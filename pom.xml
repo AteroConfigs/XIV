@@ -1,22 +1,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>pw.latematt.xiv</groupId>
-  <artifactId>XIV</artifactId>
-  <version>0.0.1-DEVELOPMENT</version>
-  <packaging>jar</packaging>
+    <groupId>pw.latematt.xiv</groupId>
+    <artifactId>XIV</artifactId>
+    <version>0.0.1-DEVELOPMENT</version>
+    <packaging>jar</packaging>
 
-  <name>XIV</name>
-  <url>http://gitlab.com/latematt/xiv</url>
+    <name>XIV</name>
+    <url>http://gitlab.com/latematt/xiv</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-  <dependencies>
-    
-  </dependencies>
+    <repositories>
+        <repository>
+            <id>in-project</id>
+            <name>In Project Repo</name>
+            <url>file://${project.basedir}/libs</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>
