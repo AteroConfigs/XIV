@@ -8,12 +8,11 @@ import pw.latematt.xiv.management.ListManager;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 
 /**
  * @author Matthew
- *
- * rudy sucks
+ *         <p>
+ *         rudy sucks
  */
 public class ListenerManager extends ListManager<Listener> {
     public ListenerManager() {

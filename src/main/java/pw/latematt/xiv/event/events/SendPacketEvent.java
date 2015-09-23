@@ -18,6 +18,7 @@ public class SendPacketEvent extends Event implements Cancellable {
     public Packet getPacket() {
         return packet;
     }
+
     public void setPacket(Packet packet) {
         this.packet = packet;
     }
@@ -25,6 +26,7 @@ public class SendPacketEvent extends Event implements Cancellable {
     public boolean isCancelled() {
         return cancelled;
     }
+
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }

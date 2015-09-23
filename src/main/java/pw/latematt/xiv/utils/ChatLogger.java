@@ -8,6 +8,7 @@ import net.minecraft.util.ChatComponentText;
  */
 public class ChatLogger {
     private static final String PREFIX = "\2473[XIV]:\247r ";
+
     public static void print(String message) {
         Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(PREFIX + message));
     }

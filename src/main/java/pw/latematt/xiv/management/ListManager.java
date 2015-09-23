@@ -6,8 +6,8 @@ import java.util.List;
 
 /**
  * @author Matthew
- *
- * KILL YOURSELF R U D Y (HAZE BOOTH)
+ *         <p>
+ *         KILL YOURSELF R U D Y (HAZE BOOTH)
  */
 public abstract class ListManager<T> {
     protected List<T> contents;

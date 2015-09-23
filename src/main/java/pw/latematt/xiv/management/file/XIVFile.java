@@ -32,6 +32,7 @@ public abstract class XIVFile {
     public String getName() {
         return name;
     }
+
     public String getExtension() {
         return extension;
     }
@@ -41,5 +42,6 @@ public abstract class XIVFile {
     }
 
     public abstract void load() throws IOException;
+
     public abstract void save() throws IOException;
 }

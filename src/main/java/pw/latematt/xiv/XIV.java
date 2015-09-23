@@ -1,6 +1,5 @@
 package pw.latematt.xiv;
 
-import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pw.latematt.xiv.management.managers.CommandManager;
@@ -28,12 +27,15 @@ public class XIV {
     public ModManager getModManager() {
         return modManager;
     }
+
     public CommandManager getCommandManager() {
         return commandManager;
     }
+
     public ListenerManager getListenerManager() {
         return listenerManager;
     }
+
     public FileManager getFileManager() {
         return fileManager;
     }
@@ -59,9 +61,8 @@ public class XIV {
         fileManager.loadAllFiles();
 
         /* save files on shutdown */
-        Runtime.getRuntime().addShutdownHook(new Thread("XIV Shutdown Thread"){
-            public void run()
-            {
+        Runtime.getRuntime().addShutdownHook(new Thread("XIV Shutdown Thread") {
+            public void run() {
                 fileManager.saveAllFiles();
             }
         });

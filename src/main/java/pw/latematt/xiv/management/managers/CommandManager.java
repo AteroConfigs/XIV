@@ -17,6 +17,7 @@ import java.util.List;
  */
 public class CommandManager extends ListManager<Command> {
     private String prefix = ".";
+
     public CommandManager() {
         super(new ArrayList<Command>());
     }
@@ -29,17 +30,17 @@ public class CommandManager extends ListManager<Command> {
         Command.newCommand()
                 .cmd("help")
                 .description("Provides help with commands")
-                .arguments(new String[] {"[command]"})
+                .arguments(new String[]{"[command]"})
                 .handler(new CommandHandler() {
-            public void onCommandRan(String message) {
-                List<Command> commandList = XIV.getInstance().getCommandManager().getContents();
-                StringBuilder commands = new StringBuilder("Commands (" + commandList.size() + "): ");
-                for (Command command : commandList) {
-                    commands.append(prefix).append(command.getCmd()).append(", ");
-                }
-                ChatLogger.print(commands.toString().substring(0, commands.length() - 2));
-            }
-        }).build();
+                    public void onCommandRan(String message) {
+                        List<Command> commandList = XIV.getInstance().getCommandManager().getContents();
+                        StringBuilder commands = new StringBuilder("Commands (" + commandList.size() + "): ");
+                        for (Command command : commandList) {
+                            commands.append(prefix).append(command.getCmd()).append(", ");
+                        }
+                        ChatLogger.print(commands.toString().substring(0, commands.length() - 2));
+                    }
+                }).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {
             public void onEventCalled(SendPacketEvent event) {
