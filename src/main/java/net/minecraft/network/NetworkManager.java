@@ -40,6 +40,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.SendPacketEvent;
+import pw.latematt.xiv.management.managers.ListenerManager;
 
 public class NetworkManager extends SimpleChannelInboundHandler
 {
@@ -161,6 +164,10 @@ public class NetworkManager extends SimpleChannelInboundHandler
 
     public void sendPacket(Packet packetIn)
     {
+        SendPacketEvent sendPacketEvent = new SendPacketEvent(packetIn);
+        XIV.getInstance().getListenerManager().call(sendPacketEvent);
+        if (sendPacketEvent.isCancelled()) return;
+        packetIn = sendPacketEvent.getPacket();
         if (this.channel != null && this.channel.isOpen())
         {
             this.flushOutboundQueue();
@@ -174,6 +181,10 @@ public class NetworkManager extends SimpleChannelInboundHandler
 
     public void sendPacket(Packet packetIn, GenericFutureListener listener, GenericFutureListener ... listeners)
     {
+        SendPacketEvent sendPacketEvent = new SendPacketEvent(packetIn);
+        XIV.getInstance().getListenerManager().call(sendPacketEvent);
+        if (sendPacketEvent.isCancelled()) return;
+        packetIn = sendPacketEvent.getPacket();
         if (this.channel != null && this.channel.isOpen())
         {
             this.flushOutboundQueue();
