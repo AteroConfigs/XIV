@@ -1,5 +1,6 @@
 package pw.latematt.xiv.management.managers;
 
+import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.management.ListManager;
@@ -39,7 +40,7 @@ public class ModManager extends ListManager<Mod> {
 
         Command.newCommand()
                 .cmd("toggle")
-                .description("Allows you to toggle modules.")
+                .description("Toggle modules on or off.")
                 .aliases("t", "tog")
                 .arguments("<module>")
                 .handler(message -> {
@@ -48,17 +49,38 @@ public class ModManager extends ListManager<Mod> {
                         String modName = arguments[1];
                         Mod mod = XIV.getInstance().getModManager().find(modName);
 
-                        if(mod != null) {
+                        if (mod != null) {
                             mod.toggle();
-                            ChatLogger.print(String.format("%s is now %s!", mod.getName(), mod.isEnabled() ? "enabled" : "disabled"));
+                            ChatLogger.print(String.format("%s has been toggled %s.", mod.getName(), mod.isEnabled() ? "on" : "off"));
                         } else {
-                            ChatLogger.print("Module \"" + modName + "\" does not exist!");
+                            ChatLogger.print(String.format("Invalid module \"%s\"", modName));
                         }
-
-                        return;
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: toggle <module>");
                     }
+                }).build();
 
-                    ChatLogger.print("Invalid arguments, valid: hud <module>");
+        Command.newCommand()
+                .cmd("bind")
+                .description("Rebinds a module.")
+                .arguments("<module> <key>")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if (arguments.length >= 3) {
+                        String modName = arguments[1];
+                        Mod mod = XIV.getInstance().getModManager().find(modName);
+
+                        if (mod != null) {
+                            String newBindName = arguments[2].toUpperCase();
+                            int newBind = Keyboard.getKeyIndex(newBindName);
+                            mod.setKeybind(newBind);
+                            ChatLogger.print(String.format("%s is now bound to %s", mod.getName(), Keyboard.getKeyName(newBind)));
+                        } else {
+                            ChatLogger.print(String.format("Invalid module \"%s\"", modName));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: bind <module> <key>");
+                    }
                 }).build();
 
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
