@@ -14,7 +14,7 @@ public class XIVTweaker implements ITweaker {
     private List<String> arguments;
 
     public void acceptOptions(List<String> args, File gameDir, File assetsDir, String profile) {
-        arguments = new ArrayList<String>(args);
+        arguments = new ArrayList<>(args);
         arguments.add("--gameDir");
         arguments.add(gameDir.getAbsolutePath());
         arguments.add("--assetsDir");

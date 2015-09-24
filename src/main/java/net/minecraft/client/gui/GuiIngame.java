@@ -43,6 +43,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.border.WorldBorder;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.IngameHUDRenderEvent;
 
 public class GuiIngame extends Gui
 {
@@ -228,6 +230,9 @@ public class GuiIngame extends Gui
         {
             this.overlayDebug.func_175237_a(var2);
         }
+
+        IngameHUDRenderEvent event = new IngameHUDRenderEvent();
+        XIV.getInstance().getListenerManager().call(event);
 
         int var9;
 
@@ -472,7 +477,7 @@ public class GuiIngame extends Gui
                 GlStateManager.pushMatrix();
                 GlStateManager.enableBlend();
                 GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-                this.func_175179_f().func_175063_a(var2, (float)var3, (float)var4, 16777215 + (var5 << 24));
+                this.func_175179_f().drawStringWithShadow(var2, (float)var3, (float)var4, 16777215 + (var5 << 24));
                 GlStateManager.disableBlend();
                 GlStateManager.popMatrix();
             }
@@ -496,7 +501,7 @@ public class GuiIngame extends Gui
         }
 
         int var3 = this.func_175179_f().getStringWidth(var2);
-        this.func_175179_f().func_175063_a(var2, (float)(p_175185_1_.getScaledWidth() - var3 - 10), 5.0F, 16777215);
+        this.func_175179_f().drawStringWithShadow(var2, (float)(p_175185_1_.getScaledWidth() - var3 - 10), 5.0F, 16777215);
         this.mc.mcProfiler.endSection();
     }
 
@@ -925,7 +930,7 @@ public class GuiIngame extends Gui
             }
 
             String var8 = BossStatus.bossName;
-            this.func_175179_f().func_175063_a(var8, (float)(var3 / 2 - this.func_175179_f().getStringWidth(var8) / 2), (float)(var7 - 10), 16777215);
+            this.func_175179_f().drawStringWithShadow(var8, (float)(var3 / 2 - this.func_175179_f().getStringWidth(var8) / 2), (float)(var7 - 10), 16777215);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             this.mc.getTextureManager().bindTexture(icons);
         }

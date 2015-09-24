@@ -51,6 +51,8 @@ import net.minecraft.util.MovementInput;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.UsingItemSlowdownEvent;
 
 public class EntityPlayerSP extends AbstractClientPlayer
 {
@@ -738,7 +740,9 @@ public class EntityPlayerSP extends AbstractClientPlayer
         boolean var4 = this.movementInput.moveForward >= var3;
         this.movementInput.updatePlayerMoveState();
 
-        if (this.isUsingItem() && !this.isRiding())
+        UsingItemSlowdownEvent event = new UsingItemSlowdownEvent();
+        XIV.getInstance().getListenerManager().call(event);
+        if (this.isUsingItem() && !this.isRiding() && !event.isCancelled())
         {
             this.movementInput.moveStrafe *= 0.2F;
             this.movementInput.moveForward *= 0.2F;
