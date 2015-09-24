@@ -16,7 +16,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent> {
 
     @Override
     public void onEventCalled(IngameHUDRenderEvent event) {
-        mc.fontRendererObj.drawStringWithShadow("XIV", 2, 2, 0xFFFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow("test123 ee", 2, 2, 0xFFFFFFFF);
     }
 
     @Override

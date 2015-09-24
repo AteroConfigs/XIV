@@ -5,9 +5,8 @@ import pw.latematt.xiv.XIV;
 import java.util.List;
 
 /**
+ * KILL YOURSELF R U D Y (HAZE BOOTH)
  * @author Matthew
- *         <p>
- *         KILL YOURSELF R U D Y (HAZE BOOTH)
  */
 public abstract class ListManager<T> {
     protected List<T> contents;

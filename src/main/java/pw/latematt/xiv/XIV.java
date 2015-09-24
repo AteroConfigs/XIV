@@ -45,7 +45,7 @@ public class XIV {
         return logger;
     }
 
-    /* sets up the client base (called in XIVMain) */
+    /* sets up the client base (called in Main#main(p_main_0_) at line 114) */
     public void setup() {
         logger.info("== Begin XIV setup == ");
         /* call setup on all managers */

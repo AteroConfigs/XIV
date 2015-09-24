@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @author Matthew
  */
-public class MapManager<K, V> {
+public abstract class MapManager<K, V> {
     protected Map<K, V> contents;
 
     public MapManager(Map<K, V> contents) {

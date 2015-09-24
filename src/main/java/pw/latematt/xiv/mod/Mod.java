@@ -7,9 +7,9 @@ import net.minecraft.client.Minecraft;
  */
 public abstract class Mod {
     protected final Minecraft mc = Minecraft.getMinecraft();
-    protected String name;
-    protected int keybind, color;
-    protected boolean enabled, visible;
+    private String name;
+    private int keybind, color;
+    private boolean enabled, visible;
 
     public Mod(String name) {
         this(name, 0, -1, false);

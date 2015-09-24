@@ -16,11 +16,10 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
+import pw.latematt.xiv.XIV;
 
 public class Main
 {
-
-
     public static void main(String[] p_main_0_)
     {
         System.setProperty("java.net.preferIPv4Stack", "true");
@@ -111,7 +110,9 @@ public class Main
             }
         });
         Thread.currentThread().setName("Client thread");
-        (new Minecraft(var42)).run();
+        Minecraft mc = new Minecraft(var42);
+        XIV.getInstance().setup();
+        mc.run();
     }
 
     private static boolean func_110121_a(String p_110121_0_)

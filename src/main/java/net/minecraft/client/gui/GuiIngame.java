@@ -112,8 +112,6 @@ public class GuiIngame extends Gui
 
     public void func_175180_a(float p_175180_1_)
     {
-        IngameHUDRenderEvent event = new IngameHUDRenderEvent();
-        XIV.getInstance().getListenerManager().call(event);
         ScaledResolution var2 = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
         int var3 = var2.getScaledWidth();
         int var4 = var2.getScaledHeight();
@@ -232,6 +230,9 @@ public class GuiIngame extends Gui
         {
             this.overlayDebug.func_175237_a(var2);
         }
+
+        IngameHUDRenderEvent event = new IngameHUDRenderEvent();
+        XIV.getInstance().getListenerManager().call(event);
 
         int var9;
 
