@@ -36,7 +36,7 @@ public class CommandManager extends ListManager<Command> {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         Command.newCommand()
                 .cmd("help")
-                .description("Provides help with commands")
+                .description("Provides help with commands.")
                 .aliases("cmds", "?")
                 .arguments("[command]")
                 .handler(message -> {
