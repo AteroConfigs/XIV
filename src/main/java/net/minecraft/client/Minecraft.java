@@ -183,6 +183,8 @@ import org.lwjgl.opengl.GLContext;
 import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.KeyPressEvent;
 
 public class Minecraft implements IThreadListener, IPlayerUsage
 {
@@ -1918,6 +1920,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage
                     }
                     else
                     {
+                        KeyPressEvent event = new KeyPressEvent(var1);
+                        XIV.getInstance().getListenerManager().call(event);
                         if (var1 == 1)
                         {
                             this.displayInGameMenu();
@@ -1931,31 +1935,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage
                         if (var1 == 31 && Keyboard.isKeyDown(61))
                         {
                             this.refreshResources();
-                        }
-
-                        if (var1 == 17 && Keyboard.isKeyDown(61))
-                        {
-                            ;
-                        }
-
-                        if (var1 == 18 && Keyboard.isKeyDown(61))
-                        {
-                            ;
-                        }
-
-                        if (var1 == 47 && Keyboard.isKeyDown(61))
-                        {
-                            ;
-                        }
-
-                        if (var1 == 38 && Keyboard.isKeyDown(61))
-                        {
-                            ;
-                        }
-
-                        if (var1 == 22 && Keyboard.isKeyDown(61))
-                        {
-                            ;
                         }
 
                         if (var1 == 20 && Keyboard.isKeyDown(61))

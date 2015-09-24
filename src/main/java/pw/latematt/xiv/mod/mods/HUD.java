@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * I HATE FUCKING NORMIES AND RUDY IS A FUCKING NORMIE REEEEEEEEEE
@@ -51,47 +52,22 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent> {
 
         hudConfigFile = new XIVFile("hudconfig", "json") {
             @Override
+            @SuppressWarnings("unchecked")
             public void load() throws IOException {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 BufferedReader reader = new BufferedReader(new FileReader(file));
-                List<Value<Boolean>> values = gson.fromJson(reader, new TypeToken<List<Value<Boolean>>>() {}.getType());
-                for (Value<Boolean> value : values) {
-                    switch(value.getName()) {
-                        case "hud_watermark":
-                            watermark.setValue(value.getValue());
-                        case "hud_arraylist":
-                            arraylist.setValue(value.getValue());
-                        case "hud_coords":
-                            coords.setValue(value.getValue());
-                        case "hud_fps":
-                            fps.setValue(value.getValue());
-                        case "hud_ign":
-                            ign.setValue(value.getValue());
-                        case "hud_time":
-                            time.setValue(value.getValue());
-                        case "hud_potions":
-                            potions.setValue(value.getValue());
-                        case "hud_armor":
-                            armor.setValue(value.getValue());
-                        case "hud_rudysucks":
-                            rudysucks.setValue(value.getValue());
-                    }
+                List<Value> values = gson.fromJson(reader, new TypeToken<List<Value>>() {}.getType());
+                for (Value value : values) {
+                    XIV.getInstance().getValueManager().getContents().stream().filter(value1 -> value.getName().equals(value1.getName())).forEach(value1 -> {
+                        value1.setValue(value.getValue());
+                    });
                 }
             }
 
             @Override
             public void save() throws IOException {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                List<Value<Boolean>> values = new ArrayList<>();
-                values.add(watermark);
-                values.add(arraylist);
-                values.add(coords);
-                values.add(fps);
-                values.add(ign);
-                values.add(time);
-                values.add(potions);
-                values.add(armor);
-                values.add(rudysucks);
+                List<Value> values = XIV.getInstance().getValueManager().getContents().stream().filter(value -> value.getName().startsWith("hud_")).collect(Collectors.toList());
                 Files.write(gson.toJson(values).getBytes("UTF-8"), file);
             }
         };
@@ -115,12 +91,14 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent> {
             int x = 2;
             if (watermark.getValue())
                 x += mc.fontRendererObj.getStringWidth("XIV ");
+            else if (rudysucks.getValue())
+                x += mc.fontRendererObj.getStringWidth("rudy sucks ");
             SimpleDateFormat format = new SimpleDateFormat("h:mm a");
-            mc.fontRendererObj.drawStringWithShadow(format.format(new Date()), x, 2, 0x80FFFFFF);
+            mc.fontRendererObj.drawStringWithShadow(format.format(new Date()), x, 2, 0xDDDDDDDD);
         }
         if (rudysucks.getValue()) {
             int y = 2;
-            if (watermark.getValue() || time.getValue())
+            if (watermark.getValue() && time.getValue())
                 y += 8;
             mc.fontRendererObj.drawStringWithShadow("\2471r\2472u\2473d\2474y \2475s\2476u\2477c\2478k\2479s", 2, y, 0xFFFFFFFF);
         }
