@@ -22,12 +22,10 @@ public class ModManager extends ListManager<Mod> {
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         contents.add(new HUD());
-        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
-
 
         Command.newCommand()
                 .cmd("mods")
-                .description("Provides help with commands.")
+                .description("Provides a list of all modules.")
                 .aliases("modules", "hacks", "cheats")
                 .handler(message -> {
                     List<Mod> moduleList = XIV.getInstance().getModManager().getContents();
@@ -37,5 +35,7 @@ public class ModManager extends ListManager<Mod> {
                     }
                     ChatLogger.print(mods.toString().substring(0, mods.length() - 2));
                 }).build();
+
+        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
     }
 }
