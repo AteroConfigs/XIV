@@ -13,10 +13,15 @@ import pw.latematt.xiv.mod.Mod;
  */
 public class Example extends Mod implements Listener<SendPacketEvent> {
     public Example() {
-        super("Example", Keyboard.KEY_F, 0xFF696969);
+        super("Example", Keyboard.KEY_F, 0xFF696969, new String[] {}, new String[] {});
     }
 
     public void onEventCalled(SendPacketEvent event) {
+
+    }
+
+    @Override
+    public void onCommandRan(String message) {
 
     }
 

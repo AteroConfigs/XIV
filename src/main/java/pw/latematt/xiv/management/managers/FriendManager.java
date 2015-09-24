@@ -22,9 +22,9 @@ public class FriendManager extends MapManager<String, String> {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         Command.newCommand()
                 .cmd("friend")
-                .description("Manages a player's friend status so the client doesn't target him")
+                .description("Manages a player's friend status so the client doesn't target him.")
                 .aliases("fr")
-                .arguments("<add/del>", "<mcname>", "[alias]")
+                .arguments("<action>", "<mcname>", "[alias]")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
                     if (arguments.length < 3) {
