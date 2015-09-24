@@ -60,6 +60,13 @@ public class CommandManager extends ListManager<Command> {
                                 event.setCancelled(true);
                                 return;
                             }
+                            for (String alias : command.getAliases()) {
+                                if (spaceSplit[0].equalsIgnoreCase(prefix + alias)) {
+                                    command.getHandler().onCommandRan(packet.getMessage());
+                                    event.setCancelled(true);
+                                    return;
+                                }
+                            }
                         }
                         ChatLogger.print("Invalid command \"" + spaceSplit[0] + "\"");
                         event.setCancelled(true);

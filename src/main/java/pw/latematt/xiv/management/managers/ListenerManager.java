@@ -1,9 +1,12 @@
 package pw.latematt.xiv.management.managers;
 
+import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Event;
 import pw.latematt.xiv.event.Listener;
+import pw.latematt.xiv.event.events.KeyPressEvent;
 import pw.latematt.xiv.management.ListManager;
+import pw.latematt.xiv.mod.Mod;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -11,12 +14,28 @@ import java.util.ArrayList;
 
 /**
  * @author Matthew
- *         <p>
- *         rudy sucks
  */
 public class ListenerManager extends ListManager<Listener> {
     public ListenerManager() {
         super(new ArrayList<>());
+    }
+
+    @Override
+    public void setup() {
+        XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
+        add(new Listener<KeyPressEvent>() {
+            @Override
+            public void onEventCalled(KeyPressEvent event) {
+                for (Mod mod : XIV.getInstance().getModManager().getContents()) {
+                    if (mod.getKeybind() == Keyboard.KEY_NONE) continue;
+
+                    if (mod.getKeybind() == event.getKeyCode()) {
+                        mod.toggle();
+                    }
+                }
+            }
+        });
+        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
     }
 
     public void add(Listener listener) {
