@@ -409,7 +409,7 @@ public class RenderItem implements IResourceManagerReloadListener
         }
     }
 
-    public void func_180450_b(final ItemStack p_180450_1_, int p_180450_2_, int p_180450_3_)
+    public void renderItemAndEffectIntoGUI(final ItemStack p_180450_1_, int p_180450_2_, int p_180450_3_)
     {
         if (p_180450_1_ != null)
         {
@@ -462,12 +462,12 @@ public class RenderItem implements IResourceManagerReloadListener
         }
     }
 
-    public void func_175030_a(FontRenderer p_175030_1_, ItemStack p_175030_2_, int p_175030_3_, int p_175030_4_)
+    public void renderItemOverlayIntoGUI(FontRenderer p_175030_1_, ItemStack p_175030_2_, int p_175030_3_, int p_175030_4_)
     {
-        this.func_180453_a(p_175030_1_, p_175030_2_, p_175030_3_, p_175030_4_, (String)null);
+        this.renderItemOverlayIntoGUI(p_175030_1_, p_175030_2_, p_175030_3_, p_175030_4_, (String)null);
     }
 
-    public void func_180453_a(FontRenderer p_180453_1_, ItemStack p_180453_2_, int p_180453_3_, int p_180453_4_, String p_180453_5_)
+    public void renderItemOverlayIntoGUI(FontRenderer p_180453_1_, ItemStack p_180453_2_, int p_180453_3_, int p_180453_4_, String p_180453_5_)
     {
         if (p_180453_2_ != null)
         {

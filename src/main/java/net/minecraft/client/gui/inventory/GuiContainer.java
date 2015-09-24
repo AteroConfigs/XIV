@@ -209,8 +209,8 @@ public abstract class GuiContainer extends GuiScreen
         GlStateManager.translate(0.0F, 0.0F, 32.0F);
         this.zLevel = 200.0F;
         this.itemRender.zLevel = 200.0F;
-        this.itemRender.func_180450_b(stack, x, y);
-        this.itemRender.func_180453_a(this.fontRendererObj, stack, x, y - (this.draggedStack == null ? 0 : 8), altText);
+        this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
+        this.itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, stack, x, y - (this.draggedStack == null ? 0 : 8), altText);
         this.zLevel = 0.0F;
         this.itemRender.zLevel = 0.0F;
     }
@@ -298,8 +298,8 @@ public abstract class GuiContainer extends GuiScreen
             }
 
             GlStateManager.enableDepth();
-            this.itemRender.func_180450_b(var4, var2, var3);
-            this.itemRender.func_180453_a(this.fontRendererObj, var4, var2, var3, var8);
+            this.itemRender.renderItemAndEffectIntoGUI(var4, var2, var3);
+            this.itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, var4, var2, var3, var8);
         }
 
         this.itemRender.zLevel = 0.0F;

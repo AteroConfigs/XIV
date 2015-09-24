@@ -1059,14 +1059,14 @@ public class GuiIngame extends Gui
                 GlStateManager.translate((float)(-(p_175184_2_ + 8)), (float)(-(p_175184_3_ + 12)), 0.0F);
             }
 
-            this.itemRenderer.func_180450_b(var6, p_175184_2_, p_175184_3_);
+            this.itemRenderer.renderItemAndEffectIntoGUI(var6, p_175184_2_, p_175184_3_);
 
             if (var7 > 0.0F)
             {
                 GlStateManager.popMatrix();
             }
 
-            this.itemRenderer.func_175030_a(this.mc.fontRendererObj, var6, p_175184_2_, p_175184_3_);
+            this.itemRenderer.renderItemOverlayIntoGUI(this.mc.fontRendererObj, var6, p_175184_2_, p_175184_3_);
         }
     }
 

@@ -173,17 +173,17 @@ public class GuiMerchant extends GuiContainer
             GlStateManager.enableColorMaterial();
             GlStateManager.enableLighting();
             this.itemRender.zLevel = 100.0F;
-            this.itemRender.func_180450_b(var9, var5 + 36, var6 + 24);
-            this.itemRender.func_175030_a(this.fontRendererObj, var9, var5 + 36, var6 + 24);
+            this.itemRender.renderItemAndEffectIntoGUI(var9, var5 + 36, var6 + 24);
+            this.itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, var9, var5 + 36, var6 + 24);
 
             if (var10 != null)
             {
-                this.itemRender.func_180450_b(var10, var5 + 62, var6 + 24);
-                this.itemRender.func_175030_a(this.fontRendererObj, var10, var5 + 62, var6 + 24);
+                this.itemRender.renderItemAndEffectIntoGUI(var10, var5 + 62, var6 + 24);
+                this.itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, var10, var5 + 62, var6 + 24);
             }
 
-            this.itemRender.func_180450_b(var11, var5 + 120, var6 + 24);
-            this.itemRender.func_175030_a(this.fontRendererObj, var11, var5 + 120, var6 + 24);
+            this.itemRender.renderItemAndEffectIntoGUI(var11, var5 + 120, var6 + 24);
+            this.itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, var11, var5 + 120, var6 + 24);
             this.itemRender.zLevel = 0.0F;
             GlStateManager.disableLighting();
 
