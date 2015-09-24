@@ -22,6 +22,13 @@ public class CommandManager extends ListManager<Command> {
         super(new ArrayList<Command>());
     }
 
+    public String getPrefix() {
+        return prefix;
+    }
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
     @Override
     public void setup() {
         // setup is not required in command management, commands will add themselves as they are built
@@ -30,7 +37,8 @@ public class CommandManager extends ListManager<Command> {
         Command.newCommand()
                 .cmd("help")
                 .description("Provides help with commands")
-                .arguments(new String[]{"[command]"})
+                .aliases("cmds", "?")
+                .arguments("[command]")
                 .handler(new CommandHandler() {
                     public void onCommandRan(String message) {
                         List<Command> commandList = XIV.getInstance().getCommandManager().getContents();

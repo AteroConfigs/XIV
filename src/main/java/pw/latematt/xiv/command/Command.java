@@ -7,13 +7,14 @@ import pw.latematt.xiv.XIV;
  */
 public class Command {
     protected final String cmd, description;
-    protected final String[] arguments;
+    protected final String[] arguments, aliases;
     protected final CommandHandler handler;
 
     private Command(Builder builder) {
         this.cmd = builder.cmd;
         this.description = builder.description;
         this.arguments = builder.arguments;
+        this.aliases = builder.aliases;
         this.handler = builder.handler;
         XIV.getInstance().getCommandManager().getContents().add(this);
     }
@@ -21,15 +22,15 @@ public class Command {
     public String getCmd() {
         return cmd;
     }
-
     public String getDescription() {
         return description;
     }
-
+    public String[] getAliases() {
+        return aliases;
+    }
     public String[] getArguments() {
         return arguments;
     }
-
     public CommandHandler getHandler() {
         return handler;
     }
@@ -40,7 +41,7 @@ public class Command {
 
     public static final class Builder {
         private String cmd, description;
-        private String[] arguments;
+        private String[] arguments, aliases;
         private CommandHandler handler;
 
         private Builder() {
@@ -60,7 +61,12 @@ public class Command {
             return this;
         }
 
-        public Builder arguments(String[] arguments) {
+        public Builder aliases(String... aliases) {
+            this.aliases = aliases;
+            return this;
+        }
+
+        public Builder arguments(String... arguments) {
             this.arguments = arguments;
             return this;
         }

@@ -2,10 +2,7 @@ package pw.latematt.xiv;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pw.latematt.xiv.management.managers.CommandManager;
-import pw.latematt.xiv.management.managers.FileManager;
-import pw.latematt.xiv.management.managers.ListenerManager;
-import pw.latematt.xiv.management.managers.ModManager;
+import pw.latematt.xiv.management.managers.*;
 
 /**
  * @author Matthew
@@ -23,21 +20,22 @@ public class XIV {
     private CommandManager commandManager = new CommandManager();
     private ListenerManager listenerManager = new ListenerManager();
     private FileManager fileManager = new FileManager();
+    private FriendManager friendManager = new FriendManager();
 
     public ModManager getModManager() {
         return modManager;
     }
-
     public CommandManager getCommandManager() {
         return commandManager;
     }
-
     public ListenerManager getListenerManager() {
         return listenerManager;
     }
-
     public FileManager getFileManager() {
         return fileManager;
+    }
+    public FriendManager getFriendManager() {
+        return friendManager;
     }
 
     /* logger */
@@ -55,17 +53,8 @@ public class XIV {
         /* setup is not required with all managers */
         commandManager.setup();
         modManager.setup();
-
-        /* file loading */
+        friendManager.setup();
         fileManager.setup();
-        fileManager.loadAllFiles();
-
-        /* save files on shutdown */
-        Runtime.getRuntime().addShutdownHook(new Thread("XIV Shutdown Thread") {
-            public void run() {
-                fileManager.saveAllFiles();
-            }
-        });
 
         logger.info("==  End XIV setup  == ");
     }

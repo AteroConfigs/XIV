@@ -28,8 +28,7 @@ public class ModConfig extends XIVFile {
     public void load() throws IOException {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         BufferedReader reader = new BufferedReader(new FileReader(file));
-        HashMap<String, ModOptions> modOptions = gson.fromJson(reader, new TypeToken<HashMap<String, ModOptions>>() {
-        }.getType());
+        HashMap<String, ModOptions> modOptions = gson.fromJson(reader, new TypeToken<HashMap<String, ModOptions>>() {}.getType());
         for (Mod mod : XIV.getInstance().getModManager().getContents()) {
             for (String modName : modOptions.keySet()) {
                 if (mod.getName().equals(modName)) {
