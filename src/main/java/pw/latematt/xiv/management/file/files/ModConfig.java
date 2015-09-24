@@ -34,6 +34,7 @@ public class ModConfig extends XIVFile {
                 ModOptions options = modOptions.get(modName);
                 mod.setKeybind(Keyboard.getKeyIndex(options.getKeybind()));
                 mod.setColor(options.getColor());
+                mod.setEnabled(options.isEnabled());
                 mod.setVisible(options.isVisible());
             });
         }
@@ -44,7 +45,7 @@ public class ModConfig extends XIVFile {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         HashMap<String, ModOptions> modOptions = new HashMap<>();
         for (Mod mod : XIV.getInstance().getModManager().getContents()) {
-            modOptions.put(mod.getName(), new ModOptions(Keyboard.getKeyName(mod.getKeybind()), mod.getColor(), mod.isVisible()));
+            modOptions.put(mod.getName(), new ModOptions(Keyboard.getKeyName(mod.getKeybind()), mod.getColor(), mod.isEnabled(), mod.isVisible()));
         }
         Files.write(gson.toJson(modOptions).getBytes("UTF-8"), file);
     }
@@ -52,24 +53,26 @@ public class ModConfig extends XIVFile {
     public class ModOptions {
         private final String keybind;
         private final int color;
-        private final boolean visible;
+        private final boolean visible, enabled;
 
-        public ModOptions(String keybind, int color, boolean visible) {
+        public ModOptions(String keybind, int color, boolean enabled, boolean visible) {
             this.keybind = keybind;
             this.color = color;
+            this.enabled = enabled;
             this.visible = visible;
         }
 
         public String getKeybind() {
             return keybind;
         }
-
         public int getColor() {
             return color;
         }
-
         public boolean isVisible() {
             return visible;
+        }
+        public boolean isEnabled() {
+            return enabled;
         }
     }
 }

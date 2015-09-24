@@ -6,6 +6,7 @@ import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.mods.HUD;
+import pw.latematt.xiv.mod.mods.Step;
 import pw.latematt.xiv.utils.ChatLogger;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class ModManager extends ListManager<Mod> {
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         contents.add(new HUD());
+        contents.add(new Step());
 
         Command.newCommand()
                 .cmd("mods")
