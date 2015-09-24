@@ -46,6 +46,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.EntityStepEvent;
 
 public abstract class Entity implements ICommandSender
 {
@@ -715,6 +717,8 @@ public abstract class Entity implements ICommandSender
                 AxisAlignedBB var32 = var31.addCoord(var13, 0.0D, var17);
                 double var33 = y;
                 AxisAlignedBB var36;
+                EntityStepEvent event = new EntityStepEvent(this);
+                XIV.getInstance().getListenerManager().call(event);
 
                 for (Iterator var35 = var30.iterator(); var35.hasNext(); var33 = var36.calculateYOffset(var32, var33))
                 {
