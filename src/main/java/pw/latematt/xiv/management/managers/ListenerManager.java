@@ -11,13 +11,14 @@ import pw.latematt.xiv.mod.Mod;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Matthew
  */
 public class ListenerManager extends ListManager<Listener> {
     public ListenerManager() {
-        super(new ArrayList<>());
+        super(new CopyOnWriteArrayList<>());
     }
 
     @Override
