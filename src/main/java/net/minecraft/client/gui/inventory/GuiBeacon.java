@@ -207,10 +207,10 @@ public class GuiBeacon extends GuiContainer
         int var5 = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(var4, var5, 0, 0, this.xSize, this.ySize);
         this.itemRender.zLevel = 100.0F;
-        this.itemRender.func_180450_b(new ItemStack(Items.emerald), var4 + 42, var5 + 109);
-        this.itemRender.func_180450_b(new ItemStack(Items.diamond), var4 + 42 + 22, var5 + 109);
-        this.itemRender.func_180450_b(new ItemStack(Items.gold_ingot), var4 + 42 + 44, var5 + 109);
-        this.itemRender.func_180450_b(new ItemStack(Items.iron_ingot), var4 + 42 + 66, var5 + 109);
+        this.itemRender.renderItemAndEffectIntoGUI(new ItemStack(Items.emerald), var4 + 42, var5 + 109);
+        this.itemRender.renderItemAndEffectIntoGUI(new ItemStack(Items.diamond), var4 + 42 + 22, var5 + 109);
+        this.itemRender.renderItemAndEffectIntoGUI(new ItemStack(Items.gold_ingot), var4 + 42 + 44, var5 + 109);
+        this.itemRender.renderItemAndEffectIntoGUI(new ItemStack(Items.iron_ingot), var4 + 42 + 66, var5 + 109);
         this.itemRender.zLevel = 0.0F;
     }
 

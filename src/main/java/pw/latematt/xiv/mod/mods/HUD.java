@@ -4,8 +4,14 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
@@ -25,9 +31,6 @@ import java.util.List;
 
 /**
  * I HATE FUCKING NORMIES AND RUDY IS A FUCKING NORMIE REEEEEEEEEE
- * <p>
- * kill me now
- *
  * @author Matthew
  */
 public class HUD extends Mod implements Listener<IngameHUDRenderEvent> {
@@ -130,11 +133,50 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent> {
     }
 
     private void drawArmor(ScaledResolution scaledResolution) {
+        if (mc.playerController.isNotCreative()) {
+            int x = 15;
 
+            GlStateManager.pushMatrix();
+            GlStateManager.enableRescaleNormal();
+            GlStateManager.disableBlend();
+            RenderHelper.enableStandardItemLighting();
+            for (int index = 3; index >= 0; index--) {
+                final ItemStack stack = mc.thePlayer.inventory.armorInventory[index];
+                if (stack != null) {
+                    int height = scaledResolution.getScaledHeight()
+                            - (mc.thePlayer.isInsideOfMaterial(Material.water) ? mc.thePlayer.getActivePotionEffect(Potion.absorption) != null ? 75 : 65 : 55);
+                    mc.getRenderItem().renderItemAndEffectIntoGUI(stack, scaledResolution.getScaledWidth() / 2 + x, height);
+                    mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, scaledResolution.getScaledWidth() / 2 + x, height);
+                    x += 18;
+                }
+            }
+            RenderHelper.disableStandardItemLighting();
+            GlStateManager.disableRescaleNormal();
+            GlStateManager.popMatrix();
+        }
     }
 
     private void drawPotions(ScaledResolution scaledResolution) {
+        int x = scaledResolution.getScaledWidth() - 2;
+        int y = scaledResolution.getScaledHeight() - 10;
+        for (Object o : mc.thePlayer.getActivePotionEffects()) {
+            PotionEffect effect = (PotionEffect) o;
+            String name = I18n.format(effect.getEffectName());
 
+            if (effect.getAmplifier() == 1) {
+                name = name + " " + I18n.format("enchantment.level.2");
+            } else if (effect.getAmplifier() == 2) {
+                name = name + " " + I18n.format("enchantment.level.3");
+            } else if (effect.getAmplifier() == 3) {
+                name = name + " " + I18n.format("enchantment.level.4");
+            } else {
+                name = name + " " + (effect.getAmplifier() + 1);
+            }
+
+            name = String.format("%s (%s)", name, Potion.getDurationString(effect));
+            mc.fontRendererObj.drawStringWithShadow(name, x - mc.fontRendererObj.getStringWidth(name), y, Potion.potionTypes[effect.getPotionID()].getLiquidColor());
+            y -= 10;
+        }
     }
 
     private void drawArraylist(ScaledResolution scaledResolution) {
