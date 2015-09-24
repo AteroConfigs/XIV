@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class ListenerManager extends ListManager<Listener> {
     public ListenerManager() {
-        super(new ArrayList<Listener>());
+        super(new ArrayList<>());
     }
 
     public void add(Listener listener) {

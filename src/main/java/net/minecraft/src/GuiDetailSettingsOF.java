@@ -123,7 +123,7 @@ public class GuiDetailSettingsOF extends GuiScreen
                     for (int i = 0; i < lines.length; ++i)
                     {
                         String line = lines[i];
-                        this.fontRendererObj.func_175063_a(line, (float)(x1 + 5), (float)(y1 + 5 + i * 11), 14540253);
+                        this.fontRendererObj.drawStringWithShadow(line, (float)(x1 + 5), (float)(y1 + 5 + i * 11), 14540253);
                     }
                 }
             }

@@ -19,7 +19,7 @@ public class CommandManager extends ListManager<Command> {
     private String prefix = ".";
 
     public CommandManager() {
-        super(new ArrayList<Command>());
+        super(new ArrayList<>());
     }
 
     public String getPrefix() {
@@ -39,15 +39,13 @@ public class CommandManager extends ListManager<Command> {
                 .description("Provides help with commands")
                 .aliases("cmds", "?")
                 .arguments("[command]")
-                .handler(new CommandHandler() {
-                    public void onCommandRan(String message) {
-                        List<Command> commandList = XIV.getInstance().getCommandManager().getContents();
-                        StringBuilder commands = new StringBuilder("Commands (" + commandList.size() + "): ");
-                        for (Command command : commandList) {
-                            commands.append(prefix).append(command.getCmd()).append(", ");
-                        }
-                        ChatLogger.print(commands.toString().substring(0, commands.length() - 2));
+                .handler(message -> {
+                    List<Command> commandList = XIV.getInstance().getCommandManager().getContents();
+                    StringBuilder commands = new StringBuilder("Commands (" + commandList.size() + "): ");
+                    for (Command command : commandList) {
+                        commands.append(prefix).append(command.getCmd()).append(", ");
                     }
+                    ChatLogger.print(commands.toString().substring(0, commands.length() - 2));
                 }).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {

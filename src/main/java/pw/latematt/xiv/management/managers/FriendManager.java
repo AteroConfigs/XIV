@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
  */
 public class FriendManager extends MapManager<String, String> {
     public FriendManager() {
-        super(new HashMap<String, String>());
+        super(new HashMap<>());
     }
 
     @Override
@@ -23,35 +23,34 @@ public class FriendManager extends MapManager<String, String> {
         Command.newCommand()
                 .cmd("friend")
                 .description("Manages a player's friend status so the client doesn't target him")
+                .aliases("fr")
                 .arguments("<add/del>", "<mcname>", "[alias]")
-                .handler(new CommandHandler() {
-                    public void onCommandRan(String message) {
-                        String[] arguments = message.split(" ");
-                        if (arguments.length < 3) {
-                            ChatLogger.print("Invalid arguments, valid: friend <add/del> <mcname> [alias]");
-                        } else {
-                            String action = arguments[1];
-                            if (action.equalsIgnoreCase("add")) {
-                                if (arguments.length == 3) {
-                                    String mcname = arguments[2];
-                                    XIV.getInstance().getFriendManager().add(mcname, mcname);
-                                    XIV.getInstance().getFileManager().saveFile("friends");
-                                    ChatLogger.print(String.format("Friend \"\2473%s\" added.", mcname));
-                                } else if (arguments.length == 4) {
-                                    String mcname = arguments[2];
-                                    String alias = arguments[3];
-                                    XIV.getInstance().getFriendManager().add(mcname, alias);
-                                    XIV.getInstance().getFileManager().saveFile("friends");
-                                    ChatLogger.print(String.format("Friend \"\2473%s\" added.", alias));
-                                }
-                            } else if (action.equalsIgnoreCase("del")) {
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if (arguments.length < 3) {
+                        ChatLogger.print("Invalid arguments, valid: friend <add/del> <mcname> [alias]");
+                    } else {
+                        String action = arguments[1];
+                        if (action.equalsIgnoreCase("add")) {
+                            if (arguments.length == 3) {
                                 String mcname = arguments[2];
-                                XIV.getInstance().getFriendManager().remove(mcname);
+                                XIV.getInstance().getFriendManager().add(mcname, mcname);
                                 XIV.getInstance().getFileManager().saveFile("friends");
-                                ChatLogger.print(String.format("Friend \"%s\" removed.", mcname));
-                            } else {
-                                ChatLogger.print("Invalid action, valid: add, del");
+                                ChatLogger.print(String.format("Friend \"\2473%s\" added.", mcname));
+                            } else if (arguments.length == 4) {
+                                String mcname = arguments[2];
+                                String alias = arguments[3];
+                                XIV.getInstance().getFriendManager().add(mcname, alias);
+                                XIV.getInstance().getFileManager().saveFile("friends");
+                                ChatLogger.print(String.format("Friend \"\2473%s\" added.", alias));
                             }
+                        } else if (action.equalsIgnoreCase("del")) {
+                            String mcname = arguments[2];
+                            XIV.getInstance().getFriendManager().remove(mcname);
+                            XIV.getInstance().getFileManager().saveFile("friends");
+                            ChatLogger.print(String.format("Friend \"%s\" removed.", mcname));
+                        } else {
+                            ChatLogger.print("Invalid action, valid: add, del");
                         }
                     }
                 }).build();

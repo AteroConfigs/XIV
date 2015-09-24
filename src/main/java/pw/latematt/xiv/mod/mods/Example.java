@@ -1,16 +1,19 @@
 package pw.latematt.xiv.mod.mods;
 
 import org.lwjgl.input.Keyboard;
+import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 
 /**
+ * Use this template when making modules
+ *
  * @author Matthew
  */
-public class Test extends Mod implements Listener<SendPacketEvent> {
-    public Test() {
-        super("Test", Keyboard.KEY_F, 0xFF696969);
+public class Example extends Mod implements Listener<SendPacketEvent> {
+    public Example() {
+        super("Example", Keyboard.KEY_F, 0xFF696969);
     }
 
     public void onEventCalled(SendPacketEvent event) {
@@ -19,11 +22,11 @@ public class Test extends Mod implements Listener<SendPacketEvent> {
 
     @Override
     public void onEnabled() {
-
+        XIV.getInstance().getListenerManager().add(this);
     }
 
     @Override
     public void onDisabled() {
-
+        XIV.getInstance().getListenerManager().remove(this);
     }
 }

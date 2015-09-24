@@ -352,7 +352,7 @@ public class FontRenderer implements IResourceManagerReloadListener
         }
     }
 
-    public int func_175063_a(String p_175063_1_, float p_175063_2_, float p_175063_3_, int p_175063_4_)
+    public int drawStringWithShadow(String p_175063_1_, float p_175063_2_, float p_175063_3_, int p_175063_4_)
     {
         return this.func_175065_a(p_175063_1_, p_175063_2_, p_175063_3_, p_175063_4_, true);
     }

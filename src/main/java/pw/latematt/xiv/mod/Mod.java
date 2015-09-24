@@ -1,21 +1,25 @@
 package pw.latematt.xiv.mod;
 
+import net.minecraft.client.Minecraft;
+
 /**
  * @author Matthew
  */
 public abstract class Mod {
+    protected final Minecraft mc = Minecraft.getMinecraft();
     protected String name;
     protected int keybind, color;
     protected boolean enabled, visible;
 
+    public Mod(String name) {
+        this(name, 0, -1, false);
+    }
     public Mod(String name, int keybind, int color) {
         this(name, keybind, color, true);
     }
-
     public Mod(String name, int keybind) {
         this(name, keybind, -1, false);
     }
-
     public Mod(String name, int keybind, int color, boolean visible) {
         this.name = name;
         this.keybind = keybind;
@@ -53,6 +57,12 @@ public abstract class Mod {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+
+        if (enabled) {
+            onEnabled();
+        } else {
+            onDisabled();
+        }
     }
 
     public boolean isVisible() {

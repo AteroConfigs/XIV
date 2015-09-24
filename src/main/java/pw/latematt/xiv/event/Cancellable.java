@@ -6,5 +6,5 @@ package pw.latematt.xiv.event;
 public interface Cancellable {
     boolean isCancelled();
 
-    void setCancelled(boolean enabled);
+    void setCancelled(boolean cancelled);
 }

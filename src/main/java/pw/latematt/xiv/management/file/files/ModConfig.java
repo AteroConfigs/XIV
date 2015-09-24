@@ -30,21 +30,19 @@ public class ModConfig extends XIVFile {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         HashMap<String, ModOptions> modOptions = gson.fromJson(reader, new TypeToken<HashMap<String, ModOptions>>() {}.getType());
         for (Mod mod : XIV.getInstance().getModManager().getContents()) {
-            for (String modName : modOptions.keySet()) {
-                if (mod.getName().equals(modName)) {
-                    ModOptions options = modOptions.get(modName);
-                    mod.setKeybind(Keyboard.getKeyIndex(options.getKeybind()));
-                    mod.setColor(options.getColor());
-                    mod.setVisible(options.isVisible());
-                }
-            }
+            modOptions.keySet().stream().filter(modName -> mod.getName().equals(modName)).forEach(modName -> {
+                ModOptions options = modOptions.get(modName);
+                mod.setKeybind(Keyboard.getKeyIndex(options.getKeybind()));
+                mod.setColor(options.getColor());
+                mod.setVisible(options.isVisible());
+            });
         }
     }
 
     @Override
     public void save() throws IOException {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        HashMap<String, ModOptions> modOptions = new HashMap<String, ModOptions>();
+        HashMap<String, ModOptions> modOptions = new HashMap<>();
         for (Mod mod : XIV.getInstance().getModManager().getContents()) {
             modOptions.put(mod.getName(), new ModOptions(Keyboard.getKeyName(mod.getKeybind()), mod.getColor(), mod.isVisible()));
         }

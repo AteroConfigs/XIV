@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class FileManager extends ListManager<XIVFile> {
     public FileManager() {
-        super(new ArrayList<XIVFile>());
+        super(new ArrayList<>());
     }
 
     @Override
