@@ -131,7 +131,7 @@ public class GuiAchievement extends Gui
             GlStateManager.enableRescaleNormal();
             GlStateManager.enableColorMaterial();
             GlStateManager.enableLighting();
-            this.renderItem.func_180450_b(this.theAchievement.theItemStack, var5 + 8, var6 + 8);
+            this.renderItem.renderItemAndEffectIntoGUI(this.theAchievement.theItemStack, var5 + 8, var6 + 8);
             GlStateManager.disableLighting();
             GlStateManager.depthMask(true);
             GlStateManager.enableDepth();

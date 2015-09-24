@@ -473,7 +473,7 @@ public class GuiAchievements extends GuiScreen implements IProgressMeter
 
                 GlStateManager.enableLighting();
                 GlStateManager.enableCull();
-                this.itemRender.func_180450_b(var38.theItemStack, var40 + 3, var41 + 3);
+                this.itemRender.renderItemAndEffectIntoGUI(var38.theItemStack, var40 + 3, var41 + 3);
                 GlStateManager.blendFunc(770, 771);
                 GlStateManager.disableLighting();
 

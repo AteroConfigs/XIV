@@ -867,8 +867,8 @@ public class GuiContainerCreative extends InventoryEffectRenderer
         GlStateManager.enableLighting();
         GlStateManager.enableRescaleNormal();
         ItemStack var10 = p_147051_1_.getIconItemStack();
-        this.itemRender.func_180450_b(var10, var7, var8);
-        this.itemRender.func_175030_a(this.fontRendererObj, var10, var7, var8);
+        this.itemRender.renderItemAndEffectIntoGUI(var10, var7, var8);
+        this.itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, var10, var7, var8);
         GlStateManager.disableLighting();
         this.itemRender.zLevel = 0.0F;
         this.zLevel = 0.0F;

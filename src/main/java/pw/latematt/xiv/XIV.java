@@ -1,5 +1,7 @@
 package pw.latematt.xiv;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pw.latematt.xiv.management.managers.*;
@@ -21,6 +23,7 @@ public class XIV {
     private ListenerManager listenerManager = new ListenerManager();
     private FileManager fileManager = new FileManager();
     private FriendManager friendManager = new FriendManager();
+    private ValueManager valueManager = new ValueManager();
 
     public ModManager getModManager() {
         return modManager;
@@ -36,6 +39,9 @@ public class XIV {
     }
     public FriendManager getFriendManager() {
         return friendManager;
+    }
+    public ValueManager getValueManager() {
+        return valueManager;
     }
 
     /* logger */
@@ -57,5 +63,9 @@ public class XIV {
         fileManager.setup();
 
         logger.info("==  End XIV setup  == ");
+    }
+
+    public ScaledResolution newScaledResolution() {
+        return new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
     }
 }
