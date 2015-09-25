@@ -78,6 +78,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Project;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.Render3DEvent;
 
 public class EntityRenderer implements IResourceManagerReloadListener
 {
@@ -1660,6 +1662,8 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
         this.mc.mcProfiler.endStartSection("hand");
         handRendered = Reflector.callBoolean(Reflector.ForgeHooksClient_renderFirstPersonHand, new Object[] {this.mc.renderGlobal, Float.valueOf(partialTicks), Integer.valueOf(pass)});
+
+        XIV.getInstance().getListenerManager().call(new Render3DEvent());
 
         if (!handRendered && this.field_175074_C)
         {
