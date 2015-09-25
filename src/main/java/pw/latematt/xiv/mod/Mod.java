@@ -7,34 +7,26 @@ import pw.latematt.xiv.command.CommandHandler;
 /**
  * @author Matthew
  */
-public abstract class Mod implements CommandHandler {
+public abstract class Mod {
     protected final Minecraft mc = Minecraft.getMinecraft();
     private String name;
     private int keybind, color;
     private boolean enabled, visible;
 
-    public Mod(String name, String[] commandArguments, String[] commandAliases) {
-        this(name, 0, -1, false, commandArguments, commandAliases);
+    public Mod(String name) {
+        this(name, 0, -1, false);
     }
-    public Mod(String name, int keybind, int color, String[] commandArguments, String[] commandAliases) {
-        this(name, keybind, color, true, commandArguments, commandAliases);
+    public Mod(String name, int keybind, int color) {
+        this(name, keybind, color, true);
     }
-    public Mod(String name, int keybind, String[] commandArguments, String[] commandAliases) {
-        this(name, keybind, -1, false, commandArguments, commandAliases);
+    public Mod(String name, int keybind) {
+        this(name, keybind, -1, false);
     }
-    public Mod(String name, int keybind, int color, boolean visible, String[] commandArguments, String[] commandAliases) {
+    public Mod(String name, int keybind, int color, boolean visible) {
         this.name = name;
         this.keybind = keybind;
         this.color = color;
         this.visible = visible;
-
-        Command.newCommand()
-                .cmd(name.toLowerCase().replaceAll(" ", ""))
-                .description("Base command for the " + name + " mod.")
-                .arguments(commandArguments)
-                .aliases(commandAliases)
-                .handler(this)
-                .build();
     }
 
     public String getName() {

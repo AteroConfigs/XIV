@@ -1663,18 +1663,18 @@ public class EntityRenderer implements IResourceManagerReloadListener
         this.mc.mcProfiler.endStartSection("hand");
         handRendered = Reflector.callBoolean(Reflector.ForgeHooksClient_renderFirstPersonHand, new Object[] {this.mc.renderGlobal, Float.valueOf(partialTicks), Integer.valueOf(pass)});
 
-
+        boolean viewBobbing = mc.gameSettings.viewBobbing;
+        mc.gameSettings.viewBobbing = false;
+        setupCameraTransform(partialTicks, pass);
         XIV.getInstance().getListenerManager().call(new Render3DEvent(partialTicks));
-        GL11.glColor4f(1, 1, 1, 1);
-
+        mc.gameSettings.viewBobbing = viewBobbing;
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         if (!handRendered && this.field_175074_C)
         {
             GlStateManager.clear(256);
             this.renderHand(partialTicks, pass);
             this.func_175067_i(partialTicks);
         }
-
-
     }
 
     private void func_180437_a(RenderGlobal p_180437_1_, float partialTicks, int pass)

@@ -14,6 +14,8 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.command.Command;
+import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.IngameHUDRenderEvent;
 import pw.latematt.xiv.management.file.XIVFile;
@@ -34,7 +36,7 @@ import java.util.stream.Collectors;
  * I HATE FUCKING NORMIES AND RUDY IS A FUCKING NORMIE REEEEEEEEEE
  * @author Matthew
  */
-public class HUD extends Mod implements Listener<IngameHUDRenderEvent> {
+public class HUD extends Mod implements Listener<IngameHUDRenderEvent>,CommandHandler {
     private final Value<Boolean> watermark = new Value<>("hud_watermark", false);
     private final Value<Boolean> arraylist = new Value<>("hud_arraylist", true);
     private final Value<Boolean> coords = new Value<>("hud_coords", true);
@@ -47,8 +49,15 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent> {
     private final XIVFile hudConfigFile;
 
     public HUD() {
-        super("HUD", new String[]{"<action>"}, new String[]{});
+        super("HUD");
         setEnabled(true);
+
+        Command.newCommand()
+                .cmd("hud")
+                .description("Base command for the HUD mod.")
+                .arguments("<action>")
+                .handler(this)
+                .build();
 
         hudConfigFile = new XIVFile("hudconfig", "json") {
             @Override
@@ -82,12 +91,13 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent> {
 
     @Override
     public void onEventCalled(IngameHUDRenderEvent event) {
-        if(mc.gameSettings.showDebugInfo) return;
+        if (mc.gameSettings.showDebugInfo)
+            return;
 
         ScaledResolution scaledResolution = XIV.getInstance().newScaledResolution();
         GlStateManager.enableBlend();
         if (watermark.getValue()) {
-            mc.fontRendererObj.drawStringWithShadow("XIV", 2, 2, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow("XIV", 2, 2, 0xFFEEEEEE);
         }
         if (time.getValue()) {
             int x = 2;
@@ -180,7 +190,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent> {
             info.add(String.format("\2477IGN\247r: %s", mc.getSession().getUsername()));
         }
         if (coords.getValue()) {
-            info.add(String.format("\2477XYZ\247r: %s, %s, %s", MathHelper.floor_double(mc.thePlayer.posX), MathHelper.floor_double(mc.thePlayer.posY), MathHelper.floor_double(mc.thePlayer.posZ)));
+            info.add(String.format("\2477XYZ\247r: %s %s %s", MathHelper.floor_double(mc.thePlayer.posX), MathHelper.floor_double(mc.thePlayer.posY), MathHelper.floor_double(mc.thePlayer.posZ)));
         }
 
         int y = scaledResolution.getScaledHeight() - 10;

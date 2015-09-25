@@ -17,7 +17,7 @@ public class Step extends Mod implements Listener<EntityStepEvent> {
     private Value<Float> height = new Value<>("step_height", 1.065F);
 
     public Step() {
-        super("Step", new String[] {"<action>", "[height]"}, new String[] {});
+        super("Step");
 
         sendPacketListener = new Listener<SendPacketEvent>() {
             @Override
@@ -37,11 +37,6 @@ public class Step extends Mod implements Listener<EntityStepEvent> {
                 && !mc.thePlayer.isCollidedHorizontally;
         mc.thePlayer.stepHeight = mc.thePlayer.isInWater() ? 0.50F : height.getValue();
         editPackets = shouldStep;
-    }
-
-    @Override
-    public void onCommandRan(String message) {
-
     }
 
     public boolean isEditingPackets() {
