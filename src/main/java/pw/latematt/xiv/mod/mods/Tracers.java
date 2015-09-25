@@ -1,7 +1,6 @@
 package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Keyboard;
@@ -9,7 +8,6 @@ import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.Render3DEvent;
-import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
@@ -17,7 +15,7 @@ import pw.latematt.xiv.value.Value;
 import java.util.List;
 
 /**
- * Created by TehNeon on 9/24/2015.
+ * @author TehNeon
  */
 public class Tracers extends Mod implements Listener<Render3DEvent> {
 
@@ -27,7 +25,7 @@ public class Tracers extends Mod implements Listener<Render3DEvent> {
     public Value<Float> spineWidth = new Value<>("tracers_spine_width", 1F);
 
     public Tracers() {
-        super("Tracers", Keyboard.KEY_I, 0xFFA718AD, new String[] { "<action>" }, new String[] {});
+        super("Tracers", Keyboard.KEY_I, new String[] { "<action>" }, new String[] {});
     }
 
     public void onEventCalled(Render3DEvent event) {
@@ -62,15 +60,15 @@ public class Tracers extends Mod implements Listener<Render3DEvent> {
 
         GL11.glLineWidth(tracerWidth.getValue());
 
-//        if (XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderName())) {
-//            GL11.glColor4f(0, 1, 1, 1);
-//        } else {
+        if (XIV.getInstance().getFriendManager().isFriend(entity.getDisplayName().getUnformattedText())) {
+            GL11.glColor4f(0.0F, 0.6F, 0.6F, 1.0F);
+        } else {
             if (distanceColor.getValue()) {
-                GL11.glColor4f(1f, Math.min(mc.thePlayer.getDistanceToEntity(entity) / 50f, 0.4f), 0, 1f);
+                GL11.glColor4f(1.0F, Math.min(mc.thePlayer.getDistanceToEntity(entity) / 64.0F, 0.4F), 0.0F, 1.0F);
             } else {
-                GL11.glColor4f(1, 1, 1, 1);
+                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             }
-//        }
+        }
 
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
 
