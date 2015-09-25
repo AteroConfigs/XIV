@@ -11,6 +11,7 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
+import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
 
 import java.util.List;
@@ -21,11 +22,12 @@ import java.util.List;
 public class Tracers extends Mod implements Listener<Render3DEvent> {
 
     public Value<Boolean> spines = new Value<Boolean>("tracers_spines", false);
+    public Value<Boolean> distanceColor = new Value<Boolean>("tracers_distance_color", true);
     public Value<Float> tracerWidth = new Value<Float>("tracers_width", 1F);
     public Value<Float> spineWidth = new Value<Float>("tracers_spine_width", 1F);
 
     public Tracers() {
-        super("Tracers", Keyboard.KEY_I, 0xFFA718AD, new String[] {}, new String[] {});
+        super("Tracers", Keyboard.KEY_I, 0xFFA718AD, new String[] { "<action>" }, new String[] {});
     }
 
     public void onEventCalled(Render3DEvent event) {
@@ -60,7 +62,15 @@ public class Tracers extends Mod implements Listener<Render3DEvent> {
 
         GL11.glLineWidth(tracerWidth.getValue());
 
-        GL11.glColor3f(1, 1, 1);
+//        if (XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderName())) {
+//            GL11.glColor4f(0, 1, 1, 1);
+//        } else {
+            if (distanceColor.getValue()) {
+                GL11.glColor4f(1f, Math.min(mc.thePlayer.getDistanceToEntity(entity) / 50f, 0.4f), 0, 1f);
+            } else {
+                GL11.glColor4f(1, 1, 1, 1);
+            }
+//        }
 
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
 
@@ -87,7 +97,26 @@ public class Tracers extends Mod implements Listener<Render3DEvent> {
 
     @Override
     public void onCommandRan(String message) {
+        String[] arguments = message.split(" ");
+        if (arguments.length >= 2) {
+            String action = arguments[1];
 
+            switch (action) {
+                case "spines":
+                    spines.setValue(!spines.getValue());
+                    ChatLogger.print(String.format("Tracers will %s display spines of entities.", (spines.getValue() ? "now" : "no longer")));
+                    break;
+                case "distancecolor":
+                    distanceColor.setValue(!distanceColor.getValue());
+                    ChatLogger.print(String.format("Tracers will %s change color based on entity distance.", (distanceColor.getValue() ? "now" : "no longer")));
+                    break;
+                default:
+                    ChatLogger.print("Invalid action, valid: spines, distancecolor");
+                    break;
+            }
+        } else {
+            ChatLogger.print("Invalid arguments, valid: tracers <action>");
+        }
     }
 
     @Override
