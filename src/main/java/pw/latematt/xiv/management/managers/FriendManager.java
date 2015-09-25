@@ -75,4 +75,8 @@ public class FriendManager extends MapManager<String, String> {
         }
         return string;
     }
+
+    public boolean isFriend(String mcname) {
+        return contents.containsKey(mcname);
+    }
 }

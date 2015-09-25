@@ -41,7 +41,7 @@ public class ListenerManager extends ListManager<Listener> {
 
     public void add(Listener listener) {
         if (contents.contains(listener)) {
-            XIV.getInstance().getLogger().warn("Duplicate listener entries were attempted to be added");
+            XIV.getInstance().getLogger().warn(String.format("%s was attempted to be added when it's already in the list.", listener.getClass().getSimpleName()));
             return;
         }
         contents.add(listener);
@@ -49,7 +49,7 @@ public class ListenerManager extends ListManager<Listener> {
 
     public void remove(Listener listener) {
         if (!contents.contains(listener)) {
-            XIV.getInstance().getLogger().warn("A listener that didn't exist was attempted to be removed");
+            XIV.getInstance().getLogger().warn(String.format("%s was attempted to be removed when it's not in the list.", listener.getClass().getSimpleName()));
             return;
         }
         contents.remove(listener);

@@ -63,8 +63,6 @@ public class CommandManager extends ListManager<Command> {
 
                             if (command.getAliases() != null) {
                                 for (String alias : command.getAliases()) {
-                                    if (alias == null)
-                                        continue;
                                     if (spaceSplit[0].equalsIgnoreCase(prefix + alias)) {
                                         command.getHandler().onCommandRan(packet.getMessage());
                                         event.setCancelled(true);
