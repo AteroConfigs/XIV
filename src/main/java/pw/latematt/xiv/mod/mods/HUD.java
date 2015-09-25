@@ -82,6 +82,8 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent> {
 
     @Override
     public void onEventCalled(IngameHUDRenderEvent event) {
+        if(mc.gameSettings.showDebugInfo) return;
+
         ScaledResolution scaledResolution = XIV.getInstance().newScaledResolution();
         GlStateManager.enableBlend();
         if (watermark.getValue()) {
