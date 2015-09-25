@@ -1663,7 +1663,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
         this.mc.mcProfiler.endStartSection("hand");
         handRendered = Reflector.callBoolean(Reflector.ForgeHooksClient_renderFirstPersonHand, new Object[] {this.mc.renderGlobal, Float.valueOf(partialTicks), Integer.valueOf(pass)});
 
-        XIV.getInstance().getListenerManager().call(new Render3DEvent());
+        XIV.getInstance().getListenerManager().call(new Render3DEvent(partialTicks));
 
         if (!handRendered && this.field_175074_C)
         {
