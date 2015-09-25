@@ -5,14 +5,13 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.Mod;
+import pw.latematt.xiv.mod.mods.ESP;
 import pw.latematt.xiv.mod.mods.HUD;
 import pw.latematt.xiv.mod.mods.Step;
-import pw.latematt.xiv.mod.mods.Tracers;
 import pw.latematt.xiv.utils.ChatLogger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.Pack200;
 
 /**
  * @author Matthew
@@ -27,7 +26,7 @@ public class ModManager extends ListManager<Mod> {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         contents.add(new HUD());
         contents.add(new Step());
-        contents.add(new Tracers());
+        contents.add(new ESP());
 
         Command.newCommand()
                 .cmd("mods")
