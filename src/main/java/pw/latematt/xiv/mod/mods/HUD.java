@@ -193,6 +193,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent> {
         String[] arguments = message.split(" ");
         if (arguments.length >= 2) {
             String action = arguments[1];
+
             switch (action) {
                 case "watermark":
                     watermark.setValue(!watermark.getValue());
