@@ -41,8 +41,8 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.ReadPacketEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
-import pw.latematt.xiv.management.managers.ListenerManager;
 
 public class NetworkManager extends SimpleChannelInboundHandler
 {
@@ -138,6 +138,11 @@ public class NetworkManager extends SimpleChannelInboundHandler
 
     protected void channelRead0(ChannelHandlerContext p_channelRead0_1_, Packet p_channelRead0_2_)
     {
+        ReadPacketEvent event = new ReadPacketEvent(p_channelRead0_2_);
+        XIV.getInstance().getListenerManager().call(event);
+        if (event.isCancelled())
+            return;
+        p_channelRead0_2_ = event.getPacket();
         if (this.channel.isOpen())
         {
             try

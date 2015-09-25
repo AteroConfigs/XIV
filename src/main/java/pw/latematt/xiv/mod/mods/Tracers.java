@@ -21,10 +21,10 @@ import java.util.List;
  */
 public class Tracers extends Mod implements Listener<Render3DEvent> {
 
-    public Value<Boolean> spines = new Value<Boolean>("tracers_spines", false);
-    public Value<Boolean> distanceColor = new Value<Boolean>("tracers_distance_color", true);
-    public Value<Float> tracerWidth = new Value<Float>("tracers_width", 1F);
-    public Value<Float> spineWidth = new Value<Float>("tracers_spine_width", 1F);
+    public Value<Boolean> spines = new Value<>("tracers_spines", false);
+    public Value<Boolean> distanceColor = new Value<>("tracers_distance_color", true);
+    public Value<Float> tracerWidth = new Value<>("tracers_width", 1F);
+    public Value<Float> spineWidth = new Value<>("tracers_spine_width", 1F);
 
     public Tracers() {
         super("Tracers", Keyboard.KEY_I, 0xFFA718AD, new String[] { "<action>" }, new String[] {});

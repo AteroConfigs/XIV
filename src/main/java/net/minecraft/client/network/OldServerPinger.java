@@ -207,7 +207,7 @@ public class OldServerPinger
                     ;
                 }
 
-                p_initChannel_1_.pipeline().addLast(new ChannelHandler[] {new SimpleChannelInboundHandler()
+                p_initChannel_1_.pipeline().addLast(new SimpleChannelInboundHandler()
                     {
 
                         public void channelActive(ChannelHandlerContext p_channelActive_1_) throws Exception
@@ -287,8 +287,7 @@ public class OldServerPinger
                         {
                             this.channelRead0(p_channelRead0_1_, (ByteBuf)p_channelRead0_2_);
                         }
-                    }
-                });
+                    });
             }
         })).channel(NioSocketChannel.class)).connect(var2.getIP(), var2.getPort());
     }
