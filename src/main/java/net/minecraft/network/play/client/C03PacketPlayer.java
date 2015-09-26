@@ -8,14 +8,14 @@ import net.minecraft.network.play.INetHandlerPlayServer;
 
 public class C03PacketPlayer implements Packet
 {
-    protected double x;
+    public double x;
     public double y;
-    protected double z;
-    protected float yaw;
-    protected float pitch;
+    public double z;
+    public float yaw;
+    public float pitch;
     public boolean moving;
     protected boolean field_149480_h;
-    protected boolean rotating;
+    public boolean rotating;
 
 
     public C03PacketPlayer() {}

@@ -157,6 +157,11 @@ public class EntityPlayerSP extends AbstractClientPlayer
         XIV.getInstance().getListenerManager().call(pre);
         if (pre.isCancelled())
             return;
+        float preYaw = rotationYaw;
+        float prePitch = rotationPitch;
+        double preX = posX;
+        double preY = posY;
+        double preZ = posZ;
         rotationYaw = pre.getYaw();
         rotationPitch = pre.getPitch();
         posX = pre.getX();
@@ -246,6 +251,11 @@ public class EntityPlayerSP extends AbstractClientPlayer
                 this.field_175165_bM = this.rotationPitch;
             }
         }
+        rotationYaw = preYaw;
+        rotationPitch = prePitch;
+        posX = preX;
+        posY = preY;
+        posZ = preZ;
         MotionUpdateEvent post = new MotionUpdateEvent(MotionUpdateEvent.State.POST, rotationYaw, rotationPitch, posX, posY, posZ);
         XIV.getInstance().getListenerManager().call(post);
     }

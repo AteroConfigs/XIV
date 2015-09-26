@@ -59,8 +59,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glLineWidth(lineWidth.getValue());
 
-        for (Object o : mc.theWorld.loadedEntityList) {
-            Entity entity = (Entity) o;
+        for (Entity entity : mc.theWorld.loadedEntityList) {
             if (!isValidEntity(entity))
                 continue;
 
