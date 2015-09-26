@@ -28,6 +28,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new KillAura());
         contents.add(new NoSlowdown());
         contents.add(new Step());
+        contents.add(new Velocity());
 
         Command.newCommand()
                 .cmd("mods")

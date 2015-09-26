@@ -506,11 +506,11 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
     public void handleEntityVelocity(S12PacketEntityVelocity packetIn)
     {
         PacketThreadUtil.func_180031_a(packetIn, this, this.gameController);
-        Entity var2 = this.clientWorldController.getEntityByID(packetIn.func_149412_c());
+        Entity var2 = this.clientWorldController.getEntityByID(packetIn.getEntityID());
 
         if (var2 != null)
         {
-            var2.setVelocity((double)packetIn.func_149411_d() / 8000.0D, (double)packetIn.func_149410_e() / 8000.0D, (double)packetIn.func_149409_f() / 8000.0D);
+            var2.setVelocity((double)packetIn.getVelocityX() / 8000.0D, (double)packetIn.getVelocityY() / 8000.0D, (double)packetIn.getVelocityZ() / 8000.0D);
         }
     }
 
