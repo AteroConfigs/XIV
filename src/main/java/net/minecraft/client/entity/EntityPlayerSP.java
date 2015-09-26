@@ -52,6 +52,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.UsingItemSlowdownEvent;
 
 public class EntityPlayerSP extends AbstractClientPlayer
@@ -152,6 +153,16 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
     public void func_175161_p()
     {
+        MotionUpdateEvent pre = new MotionUpdateEvent(MotionUpdateEvent.State.PRE, rotationYaw, rotationPitch, posX, posY, posZ);
+        XIV.getInstance().getListenerManager().call(pre);
+        if (pre.isCancelled())
+            return;
+        rotationYaw = pre.getYaw();
+        rotationPitch = pre.getPitch();
+        posX = pre.getX();
+        posY = pre.getY();
+        posZ = pre.getZ();
+
         boolean var1 = this.isSprinting();
 
         if (var1 != this.field_175171_bO)
@@ -235,6 +246,8 @@ public class EntityPlayerSP extends AbstractClientPlayer
                 this.field_175165_bM = this.rotationPitch;
             }
         }
+        MotionUpdateEvent post = new MotionUpdateEvent(MotionUpdateEvent.State.POST, rotationYaw, rotationPitch, posX, posY, posZ);
+        XIV.getInstance().getListenerManager().call(post);
     }
 
     /**

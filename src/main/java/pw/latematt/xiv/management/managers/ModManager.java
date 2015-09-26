@@ -5,9 +5,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.Mod;
-import pw.latematt.xiv.mod.mods.ESP;
-import pw.latematt.xiv.mod.mods.HUD;
-import pw.latematt.xiv.mod.mods.Step;
+import pw.latematt.xiv.mod.mods.*;
 import pw.latematt.xiv.utils.ChatLogger;
 
 import java.util.ArrayList;
@@ -24,9 +22,11 @@ public class ModManager extends ListManager<Mod> {
     @Override
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
-        contents.add(new HUD());
-        contents.add(new Step());
         contents.add(new ESP());
+        contents.add(new HUD());
+        contents.add(new KillAura());
+        contents.add(new NoSlowdown());
+        contents.add(new Step());
 
         Command.newCommand()
                 .cmd("mods")
@@ -90,8 +90,8 @@ public class ModManager extends ListManager<Mod> {
     }
 
     public Mod find(Class clazz) {
-        for(Mod mod: getContents()) {
-            if(mod.getClass().equals(clazz)) {
+        for (Mod mod: getContents()) {
+            if (mod.getClass().equals(clazz)) {
                 return mod;
             }
         }
@@ -100,8 +100,8 @@ public class ModManager extends ListManager<Mod> {
     }
 
     public Mod find(String name) {
-        for(Mod mod: getContents()) {
-            if(mod.getName().equalsIgnoreCase(name)) {
+        for (Mod mod: getContents()) {
+            if (mod.getName().toLowerCase().replaceAll(" ", "").startsWith(name.toLowerCase().replaceAll(" ", ""))) {
                 return mod;
             }
         }

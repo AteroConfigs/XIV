@@ -103,7 +103,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
             color = new float[] { 1.0F, 0.9F, 0.0F };
         } else if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).hurtTime > 0) {
             color = new float[] { 1.0F, 0.66F, 0.0F };
-        } else if (distance <= 4.25F) {
+        } else if (distance <= 3.9F) {
             color = new float[] { 0.9F, 0.0F, 0.0F };
         } else {
             color = new float[] { 0.0F, 0.9F, 0.0F };
@@ -143,6 +143,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
 
             switch (action) {
                 case "players":
+                case "plyrs":
                     players.setValue(!players.getValue());
                     ChatLogger.print(String.format("ESP will %s display players.", (players.getValue() ? "now" : "no longer")));
                     break;
@@ -159,18 +160,22 @@ public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
                     ChatLogger.print(String.format("ESP will %s display items.", (items.getValue() ? "now" : "no longer")));
                     break;
                 case "enderpearls":
+                case "eps":
                     enderpearls.setValue(!enderpearls.getValue());
                     ChatLogger.print(String.format("ESP will %s display enderpearls.", (enderpearls.getValue() ? "now" : "no longer")));
                     break;
                 case "boxes":
+                case "box":
                     boxes.setValue(!boxes.getValue());
                     ChatLogger.print(String.format("ESP will %s display boxes.", (boxes.getValue() ? "now" : "no longer")));
                     break;
                 case "tracerlines":
+                case "tracers":
                     tracerlines.setValue(!tracerlines.getValue());
                     ChatLogger.print(String.format("ESP will %s display tracer lines.", (tracerlines.getValue() ? "now" : "no longer")));
                     break;
                 case "linewidth":
+                case "width":
                     if (arguments.length == 3) {
                         try {
                             float newLineWidth = Float.parseFloat(arguments[2]);
