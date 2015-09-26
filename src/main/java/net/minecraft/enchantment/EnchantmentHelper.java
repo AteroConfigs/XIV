@@ -206,6 +206,16 @@ public class EnchantmentHelper
     }
 
     /**
+     * Return the (magic) extra damage of the enchantments on player equipped
+     * item.
+     */
+    public static float getEnchantmentModifierLiving(
+            EntityLivingBase p_77512_0_, EntityLivingBase p_77512_1_) {
+        return func_152377_a(p_77512_0_.getHeldItem(),
+                p_77512_1_.getCreatureAttribute());
+    }
+
+    /**
      * Returns the modifier of protection enchantments on armors equipped on player.
      */
     public static int getEnchantmentModifierDamage(ItemStack[] p_77508_0_, DamageSource p_77508_1_)

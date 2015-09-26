@@ -62,7 +62,7 @@ public abstract class World implements IBlockAccess
     protected boolean scheduledUpdatesAreImmediate;
 
     /** A list of all Entities in all currently-loaded chunks */
-    public final List loadedEntityList = Lists.newArrayList();
+    public final List<Entity> loadedEntityList = Lists.newArrayList();
     protected final List unloadedEntityList = Lists.newArrayList();
 
     /** A list of the loaded tile entities in the world */
