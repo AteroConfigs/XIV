@@ -1,8 +1,14 @@
 package pw.latematt.xiv.mod.mods;
 
+import net.minecraft.client.gui.spectator.ISpectatorMenuObject;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityEnderPearl;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.input.Keyboard;
@@ -55,9 +61,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
 
         for (Object o : mc.theWorld.loadedEntityList) {
             Entity entity = (Entity) o;
-            if (entity == mc.thePlayer)
-                continue;
-            if (entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer) && mc.thePlayer.getDistanceToEntity(entity) > 32)
+            if (!isValidEntity(entity))
                 continue;
 
             float partialTicks = event.getPartialTicks();
@@ -89,6 +93,31 @@ public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
         GL11.glPopMatrix();
     }
 
+    private boolean isValidEntity(Entity entity) {
+        if (entity == null)
+            return false;
+        if (entity == mc.thePlayer)
+            return false;
+        if (!entity.isEntityAlive())
+            return false;
+        if (entity.ticksExisted < 20)
+            return false;
+        if (entity instanceof EntityLivingBase) {
+            if (entity instanceof EntityPlayer) {
+                return players.getValue();
+            } else if (entity instanceof IAnimals && !(entity instanceof IMob)) {
+                return animals.getValue();
+            } else if (entity instanceof IMob) {
+                return mobs.getValue();
+            }
+        } else if (entity instanceof EntityEnderPearl) {
+            return enderpearls.getValue();
+        } else if (entity instanceof EntityItem) {
+            return items.getValue();
+        }
+        return false;
+    }
+
     private void drawBoxes(Entity entity, double x, double y, double z) {
         AxisAlignedBB box = AxisAlignedBB.fromBounds(x - entity.width, y, z - entity.width, x + entity.width, y + entity.height + 0.2D, z + entity.width);
         if (entity instanceof EntityLivingBase) {
@@ -103,7 +132,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
             color = new float[] { 1.0F, 0.9F, 0.0F };
         } else if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).hurtTime > 0) {
             color = new float[] { 1.0F, 0.66F, 0.0F };
-        } else if (distance <= 4.25F) {
+        } else if (distance <= 3.9F) {
             color = new float[] { 0.9F, 0.0F, 0.0F };
         } else {
             color = new float[] { 0.0F, 0.9F, 0.0F };
@@ -143,6 +172,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
 
             switch (action) {
                 case "players":
+                case "plyrs":
                     players.setValue(!players.getValue());
                     ChatLogger.print(String.format("ESP will %s display players.", (players.getValue() ? "now" : "no longer")));
                     break;
@@ -159,18 +189,22 @@ public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
                     ChatLogger.print(String.format("ESP will %s display items.", (items.getValue() ? "now" : "no longer")));
                     break;
                 case "enderpearls":
+                case "eps":
                     enderpearls.setValue(!enderpearls.getValue());
                     ChatLogger.print(String.format("ESP will %s display enderpearls.", (enderpearls.getValue() ? "now" : "no longer")));
                     break;
                 case "boxes":
+                case "box":
                     boxes.setValue(!boxes.getValue());
                     ChatLogger.print(String.format("ESP will %s display boxes.", (boxes.getValue() ? "now" : "no longer")));
                     break;
                 case "tracerlines":
+                case "tracers":
                     tracerlines.setValue(!tracerlines.getValue());
                     ChatLogger.print(String.format("ESP will %s display tracer lines.", (tracerlines.getValue() ? "now" : "no longer")));
                     break;
                 case "linewidth":
+                case "width":
                     if (arguments.length == 3) {
                         try {
                             float newLineWidth = Float.parseFloat(arguments[2]);
