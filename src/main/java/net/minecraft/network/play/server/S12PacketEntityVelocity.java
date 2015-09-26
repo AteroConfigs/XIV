@@ -9,10 +9,10 @@ import net.minecraft.network.play.INetHandlerPlayClient;
 
 public class S12PacketEntityVelocity implements Packet
 {
-    private int field_149417_a;
-    private int field_149415_b;
-    private int field_149416_c;
-    private int field_149414_d;
+    private int entityID;
+    private int velocityX;
+    private int velocityY;
+    private int velocityZ;
 
 
     public S12PacketEntityVelocity() {}
@@ -24,7 +24,7 @@ public class S12PacketEntityVelocity implements Packet
 
     public S12PacketEntityVelocity(int p_i45220_1_, double p_i45220_2_, double p_i45220_4_, double p_i45220_6_)
     {
-        this.field_149417_a = p_i45220_1_;
+        this.entityID = p_i45220_1_;
         double var8 = 3.9D;
 
         if (p_i45220_2_ < -var8)
@@ -57,9 +57,9 @@ public class S12PacketEntityVelocity implements Packet
             p_i45220_6_ = var8;
         }
 
-        this.field_149415_b = (int)(p_i45220_2_ * 8000.0D);
-        this.field_149416_c = (int)(p_i45220_4_ * 8000.0D);
-        this.field_149414_d = (int)(p_i45220_6_ * 8000.0D);
+        this.velocityX = (int)(p_i45220_2_ * 8000.0D);
+        this.velocityY = (int)(p_i45220_4_ * 8000.0D);
+        this.velocityZ = (int)(p_i45220_6_ * 8000.0D);
     }
 
     /**
@@ -67,10 +67,10 @@ public class S12PacketEntityVelocity implements Packet
      */
     public void readPacketData(PacketBuffer data) throws IOException
     {
-        this.field_149417_a = data.readVarIntFromBuffer();
-        this.field_149415_b = data.readShort();
-        this.field_149416_c = data.readShort();
-        this.field_149414_d = data.readShort();
+        this.entityID = data.readVarIntFromBuffer();
+        this.velocityX = data.readShort();
+        this.velocityY = data.readShort();
+        this.velocityZ = data.readShort();
     }
 
     /**
@@ -78,10 +78,10 @@ public class S12PacketEntityVelocity implements Packet
      */
     public void writePacketData(PacketBuffer data) throws IOException
     {
-        data.writeVarIntToBuffer(this.field_149417_a);
-        data.writeShort(this.field_149415_b);
-        data.writeShort(this.field_149416_c);
-        data.writeShort(this.field_149414_d);
+        data.writeVarIntToBuffer(this.entityID);
+        data.writeShort(this.velocityX);
+        data.writeShort(this.velocityY);
+        data.writeShort(this.velocityZ);
     }
 
     /**
@@ -92,24 +92,24 @@ public class S12PacketEntityVelocity implements Packet
         handler.handleEntityVelocity(this);
     }
 
-    public int func_149412_c()
+    public int getEntityID()
     {
-        return this.field_149417_a;
+        return this.entityID;
     }
 
-    public int func_149411_d()
+    public int getVelocityX()
     {
-        return this.field_149415_b;
+        return this.velocityX;
     }
 
-    public int func_149410_e()
+    public int getVelocityY()
     {
-        return this.field_149416_c;
+        return this.velocityY;
     }
 
-    public int func_149409_f()
+    public int getVelocityZ()
     {
-        return this.field_149414_d;
+        return this.velocityZ;
     }
 
     /**

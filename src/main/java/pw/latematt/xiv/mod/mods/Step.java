@@ -42,6 +42,8 @@ public class Step extends Mod implements Listener<EntityStepEvent>,CommandHandle
 
     @Override
     public void onEventCalled(EntityStepEvent event) {
+        if(mc.thePlayer == null) return;
+
         final boolean shouldStep = event.getEntity() == mc.thePlayer
                 && mc.thePlayer.onGround && !mc.thePlayer.isInWater()
                 && !mc.thePlayer.isCollidedHorizontally;
@@ -56,18 +58,22 @@ public class Step extends Mod implements Listener<EntityStepEvent>,CommandHandle
             String action = arguments[1];
             switch (action) {
                 case "height":
-                    String newHeightString = arguments[2];
-                    try {
-                        float newHeight = Float.parseFloat(newHeightString);
-                        if (newHeight > 10.0F) {
-                            newHeight = 10.0F;
-                        } else if (newHeight < 0.5F) {
-                            newHeight = 0.5F;
+                    if(arguments.length >= 3) {
+                        String newHeightString = arguments[2];
+                        try {
+                            float newHeight = Float.parseFloat(newHeightString);
+                            if (newHeight > 10.0F) {
+                                newHeight = 10.0F;
+                            } else if (newHeight < 0.5F) {
+                                newHeight = 0.5F;
+                            }
+                            height.setValue(newHeight);
+                            ChatLogger.print(String.format("Step Height set to %s", height.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newHeightString));
                         }
-                        height.setValue(newHeight);
-                        ChatLogger.print(String.format("Step Height set to %s", height.getValue()));
-                    } catch (NumberFormatException e) {
-                        ChatLogger.print(String.format("\"%s\" is not a number.", newHeightString));
+                    } else {
+                        ChatLogger.print("Invalid syntax, valid: step height <number>");
                     }
                     break;
                 default:
