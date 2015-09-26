@@ -58,6 +58,7 @@ public class XIV {
         /* the order that these are called in is important, do not change! */
         /* setup is not required with all managers */
         commandManager.setup();
+        listenerManager.setup();
         modManager.setup();
         friendManager.setup();
         fileManager.setup();

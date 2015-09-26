@@ -29,7 +29,7 @@ public class KillAura extends Mod implements CommandHandler {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    
+
                 } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
 
                 }
