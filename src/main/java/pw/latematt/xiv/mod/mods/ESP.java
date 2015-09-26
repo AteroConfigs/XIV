@@ -1,8 +1,14 @@
 package pw.latematt.xiv.mod.mods;
 
+import net.minecraft.client.gui.spectator.ISpectatorMenuObject;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityEnderPearl;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.input.Keyboard;
@@ -55,9 +61,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
 
         for (Object o : mc.theWorld.loadedEntityList) {
             Entity entity = (Entity) o;
-            if (entity == mc.thePlayer)
-                continue;
-            if (entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer) && mc.thePlayer.getDistanceToEntity(entity) > 32)
+            if (!isValidEntity(entity))
                 continue;
 
             float partialTicks = event.getPartialTicks();
@@ -87,6 +91,31 @@ public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPopMatrix();
+    }
+
+    private boolean isValidEntity(Entity entity) {
+        if (entity == null)
+            return false;
+        if (entity == mc.thePlayer)
+            return false;
+        if (!entity.isEntityAlive())
+            return false;
+        if (entity.ticksExisted < 20)
+            return false;
+        if (entity instanceof EntityLivingBase) {
+            if (entity instanceof EntityPlayer) {
+                return players.getValue();
+            } else if (entity instanceof IAnimals && !(entity instanceof IMob)) {
+                return animals.getValue();
+            } else if (entity instanceof IMob) {
+                return mobs.getValue();
+            }
+        } else if (entity instanceof EntityEnderPearl) {
+            return enderpearls.getValue();
+        } else if (entity instanceof EntityItem) {
+            return items.getValue();
+        }
+        return false;
     }
 
     private void drawBoxes(Entity entity, double x, double y, double z) {
