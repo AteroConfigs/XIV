@@ -38,7 +38,7 @@ public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandH
             String action = arguments[1];
             switch (action) {
                 case "percent":
-                    if(arguments.length >= 3) {
+                    if (arguments.length >= 3) {
                         String newVelocityString = arguments[2];
                         try {
                             float newPercent = Float.parseFloat(newVelocityString);
@@ -63,7 +63,7 @@ public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandH
 
     @Override
     public void onEventCalled(ReadPacketEvent event) {
-        if(event.getPacket() instanceof S12PacketEntityVelocity) {
+        if (event.getPacket() instanceof S12PacketEntityVelocity) {
             S12PacketEntityVelocity packet = (S12PacketEntityVelocity) event.getPacket();
 
             if (mc.thePlayer.getEntityId() == packet.getEntityID()) {
@@ -76,25 +76,6 @@ public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandH
                 mc.thePlayer.motionY += velY;
                 mc.thePlayer.motionZ += velZ;
             }
-
-//            if (mc.thePlayer.getEntityId() == packet.getEntityID()) {
-//                event.setCancelled(true);
-//
-////                double hor = horzontalVeloc / 100.0;
-////                double dh = 8000 * (1 / hor);
-////                double ver = verticalVeloc / 100.0;
-////                double dv = 8000 * (1 / hor);
-////                var2.setVelocity(0, 0, 0);
-////                var2.setVelocity(x / dh, y / dv, z / dh);
-//
-//                double velX = packet.getVelocityX() * reducedVelocity.getValue();
-//                double velY = packet.getVelocityY() * reducedVelocity.getValue();
-//                double velZ = packet.getVelocityZ() * reducedVelocity.getValue();
-//
-//                mc.thePlayer.motionX += velX;
-//                mc.thePlayer.motionY += velY;
-//                mc.thePlayer.motionZ += velZ;
-//            }
         }
     }
 

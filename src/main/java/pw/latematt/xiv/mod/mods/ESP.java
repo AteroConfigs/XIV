@@ -24,11 +24,10 @@ import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
 /**
- *
  * @author Matthew
  * @author TehNeon
  */
-public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
+public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler {
     public Value<Boolean> players = new Value<>("esp_players", true);
     public Value<Boolean> mobs = new Value<>("esp_mobs", false);
     public Value<Boolean> animals = new Value<>("esp_animals", false);
@@ -123,18 +122,20 @@ public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
             box = AxisAlignedBB.fromBounds(x - entity.width + 0.2D, y, z - entity.width + 0.2D, x + entity.width - 0.2D, y + entity.height + (entity.isSneaking() ? 0.02D : 0.2D), z + entity.width - 0.2D);
         }
 
+        KillAura killAura = (KillAura) XIV.getInstance().getModManager().find(KillAura.class);
+
         float[] color;
         final float distance = mc.thePlayer.getDistanceToEntity(entity);
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getDisplayName().getUnformattedText())) {
-            color = new float[] { 0.3F, 0.7F, 1.0F };
+            color = new float[]{0.3F, 0.7F, 1.0F};
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
-            color = new float[] { 1.0F, 0.9F, 0.0F };
+            color = new float[]{1.0F, 0.9F, 0.0F};
         } else if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).hurtTime > 0) {
-            color = new float[] { 1.0F, 0.66F, 0.0F };
+            color = new float[]{1.0F, 0.66F, 0.0F};
         } else if (distance <= 3.9F) {
-            color = new float[] { 0.9F, 0.0F, 0.0F };
+            color = new float[]{0.9F, 0.0F, 0.0F};
         } else {
-            color = new float[] { 0.0F, 0.9F, 0.0F };
+            color = new float[]{0.0F, 0.9F, 0.0F};
         }
 
         GL11.glColor4f(color[0], color[1], color[2], 0.6F);
@@ -147,13 +148,13 @@ public class ESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
         final float distance = mc.thePlayer.getDistanceToEntity(entity);
         float[] color;
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getDisplayName().getUnformattedText())) {
-            color = new float[] { 0.30F, 0.7F, 1.0F };
+            color = new float[]{0.30F, 0.7F, 1.0F};
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
-            color = new float[] { 1.0F, 0.9F, 0.0F };
+            color = new float[]{1.0F, 0.9F, 0.0F};
         } else if (distance <= 64.0F) {
-            color = new float[] { 0.9F, distance / 64.0F, 0.0F };
+            color = new float[]{0.9F, distance / 64.0F, 0.0F};
         } else {
-            color = new float[] { 0.0F, 0.90F, 0.0F };
+            color = new float[]{0.0F, 0.90F, 0.0F};
         }
 
         GL11.glColor4f(color[0], color[1], color[2], 1.0F);

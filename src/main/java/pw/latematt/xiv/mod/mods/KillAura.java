@@ -39,7 +39,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> silent = new Value<>("killaura_silent", true);
     private final Value<Boolean> autosword = new Value<>("killaura_autosword", true);
     private final List<EntityLivingBase> entities;
-    private EntityLivingBase entityToAttack;
+    public EntityLivingBase entityToAttack;
     private boolean aimed;
     private Timer entitySelectTimer = new Timer();
     private Timer attackTimer = new Timer();
@@ -188,27 +188,65 @@ public class KillAura extends Mod implements CommandHandler {
             switch (action) {
                 case "delay":
                 case "d":
+                    if (arguments.length >= 3) {
+                        String newDelayString = arguments[2];
+                        try {
+                            long newDelay = Long.parseLong(newDelayString);
+                            delay.setValue(newDelay);
+                            ChatLogger.print(String.format("Kill Aura Delay set to %s", delay.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid syntax, valid: killaura delay <number>");
+                    }
                     break;
                 case "range":
                 case "r":
+                    if (arguments.length >= 3) {
+                        String newRangeString = arguments[2];
+                        try {
+                            double newRange = Double.parseDouble(newRangeString);
+                            range.setValue(newRange);
+                            ChatLogger.print(String.format("Kill Aura Range set to %s", range.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newRangeString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid syntax, valid: killaura range <number>");
+                    }
                     break;
                 case "players":
                 case "plyrs":
+                    players.setValue(!players.getValue());
+                    ChatLogger.print(String.format("Kill Aura will %s attack players.", (players.getValue() ? "now" : "no longer")));
                     break;
                 case "mobs":
+                    mobs.setValue(!mobs.getValue());
+                    ChatLogger.print(String.format("Kill Aura will %s attack mobs.", (mobs.getValue() ? "now" : "no longer")));
                     break;
                 case "animals":
+                    animals.setValue(!animals.getValue());
+                    ChatLogger.print(String.format("Kill Aura will %s attack animals.", (animals.getValue() ? "now" : "no longer")));
                     break;
                 case "invisible":
                 case "invis":
+                    invisible.setValue(!invisible.getValue());
+                    ChatLogger.print(String.format("Kill Aura will %s attack invisible entities.", (invisible.getValue() ? "now" : "no longer")));
                     break;
                 case "team":
+                    team.setValue(!team.getValue());
+                    ChatLogger.print(String.format("Kill Aura will %s attack your team.", (team.getValue() ? "now" : "no longer")));
                     break;
                 case "silent":
                 case "sil":
+                    silent.setValue(!silent.getValue());
+                    ChatLogger.print(String.format("Kill Aura will %s silently aim.", (silent.getValue() ? "now" : "no longer")));
                     break;
                 case "autosword":
                 case "as":
+                    autosword.setValue(!autosword.getValue());
+                    ChatLogger.print(String.format("Kill Aura will %s automatically switch to your sword.", (autosword.getValue() ? "now" : "no longer")));
                     break;
                 default:
                     ChatLogger.print("Invalid action, valid: delay, range, players, mobs, animals, invisible, team, silent, autosword");
