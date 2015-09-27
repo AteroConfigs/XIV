@@ -73,7 +73,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>,CommandHandle
                             ChatLogger.print(String.format("\"%s\" is not a number.", newHeightString));
                         }
                     } else {
-                        ChatLogger.print("Invalid syntax, valid: step height <number>");
+                        ChatLogger.print("Invalid arguments, valid: step height <number>");
                     }
                     break;
                 default:

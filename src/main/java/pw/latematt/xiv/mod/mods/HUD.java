@@ -116,9 +116,15 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>,CommandHa
         }
 
         drawInfo(scaledResolution);
-        drawArraylist(scaledResolution);
-        drawPotions(scaledResolution);
-        drawArmor(scaledResolution);
+        if (arraylist.getValue()) {
+            drawArraylist(scaledResolution);
+        }
+        if (potions.getValue()) {
+            drawPotions(scaledResolution);
+        }
+        if (armor.getValue()) {
+            drawArmor(scaledResolution);
+        }
         GlStateManager.disableBlend();
     }
 
@@ -159,11 +165,11 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>,CommandHa
                 name = name + " " + I18n.format("enchantment.level.3");
             } else if (effect.getAmplifier() == 3) {
                 name = name + " " + I18n.format("enchantment.level.4");
-            } else {
+            } else if (effect.getAmplifier() > 0) {
                 name = name + " " + (effect.getAmplifier() + 1);
             }
 
-            name = String.format("%s (%s)", name, Potion.getDurationString(effect));
+            name = String.format("%s \2477(%s)", name, Potion.getDurationString(effect));
             mc.fontRendererObj.drawStringWithShadow(name, x - mc.fontRendererObj.getStringWidth(name), y, Potion.potionTypes[effect.getPotionID()].getLiquidColor());
             y -= 10;
         }
@@ -175,14 +181,13 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>,CommandHa
         for (Mod mod : XIV.getInstance().getModManager().getContents()) {
             if (!mod.isVisible() || !mod.isEnabled())
                 continue;
-            mc.fontRendererObj.drawStringWithShadow(mod.getName(), x - mc.fontRendererObj.getStringWidth(mod.getName()), y, mod.getColor());
+            mc.fontRendererObj.drawStringWithShadow(mod.getTag(), x - mc.fontRendererObj.getStringWidth(mod.getTag()), y, mod.getColor());
             y += 10;
         }
     }
 
     private void drawInfo(ScaledResolution scaledResolution) {
         List<String> info = new ArrayList<>();
-
 
         if (coords.getValue()) {
             info.add(String.format("\2477XYZ\247r: %s %s %s", MathHelper.floor_double(mc.thePlayer.posX), MathHelper.floor_double(mc.thePlayer.posY), MathHelper.floor_double(mc.thePlayer.posZ)));
@@ -193,7 +198,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>,CommandHa
         if (fps.getValue()) {
             info.add(String.format("\2477FPS\247r: %s", mc.debug.split(" fps")[0]));
         }
-
 
         int y = scaledResolution.getScaledHeight() - 10;
         for (String infoString : info) {

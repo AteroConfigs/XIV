@@ -198,7 +198,7 @@ public class KillAura extends Mod implements CommandHandler {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));
                         }
                     } else {
-                        ChatLogger.print("Invalid syntax, valid: killaura delay <number>");
+                        ChatLogger.print("Invalid arguments, valid: killaura delay <number>");
                     }
                     break;
                 case "range":
@@ -213,7 +213,7 @@ public class KillAura extends Mod implements CommandHandler {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newRangeString));
                         }
                     } else {
-                        ChatLogger.print("Invalid syntax, valid: killaura range <number>");
+                        ChatLogger.print("Invalid arguments, valid: killaura range <number>");
                     }
                     break;
                 case "players":
