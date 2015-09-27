@@ -247,7 +247,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                     }
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: players, mobs, animals, items, enderpearls, boxes, tracerlines, linewidth");
+                    ChatLogger.print("Invalid action, valid: players, mobs, animals, items, enderpearls, boxes, tracerlines, linewidth, spines");
                     break;
             }
         } else {
