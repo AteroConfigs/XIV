@@ -26,9 +26,9 @@ public class AutoBlock extends Mod implements Listener<MotionUpdateEvent> {
         if (mc.thePlayer.getCurrentEquippedItem() == null || !(mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword))
             return;
         KillAura aura = (KillAura) XIV.getInstance().getModManager().find("killaura");
-        if (!aura.shouldBlock()) {
-            mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, mc.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
+        if (!aura.shouldBlock() && blockingFix) {
             mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
+            blockingFix = false;
             return;
         }
 
@@ -37,18 +37,13 @@ public class AutoBlock extends Mod implements Listener<MotionUpdateEvent> {
                 if (!blockingFix)
                     blockingFix = true;
 
-                mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, mc.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
                 mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
-            } else if (blockingFix) {
-                mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
-                blockingFix = false;
             }
         } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
             if (mc.thePlayer.isBlocking()) {
                 if (!blockingFix)
                     blockingFix = true;
 
-                mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
                 mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, mc.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
             } else if (blockingFix) {
                 mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));

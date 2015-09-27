@@ -20,8 +20,7 @@ public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandH
     public Value<Float> reducedVelocity = new Value<>("velocity_reduction", 0.7F);
 
     public Velocity() {
-        super("Velocity", Keyboard.KEY_NONE, 0x36454f, true);
-        setEnabled(true);
+        super("Velocity", Keyboard.KEY_NONE, 0xFF36454F, true);
 
         Command.newCommand()
                 .cmd("velocity")
@@ -43,14 +42,18 @@ public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandH
                         String newVelocityString = arguments[2];
                         try {
                             float newPercent = Float.parseFloat(newVelocityString);
-
+                            if (newPercent < -1.5F) {
+                                newPercent = -1.5F;
+                            } else if (newPercent > 1.5F) {
+                                newPercent = 1.5F;
+                            }
                             reducedVelocity.setValue(newPercent);
                             ChatLogger.print(String.format("Velocity Percent set to %s", (reducedVelocity.getValue() * 100F) + "%"));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newVelocityString));
                         }
                     } else {
-                        ChatLogger.print("Invalid syntax, valid: velocity percent <number>");
+                        ChatLogger.print("Invalid arguments, valid: velocity percent <number>");
                     }
                     break;
                 default:
