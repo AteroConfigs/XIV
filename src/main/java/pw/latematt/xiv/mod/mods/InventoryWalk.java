@@ -1,6 +1,9 @@
 package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiScreenBook;
+import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
@@ -20,7 +23,8 @@ public class InventoryWalk extends Mod implements Listener<MotionUpdateEvent> {
 
     public void onEventCalled(MotionUpdateEvent event) {
         if (mc.currentScreen == null) return;
-        if (mc.currentScreen instanceof GuiChat) return;
+
+        if (mc.currentScreen instanceof GuiChat || mc.currentScreen instanceof GuiEditSign || mc.currentScreen instanceof GuiScreenBook) return;
 
         KeyBinding[] keyBindings = {mc.gameSettings.keyBindForward, mc.gameSettings.keyBindBack, mc.gameSettings.keyBindLeft, mc.gameSettings.keyBindRight, mc.gameSettings.keyBindJump};
 
