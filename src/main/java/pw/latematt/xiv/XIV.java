@@ -1,14 +1,11 @@
 package pw.latematt.xiv;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.GuiScreenEvent;
 import pw.latematt.xiv.management.managers.AltManager;
 import pw.latematt.xiv.management.managers.CommandManager;
 import pw.latematt.xiv.management.managers.FileManager;
@@ -16,12 +13,11 @@ import pw.latematt.xiv.management.managers.FriendManager;
 import pw.latematt.xiv.management.managers.ListenerManager;
 import pw.latematt.xiv.management.managers.ModManager;
 import pw.latematt.xiv.management.managers.ValueManager;
-import pw.latematt.xiv.ui.GuiMainMenu$1;
 
 /**
  * @author Matthew
  */
-public class XIV implements Listener<GuiScreenEvent> {
+public class XIV {
     /* static instance of main class */
     private static XIV instance = new XIV();
 
@@ -92,11 +88,4 @@ public class XIV implements Listener<GuiScreenEvent> {
     public ScaledResolution newScaledResolution() {
         return new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
     }
-
-	@Override
-	public void onEventCalled(GuiScreenEvent event) {
-		if(event.getScreen() instanceof GuiScreen && !(event.getScreen() instanceof GuiMainMenu$1)) {
-			event.setScreen(new GuiMainMenu$1());
-		}
-	}
 }
