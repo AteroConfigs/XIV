@@ -45,7 +45,7 @@ public class AltSlot extends GuiSlot {
         this.selected = slot;
     }
 
-    public Entry<String, String> getAlt() {
+    public AltAccount getAlt() {
         return getAlt(getSelected());
     }
 
@@ -56,17 +56,17 @@ public class AltSlot extends GuiSlot {
 
     @Override
     protected void drawSlot(int slot, int x, int y, int var4, int var5, int var6) {
-        Entry<String, String> alt = getAlt(slot);
+        AltAccount alt = getAlt(slot);
 
         if (alt != null) {
-            mc.fontRendererObj.drawStringWithShadow(alt.getKey(), x + 1, y + 2, 0xFFFFFFFF);
-            mc.fontRendererObj.drawStringWithShadow(alt.getValue().replaceAll("(?s).", "*"), x + 1, y + 12, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow(alt.getUsername(), x + 1, y + 2, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow(alt.getPassword().replaceAll("(?s).", "*"), x + 1, y + 12, 0xFFFFFFFF);
         }
     }
 
-    public Entry<String, String> getAlt(int slot) {
+    public AltAccount getAlt(int slot) {
         int count = 0;
-        for (Entry<String, String> alt : XIV.getInstance().getAltManager().getContents().entrySet()) {
+        for (AltAccount alt : XIV.getInstance().getAltManager().getContents()) {
             if (count == slot) {
                 return alt;
             }

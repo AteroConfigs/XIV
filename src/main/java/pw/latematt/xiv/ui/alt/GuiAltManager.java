@@ -18,6 +18,7 @@ public class GuiAltManager extends GuiScreen {
 
     public GuiAltManager(GuiScreen parent) {
         this.parent = parent;
+        XIV.getInstance().getFileManager().loadFile("alts");
     }
 
     @Override
@@ -55,11 +56,11 @@ public class GuiAltManager extends GuiScreen {
                 AuthThread thread = new AuthThread(this.slot.getAlt());
                 thread.start();
             } else if (button.id == 2) {
-                XIV.getInstance().getAltManager().getContents().put(username.getText(), password.getText());
+                XIV.getInstance().getAltManager().add(username.getText(), password.getText());
                 username.setText("");
                 password.setText("");
             } else if (button.id == 3) {
-                XIV.getInstance().getAltManager().remove(slot.getAlt().getKey());
+                XIV.getInstance().getAltManager().remove(slot.getAlt().getUsername());
             } else if (button.id == 4) {
                 Random random = new Random();
 
