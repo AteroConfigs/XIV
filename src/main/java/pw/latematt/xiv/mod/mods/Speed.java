@@ -36,6 +36,7 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
             /* thanks anodise */
             if (currentMode.getValue() == Mode.BYPASS) {
+                // TODO: Fix this a bit more.
                 if (!mc.thePlayer.onGround) return;
 
                 switch (this.delay) {
