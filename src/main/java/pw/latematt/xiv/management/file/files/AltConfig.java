@@ -24,6 +24,8 @@ public class AltConfig extends XIVFile {
     public void load() throws IOException {
         if(!file.exists()) file.createNewFile();
 
+        XIV.getInstance().getAltManager().getContents().clear();
+
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String line = "";
         while ((line = reader.readLine()) != null) {
