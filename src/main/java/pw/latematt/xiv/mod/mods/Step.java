@@ -8,19 +8,20 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.EntityStepEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
+import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
 
 /**
  * @author Matthew
  */
-public class Step extends Mod implements Listener<EntityStepEvent>,CommandHandler {
+public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandler {
     private final Listener sendPacketListener;
     private boolean editPackets;
     private Value<Float> height = new Value<>("step_height", 1.5F);
 
     public Step() {
-        super("Step");
+        super("Step", ModType.MOVEMENT);
 
         Command.newCommand()
                 .cmd("step")
@@ -42,7 +43,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>,CommandHandle
 
     @Override
     public void onEventCalled(EntityStepEvent event) {
-        if(mc.thePlayer == null) return;
+        if (mc.thePlayer == null) return;
 
         final boolean shouldStep = event.getEntity() == mc.thePlayer
                 && mc.thePlayer.onGround && !mc.thePlayer.isInWater()

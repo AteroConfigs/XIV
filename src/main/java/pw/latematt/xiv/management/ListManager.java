@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * KILL YOURSELF R U D Y (HAZE BOOTH)
+ *
  * @author Matthew
  */
 public abstract class ListManager<T> {

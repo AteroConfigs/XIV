@@ -1,16 +1,15 @@
 package pw.latematt.xiv.management.managers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.lwjgl.input.Keyboard;
-
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.mods.*;
 import pw.latematt.xiv.utils.ChatLogger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Matthew
@@ -95,7 +94,7 @@ public class ModManager extends ListManager<Mod> {
     }
 
     public Mod find(Class clazz) {
-        for (Mod mod: getContents()) {
+        for (Mod mod : getContents()) {
             if (mod.getClass().equals(clazz)) {
                 return mod;
             }
@@ -105,7 +104,7 @@ public class ModManager extends ListManager<Mod> {
     }
 
     public Mod find(String name) {
-        for (Mod mod: getContents()) {
+        for (Mod mod : getContents()) {
             if (mod.getName().toLowerCase().replaceAll(" ", "").startsWith(name.toLowerCase().replaceAll(" ", ""))) {
                 return mod;
             }

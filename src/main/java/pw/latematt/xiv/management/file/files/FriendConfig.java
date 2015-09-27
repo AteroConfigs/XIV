@@ -24,7 +24,8 @@ public class FriendConfig extends XIVFile {
     public void load() throws IOException {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         BufferedReader reader = new BufferedReader(new FileReader(file));
-        HashMap<String, String> friends = gson.fromJson(reader, new TypeToken<HashMap<String, String>>() {}.getType());
+        HashMap<String, String> friends = gson.fromJson(reader, new TypeToken<HashMap<String, String>>() {
+        }.getType());
         for (String mcname : friends.keySet()) {
             String alias = friends.get(mcname);
             XIV.getInstance().getFriendManager().add(mcname, alias);

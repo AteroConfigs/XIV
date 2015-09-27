@@ -1,12 +1,10 @@
 package pw.latematt.xiv.mod.mods;
 
-import net.minecraft.client.gui.spectator.ISpectatorMenuObject;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderPearl;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +17,7 @@ import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
+import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
@@ -38,7 +37,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     public Value<Float> lineWidth = new Value<>("esp_lineWidth", 1.0F);
 
     public ESP() {
-        super("ESP", Keyboard.KEY_I);
+        super("ESP", ModType.RENDER, Keyboard.KEY_I);
 
         Command.newCommand()
                 .cmd("esp")

@@ -28,7 +28,8 @@ public class ModConfig extends XIVFile {
     public void load() throws IOException {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         BufferedReader reader = new BufferedReader(new FileReader(file));
-        HashMap<String, ModOptions> modOptions = gson.fromJson(reader, new TypeToken<HashMap<String, ModOptions>>() {}.getType());
+        HashMap<String, ModOptions> modOptions = gson.fromJson(reader, new TypeToken<HashMap<String, ModOptions>>() {
+        }.getType());
         for (Mod mod : XIV.getInstance().getModManager().getContents()) {
             modOptions.keySet().stream().filter(modName -> mod.getName().equals(modName)).forEach(modName -> {
                 ModOptions options = modOptions.get(modName);
@@ -65,12 +66,15 @@ public class ModConfig extends XIVFile {
         public String getKeybind() {
             return keybind;
         }
+
         public int getColor() {
             return color;
         }
+
         public boolean isVisible() {
             return visible;
         }
+
         public boolean isEnabled() {
             return enabled;
         }

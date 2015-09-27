@@ -1,8 +1,6 @@
 package pw.latematt.xiv.mod;
 
 import net.minecraft.client.Minecraft;
-import pw.latematt.xiv.command.Command;
-import pw.latematt.xiv.command.CommandHandler;
 
 /**
  * @author Matthew
@@ -13,21 +11,26 @@ public abstract class Mod {
     private String tag;
     private int keybind, color;
     private boolean enabled, visible;
+    private ModType type;
 
-    public Mod(String name) {
-        this(name, 0, -1, false);
+    public Mod(String name, ModType type) {
+        this(name, type, 0, -1, false);
     }
-    public Mod(String name, int keybind, int color) {
-        this(name, keybind, color, true);
+
+    public Mod(String name, ModType type, int keybind, int color) {
+        this(name, type, keybind, color, true);
     }
-    public Mod(String name, int keybind) {
-        this(name, keybind, -1, false);
+
+    public Mod(String name, ModType type, int keybind) {
+        this(name, type, keybind, -1, false);
     }
-    public Mod(String name, int keybind, int color, boolean visible) {
+
+    public Mod(String name, ModType type, int keybind, int color, boolean visible) {
         this.name = name;
         this.keybind = keybind;
         this.color = color;
         this.visible = visible;
+        this.type = type;
         tag = name;
     }
 
@@ -61,6 +64,10 @@ public abstract class Mod {
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public ModType getModType() {
+        return type;
     }
 
     public void setEnabled(boolean enabled) {
