@@ -7,6 +7,8 @@ import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class GuiAltManager extends GuiScreen {
@@ -14,11 +16,26 @@ public class GuiAltManager extends GuiScreen {
     private GuiScreen parent;
     private AltSlot slot;
 
-    private GuiTextField username, password;
+    private GuiTextField username, password, search;
 
     public GuiAltManager(GuiScreen parent) {
         this.parent = parent;
         XIV.getInstance().getFileManager().loadFile("alts");
+    }
+
+    public List<AltAccount> getAccounts() {
+        if(search.getText().length() > 0) {
+            ArrayList<AltAccount> accounts = new ArrayList<>();
+            for(AltAccount account: XIV.getInstance().getAltManager().getContents()) {
+                if(account.getUsername().toLowerCase().startsWith(search.getText().toLowerCase())) {
+                    accounts.add(account);
+                }
+            }
+
+            return accounts;
+        } else {
+            return XIV.getInstance().getAltManager().getContents();
+        }
     }
 
     @Override
@@ -43,6 +60,9 @@ public class GuiAltManager extends GuiScreen {
 
         this.password = new GuiTextField(1, mc.fontRendererObj, 8, height - 32, 150, 20);
         this.password.setVisible(true);
+
+        this.search = new GuiTextField(2, mc.fontRendererObj, width - 152, height - 54, 150, 20);
+        this.search.setVisible(true);
     }
 
     @Override
@@ -108,11 +128,15 @@ public class GuiAltManager extends GuiScreen {
         mc.fontRendererObj.drawStringWithShadow("Password:", 8, height - 44, 0xFFFFFFFF);
         password.drawTextBox();
 
+        mc.fontRendererObj.drawStringWithShadow("Search:", width - 152, height - 66, 0xFFFFFFFF);
+        search.drawTextBox();
+
         drawCenteredString(mc.fontRendererObj, String.format("Accounts: %s", XIV.getInstance().getAltManager().getContents().size()), width / 2, 2, 0xFFFFFFFF);
         drawCenteredString(mc.fontRendererObj, String.format("Logged in as %s", mc.getSession().getUsername()), width / 2, 12, 0xFFFFFFFF);
 
         if (username.isFocused() && password.isFocused()) {
             password.setFocused(false);
+            search.setFocused(false);
         }
     }
 
@@ -127,6 +151,7 @@ public class GuiAltManager extends GuiScreen {
 
         username.textboxKeyTyped(typedChar, keyCode);
         password.textboxKeyTyped(typedChar, keyCode);
+        search.textboxKeyTyped(typedChar, keyCode);
 
         if (keyCode == Keyboard.KEY_RETURN) {
             if (!username.getText().equals("") && !password.getText().equals("")) {
@@ -141,6 +166,7 @@ public class GuiAltManager extends GuiScreen {
 
         username.mouseClicked(mouseX, mouseY, mouseButton);
         password.mouseClicked(mouseX, mouseY, mouseButton);
+        search.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
@@ -149,6 +175,7 @@ public class GuiAltManager extends GuiScreen {
 
         username.updateCursorCounter();
         password.updateCursorCounter();
+        search.updateCursorCounter();
     }
 
     @Override
