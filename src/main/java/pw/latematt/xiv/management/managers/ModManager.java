@@ -1,15 +1,23 @@
 package pw.latematt.xiv.management.managers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.input.Keyboard;
+
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.Mod;
-import pw.latematt.xiv.mod.mods.*;
+import pw.latematt.xiv.mod.mods.AutoBlock;
+import pw.latematt.xiv.mod.mods.ClickGUI;
+import pw.latematt.xiv.mod.mods.ESP;
+import pw.latematt.xiv.mod.mods.HUD;
+import pw.latematt.xiv.mod.mods.KillAura;
+import pw.latematt.xiv.mod.mods.NoSlowdown;
+import pw.latematt.xiv.mod.mods.Step;
+import pw.latematt.xiv.mod.mods.Velocity;
 import pw.latematt.xiv.utils.ChatLogger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Matthew
@@ -23,6 +31,7 @@ public class ModManager extends ListManager<Mod> {
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         contents.add(new AutoBlock());
+        contents.add(new ClickGUI());
         contents.add(new ESP());
         contents.add(new HUD());
         contents.add(new KillAura());

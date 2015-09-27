@@ -13,3 +13,11 @@ src/test
 
 # Minecraft Directory
 minecraft-directory
+
+# eclipse directories
+.settings
+.classpath
+.project
+
+# gitignore
+.gitignore
