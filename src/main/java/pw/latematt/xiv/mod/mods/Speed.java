@@ -81,6 +81,8 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>,CommandHan
                         break;
                     }
                 }
+            } else if (currentMode.getValue() == Mode.OLD) {
+                
             }
             this.delay++;
         }
@@ -115,9 +117,10 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>,CommandHan
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
+        mc.timer.timerSpeed = 1.0F;
     }
 
     public enum Mode {
-        BYPASS, REDERPZ
+        BYPASS, OLD
     }
 }
