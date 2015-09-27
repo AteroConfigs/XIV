@@ -58,7 +58,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>,CommandHandle
             String action = arguments[1];
             switch (action) {
                 case "height":
-                    if(arguments.length >= 3) {
+                    if (arguments.length >= 3) {
                         String newHeightString = arguments[2];
                         try {
                             float newHeight = Float.parseFloat(newHeightString);
