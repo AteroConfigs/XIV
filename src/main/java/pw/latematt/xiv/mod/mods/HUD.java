@@ -159,11 +159,11 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>,CommandHa
                 name = name + " " + I18n.format("enchantment.level.3");
             } else if (effect.getAmplifier() == 3) {
                 name = name + " " + I18n.format("enchantment.level.4");
-            } else {
+            } else if (effect.getAmplifier() > 0) {
                 name = name + " " + (effect.getAmplifier() + 1);
             }
 
-            name = String.format("%s (%s)", name, Potion.getDurationString(effect));
+            name = String.format("%s \2477(%s)", name, Potion.getDurationString(effect));
             mc.fontRendererObj.drawStringWithShadow(name, x - mc.fontRendererObj.getStringWidth(name), y, Potion.potionTypes[effect.getPotionID()].getLiquidColor());
             y -= 10;
         }
