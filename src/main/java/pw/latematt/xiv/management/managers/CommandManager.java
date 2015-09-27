@@ -10,6 +10,7 @@ import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.utils.ChatLogger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,12 +42,26 @@ public class CommandManager extends ListManager<Command> {
                 .aliases("cmds", "?")
                 .arguments("[command]")
                 .handler(message -> {
-                    List<Command> commandList = XIV.getInstance().getCommandManager().getContents();
-                    StringBuilder commands = new StringBuilder("Commands (" + commandList.size() + "): ");
-                    for (Command command : commandList) {
-                        commands.append(prefix).append(command.getCmd()).append(", ");
+                    String[] arguments = message.split(" ");
+                    if (arguments.length >= 2) {
+                        String commandName = arguments[1];
+                        Command command = XIV.getInstance().getCommandManager().find(commandName);
+                        if (command != null) {
+                            ChatLogger.print(String.format("Help for %s.", command.getCmd()));
+                            ChatLogger.print(String.format("Description for %s: %s.", command.getCmd(), command.getDescription() == null ? "No description" : command.getDescription()));
+                            ChatLogger.print(String.format("Aliases for %s: %s.", command.getCmd(), command.getAliases() == null ? "No aliases" : Arrays.asList(command.getAliases())));
+                            ChatLogger.print(String.format("Arguments for %s: %s.", command.getCmd(), command.getArguments() == null ? "No arguments" : Arrays.asList(command.getArguments())));
+                        } else {
+                            ChatLogger.print(String.format("Invalid command \"%s\"", commandName));
+                        }
+                    } else {
+                        List<Command> commandList = XIV.getInstance().getCommandManager().getContents();
+                        StringBuilder commands = new StringBuilder("Commands (" + commandList.size() + "): ");
+                        for (Command command : commandList) {
+                            commands.append(prefix).append(command.getCmd()).append(", ");
+                        }
+                        ChatLogger.print(commands.toString().substring(0, commands.length() - 2));
                     }
-                    ChatLogger.print(commands.toString().substring(0, commands.length() - 2));
                 }).build();
         Command.newCommand()
                 .cmd("vclip")
@@ -103,5 +118,27 @@ public class CommandManager extends ListManager<Command> {
             }
         });
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
+    }
+
+    public Command find(Class clazz) {
+        for (Command cmd : getContents()) {
+            if (cmd.getClass().equals(clazz)) {
+                return cmd;
+            }
+        }
+
+        return null;
+    }
+
+    public Command find(String name) {
+        for (Command cmd : getContents()) {
+            if (cmd
+                    .getCmd()
+                    .equals(name)) {
+                return cmd;
+            }
+        }
+
+        return null;
     }
 }
