@@ -75,6 +75,8 @@ import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.mod.mods.NoSlowdown;
 
 public abstract class EntityPlayer extends EntityLivingBase
 {
@@ -1351,7 +1353,7 @@ public abstract class EntityPlayer extends EntityLivingBase
 
                     if (var14)
                     {
-                        if (var18 > 0)
+                        if (var18 > 0 && !XIV.getInstance().getModManager().find(NoSlowdown.class).isEnabled())
                         {
                             targetEntity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)var18 * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)var18 * 0.5F));
                             this.motionX *= 0.6D;
