@@ -1,6 +1,7 @@
 package pw.latematt.xiv.management;
 
 import pw.latematt.xiv.XIV;
+
 import java.util.Map;
 
 /**

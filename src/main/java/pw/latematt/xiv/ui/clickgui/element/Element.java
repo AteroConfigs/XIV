@@ -2,53 +2,56 @@ package pw.latematt.xiv.ui.clickgui.element;
 
 public abstract class Element {
 
-	private float x, y, width, height;
+    private float x, y, width, height;
 
-	public Element(float x, float y, float width, float height) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-	}
-	
-	public float getX() {
-		return x;
-	}
+    public Element(float x, float y, float width, float height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
 
-	public void setX(float x) {
-		this.x = x;
-	}
+    public float getX() {
+        return x;
+    }
 
-	public float getY() {
-		return y;
-	}
+    public void setX(float x) {
+        this.x = x;
+    }
 
-	public void setY(float y) {
-		this.y = y;
-	}
+    public float getY() {
+        return y;
+    }
 
-	public float getWidth() {
-		return width;
-	}
+    public void setY(float y) {
+        this.y = y;
+    }
 
-	public void setWidth(float width) {
-		this.width = width;
-	}
+    public float getWidth() {
+        return width;
+    }
 
-	public float getHeight() {
-		return height;
-	}
+    public void setWidth(float width) {
+        this.width = width;
+    }
 
-	public void setHeight(float height) {
-		this.height = height;
-	}
-	
-	public abstract void drawElement(int mouseX, int mouseY);	
-	public abstract void keyPressed(int key);
-	public abstract void mouseClicked(int mouseX, int mouseY, int mouseButton);
-	public abstract void onGuiClosed();
-	
-	public boolean isOverElement(int mouseX, int mouseY) {
-		return mouseX > getX() && mouseY > getY() && mouseX < getX() + getWidth() && mouseY < getY() + getHeight();
-	}
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public abstract void drawElement(int mouseX, int mouseY);
+
+    public abstract void keyPressed(int key);
+
+    public abstract void mouseClicked(int mouseX, int mouseY, int mouseButton);
+
+    public abstract void onGuiClosed();
+
+    public boolean isOverElement(int mouseX, int mouseY) {
+        return mouseX > getX() && mouseY > getY() && mouseX < getX() + getWidth() && mouseY < getY() + getHeight();
+    }
 }

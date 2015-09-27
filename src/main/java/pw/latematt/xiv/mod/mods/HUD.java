@@ -20,6 +20,7 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.IngameHUDRenderEvent;
 import pw.latematt.xiv.management.file.XIVFile;
 import pw.latematt.xiv.mod.Mod;
+import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
 
@@ -34,9 +35,10 @@ import java.util.stream.Collectors;
 
 /**
  * I HATE FUCKING NORMIES AND RUDY IS A FUCKING NORMIE REEEEEEEEEE
+ *
  * @author Matthew
  */
-public class HUD extends Mod implements Listener<IngameHUDRenderEvent>,CommandHandler {
+public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandHandler {
     private final Value<Boolean> watermark = new Value<>("hud_watermark", false);
     private final Value<Boolean> arraylist = new Value<>("hud_arraylist", true);
     private final Value<Boolean> coords = new Value<>("hud_coords", true);
@@ -49,7 +51,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>,CommandHa
     private final XIVFile hudConfigFile;
 
     public HUD() {
-        super("HUD");
+        super("HUD", ModType.RENDER);
         setEnabled(true);
 
         Command.newCommand()
@@ -65,7 +67,8 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>,CommandHa
             public void load() throws IOException {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 BufferedReader reader = new BufferedReader(new FileReader(file));
-                List<Value> values = gson.fromJson(reader, new TypeToken<List<Value>>() {}.getType());
+                List<Value> values = gson.fromJson(reader, new TypeToken<List<Value>>() {
+                }.getType());
                 for (Value value : values) {
                     XIV.getInstance().getValueManager().getContents().stream().filter(value1 -> value.getName().equals(value1.getName())).forEach(value1 -> {
                         value1.setValue(value.getValue());

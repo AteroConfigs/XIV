@@ -1,19 +1,13 @@
 package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.command.Command;
-import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
-import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
-
-import java.util.ArrayList;
-import java.util.List;
+import pw.latematt.xiv.mod.ModType;
 
 /**
  * @author TehNeon
@@ -21,7 +15,7 @@ import java.util.List;
 public class InventoryWalk extends Mod implements Listener<MotionUpdateEvent> {
 
     public InventoryWalk() {
-        super("Inventory Walk");
+        super("Inventory Walk", ModType.MOVEMENT);
     }
 
     public void onEventCalled(MotionUpdateEvent event) {

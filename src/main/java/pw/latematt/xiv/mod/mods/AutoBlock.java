@@ -9,7 +9,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
-import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.mod.ModType;
 
 /**
  * @author Matthew
@@ -18,7 +18,7 @@ public class AutoBlock extends Mod implements Listener<MotionUpdateEvent> {
     private boolean blockingFix;
 
     public AutoBlock() {
-        super("AutoBlock");
+        super("AutoBlock", ModType.MOVEMENT);
     }
 
     @Override

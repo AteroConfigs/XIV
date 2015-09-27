@@ -7,11 +7,9 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.KeyPressEvent;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.Mod;
-import pw.latematt.xiv.utils.ChatLogger;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**

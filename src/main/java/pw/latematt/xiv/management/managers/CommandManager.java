@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
-import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.management.ListManager;
@@ -26,6 +25,7 @@ public class CommandManager extends ListManager<Command> {
     public String getPrefix() {
         return prefix;
     }
+
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }

@@ -2,7 +2,6 @@ package pw.latematt.xiv.management.managers;
 
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
-import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.management.MapManager;
 import pw.latematt.xiv.utils.ChatLogger;
 

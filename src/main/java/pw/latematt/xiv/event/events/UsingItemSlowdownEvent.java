@@ -6,8 +6,9 @@ import pw.latematt.xiv.event.Event;
 /**
  * @author Matthew
  */
-public class UsingItemSlowdownEvent extends Event implements Cancellable{
+public class UsingItemSlowdownEvent extends Event implements Cancellable {
     private boolean cancelled;
+
     @Override
     public boolean isCancelled() {
         return cancelled;

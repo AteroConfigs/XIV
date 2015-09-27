@@ -4,9 +4,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.play.client.*;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C0BPacketEntityAction;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -15,6 +14,7 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
+import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.Timer;
@@ -45,7 +45,7 @@ public class KillAura extends Mod implements CommandHandler {
     private Timer attackTimer = new Timer();
 
     public KillAura() {
-        super("Kill Aura", Keyboard.KEY_R, 0xFFC6172B);
+        super("Kill Aura", ModType.COMBAT, Keyboard.KEY_R, 0xFFC6172B);
 
         Command.newCommand()
                 .cmd("killaura")

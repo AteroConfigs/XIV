@@ -5,13 +5,14 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.UsingItemSlowdownEvent;
 import pw.latematt.xiv.mod.Mod;
+import pw.latematt.xiv.mod.ModType;
 
 /**
  * @author Matthew
  */
 public class NoSlowdown extends Mod implements Listener<UsingItemSlowdownEvent> {
     public NoSlowdown() {
-        super("NoSlowdown", Keyboard.KEY_NONE);
+        super("NoSlowdown", ModType.MOVEMENT, Keyboard.KEY_NONE);
         setEnabled(true);
     }
 

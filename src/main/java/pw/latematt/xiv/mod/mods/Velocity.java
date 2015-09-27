@@ -7,8 +7,8 @@ import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.ReadPacketEvent;
-import pw.latematt.xiv.event.events.UsingItemSlowdownEvent;
 import pw.latematt.xiv.mod.Mod;
+import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
 
@@ -19,7 +19,7 @@ public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandH
     public Value<Float> reducedVelocity = new Value<>("velocity_reduction", 0.0F);
 
     public Velocity() {
-        super("Velocity", Keyboard.KEY_BACKSLASH, 0xFF36454F, true);
+        super("Velocity", ModType.MOVEMENT, Keyboard.KEY_BACKSLASH, 0xFF36454F, true);
 
         setTag(String.format("%s \2477%s", getName(), (reducedVelocity.getValue() * 100) + "%"));
 

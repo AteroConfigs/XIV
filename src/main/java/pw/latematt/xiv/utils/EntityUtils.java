@@ -17,6 +17,7 @@ import java.util.Map;
  */
 public class EntityUtils {
     private static Minecraft mc = Minecraft.getMinecraft();
+
     public static float[] getEntityRotations(Entity target) {
         final double var4 = target.posX - mc.thePlayer.posX;
         final double var6 = target.posZ - mc.thePlayer.posZ;
@@ -24,7 +25,7 @@ public class EntityUtils {
         final double var14 = MathHelper.sqrt_double(var4 * var4 + var6 * var6);
         final float yaw = (float) (Math.atan2(var6, var4) * 180.0D / Math.PI) - 90.0F;
         final float pitch = (float) -(Math.atan2(var8, var14) * 180.0D / Math.PI);
-        return new float[] { yaw, pitch };
+        return new float[]{yaw, pitch};
     }
 
     public static int getBestWeapon(EntityLivingBase target) {

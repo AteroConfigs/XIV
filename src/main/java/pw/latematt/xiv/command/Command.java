@@ -22,15 +22,19 @@ public class Command {
     public String getCmd() {
         return cmd;
     }
+
     public String getDescription() {
         return description;
     }
+
     public String[] getAliases() {
         return aliases;
     }
+
     public String[] getArguments() {
         return arguments;
     }
+
     public CommandHandler getHandler() {
         return handler;
     }

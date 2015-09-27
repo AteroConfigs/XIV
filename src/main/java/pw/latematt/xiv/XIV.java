@@ -28,18 +28,23 @@ public class XIV {
     public ModManager getModManager() {
         return modManager;
     }
+
     public CommandManager getCommandManager() {
         return commandManager;
     }
+
     public ListenerManager getListenerManager() {
         return listenerManager;
     }
+
     public FileManager getFileManager() {
         return fileManager;
     }
+
     public FriendManager getFriendManager() {
         return friendManager;
     }
+
     public ValueManager getValueManager() {
         return valueManager;
     }
