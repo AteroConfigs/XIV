@@ -25,6 +25,7 @@ public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandH
 
         Command.newCommand()
                 .cmd("velocity")
+                .aliases("vel")
                 .description("Base command for Velocity mod.")
                 .arguments("<action>")
                 .handler(this)

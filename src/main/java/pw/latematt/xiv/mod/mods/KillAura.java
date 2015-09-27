@@ -45,7 +45,7 @@ public class KillAura extends Mod implements CommandHandler {
     private Timer attackTimer = new Timer();
 
     public KillAura() {
-        super("Kill Aura", Keyboard.KEY_F, 0xFFC6172B);
+        super("Kill Aura", Keyboard.KEY_R, 0xFFC6172B);
 
         Command.newCommand()
                 .cmd("killaura")
