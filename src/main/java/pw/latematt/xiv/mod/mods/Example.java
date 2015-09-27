@@ -15,7 +15,7 @@ import pw.latematt.xiv.mod.Mod;
  */
 public class Example extends Mod implements Listener<SendPacketEvent>,CommandHandler {
     public Example() {
-        super("Example", Keyboard.KEY_F, 0xFF696969);
+        super("Example", Keyboard.KEY_NONE, 0xFF696969);
 
         Command.newCommand()
                 .cmd("example")
