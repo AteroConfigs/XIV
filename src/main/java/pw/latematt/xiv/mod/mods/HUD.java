@@ -28,9 +28,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +38,7 @@ import java.util.stream.Collectors;
  */
 public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandHandler {
     private final Value<Boolean> watermark = new Value<>("hud_watermark", false);
+    private final Value<Boolean> organize = new Value<>("hud_organize", true);
     private final Value<Boolean> arraylist = new Value<>("hud_arraylist", true);
     private final Value<Boolean> coords = new Value<>("hud_coords", true);
     private final Value<Boolean> fps = new Value<>("hud_fps", true);
@@ -181,9 +180,32 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
     private void drawArraylist(ScaledResolution scaledResolution) {
         int x = scaledResolution.getScaledWidth() - 2;
         int y = 2;
-        for (Mod mod : XIV.getInstance().getModManager().getContents()) {
+
+        List<Mod> mods = new ArrayList<>();
+
+        for(Mod mod: XIV.getInstance().getModManager().getContents()) {
             if (!mod.isVisible() || !mod.isEnabled())
                 continue;
+            mods.add(mod);
+        }
+
+        if(organize.getValue()) {
+            Comparator<Mod> stringComparator = new Comparator<Mod>() {
+                public int compare(Mod o1, Mod o2) {
+                    if (mc.fontRendererObj.getStringWidth(o1.getTag()) > mc.fontRendererObj
+                            .getStringWidth(o2.getTag()))
+                        return -1;
+                    if (mc.fontRendererObj.getStringWidth(o2.getTag()) > mc.fontRendererObj
+                            .getStringWidth(o1.getTag()))
+                        return 1;
+                    return 0;
+                }
+            };
+
+            Collections.sort(mods, stringComparator);
+        }
+
+        for (Mod mod : mods) {
             mc.fontRendererObj.drawStringWithShadow(mod.getTag(), x - mc.fontRendererObj.getStringWidth(mod.getTag()), y, mod.getColor());
             y += 10;
         }
@@ -220,6 +242,10 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     watermark.setValue(!watermark.getValue());
                     ChatLogger.print(String.format("HUD will %s display the watermark.", (watermark.getValue() ? "now" : "no longer")));
                     break;
+                case "organize":
+                    organize.setValue(!organize.getValue());
+                    ChatLogger.print(String.format("HUD will %s display organize mods in the arraylist.", (organize.getValue() ? "now" : "no longer")));
+                    break;
                 case "arraylist":
                     arraylist.setValue(!arraylist.getValue());
                     ChatLogger.print(String.format("HUD will %s display the arraylist.", (arraylist.getValue() ? "now" : "no longer")));
@@ -253,7 +279,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     ChatLogger.print(String.format("HUD will %s display \"rudy sucks\".", (rudysucks.getValue() ? "now" : "no longer")));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: watermark, arraylist, coords, fps, ign, time, potions, armor");
+                    ChatLogger.print("Invalid action, valid: watermark, arraylist, organize, coords, fps, ign, time, potions, armor");
                     break;
             }
         } else {
