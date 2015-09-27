@@ -37,7 +37,7 @@ public class ModManager extends ListManager<Mod> {
         Command.newCommand()
                 .cmd("mods")
                 .description("Provides a list of all modules.")
-                .aliases("modules", "hacks", "cheats")
+                .aliases("modules", "hacks", "cheats", "lm")
                 .handler(message -> {
                     List<Mod> moduleList = XIV.getInstance().getModManager().getContents();
                     StringBuilder mods = new StringBuilder("Modules (" + moduleList.size() + "): ");
