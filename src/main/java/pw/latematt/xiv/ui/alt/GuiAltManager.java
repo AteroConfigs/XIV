@@ -1,16 +1,22 @@
 package pw.latematt.xiv.ui.alt;
 
 import java.io.IOException;
+import java.util.Random;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 
 import org.lwjgl.input.Keyboard;
+
+import pw.latematt.xiv.XIV;
 
 public class GuiAltManager extends GuiScreen {
 
 	private GuiScreen parent;
 	private AltSlot slot;
+	
+	private GuiTextField username, password;
 	
 	public GuiAltManager(GuiScreen parent) {
 		this.parent = parent;
@@ -23,7 +29,21 @@ public class GuiAltManager extends GuiScreen {
 		this.slot = new AltSlot(this, mc, width, height, 25, height - 98, 16);
 		this.slot.registerScrollButtons(7, 8);
 		
-		this.buttonList.add(new GuiButton(0, 2, height - 4, "Login"));
+		this.buttonList.clear();
+		this.buttonList.add(new GuiButton(0, width / 2 - 100, height - 26, 200, 20, "Cancel"));
+		
+		this.buttonList.add(new GuiButton(1, width / 2 - 100, height - 70, 200, 20, "Login"));
+		
+		this.buttonList.add(new GuiButton(2, width / 2 - 100, height - 92, 98, 20, "Add"));
+		this.buttonList.add(new GuiButton(3, width / 2 + 2, height - 92, 98, 20, "Remove"));
+
+		this.buttonList.add(new GuiButton(4, width / 2 - 51, height - 48, 98, 20, "Random"));
+
+		this.username = new GuiTextField(0, mc.fontRendererObj, 8, height - 76, 150, 20);
+		this.username.setVisible(true);
+		
+		this.password = new GuiTextField(1, mc.fontRendererObj, 8, height - 32, 150, 20);
+		this.password.setVisible(true);
 	}
 	
 	@Override
@@ -32,7 +52,27 @@ public class GuiAltManager extends GuiScreen {
 		
 		if(button.enabled) {
 			if(button.id == 0) {
-				/** LOGIN HERE */
+				mc.displayGuiScreen(parent);
+			}else if(button.id == 1) {
+				AuthThread thread = new AuthThread(this.slot.getAlt());
+				thread.start();				
+			}else if(button.id == 2) {
+				XIV.getInstance().getAltManager().getContents().put(username.getText(), password.getText());
+				username.setText("");
+				password.setText("");
+			}else if(button.id == 3) {
+				XIV.getInstance().getAltManager().remove(slot.getAlt().getKey());
+			}else if(button.id == 4) {
+				Random random = new Random();
+				
+				if(this.slot.getSize() > 1) {
+					int next = random.nextInt(this.slot.getSize());
+					if(this.slot.getSelected() != next) {
+						this.slot.setSelected(next);
+					}else{
+						this.actionPerformed(button);
+					}
+				}
 			}
 		}
 	}
@@ -44,14 +84,71 @@ public class GuiAltManager extends GuiScreen {
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.slot.drawScreen(mouseX, mouseY, partialTicks);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
-		this.slot.drawScreen(mouseX, mouseY, partialTicks);
+		if(slot.getAlt() == null) {
+			((GuiButton) buttonList.get(4)).enabled = false;
+			((GuiButton) buttonList.get(3)).enabled = false;
+			((GuiButton) buttonList.get(1)).enabled = false;
+		}else{
+			((GuiButton) buttonList.get(4)).enabled = true;
+			((GuiButton) buttonList.get(3)).enabled = true;
+			((GuiButton) buttonList.get(1)).enabled = true;
+		}
+		
+		if(!username.getText().equals("") && !password.getText().equals("")) {
+			((GuiButton) buttonList.get(2)).enabled = true;
+		}else{
+			((GuiButton) buttonList.get(2)).enabled = false;
+		}
+
+		mc.fontRendererObj.drawStringWithShadow("Username:", 8, height - 88, 0xFFFFFFFF);
+		username.drawTextBox();
+
+		mc.fontRendererObj.drawStringWithShadow("Password:", 8, height - 44, 0xFFFFFFFF);
+		password.drawTextBox();
+
+		mc.fontRendererObj.drawStringWithShadow(mc.getSession().getUsername(), 4, 4, 0xFFFFFFFF);
+		
+		if(username.isFocused() && password.isFocused()) {
+			password.setFocused(false);
+		}
+	}
+	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException {	
+		super.keyTyped(typedChar, keyCode);
+		
+		if(keyCode == Keyboard.KEY_TAB) {
+			username.setFocused(!username.isFocused());
+			password.setFocused(!password.isFocused());
+		}
+		
+		username.textboxKeyTyped(typedChar, keyCode);
+		password.textboxKeyTyped(typedChar, keyCode);
+		
+		if(keyCode == Keyboard.KEY_RETURN) {
+			if(!username.getText().equals("") && !password.getText().equals("")) {
+				this.actionPerformed(((GuiButton) buttonList.get(2)));
+			}
+		}
 	}
 	
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
+		
+		username.mouseClicked(mouseX, mouseY, mouseButton);
+		password.mouseClicked(mouseX, mouseY, mouseButton);
+	}
+	
+	@Override
+	public void updateScreen() {
+		super.updateScreen();
+		
+		username.updateCursorCounter();
+		password.updateCursorCounter();
 	}
 	
 	@Override

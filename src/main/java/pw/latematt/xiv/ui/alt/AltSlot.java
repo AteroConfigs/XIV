@@ -19,7 +19,7 @@ public class AltSlot extends GuiSlot {
 
 	@Override
 	protected int getSize() {
-		return XIV.getInstance().getAltManager().getContents().size() * 16;
+		return XIV.getInstance().getAltManager().getContents().size();
 	}
 	
 	@Override
@@ -36,6 +36,18 @@ public class AltSlot extends GuiSlot {
 	protected boolean isSelected(int slot) {
 		return selected == slot;
 	}
+	
+	public int getSelected() {
+		return selected;
+	}
+	
+	public void setSelected(int slot) {
+		this.selected = slot;
+	}
+	
+	public Entry<String, String> getAlt() {
+		return getAlt(getSelected());
+	}
 
 	@Override
 	protected void drawBackground() {
@@ -47,7 +59,7 @@ public class AltSlot extends GuiSlot {
 		Entry<String, String> alt = getAlt(slot);
 		
 		if(alt != null) {
-			mc.fontRendererObj.drawStringWithShadow(alt.getKey() + "", x + 1, y + 1, 0xFFFFFFFF);
+			mc.fontRendererObj.drawStringWithShadow(alt.getKey() + " : " + alt.getValue().replaceAll("(?s).", "*"), x + 1, y + 2, 0xFFFFFFFF);
 		}
 	}
 	
