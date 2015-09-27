@@ -81,10 +81,10 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>,CommandHan
                         break;
                     }
                 }
+                this.delay++;
             } else if (currentMode.getValue() == Mode.OLD) {
-                
+
             }
-            this.delay++;
         }
     }
 
