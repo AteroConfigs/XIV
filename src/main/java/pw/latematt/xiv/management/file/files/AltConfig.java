@@ -1,8 +1,6 @@
 package pw.latematt.xiv.management.file.files;
 
 import com.google.common.io.Files;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.management.file.XIVFile;
 import pw.latematt.xiv.ui.alt.AltAccount;
@@ -10,7 +8,6 @@ import pw.latematt.xiv.ui.alt.AltAccount;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * @author Rederpz
@@ -22,7 +19,7 @@ public class AltConfig extends XIVFile {
 
     @Override
     public void load() throws IOException {
-        if(!file.exists()) file.createNewFile();
+        if (!file.exists()) file.createNewFile();
 
         XIV.getInstance().getAltManager().getContents().clear();
 

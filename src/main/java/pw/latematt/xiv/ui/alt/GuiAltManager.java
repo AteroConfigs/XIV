@@ -108,7 +108,8 @@ public class GuiAltManager extends GuiScreen {
         mc.fontRendererObj.drawStringWithShadow("Password:", 8, height - 44, 0xFFFFFFFF);
         password.drawTextBox();
 
-        drawCenteredString(mc.fontRendererObj, String.format("Logged in as %s", mc.getSession().getUsername()), width / 2, 10, 0xFFFFFFFF);
+        drawCenteredString(mc.fontRendererObj, String.format("Accounts: %s", XIV.getInstance().getAltManager().getContents().size()), width / 2, 2, 0xFFFFFFFF);
+        drawCenteredString(mc.fontRendererObj, String.format("Logged in as %s", mc.getSession().getUsername()), width / 2, 12, 0xFFFFFFFF);
 
         if (username.isFocused() && password.isFocused()) {
             password.setFocused(false);

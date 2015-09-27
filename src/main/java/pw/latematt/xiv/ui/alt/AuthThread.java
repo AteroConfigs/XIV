@@ -8,7 +8,6 @@ import net.minecraft.util.Session;
 
 import java.lang.reflect.Field;
 import java.net.Proxy;
-import java.util.Map.Entry;
 import java.util.UUID;
 
 public class AuthThread extends Thread {

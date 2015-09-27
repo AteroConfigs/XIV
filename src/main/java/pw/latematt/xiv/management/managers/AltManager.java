@@ -2,11 +2,9 @@ package pw.latematt.xiv.management.managers;
 
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.management.ListManager;
-import pw.latematt.xiv.management.MapManager;
 import pw.latematt.xiv.ui.alt.AltAccount;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * @author Rederpz
@@ -32,8 +30,8 @@ public class AltManager extends ListManager<AltAccount> {
     }
 
     public AltAccount find(String username) {
-        for(AltAccount account: getContents()) {
-            if(account.getUsername().equals(username)) {
+        for (AltAccount account : getContents()) {
+            if (account.getUsername().equals(username)) {
                 return account;
             }
         }

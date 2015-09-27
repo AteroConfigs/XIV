@@ -4,8 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
 import pw.latematt.xiv.XIV;
 
-import java.util.Map.Entry;
-
 public class AltSlot extends GuiSlot {
 
     private GuiAltManager screen;
