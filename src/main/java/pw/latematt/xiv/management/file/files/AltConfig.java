@@ -24,7 +24,8 @@ public class AltConfig extends XIVFile {
     public void load() throws IOException {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         BufferedReader reader = new BufferedReader(new FileReader(file));
-        HashMap<String, String> alts = gson.fromJson(reader, new TypeToken<HashMap<String, String>>() {}.getType());
+        HashMap<String, String> alts = gson.fromJson(reader, new TypeToken<HashMap<String, String>>() {
+        }.getType());
         for (String username : alts.keySet()) {
             String password = alts.get(username);
             XIV.getInstance().getAltManager().add(username, password);

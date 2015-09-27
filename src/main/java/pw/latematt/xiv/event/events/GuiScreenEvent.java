@@ -8,8 +8,8 @@ import pw.latematt.xiv.event.Event;
  * @author Rederpz
  */
 public class GuiScreenEvent extends Event {
-	private final Minecraft mc = Minecraft.getMinecraft();
-	
+    private final Minecraft mc = Minecraft.getMinecraft();
+
     private final GuiScreen screen;
 
     public GuiScreenEvent(GuiScreen screen) {
@@ -19,8 +19,8 @@ public class GuiScreenEvent extends Event {
     public GuiScreen getScreen() {
         return screen;
     }
-    
+
     public void setScreen(GuiScreen screen) {
-    	mc.displayGuiScreen(screen);
+        mc.displayGuiScreen(screen);
     }
 }

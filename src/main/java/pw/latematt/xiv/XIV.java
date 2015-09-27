@@ -2,17 +2,9 @@ package pw.latematt.xiv;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import pw.latematt.xiv.management.managers.AltManager;
-import pw.latematt.xiv.management.managers.CommandManager;
-import pw.latematt.xiv.management.managers.FileManager;
-import pw.latematt.xiv.management.managers.FriendManager;
-import pw.latematt.xiv.management.managers.ListenerManager;
-import pw.latematt.xiv.management.managers.ModManager;
-import pw.latematt.xiv.management.managers.ValueManager;
+import pw.latematt.xiv.management.managers.*;
 
 /**
  * @author Matthew

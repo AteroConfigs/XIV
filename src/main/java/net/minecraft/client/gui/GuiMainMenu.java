@@ -27,6 +27,7 @@ import net.minecraft.world.storage.WorldInfo;
 import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
@@ -251,8 +252,11 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
 
         if (button.id == 5)
         {
-//            this.mc.displayGuiScreen(new GuiLanguage(this, this.mc.gameSettings, this.mc.getLanguageManager()));
-            this.mc.displayGuiScreen(new GuiAltManager(this));
+            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                this.mc.displayGuiScreen(new GuiAltManager(this));
+            } else {
+                this.mc.displayGuiScreen(new GuiLanguage(this, this.mc.gameSettings, this.mc.getLanguageManager()));
+            }
         }
 
 

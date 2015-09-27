@@ -1,9 +1,9 @@
 package pw.latematt.xiv.management.managers;
 
-import java.util.HashMap;
-
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.management.MapManager;
+
+import java.util.HashMap;
 
 /**
  * @author Rederpz
@@ -16,7 +16,7 @@ public class AltManager extends MapManager<String, String> {
     @Override
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + ".");
-                        
+
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
     }
 
