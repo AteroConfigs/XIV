@@ -60,14 +60,13 @@ public class KillAura extends Mod implements CommandHandler {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (entities.isEmpty() && entitySelectTimer.hasReached(delay.getValue())) {
+                    if (entities.isEmpty()) {
                         mc.theWorld.loadedEntityList.stream().filter(entity -> entity instanceof EntityLivingBase).forEach(entity -> {
                             EntityLivingBase living = (EntityLivingBase) entity;
                             if (isValidEntity(living)) {
                                 entities.add(living);
                             }
                         });
-                        entitySelectTimer.reset();
                     }
 
                     if (!entities.isEmpty()) {
