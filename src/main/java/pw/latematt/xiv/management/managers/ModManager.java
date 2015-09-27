@@ -70,6 +70,28 @@ public class ModManager extends ListManager<Mod> {
                 }).build();
 
         Command.newCommand()
+                .cmd("visible")
+                .description("Toggle visibility of modules on or off in the arraylist.")
+                .aliases("vis")
+                .arguments("<module>")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if (arguments.length >= 2) {
+                        String modName = arguments[1];
+                        Mod mod = XIV.getInstance().getModManager().find(modName);
+
+                        if (mod != null) {
+                            mod.setVisible(!mod.isVisible());
+                            ChatLogger.print(String.format("%s will %s be shown in the arraylist.", mod.getName(), mod.isVisible() ? "now" : "no longer"));
+                        } else {
+                            ChatLogger.print(String.format("Invalid module \"%s\"", modName));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: visible <module>");
+                    }
+                }).build();
+
+        Command.newCommand()
                 .cmd("bind")
                 .description("Rebinds a module.")
                 .arguments("<module> <key>")
