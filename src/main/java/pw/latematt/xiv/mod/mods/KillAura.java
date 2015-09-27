@@ -38,6 +38,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> team = new Value<>("killaura_team", false);
     private final Value<Boolean> silent = new Value<>("killaura_silent", true);
     private final Value<Boolean> autosword = new Value<>("killaura_autosword", true);
+    private final Value<Boolean> toggledeath = new Value<>("killaura_toggledeath", false);
     private final List<EntityLivingBase> entities;
     public EntityLivingBase entityToAttack;
     private boolean aimed;
@@ -59,6 +60,14 @@ public class KillAura extends Mod implements CommandHandler {
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
+                if (isEnabled()) {
+                    if (mc.thePlayer.isDead) {
+                        if (toggledeath.getValue()) {
+                            toggle();
+                        }
+                    }
+                }
+
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
                     if (entities.isEmpty()) {
                         mc.theWorld.loadedEntityList.stream().filter(entity -> entity instanceof EntityLivingBase).forEach(entity -> {
@@ -232,6 +241,11 @@ public class KillAura extends Mod implements CommandHandler {
                 case "invis":
                     invisible.setValue(!invisible.getValue());
                     ChatLogger.print(String.format("Kill Aura will %s attack invisible entities.", (invisible.getValue() ? "now" : "no longer")));
+                    break;
+                case "toggledeath":
+                case "tdeath":
+                    toggledeath.setValue(!toggledeath.getValue());
+                    ChatLogger.print(String.format("Kill Aura will %s toggle on death.", (toggledeath.getValue() ? "now" : "no longer")));
                     break;
                 case "team":
                     team.setValue(!team.getValue());
