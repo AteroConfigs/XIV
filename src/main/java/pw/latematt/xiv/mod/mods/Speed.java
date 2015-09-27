@@ -4,6 +4,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
@@ -21,6 +22,13 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>,CommandHan
 
     public Speed() {
         super("Speed", ModType.MOVEMENT, Keyboard.KEY_M, 0xFFDC5B18);
+
+        Command.newCommand()
+                .cmd("speed")
+                .description("Base command for the Speed mod.")
+                .arguments("<action>")
+                .handler(this)
+                .build();
     }
 
     @Override
@@ -93,6 +101,9 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>,CommandHan
         String[] arguments = message.split(" ");
         if (arguments.length >= 2) {
             String action = arguments[1];
+            // TODO: Make this actually function!
+            ChatLogger.print("Command not functional yet. :(");
+
             switch (action.toLowerCase()) {
                 case "bypass":
                 case "anodise":

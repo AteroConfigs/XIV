@@ -20,7 +20,7 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
         Command.newCommand()
                 .cmd("fly")
                 .aliases("flight")
-                .description("FLIGHT FLY FLIGHT")
+                .description("Base command for the Fly mod.")
                 .arguments("<action>")
                 .handler(this).build();
     }
