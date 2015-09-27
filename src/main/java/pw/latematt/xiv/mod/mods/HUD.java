@@ -189,7 +189,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>,CommandHa
     private void drawInfo(ScaledResolution scaledResolution) {
         List<String> info = new ArrayList<>();
 
-
         if (coords.getValue()) {
             info.add(String.format("\2477XYZ\247r: %s %s %s", MathHelper.floor_double(mc.thePlayer.posX), MathHelper.floor_double(mc.thePlayer.posY), MathHelper.floor_double(mc.thePlayer.posZ)));
         }
@@ -199,7 +198,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>,CommandHa
         if (fps.getValue()) {
             info.add(String.format("\2477FPS\247r: %s", mc.debug.split(" fps")[0]));
         }
-
 
         int y = scaledResolution.getScaledHeight() - 10;
         for (String infoString : info) {
