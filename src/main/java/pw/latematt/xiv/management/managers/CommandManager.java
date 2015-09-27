@@ -1,5 +1,6 @@
 package pw.latematt.xiv.management.managers;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -46,6 +47,30 @@ public class CommandManager extends ListManager<Command> {
                         commands.append(prefix).append(command.getCmd()).append(", ");
                     }
                     ChatLogger.print(commands.toString().substring(0, commands.length() - 2));
+                }).build();
+        Command.newCommand()
+                .cmd("vclip")
+                .description("Allows you to teleport up and down.")
+                .aliases("vc", "up", "down")
+                .arguments("<blocks>")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if (arguments.length >= 2) {
+                        String blockChangeString = arguments[1];
+                        try {
+                            double newHeight = Double.parseDouble(blockChangeString);
+
+                            Minecraft.getMinecraft().thePlayer.func_174826_a(Minecraft.getMinecraft().thePlayer.getEntityBoundingBox().offset(0, newHeight, 0));
+
+                            // Minecraft.getMinecraft().thePlayer.posY += newHeight;
+
+                            ChatLogger.print(String.format("You've teleported %s block%s", newHeight, (newHeight > 1 || newHeight < -1) ? "s" : ""));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", blockChangeString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: vclip <blocks>");
+                    }
                 }).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {

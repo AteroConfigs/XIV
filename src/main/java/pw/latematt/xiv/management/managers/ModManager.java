@@ -25,6 +25,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new AutoBlock());
         contents.add(new ESP());
         contents.add(new HUD());
+        contents.add(new InventoryWalk());
         contents.add(new KillAura());
         contents.add(new NoSlowdown());
         contents.add(new Step());
