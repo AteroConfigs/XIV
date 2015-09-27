@@ -1,16 +1,17 @@
 package pw.latematt.xiv.management.managers;
 
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.management.MapManager;
+import pw.latematt.xiv.management.ListManager;
+import pw.latematt.xiv.ui.alt.AltAccount;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * @author Rederpz
  */
-public class AltManager extends MapManager<String, String> {
+public class AltManager extends ListManager<AltAccount> {
     public AltManager() {
-        super(new HashMap<>());
+        super(new ArrayList<>());
     }
 
     @Override
@@ -21,10 +22,20 @@ public class AltManager extends MapManager<String, String> {
     }
 
     public void add(String username, String password) {
-        contents.put(username, password);
+        contents.add(new AltAccount(username, password));
     }
 
     public void remove(String username) {
-        contents.remove(username);
+        contents.remove(find(username));
+    }
+
+    public AltAccount find(String username) {
+        for (AltAccount account : getContents()) {
+            if (account.getUsername().equals(username)) {
+                return account;
+            }
+        }
+
+        return null;
     }
 }

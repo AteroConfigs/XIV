@@ -2,9 +2,6 @@ package pw.latematt.xiv.ui.alt;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
-import pw.latematt.xiv.XIV;
-
-import java.util.Map.Entry;
 
 public class AltSlot extends GuiSlot {
 
@@ -19,7 +16,12 @@ public class AltSlot extends GuiSlot {
 
     @Override
     protected int getSize() {
-        return XIV.getInstance().getAltManager().getContents().size();
+        if (mc.currentScreen instanceof GuiAltManager) {
+            GuiAltManager screen = (GuiAltManager) mc.currentScreen;
+            return screen.getAccounts().size();
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -45,7 +47,7 @@ public class AltSlot extends GuiSlot {
         this.selected = slot;
     }
 
-    public Entry<String, String> getAlt() {
+    public AltAccount getAlt() {
         return getAlt(getSelected());
     }
 
@@ -56,21 +58,28 @@ public class AltSlot extends GuiSlot {
 
     @Override
     protected void drawSlot(int slot, int x, int y, int var4, int var5, int var6) {
-        Entry<String, String> alt = getAlt(slot);
+        AltAccount alt = getAlt(slot);
 
         if (alt != null) {
-            mc.fontRendererObj.drawStringWithShadow(alt.getKey(), x + 1, y + 2, 0xFFFFFFFF);
-            mc.fontRendererObj.drawStringWithShadow(alt.getValue().replaceAll("(?s).", "*"), x + 1, y + 12, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow(alt.getUsername(), x + 1, y + 2, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow(alt.getPassword().replaceAll("(?s).", "*"), x + 1, y + 12, 0xFFFFFFFF);
         }
     }
 
-    public Entry<String, String> getAlt(int slot) {
+    public AltAccount getAlt(int slot) {
         int count = 0;
-        for (Entry<String, String> alt : XIV.getInstance().getAltManager().getContents().entrySet()) {
-            if (count == slot) {
-                return alt;
+
+        if (mc.currentScreen instanceof GuiAltManager) {
+            GuiAltManager screen = (GuiAltManager) mc.currentScreen;
+
+            for (AltAccount alt : screen.getAccounts()) {
+                if (count == slot) {
+                    return alt;
+                }
+                count++;
             }
-            count++;
+        } else {
+            return null;
         }
 
         return null;

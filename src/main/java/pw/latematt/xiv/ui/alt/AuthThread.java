@@ -8,23 +8,22 @@ import net.minecraft.util.Session;
 
 import java.lang.reflect.Field;
 import java.net.Proxy;
-import java.util.Map.Entry;
 import java.util.UUID;
 
 public class AuthThread extends Thread {
 
     private final Minecraft mc = Minecraft.getMinecraft();
-    private final Entry<String, String> account;
+    private final AltAccount account;
 
-    public AuthThread(Entry<String, String> account) {
+    public AuthThread(AltAccount account) {
         this.account = account;
     }
 
     @Override
     public void run() {
         YggdrasilUserAuthentication authentication = new YggdrasilUserAuthentication(new YggdrasilAuthenticationService(Proxy.NO_PROXY, UUID.randomUUID().toString()), Agent.MINECRAFT);
-        authentication.setUsername(account.getKey());
-        authentication.setPassword(account.getValue());
+        authentication.setUsername(account.getUsername());
+        authentication.setPassword(account.getPassword());
 
         Field session = null;
         for (Field field : Minecraft.class.getDeclaredFields()) {
