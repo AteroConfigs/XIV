@@ -9,14 +9,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.Mod;
-import pw.latematt.xiv.mod.mods.AutoBlock;
-import pw.latematt.xiv.mod.mods.ClickGUI;
-import pw.latematt.xiv.mod.mods.ESP;
-import pw.latematt.xiv.mod.mods.HUD;
-import pw.latematt.xiv.mod.mods.KillAura;
-import pw.latematt.xiv.mod.mods.NoSlowdown;
-import pw.latematt.xiv.mod.mods.Step;
-import pw.latematt.xiv.mod.mods.Velocity;
+import pw.latematt.xiv.mod.mods.*;
 import pw.latematt.xiv.utils.ChatLogger;
 
 /**
