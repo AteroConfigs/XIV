@@ -12,6 +12,7 @@ import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +36,9 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+
 import javax.imageio.ImageIO;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -166,6 +169,7 @@ import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -183,7 +187,9 @@ import org.lwjgl.opengl.GLContext;
 import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
+
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.GuiScreenEvent;
 import pw.latematt.xiv.event.events.KeyPressEvent;
 
 public class Minecraft implements IThreadListener, IPlayerUsage
@@ -1004,6 +1010,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage
             this.mcSoundHandler.resumeSounds();
             this.setIngameFocus();
         }
+        
+        GuiScreenEvent event = new GuiScreenEvent(guiScreenIn);
+        XIV.getInstance().getListenerManager().call(event);
     }
 
     /**
