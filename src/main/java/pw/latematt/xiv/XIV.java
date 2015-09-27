@@ -19,6 +19,7 @@ public class XIV {
 
     /* Management */
     private ModManager modManager = new ModManager();
+    private AltManager altManager = new AltManager();
     private CommandManager commandManager = new CommandManager();
     private ListenerManager listenerManager = new ListenerManager();
     private FileManager fileManager = new FileManager();
@@ -27,6 +28,10 @@ public class XIV {
 
     public ModManager getModManager() {
         return modManager;
+    }
+
+    public AltManager getAltManager() {
+        return altManager;
     }
 
     public CommandManager getCommandManager() {
@@ -62,6 +67,7 @@ public class XIV {
         /* call setup on all managers */
         /* the order that these are called in is important, do not change! */
         /* setup is not required with all managers */
+        altManager.setup();
         commandManager.setup();
         listenerManager.setup();
         modManager.setup();

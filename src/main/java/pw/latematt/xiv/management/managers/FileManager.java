@@ -3,6 +3,7 @@ package pw.latematt.xiv.management.managers;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.management.file.XIVFile;
+import pw.latematt.xiv.management.file.files.AltConfig;
 import pw.latematt.xiv.management.file.files.FriendConfig;
 import pw.latematt.xiv.management.file.files.ModConfig;
 
@@ -26,6 +27,7 @@ public class FileManager extends ListManager<XIVFile> {
             XIV.getInstance().getLogger().info("Failed to create XIV Directory.");
         }
 
+        contents.add(new AltConfig());
         contents.add(new ModConfig());
         contents.add(new FriendConfig());
 

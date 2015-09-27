@@ -42,7 +42,6 @@ public class KillAura extends Mod implements CommandHandler {
     private final List<EntityLivingBase> entities;
     public EntityLivingBase entityToAttack;
     private boolean aimed;
-    private Timer entitySelectTimer = new Timer();
     private Timer attackTimer = new Timer();
 
     public KillAura() {

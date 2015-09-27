@@ -183,13 +183,13 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
 
         List<Mod> mods = new ArrayList<>();
 
-        for(Mod mod: XIV.getInstance().getModManager().getContents()) {
+        for (Mod mod : XIV.getInstance().getModManager().getContents()) {
             if (!mod.isVisible() || !mod.isEnabled())
                 continue;
             mods.add(mod);
         }
 
-        if(organize.getValue()) {
+        if (organize.getValue()) {
             Comparator<Mod> stringComparator = new Comparator<Mod>() {
                 public int compare(Mod o1, Mod o2) {
                     if (mc.fontRendererObj.getStringWidth(o1.getTag()) > mc.fontRendererObj

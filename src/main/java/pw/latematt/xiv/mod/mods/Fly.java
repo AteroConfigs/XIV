@@ -6,7 +6,6 @@ import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
-import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 
@@ -28,11 +27,11 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
     public void onEventCalled(MotionUpdateEvent event) {
         double motionX = 0, motionY = 0, motionZ = 0;
 
-        if(mc.gameSettings.keyBindJump.getIsKeyPressed()) {
+        if (mc.gameSettings.keyBindJump.getIsKeyPressed()) {
             motionY = 0.5;
         }
 
-        if(mc.gameSettings.keyBindSneak.getIsKeyPressed()) {
+        if (mc.gameSettings.keyBindSneak.getIsKeyPressed()) {
             motionY = -0.5;
         }
 
