@@ -55,9 +55,7 @@ public class AutoBlock extends Mod implements Listener<MotionUpdateEvent> {
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
         if (mc.thePlayer != null) {
-            mc.getNetHandler().addToSendQueue(
-                    new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM,
-                            new BlockPos(0, 0, 0), EnumFacing.DOWN));
+            mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
         }
     }
 }
