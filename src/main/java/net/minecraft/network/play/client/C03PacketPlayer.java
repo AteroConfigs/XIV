@@ -14,7 +14,7 @@ public class C03PacketPlayer implements Packet
     public float yaw;
     public float pitch;
     public boolean moving;
-    protected boolean field_149480_h;
+    public boolean onGround;
     public boolean rotating;
 
 
@@ -79,9 +79,9 @@ public class C03PacketPlayer implements Packet
         return this.moving;
     }
 
-    public boolean func_149466_j()
+    public boolean onGround()
     {
-        return this.field_149480_h;
+        return this.onGround;
     }
 
     public boolean getRotating()
@@ -89,9 +89,9 @@ public class C03PacketPlayer implements Packet
         return this.rotating;
     }
 
-    public void func_149469_a(boolean p_149469_1_)
+    public void setOnGround(boolean p_149469_1_)
     {
-        this.field_149480_h = p_149469_1_;
+        this.onGround = p_149469_1_;
     }
 
     /**
@@ -108,7 +108,7 @@ public class C03PacketPlayer implements Packet
 
         public C04PacketPlayerPosition()
         {
-            this.field_149480_h = true;
+            this.onGround = true;
         }
 
         public C04PacketPlayerPosition(double p_i45942_1_, double p_i45942_3_, double p_i45942_5_, boolean p_i45942_7_)
@@ -117,7 +117,7 @@ public class C03PacketPlayer implements Packet
             this.y = p_i45942_3_;
             this.z = p_i45942_5_;
             this.moving = p_i45942_7_;
-            this.field_149480_h = true;
+            this.onGround = true;
         }
 
         public void readPacketData(PacketBuffer data) throws IOException
@@ -185,7 +185,7 @@ public class C03PacketPlayer implements Packet
 
         public C06PacketPlayerPosLook()
         {
-            this.field_149480_h = true;
+            this.onGround = true;
             this.rotating = true;
         }
 
@@ -198,7 +198,7 @@ public class C03PacketPlayer implements Packet
             this.pitch = p_i45941_8_;
             this.moving = p_i45941_9_;
             this.rotating = true;
-            this.field_149480_h = true;
+            this.onGround = true;
         }
 
         public void readPacketData(PacketBuffer data) throws IOException
