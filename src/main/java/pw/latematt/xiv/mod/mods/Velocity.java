@@ -16,11 +16,12 @@ import pw.latematt.xiv.value.Value;
  * @author TehNeon
  */
 public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandHandler {
-
-    public Value<Float> reducedVelocity = new Value<>("velocity_reduction", 0.7F);
+    public Value<Float> reducedVelocity = new Value<>("velocity_reduction", 0.0F);
 
     public Velocity() {
-        super("Velocity", Keyboard.KEY_NONE, 0xFF36454F, true);
+        super("Velocity", Keyboard.KEY_BACKSLASH, 0xFF36454F, true);
+
+        setTag(String.format("%s \2477%s", getName(), (reducedVelocity.getValue() * 100) + "%"));
 
         Command.newCommand()
                 .cmd("velocity")
@@ -29,40 +30,6 @@ public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandH
                 .arguments("<action>")
                 .handler(this)
                 .build();
-    }
-
-    @Override
-    public void onCommandRan(String message) {
-        String[] arguments = message.split(" ");
-        if (arguments.length >= 2) {
-            String action = arguments[1];
-            switch (action) {
-                case "percent":
-                    if (arguments.length >= 3) {
-                        String newVelocityString = arguments[2];
-                        try {
-                            float newPercent = Float.parseFloat(newVelocityString);
-                            if (newPercent < -1.5F) {
-                                newPercent = -1.5F;
-                            } else if (newPercent > 1.5F) {
-                                newPercent = 1.5F;
-                            }
-                            reducedVelocity.setValue(newPercent);
-                            ChatLogger.print(String.format("Velocity Percent set to %s", (reducedVelocity.getValue() * 100F) + "%"));
-                        } catch (NumberFormatException e) {
-                            ChatLogger.print(String.format("\"%s\" is not a number.", newVelocityString));
-                        }
-                    } else {
-                        ChatLogger.print("Invalid arguments, valid: velocity percent <number>");
-                    }
-                    break;
-                default:
-                    ChatLogger.print("Invalid action, valid: percent");
-                    break;
-            }
-        } else {
-            ChatLogger.print("Invalid arguments, valid: velocity <action>");
-        }
     }
 
     @Override
@@ -80,6 +47,41 @@ public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandH
                 mc.thePlayer.motionY += velY;
                 mc.thePlayer.motionZ += velZ;
             }
+        }
+    }
+
+    @Override
+    public void onCommandRan(String message) {
+        String[] arguments = message.split(" ");
+        if (arguments.length >= 2) {
+            String action = arguments[1];
+            switch (action) {
+                case "percent":
+                    if (arguments.length >= 3) {
+                        String newVelocityString = arguments[2];
+                        try {
+                            float newPercent = Float.parseFloat(newVelocityString);
+                            if (newPercent < -150.0F) {
+                                newPercent = -150.0F;
+                            } else if (newPercent > 150.0F) {
+                                newPercent = 150.0F;
+                            }
+                            reducedVelocity.setValue((newPercent / 100));
+                            setTag(String.format("%s \2477%s", getName(), (reducedVelocity.getValue() * 100) + "%"));
+                            ChatLogger.print(String.format("Velocity Percent set to %s", (reducedVelocity.getValue() * 100F) + "%"));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newVelocityString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: velocity percent <number>");
+                    }
+                    break;
+                default:
+                    ChatLogger.print("Invalid action, valid: percent");
+                    break;
+            }
+        } else {
+            ChatLogger.print("Invalid arguments, valid: velocity <action>");
         }
     }
 

@@ -9,7 +9,8 @@ import pw.latematt.xiv.command.CommandHandler;
  */
 public abstract class Mod {
     protected final Minecraft mc = Minecraft.getMinecraft();
-    private String name;
+    private final String name;
+    private String tag;
     private int keybind, color;
     private boolean enabled, visible;
 
@@ -27,14 +28,19 @@ public abstract class Mod {
         this.keybind = keybind;
         this.color = color;
         this.visible = visible;
+        tag = name;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public int getKeybind() {

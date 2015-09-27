@@ -116,9 +116,15 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>,CommandHa
         }
 
         drawInfo(scaledResolution);
-        drawArraylist(scaledResolution);
-        drawPotions(scaledResolution);
-        drawArmor(scaledResolution);
+        if (arraylist.getValue()) {
+            drawArraylist(scaledResolution);
+        }
+        if (potions.getValue()) {
+            drawPotions(scaledResolution);
+        }
+        if (armor.getValue()) {
+            drawArmor(scaledResolution);
+        }
         GlStateManager.disableBlend();
     }
 
@@ -175,7 +181,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>,CommandHa
         for (Mod mod : XIV.getInstance().getModManager().getContents()) {
             if (!mod.isVisible() || !mod.isEnabled())
                 continue;
-            mc.fontRendererObj.drawStringWithShadow(mod.getName(), x - mc.fontRendererObj.getStringWidth(mod.getName()), y, mod.getColor());
+            mc.fontRendererObj.drawStringWithShadow(mod.getTag(), x - mc.fontRendererObj.getStringWidth(mod.getTag()), y, mod.getColor());
             y += 10;
         }
     }

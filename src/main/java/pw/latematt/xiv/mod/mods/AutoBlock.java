@@ -25,22 +25,16 @@ public class AutoBlock extends Mod implements Listener<MotionUpdateEvent> {
     public void onEventCalled(MotionUpdateEvent event) {
         if (mc.thePlayer.getCurrentEquippedItem() == null || !(mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword))
             return;
-        KillAura aura = (KillAura) XIV.getInstance().getModManager().find("killaura");
-        if (!aura.shouldBlock() && blockingFix) {
-            mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
-            blockingFix = false;
-            return;
-        }
 
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
             if (mc.thePlayer.isBlocking()) {
-                if (!blockingFix)
-                    blockingFix = true;
-
                 mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
             }
         } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
-            if (mc.thePlayer.isBlocking()) {
+            KillAura aura = (KillAura) XIV.getInstance().getModManager().find("killaura");
+            if (!aura.shouldBlock()) {
+                mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
+            } else if (mc.thePlayer.isBlocking()) {
                 if (!blockingFix)
                     blockingFix = true;
 
