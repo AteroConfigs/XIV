@@ -16,7 +16,7 @@ import pw.latematt.xiv.value.Value;
 /**
  * @author Matthew
  */
-public class Speed extends Mod implements Listener<MotionUpdateEvent>,CommandHandler {
+public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private int delay;
     private Value<Mode> currentMode = new Value<>("speed_mode", Mode.BYPASS);
 
@@ -36,6 +36,8 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>,CommandHan
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
             /* thanks anodise */
             if (currentMode.getValue() == Mode.BYPASS) {
+                if (!mc.thePlayer.onGround) return;
+
                 switch (this.delay) {
                     case 1: {
                         mc.timer.timerSpeed = 1.0F;
