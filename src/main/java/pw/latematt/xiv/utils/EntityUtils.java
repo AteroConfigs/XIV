@@ -29,6 +29,8 @@ public class EntityUtils {
     }
 
     public static int getBestWeapon(EntityLivingBase target) {
+        // TODO: Issue #7 https://gitlab.com/latematt/XIV/issues/7
+
         final int originalSlot = mc.thePlayer.inventory.currentItem;
         int weaponSlot = -1;
         float weaponDamage = 1.0F;

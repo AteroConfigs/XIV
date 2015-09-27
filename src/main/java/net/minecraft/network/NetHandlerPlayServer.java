@@ -228,7 +228,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
             double var13 = packetIn.getPositionY() - this.lastPosY;
             double var15 = packetIn.getPositionZ() - this.lastPosZ;
 
-            if (packetIn.func_149466_j())
+            if (packetIn.onGround())
             {
                 var9 = var11 * var11 + var13 * var13 + var15 * var15;
 
@@ -312,12 +312,12 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                 float var25 = this.playerEntity.rotationYaw;
                 float var26 = this.playerEntity.rotationPitch;
 
-                if (packetIn.func_149466_j() && packetIn.getPositionY() == -999.0D)
+                if (packetIn.onGround() && packetIn.getPositionY() == -999.0D)
                 {
-                    packetIn.func_149469_a(false);
+                    packetIn.setOnGround(false);
                 }
 
-                if (packetIn.func_149466_j())
+                if (packetIn.onGround())
                 {
                     var19 = packetIn.getPositionX();
                     var21 = packetIn.getPositionY();

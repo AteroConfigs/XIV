@@ -4,6 +4,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
@@ -15,12 +16,19 @@ import pw.latematt.xiv.value.Value;
 /**
  * @author Matthew
  */
-public class Speed extends Mod implements Listener<MotionUpdateEvent>,CommandHandler {
+public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private int delay;
     private Value<Mode> currentMode = new Value<>("speed_mode", Mode.BYPASS);
 
     public Speed() {
         super("Speed", ModType.MOVEMENT, Keyboard.KEY_M, 0xFFDC5B18);
+
+        Command.newCommand()
+                .cmd("speed")
+                .description("Base command for the Speed mod.")
+                .arguments("<action>")
+                .handler(this)
+                .build();
     }
 
     @Override
@@ -28,6 +36,9 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>,CommandHan
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
             /* thanks anodise */
             if (currentMode.getValue() == Mode.BYPASS) {
+                // TODO: Fix this a bit more.
+                if (!mc.thePlayer.onGround) return;
+
                 switch (this.delay) {
                     case 1: {
                         mc.timer.timerSpeed = 1.0F;
@@ -93,6 +104,9 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>,CommandHan
         String[] arguments = message.split(" ");
         if (arguments.length >= 2) {
             String action = arguments[1];
+            // TODO: Make this actually function!
+            ChatLogger.print("Command not functional yet. :(");
+
             switch (action.toLowerCase()) {
                 case "bypass":
                 case "anodise":
