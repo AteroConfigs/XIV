@@ -20,7 +20,6 @@ public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandH
 
     public Velocity() {
         super("Velocity", ModType.MOVEMENT, Keyboard.KEY_BACKSLASH, 0xFF36454F, true);
-
         setTag(String.format("%s \2477%s", getName(), (reducedVelocity.getValue() * 100) + "%"));
 
         Command.newCommand()

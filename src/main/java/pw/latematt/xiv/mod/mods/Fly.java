@@ -14,7 +14,7 @@ import pw.latematt.xiv.mod.ModType;
  */
 public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     public Fly() {
-        super("Fly", ModType.PLAYER, Keyboard.KEY_NONE, 0xFF4b97f6);
+        super("Fly", ModType.PLAYER, Keyboard.KEY_M, 0xFF4B97F6);
 
         Command.newCommand()
                 .cmd("fly")
@@ -25,7 +25,7 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
     }
 
     public void onEventCalled(MotionUpdateEvent event) {
-        double motionX = 0, motionY = 0, motionZ = 0;
+        double motionY = 0;
 
         if (mc.gameSettings.keyBindJump.getIsKeyPressed()) {
             motionY = 0.5;

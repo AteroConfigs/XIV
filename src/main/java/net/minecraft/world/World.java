@@ -72,7 +72,7 @@ public abstract class World implements IBlockAccess
     private final List tileEntitiesToBeRemoved = Lists.newArrayList();
 
     /** Array list of players in the world. */
-    public final List playerEntities = Lists.newArrayList();
+    public final List<EntityPlayer> playerEntities = Lists.newArrayList();
 
     /** a list of all the lightning entities */
     public final List weatherEffects = Lists.newArrayList();

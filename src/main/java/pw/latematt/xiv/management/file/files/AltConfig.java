@@ -19,12 +19,9 @@ public class AltConfig extends XIVFile {
 
     @Override
     public void load() throws IOException {
-        if (!file.exists()) file.createNewFile();
-
         XIV.getInstance().getAltManager().getContents().clear();
-
         BufferedReader reader = new BufferedReader(new FileReader(file));
-        String line = "";
+        String line;
         while ((line = reader.readLine()) != null) {
             String[] account = line.split(":");
             if (account.length > 2) {
@@ -38,12 +35,10 @@ public class AltConfig extends XIVFile {
 
     @Override
     public void save() throws IOException {
-        StringBuilder jewBuilder = new StringBuilder();
-
+        StringBuilder builder = new StringBuilder();
         for (AltAccount account : XIV.getInstance().getAltManager().getContents()) {
-            jewBuilder.append(account.getUsername() + ":" + account.getPassword() + (account.getKeyword().length() > 0 ? (":" + account.getKeyword()) : "") + "\n");
+            builder.append(account.getUsername()).append(":").append(account.getPassword()).append((account.getKeyword().length() > 0 ? (":" + account.getKeyword()) : "")).append("\r\n");
         }
-
-        Files.write(jewBuilder.toString().getBytes("UTF-8"), file);
+        Files.write(builder.toString().getBytes("UTF-8"), file);
     }
 }

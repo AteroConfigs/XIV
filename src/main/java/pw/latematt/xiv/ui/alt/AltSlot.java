@@ -60,7 +60,7 @@ public class AltSlot extends GuiSlot {
 
             mc.fontRendererObj.drawStringWithShadow(alt.getUsername(), x + 1, y + 2, 0xFFFFFFFF);
             mc.fontRendererObj.drawStringWithShadow(alt.getPassword().replaceAll("(?s).", "*"), x + 1, y + 12, 0xFF888888);
-            mc.fontRendererObj.drawStringWithShadow(alt.getKeyword(), x + 1, y + 22, 0xFFFFFF00);
+            mc.fontRendererObj.drawStringWithShadow((alt.getKeyword().isEmpty() ? "No keyword set" : alt.getKeyword()), x + 1, y + 22, 0xFFFFFF00);
         }
     }
 

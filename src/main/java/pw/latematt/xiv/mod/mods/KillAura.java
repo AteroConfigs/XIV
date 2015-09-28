@@ -4,6 +4,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import org.lwjgl.input.Keyboard;
@@ -39,6 +40,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> silent = new Value<>("killaura_silent", true);
     private final Value<Boolean> autosword = new Value<>("killaura_autosword", true);
     private final Value<Boolean> toggledeath = new Value<>("killaura_toggledeath", false);
+    private final Value<Boolean> autoblock = new Value<>("killaura_autoblock", false);
     private final List<EntityLivingBase> entities;
     public EntityLivingBase entityToAttack;
     private boolean aimed;
@@ -59,12 +61,8 @@ public class KillAura extends Mod implements CommandHandler {
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                if (isEnabled()) {
-                    if (mc.thePlayer.isDead) {
-                        if (toggledeath.getValue()) {
-                            toggle();
-                        }
-                    }
+                if (toggledeath.getValue() && mc.thePlayer.isDead) {
+                    toggle();
                 }
 
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
@@ -132,8 +130,7 @@ public class KillAura extends Mod implements CommandHandler {
     private void attack(EntityLivingBase target) {
         final boolean wasSprinting = mc.thePlayer.isSprinting();
         if (autosword.getValue()) {
-            mc.thePlayer.inventory.currentItem = EntityUtils
-                    .getBestWeapon(target);
+            mc.thePlayer.inventory.currentItem = EntityUtils.getBestWeapon(target);
             mc.playerController.updateController();
         }
 
@@ -145,7 +142,14 @@ public class KillAura extends Mod implements CommandHandler {
         if (mc.thePlayer.getCurrentEquippedItem() != null) {
             oldDamage = mc.thePlayer.getCurrentEquippedItem().getItemDamage();
         }
+
+        if (autoblock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
+            ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
+            sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
+            mc.playerController.updateController();
+        }
         mc.playerController.attackEntity(mc.thePlayer, target);
+
         if (mc.thePlayer.getCurrentEquippedItem() != null) {
             mc.thePlayer.getCurrentEquippedItem().setItemDamage(oldDamage);
         }
@@ -208,6 +212,20 @@ public class KillAura extends Mod implements CommandHandler {
                         ChatLogger.print("Invalid arguments, valid: killaura delay <number>");
                     }
                     break;
+                case "aps":
+                    if (arguments.length >= 3) {
+                        String newApsString = arguments[2];
+                        try {
+                            long newAps = Long.parseLong(newApsString);
+                            delay.setValue(1000 / newAps);
+                            ChatLogger.print(String.format("Kill Aura Attacks/second set to %s (%sms)", newAps, delay.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newApsString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: killaura aps <number>");
+                    }
+                    break;
                 case "range":
                 case "r":
                     if (arguments.length >= 3) {
@@ -260,8 +278,13 @@ public class KillAura extends Mod implements CommandHandler {
                     autosword.setValue(!autosword.getValue());
                     ChatLogger.print(String.format("Kill Aura will %s automatically switch to your sword.", (autosword.getValue() ? "now" : "no longer")));
                     break;
+                case "autoblock":
+                case "ab":
+                    autoblock.setValue(!autoblock.getValue());
+                    ChatLogger.print(String.format("Kill Aura will %s automatically switch to your sword.", (autoblock.getValue() ? "now" : "no longer")));
+                    break;
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, range, players, mobs, animals, invisible, team, silent, autosword");
+                    ChatLogger.print("Invalid action, valid: delay, aps, range, players, mobs, animals, invisible, team, silent, autosword, autoblock");
                     break;
             }
         } else {

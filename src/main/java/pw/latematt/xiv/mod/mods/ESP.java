@@ -50,6 +50,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
 
     public void onEventCalled(Render3DEvent event) {
         GL11.glPushMatrix();
+        mc.entityRenderer.func_175072_h();
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -91,6 +92,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_LIGHTING);
+        mc.entityRenderer.func_180436_i();
         GL11.glPopMatrix();
     }
 
@@ -125,7 +127,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
 
         final float distance = mc.thePlayer.getDistanceToEntity(entity);
         float[] color;
-        if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getDisplayName().getUnformattedText())) {
+        if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.3F, 0.7F, 1.0F};
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
             color = new float[]{1.0F, 0.9F, 0.0F};
@@ -146,7 +148,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     public void drawTracerLines(Entity entity, double x, double y, double z) {
         final float distance = mc.thePlayer.getDistanceToEntity(entity);
         float[] color;
-        if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getDisplayName().getUnformattedText())) {
+        if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.30F, 0.7F, 1.0F};
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
             color = new float[]{1.0F, 0.9F, 0.0F};
@@ -166,7 +168,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     private void drawSpines(Entity entity, double x, double y, double z) {
         final float distance = mc.thePlayer.getDistanceToEntity(entity);
         float[] color;
-        if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getDisplayName().getUnformattedText())) {
+        if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.3F, 0.7F, 1.0F};
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
             color = new float[]{1.0F, 0.9F, 0.0F};

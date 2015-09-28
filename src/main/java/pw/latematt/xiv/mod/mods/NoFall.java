@@ -13,7 +13,7 @@ import pw.latematt.xiv.mod.ModType;
  */
 public class NoFall extends Mod implements Listener<SendPacketEvent> {
     public NoFall() {
-        super("NoFall", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFf5b8cd);
+        super("NoFall", ModType.PLAYER, Keyboard.KEY_N, 0xFFf5b8cd);
     }
 
     public void onEventCalled(SendPacketEvent event) {
