@@ -42,7 +42,7 @@ public class GuiAltManager extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        this.slot = new AltSlot(this, mc, width, height, 25, height - 98, 34);
+        this.slot = new AltSlot(this, mc, width, height, 25, height - 98, 36);
         this.slot.registerScrollButtons(7, 8);
 
         this.buttonList.clear();
