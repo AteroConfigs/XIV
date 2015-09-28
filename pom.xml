@@ -16,9 +16,9 @@
 
 	<repositories>
         <repository>
-            <id>in-project</id>
-            <name>In Project Repo</name>
-            <url>file://${project.basedir}/libs</url>
+            <id>mojang</id>
+            <name>Mojang's Repository</name>
+            <url>https://libraries.minecraft.net/</url>
         </repository>
     </repositories>
 
@@ -44,9 +44,9 @@
 			<version>1.5.21</version>
 		</dependency>
 		<dependency>
-			<groupId>com.mojang</groupId>
+			<groupId>net.minecraft</groupId>
 			<artifactId>launchwrapper</artifactId>
-			<version>1.12</version>
+			<version>1.7</version>
 		</dependency>
 		<dependency>
 			<groupId>com.paulscode</groupId>
