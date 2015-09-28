@@ -22,6 +22,7 @@ import pw.latematt.xiv.management.file.XIVFile;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.value.Value;
 
 import java.io.BufferedReader;
@@ -29,6 +30,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +50,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
     private final Value<Boolean> armor = new Value<>("hud_armor", true);
     private final Value<Boolean> rudysucks = new Value<>("hud_rudysucks", false);
     private final XIVFile hudConfigFile;
+    private NahrFont font;
 
     public HUD() {
         super("HUD", ModType.RENDER);
@@ -127,6 +130,12 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         if (armor.getValue()) {
             drawArmor(scaledResolution);
         }
+
+        /* NahrFont example/testing */
+//        if (font == null) // it will always be at this point, this must happen since the currnet thread won't have opengl context if done in the constructor.
+//            font = new NahrFont("Verdana", 18);
+//        font.drawString("\247gTesting Custom Colors", 2, 12, 0xFFFFFFFF, 0xFF000000);
+
         GlStateManager.disableBlend();
     }
 
@@ -141,8 +150,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             for (int index = 3; index >= 0; index--) {
                 final ItemStack stack = mc.thePlayer.inventory.armorInventory[index];
                 if (stack != null) {
-                    int height = scaledResolution.getScaledHeight()
-                            - (mc.thePlayer.isInsideOfMaterial(Material.water) ? mc.thePlayer.getActivePotionEffect(Potion.absorption) != null ? 75 : 65 : 55);
+                    int height = scaledResolution.getScaledHeight() - (mc.thePlayer.isInsideOfMaterial(Material.water) ? mc.thePlayer.getActivePotionEffect(Potion.absorption) != null ? 75 : 65 : 55);
                     mc.getRenderItem().renderItemAndEffectIntoGUI(stack, scaledResolution.getScaledWidth() / 2 + x, height);
                     mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, scaledResolution.getScaledWidth() / 2 + x, height);
                     x += 18;
@@ -190,16 +198,14 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         }
 
         if (organize.getValue()) {
-            Comparator<Mod> stringComparator = new Comparator<Mod>() {
-                public int compare(Mod o1, Mod o2) {
-                    if (mc.fontRendererObj.getStringWidth(o1.getTag()) > mc.fontRendererObj
-                            .getStringWidth(o2.getTag()))
-                        return -1;
-                    if (mc.fontRendererObj.getStringWidth(o2.getTag()) > mc.fontRendererObj
-                            .getStringWidth(o1.getTag()))
-                        return 1;
-                    return 0;
-                }
+            Comparator<Mod> stringComparator = (mod1, mod2) -> {
+                if (mc.fontRendererObj.getStringWidth(mod1.getTag()) > mc.fontRendererObj
+                        .getStringWidth(mod2.getTag()))
+                    return -1;
+                if (mc.fontRendererObj.getStringWidth(mod2.getTag()) > mc.fontRendererObj
+                        .getStringWidth(mod1.getTag()))
+                    return 1;
+                return 0;
             };
 
             Collections.sort(mods, stringComparator);

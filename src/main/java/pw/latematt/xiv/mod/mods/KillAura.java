@@ -173,7 +173,7 @@ public class KillAura extends Mod implements CommandHandler {
         if (team.getValue() && entity.getTeam() != null && entity.getTeam().isSameTeam(mc.thePlayer.getTeam()))
             return false;
         if (entity instanceof EntityPlayer) {
-            return players.getValue() && !XIV.getInstance().getFriendManager().isFriend(entity.getDisplayName().getUnformattedText());
+            return players.getValue() && !XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName());
         } else if (entity instanceof IAnimals && !(entity instanceof IMob)) {
             return animals.getValue();
         } else if (entity instanceof IMob) {
