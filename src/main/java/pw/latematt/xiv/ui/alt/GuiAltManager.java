@@ -16,7 +16,7 @@ public class GuiAltManager extends GuiScreen {
     private GuiScreen parent;
     private AltSlot slot;
 
-    private GuiTextField username, password, search;
+    public GuiTextField username, password, keyword, search;
 
     public GuiAltManager(GuiScreen parent) {
         this.parent = parent;
@@ -24,10 +24,10 @@ public class GuiAltManager extends GuiScreen {
     }
 
     public List<AltAccount> getAccounts() {
-        if(search.getText().length() > 0) {
+        if (search != null && search.getText().length() > 0) {
             ArrayList<AltAccount> accounts = new ArrayList<>();
-            for(AltAccount account: XIV.getInstance().getAltManager().getContents()) {
-                if(account.getUsername().toLowerCase().startsWith(search.getText().toLowerCase())) {
+            for (AltAccount account : XIV.getInstance().getAltManager().getContents()) {
+                if (account.getUsername().toLowerCase().startsWith(search.getText().toLowerCase()) || account.getKeyword().toLowerCase().startsWith(search.getText().toLowerCase())) {
                     accounts.add(account);
                 }
             }
@@ -42,7 +42,7 @@ public class GuiAltManager extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        this.slot = new AltSlot(this, mc, width, height, 25, height - 98, 24);
+        this.slot = new AltSlot(this, mc, width, height, 25, height - 98, 34);
         this.slot.registerScrollButtons(7, 8);
 
         this.buttonList.clear();
@@ -55,13 +55,19 @@ public class GuiAltManager extends GuiScreen {
 
         this.buttonList.add(new GuiButton(4, width / 2 - 51, height - 48, 98, 20, "Random"));
 
-        this.username = new GuiTextField(0, mc.fontRendererObj, 8, height - 76, 150, 20);
+        this.buttonList.add(new GuiButton(5, width - 28, height - 86, 12, 20, "S"));
+
+        this.username = new GuiTextField(0, mc.fontRendererObj, 8, height - 86, 150, 20);
         this.username.setVisible(true);
 
-        this.password = new GuiTextField(1, mc.fontRendererObj, 8, height - 32, 150, 20);
+        this.password = new GuiTextField(1, mc.fontRendererObj, 8, height - 52, 150, 20);
         this.password.setVisible(true);
 
-        this.search = new GuiTextField(2, mc.fontRendererObj, width - 152, height - 54, 150, 20);
+        this.keyword = new GuiTextField(3, mc.fontRendererObj, width - 182, height - 86, 150, 20);
+        this.keyword.setVisible(true);
+        this.keyword.setText(slot.getAlt().getKeyword());
+
+        this.search = new GuiTextField(3, mc.fontRendererObj, width - 182, height - 52, 150, 20);
         this.search.setVisible(true);
     }
 
@@ -92,6 +98,8 @@ public class GuiAltManager extends GuiScreen {
                         this.actionPerformed(button);
                     }
                 }
+            } else if (button.id == 5) {
+                slot.getAlt().setKeyword(keyword.getText());
             }
         }
     }
@@ -99,6 +107,7 @@ public class GuiAltManager extends GuiScreen {
     @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
+        XIV.getInstance().getFileManager().saveFile("alts");
     }
 
     @Override
@@ -122,22 +131,21 @@ public class GuiAltManager extends GuiScreen {
             ((GuiButton) buttonList.get(2)).enabled = false;
         }
 
-        mc.fontRendererObj.drawStringWithShadow("Username:", 8, height - 88, 0xFFFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow("Username:", 8, height - 96, 0xFFFFFFFF);
         username.drawTextBox();
 
-        mc.fontRendererObj.drawStringWithShadow("Password:", 8, height - 44, 0xFFFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow("Password:", 8, height - 62, 0xFFFFFFFF);
         password.drawTextBox();
 
-        mc.fontRendererObj.drawStringWithShadow("Search:", width - 152, height - 66, 0xFFFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow("Keyword:", width - 182, height - 96, 0xFFFFFFFF);
+        keyword.drawTextBox();
+
+        mc.fontRendererObj.drawStringWithShadow("Search:", width - 182, height - 62, 0xFFFFFFFF);
         search.drawTextBox();
 
         drawCenteredString(mc.fontRendererObj, String.format("Accounts: %s", XIV.getInstance().getAltManager().getContents().size()), width / 2, 2, 0xFFFFFFFF);
         drawCenteredString(mc.fontRendererObj, String.format("Logged in as %s", mc.getSession().getUsername()), width / 2, 12, 0xFFFFFFFF);
 
-        if (username.isFocused() && password.isFocused()) {
-            password.setFocused(false);
-            search.setFocused(false);
-        }
     }
 
     @Override
@@ -145,16 +153,30 @@ public class GuiAltManager extends GuiScreen {
         super.keyTyped(typedChar, keyCode);
 
         if (keyCode == Keyboard.KEY_TAB) {
-            username.setFocused(!username.isFocused());
-            password.setFocused(!password.isFocused());
+            if (username.isFocused()) {
+                username.setFocused(!username.isFocused());
+                password.setFocused(true);
+            } else if (password.isFocused()) {
+                password.setFocused(!password.isFocused());
+                keyword.setFocused(true);
+            } else if (keyword.isFocused()) {
+                keyword.setFocused(!keyword.isFocused());
+                search.setFocused(true);
+            } else if (search.isFocused()) {
+                search.setFocused(!search.isFocused());
+                username.setFocused(true);
+            }
         }
 
         username.textboxKeyTyped(typedChar, keyCode);
         password.textboxKeyTyped(typedChar, keyCode);
+        keyword.textboxKeyTyped(typedChar, keyCode);
         search.textboxKeyTyped(typedChar, keyCode);
 
         if (keyCode == Keyboard.KEY_RETURN) {
-            if (!username.getText().equals("") && !password.getText().equals("")) {
+            if (keyword.isFocused()) {
+                this.actionPerformed(((GuiButton) buttonList.get(5)));
+            } else if (!username.getText().equals("") && !password.getText().equals("")) {
                 this.actionPerformed(((GuiButton) buttonList.get(2)));
             }
         }
@@ -166,6 +188,7 @@ public class GuiAltManager extends GuiScreen {
 
         username.mouseClicked(mouseX, mouseY, mouseButton);
         password.mouseClicked(mouseX, mouseY, mouseButton);
+        keyword.mouseClicked(mouseX, mouseY, mouseButton);
         search.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
@@ -175,6 +198,7 @@ public class GuiAltManager extends GuiScreen {
 
         username.updateCursorCounter();
         password.updateCursorCounter();
+        keyword.updateCursorCounter();
         search.updateCursorCounter();
     }
 

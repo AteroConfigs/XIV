@@ -25,6 +25,10 @@ public class AltManager extends ListManager<AltAccount> {
         contents.add(new AltAccount(username, password));
     }
 
+    public void add(String username, String password, String keyword) {
+        contents.add(new AltAccount(username, password, keyword));
+    }
+
     public void remove(String username) {
         contents.remove(find(username));
     }
