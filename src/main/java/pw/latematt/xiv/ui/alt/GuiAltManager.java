@@ -27,7 +27,7 @@ public class GuiAltManager extends GuiScreen {
         if (search != null && search.getText().length() > 0) {
             ArrayList<AltAccount> accounts = new ArrayList<>();
             for (AltAccount account : XIV.getInstance().getAltManager().getContents()) {
-                if (account.getUsername().toLowerCase().startsWith(search.getText().toLowerCase()) || account.getKeyword().toLowerCase().startsWith(search.getText().toLowerCase())) {
+                if (account.getUsername().toLowerCase().contains(search.getText().toLowerCase()) || account.getKeyword().toLowerCase().contains(search.getText().toLowerCase())) {
                     accounts.add(account);
                 }
             }
@@ -42,7 +42,7 @@ public class GuiAltManager extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        this.slot = new AltSlot(this, mc, width, height, 25, height - 98, 34);
+        this.slot = new AltSlot(this, mc, width, height, 25, height - 98, 36);
         this.slot.registerScrollButtons(7, 8);
 
         this.buttonList.clear();
@@ -143,7 +143,7 @@ public class GuiAltManager extends GuiScreen {
         mc.fontRendererObj.drawStringWithShadow("Search:", width - 182, height - 62, 0xFFFFFFFF);
         search.drawTextBox();
 
-        drawCenteredString(mc.fontRendererObj, String.format("Accounts: %s", XIV.getInstance().getAltManager().getContents().size()), width / 2, 2, 0xFFFFFFFF);
+        drawCenteredString(mc.fontRendererObj, String.format("Accounts: %s/%s/%s", getAccounts().size(), XIV.getInstance().getAltManager().getContents().size() - getAccounts().size(), XIV.getInstance().getAltManager().getContents().size()), width / 2, 2, 0xFFFFFFFF);
         drawCenteredString(mc.fontRendererObj, String.format("Logged in as %s", mc.getSession().getUsername()), width / 2, 12, 0xFFFFFFFF);
 
     }

@@ -41,7 +41,7 @@ public class AltConfig extends XIVFile {
         StringBuilder jewBuilder = new StringBuilder();
 
         for (AltAccount account : XIV.getInstance().getAltManager().getContents()) {
-            jewBuilder.append(account.getUsername() + ":" + account.getPassword() + ":" + account.getKeyword() + "\n");
+            jewBuilder.append(account.getUsername() + ":" + account.getPassword() + (account.getKeyword().length() > 0 ? (":" + account.getKeyword()) : "") + "\n");
         }
 
         Files.write(jewBuilder.toString().getBytes("UTF-8"), file);
