@@ -170,7 +170,7 @@ public class KillAura extends Mod implements CommandHandler {
             return false;
         if (!(invisible.getValue()) && entity.isInvisibleToPlayer(mc.thePlayer))
             return false;
-        if (team.getValue() && entity.getTeam().isSameTeam(mc.thePlayer.getTeam()))
+        if (team.getValue() && entity.getTeam() != null && entity.getTeam().isSameTeam(mc.thePlayer.getTeam()))
             return false;
         if (entity instanceof EntityPlayer) {
             return players.getValue() && !XIV.getInstance().getFriendManager().isFriend(entity.getDisplayName().getUnformattedText());
@@ -248,7 +248,7 @@ public class KillAura extends Mod implements CommandHandler {
                     break;
                 case "team":
                     team.setValue(!team.getValue());
-                    ChatLogger.print(String.format("Kill Aura will %s attack your team.", (team.getValue() ? "now" : "no longer")));
+                    ChatLogger.print(String.format("Kill Aura will %s attack your team.", (team.getValue() ? "no longer" : "now")));
                     break;
                 case "silent":
                 case "sil":

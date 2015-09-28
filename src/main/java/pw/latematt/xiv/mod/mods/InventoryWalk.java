@@ -33,19 +33,19 @@ public class InventoryWalk extends Mod implements Listener<MotionUpdateEvent> {
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-            mc.thePlayer.rotationPitch--;
+            mc.thePlayer.rotationPitch -= 4;
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-            mc.thePlayer.rotationPitch++;
+            mc.thePlayer.rotationPitch += 4;
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-            mc.thePlayer.rotationYaw--;
+            mc.thePlayer.rotationYaw -= 4;
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-            mc.thePlayer.rotationYaw++;
+            mc.thePlayer.rotationYaw += 4;
         }
     }
 
