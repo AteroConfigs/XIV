@@ -281,7 +281,7 @@ public class KillAura extends Mod implements CommandHandler {
                 case "autoblock":
                 case "ab":
                     autoblock.setValue(!autoblock.getValue());
-                    ChatLogger.print(String.format("Kill Aura will %s automatically switch to your sword.", (autoblock.getValue() ? "now" : "no longer")));
+                    ChatLogger.print(String.format("Kill Aura will %s automatically block for you.", (autoblock.getValue() ? "now" : "no longer")));
                     break;
                 default:
                     ChatLogger.print("Invalid action, valid: delay, aps, range, players, mobs, animals, invisible, team, silent, autosword, autoblock");
