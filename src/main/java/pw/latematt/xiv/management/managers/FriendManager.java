@@ -1,5 +1,6 @@
 package pw.latematt.xiv.management.managers;
 
+import net.minecraft.util.StringUtils;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.management.MapManager;
@@ -76,6 +77,6 @@ public class FriendManager extends MapManager<String, String> {
     }
 
     public boolean isFriend(String mcname) {
-        return contents.containsKey(mcname);
+        return contents.containsKey(StringUtils.stripControlCodes(mcname));
     }
 }

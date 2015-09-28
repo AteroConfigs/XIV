@@ -26,6 +26,8 @@ import net.minecraft.util.MathHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.NametagRenderEvent;
 
 public abstract class RendererLivingEntity extends Render
 {
@@ -502,6 +504,11 @@ public abstract class RendererLivingEntity extends Render
      */
     public void passSpecialRender(EntityLivingBase p_77033_1_, double p_77033_2_, double p_77033_4_, double p_77033_6_)
     {
+        NametagRenderEvent event = new NametagRenderEvent(p_77033_1_, p_77033_2_, p_77033_4_, p_77033_6_);
+        XIV.getInstance().getListenerManager().call(event);
+        if (event.isCancelled())
+            return;
+
         if (this.canRenderName(p_77033_1_))
         {
             double var8 = p_77033_1_.getDistanceSqToEntity(this.renderManager.livingPlayer);

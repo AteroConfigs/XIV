@@ -11,6 +11,7 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pw.latematt.xiv.XIV;
 
 public class GuiNewChat extends Gui
 {
@@ -89,6 +90,7 @@ public class GuiNewChat extends Gui
                                 int var16 = -var9 * 9;
                                 drawRect(var15, var16 - 9, var15 + var8 + 4, var16, var14 / 2 << 24);
                                 String var17 = var10.getChatComponent().getFormattedText();
+                                var17 = XIV.getInstance().getFriendManager().replace(var17, true);
                                 GlStateManager.enableBlend();
                                 this.mc.fontRendererObj.drawStringWithShadow(var17, (float)var15, (float)(var16 - 8), 16777215 + (var14 << 24));
                                 GlStateManager.disableAlpha();

@@ -21,7 +21,7 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     private Value<Mode> currentMode = new Value<>("speed_mode", Mode.BYPASS);
 
     public Speed() {
-        super("Speed", ModType.MOVEMENT, Keyboard.KEY_M, 0xFFDC5B18);
+        super("Speed", ModType.MOVEMENT, Keyboard.KEY_F, 0xFFDC5B18);
 
         Command.newCommand()
                 .cmd("speed")

@@ -12,7 +12,7 @@ import pw.latematt.xiv.mod.ModType;
  */
 public class Sprint extends Mod implements Listener<MotionUpdateEvent> {
     public Sprint() {
-        super("Sprint", ModType.MOVEMENT, Keyboard.KEY_M, 0xFF72B190);
+        super("Sprint", ModType.MOVEMENT, Keyboard.KEY_B, 0xFF72B190);
     }
 
     @Override
