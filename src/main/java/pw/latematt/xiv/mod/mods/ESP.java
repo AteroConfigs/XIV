@@ -182,7 +182,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
 
         GL11.glColor4f(color[0], color[1], color[2], 1.0F);
         GL11.glBegin(GL11.GL_LINES);
-        GL11.glVertex3d(x, entity.getEyeHeight(), z);
+        GL11.glVertex3d(x, y + entity.getEyeHeight(), z);
         GL11.glVertex3d(x, y, z);
         GL11.glEnd();
     }
