@@ -16,12 +16,7 @@ public class AltSlot extends GuiSlot {
 
     @Override
     protected int getSize() {
-        if (mc.currentScreen instanceof GuiAltManager) {
-            GuiAltManager screen = (GuiAltManager) mc.currentScreen;
-            return screen.getAccounts().size();
-        } else {
-            return 0;
-        }
+        return screen.getAccounts().size();
     }
 
     @Override
@@ -32,6 +27,7 @@ public class AltSlot extends GuiSlot {
     @Override
     protected void elementClicked(int slot, boolean var2, int var3, int var4) {
         this.selected = slot;
+        this.screen.keyword.setText(getAlt().getKeyword());
     }
 
     @Override
@@ -61,25 +57,21 @@ public class AltSlot extends GuiSlot {
         AltAccount alt = getAlt(slot);
 
         if (alt != null) {
+
             mc.fontRendererObj.drawStringWithShadow(alt.getUsername(), x + 1, y + 2, 0xFFFFFFFF);
-            mc.fontRendererObj.drawStringWithShadow(alt.getPassword().replaceAll("(?s).", "*"), x + 1, y + 12, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow(alt.getPassword().replaceAll("(?s).", "*"), x + 1, y + 12, 0xFF888888);
+            mc.fontRendererObj.drawStringWithShadow(alt.getKeyword(), x + 1, y + 22, 0xFFFFFF00);
         }
     }
 
     public AltAccount getAlt(int slot) {
         int count = 0;
 
-        if (mc.currentScreen instanceof GuiAltManager) {
-            GuiAltManager screen = (GuiAltManager) mc.currentScreen;
-
-            for (AltAccount alt : screen.getAccounts()) {
-                if (count == slot) {
-                    return alt;
-                }
-                count++;
+        for (AltAccount alt : screen.getAccounts()) {
+            if (count == slot) {
+                return alt;
             }
-        } else {
-            return null;
+            count++;
         }
 
         return null;
