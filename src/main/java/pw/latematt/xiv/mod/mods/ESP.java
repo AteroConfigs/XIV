@@ -80,10 +80,6 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             if (tracerlines.getValue()) {
                 drawTracerLines(entity, x, y, z);
             }
-
-            if (spines.getValue()) {
-                drawSpines(entity, x, y, z);
-            }
         }
 
         GL11.glLineWidth(2.0F);
@@ -101,8 +97,6 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         if (entity == mc.thePlayer)
             return false;
         if (!entity.isEntityAlive())
-            return false;
-        if (entity.ticksExisted < 20)
             return false;
         if (entity instanceof EntityLivingBase) {
             if (entity instanceof EntityPlayer) {
@@ -166,26 +160,13 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         GL11.glVertex3d(0, mc.thePlayer.getEyeHeight(), 0);
         GL11.glVertex3d(x, y, z);
         GL11.glEnd();
-    }
 
-    public void drawSpines(Entity entity, double x, double y, double z) {
-        final float distance = mc.thePlayer.getDistanceToEntity(entity);
-        float[] color;
-        if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getDisplayName().getUnformattedText())) {
-            color = new float[]{0.30F, 0.7F, 1.0F};
-        } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
-            color = new float[]{1.0F, 0.9F, 0.0F};
-        } else if (distance <= 64.0F) {
-            color = new float[]{0.9F, distance / 64.0F, 0.0F};
-        } else {
-            color = new float[]{0.0F, 0.90F, 0.0F};
+        if (spines.getValue()) {
+            GL11.glBegin(GL11.GL_LINES);
+            GL11.glVertex3d(x, entity.getEyeHeight(), z);
+            GL11.glVertex3d(x, y, z);
+            GL11.glEnd();
         }
-
-        GL11.glColor4f(color[0], color[1], color[2], 1.0F);
-        GL11.glBegin(GL11.GL_LINES);
-        GL11.glVertex3d(x, y + entity.getEyeHeight(), z);
-        GL11.glVertex3d(x, y, z);
-        GL11.glEnd();
     }
 
     @Override
@@ -229,8 +210,8 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                     break;
                 case "spine":
                 case "spines":
-                    spines.setValue(!spines.getValue());
-                    ChatLogger.print(String.format("ESP will %s display spines.", (spines.getValue() ? "now" : "no longer")));
+                    spines.setValue(!tracerlines.getValue());
+                    ChatLogger.print(String.format("ESP will %s display tracer lines.", (tracerlines.getValue() ? "now" : "no longer")));
                     break;
                 case "linewidth":
                 case "width":
@@ -247,7 +228,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                     }
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: players, mobs, animals, items, enderpearls, boxes, tracerlines, linewidth, spines");
+                    ChatLogger.print("Invalid action, valid: players, mobs, animals, items, enderpearls, boxes, tracerlines, linewidth");
                     break;
             }
         } else {

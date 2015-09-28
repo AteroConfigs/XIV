@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 
@@ -21,9 +22,11 @@ public class ElementButton extends Element {
 
     @Override
     public void drawElement(int mouseX, int mouseY) {
-        Gui.drawRect((int) getX(), (int) getY(), (int) getX() + (int) getWidth(), (int) getY() + (int) getHeight(), mod.isEnabled() ? 0x99000000 : 0x33000000);
+        Gui.drawRect((int) getX(), (int) getY(), (int) getX() + (int) getWidth(), (int) getY() + (int) getHeight(), mod.isEnabled() ? isOverElement(mouseX, mouseY) ? 0xBB000000 : 0x99000000 : isOverElement(mouseX, mouseY) ? 0x66000000 : 0x33000000);
 
-        mc.fontRendererObj.drawStringWithShadow(mod.getName(), getX() + (getWidth() / 2) - (mc.fontRendererObj.getStringWidth(mod.getName()) / 2), getY() + 2, 0xFFFFFFFF);
+        String extra = mod.getKeybind() != 0 ? (" [\247b" + Keyboard.getKeyName(mod.getKeybind()) + "\247r]") : "";
+
+        mc.fontRendererObj.drawStringWithShadow(mod.getName() + extra, getX() + (getWidth() / 2) - (mc.fontRendererObj.getStringWidth(mod.getName() + extra) / 2), getY() + 2, 0xFFFFFFFF);
     }
 
     @Override

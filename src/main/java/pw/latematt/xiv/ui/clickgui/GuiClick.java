@@ -10,16 +10,19 @@ import pw.latematt.xiv.ui.clickgui.panel.Panel;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GuiClick extends GuiScreen {
 
-    private final ArrayList<Panel> panels;
+    public final List<Panel> panels;
 
     public GuiClick() {
         float x = 4;
         float y = 4;
 
-        this.panels = new ArrayList<Panel>();
+        this.panels = new CopyOnWriteArrayList<Panel>();
+
         for (ModType type : ModType.values()) {
             y = 18;
             ArrayList<Element> elements = new ArrayList<Element>();
@@ -30,13 +33,6 @@ public class GuiClick extends GuiScreen {
                     y += 13;
                 }
             }
-
-            /*for (Entry<Mod, ModType> mod : this.mods.entrySet()) {
-                if (mod.getValue() == type) {
-                    elements.add(new ElementButton(mod.getKey(), x + 2, y + 2, 96, 12));
-                    y += 13;
-                }
-            }*/
 
             this.panels.add(new Panel(type, elements, x, 4, 100, 14));
 

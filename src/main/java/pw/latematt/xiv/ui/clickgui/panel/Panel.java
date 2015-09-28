@@ -5,7 +5,9 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
+import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.mod.mods.ClickGUI;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 
 import java.util.ArrayList;
@@ -106,7 +108,9 @@ public class Panel {
     public void drawPanel(int mouseX, int mouseY) {
         Gui.drawRect((int) getX(), (int) getY(), (int) getX() + (int) getWidth(), (int) getY() + (int) getHeight(), 0x55000000);
 
-        mc.fontRendererObj.drawStringWithShadow(type.getName(), getX() + (getWidth() / 2) - (mc.fontRendererObj.getStringWidth(type.getName()) / 2), getY() + 3, 0xFFFFFFFF);
+        String extra = elements.size() > 0 ? (" [\247b" + elements.size() + "\247r]") : "";
+
+        mc.fontRendererObj.drawStringWithShadow(type.getName() + extra, getX() + (getWidth() / 2) - (mc.fontRendererObj.getStringWidth(type.getName() + extra) / 2), getY() + 3, 0xFFFFFFFF);
 
         if (isOpen()) {
             Gui.drawRect((int) getX() + 2, (int) getY() + (int) getOpenHeight() - 1, (int) getX() + (int) getWidth() - 2, (int) getY() + (int) getOpenHeight(), 0x55000000);
@@ -154,6 +158,13 @@ public class Panel {
                 dragY = (getY() - mouseY);
 
                 dragging = true;
+                ClickGUI clickGUI = (ClickGUI) XIV.getInstance().getModManager().find(ClickGUI.class);
+                for (Panel pan : clickGUI.screen.panels) {
+                    if (pan.equals(this)) continue;
+                    pan.dragging = false;
+                }
+                clickGUI.screen.panels.remove(this);
+                clickGUI.screen.panels.add(this);
             } else if (mouseButton == 1) {
                 open = !open;
             }
