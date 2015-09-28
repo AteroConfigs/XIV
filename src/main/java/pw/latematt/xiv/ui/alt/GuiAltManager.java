@@ -143,7 +143,7 @@ public class GuiAltManager extends GuiScreen {
         mc.fontRendererObj.drawStringWithShadow("Search:", width - 182, height - 62, 0xFFFFFFFF);
         search.drawTextBox();
 
-        drawCenteredString(mc.fontRendererObj, String.format("Accounts: %s/%s", getAccounts().size(), XIV.getInstance().getAltManager().getContents().size()), width / 2, 2, 0xFFFFFFFF);
+        drawCenteredString(mc.fontRendererObj, String.format("Accounts: %s/%s/%s", getAccounts().size(), XIV.getInstance().getAltManager().getContents().size() - getAccounts().size(), XIV.getInstance().getAltManager().getContents().size()), width / 2, 2, 0xFFFFFFFF);
         drawCenteredString(mc.fontRendererObj, String.format("Logged in as %s", mc.getSession().getUsername()), width / 2, 12, 0xFFFFFFFF);
 
     }
