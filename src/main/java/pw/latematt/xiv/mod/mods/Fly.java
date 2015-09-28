@@ -12,16 +12,16 @@ import pw.latematt.xiv.mod.ModType;
 /**
  * @author TehNeon
  */
-public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
+public class Fly extends Mod implements Listener<MotionUpdateEvent>/*, CommandHandler*/ {
     public Fly() {
         super("Fly", ModType.PLAYER, Keyboard.KEY_M, 0xFF4B97F6);
 
-        Command.newCommand()
+        /*Command.newCommand()
                 .cmd("fly")
                 .aliases("flight")
                 .description("Base command for the Fly mod.")
                 .arguments("<action>")
-                .handler(this).build();
+                .handler(this).build();*/
     }
 
     public void onEventCalled(MotionUpdateEvent event) {
@@ -38,10 +38,10 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
         mc.thePlayer.motionY = motionY;
     }
 
-    @Override
+    /*@Override
     public void onCommandRan(String message) {
 
-    }
+    }*/
 
     @Override
     public void onEnabled() {
