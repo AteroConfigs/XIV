@@ -5,7 +5,9 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
+import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.mod.mods.ClickGUI;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 
 import java.util.ArrayList;
@@ -154,6 +156,13 @@ public class Panel {
                 dragY = (getY() - mouseY);
 
                 dragging = true;
+                ClickGUI clickGUI = (ClickGUI) XIV.getInstance().getModManager().find(ClickGUI.class);
+                for (Panel pan : clickGUI.screen.panels) {
+                    if (pan.equals(this)) continue;
+                    pan.dragging = false;
+                }
+                clickGUI.screen.panels.remove(this);
+                clickGUI.screen.panels.add(this);
             } else if (mouseButton == 1) {
                 open = !open;
             }

@@ -10,7 +10,7 @@ import pw.latematt.xiv.ui.clickgui.GuiClick;
 
 public class ClickGUI extends Mod implements Listener<GuiScreenEvent> {
 
-    private GuiClick screen;
+    public GuiClick screen;
 
     public ClickGUI() {
         super("ClickGUI", ModType.RENDER, Keyboard.KEY_RSHIFT);
