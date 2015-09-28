@@ -27,7 +27,7 @@ public class AltConfig extends XIVFile {
         String line = "";
         while ((line = reader.readLine()) != null) {
             String[] account = line.split(":");
-            if(account.length > 2) {
+            if (account.length > 2) {
                 XIV.getInstance().getAltManager().add(account[0], account[1], account[2]);
             } else {
                 XIV.getInstance().getAltManager().add(account[0], account[1]);
