@@ -65,7 +65,8 @@ public class GuiAltManager extends GuiScreen {
 
         this.keyword = new GuiTextField(3, mc.fontRendererObj, width - 182, height - 86, 150, 20);
         this.keyword.setVisible(true);
-        this.keyword.setText(slot.getAlt().getKeyword());
+        if(slot.getAlt() != null)
+            this.keyword.setText(slot.getAlt().getKeyword());
 
         this.search = new GuiTextField(3, mc.fontRendererObj, width - 182, height - 52, 150, 20);
         this.search.setVisible(true);
