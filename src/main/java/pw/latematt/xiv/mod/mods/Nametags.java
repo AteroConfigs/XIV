@@ -86,8 +86,13 @@ public class Nametags extends Mod {
         mc.entityRenderer.func_175072_h();
         GlStateManager.translate((float) x + 0.0F, (float) y + entity.height + 0.5F, (float) z);
         GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
+        if (mc.gameSettings.thirdPersonView == 2) {
+			GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(mc.getRenderManager().playerViewX, -1.0F, 0.0F, 0.0F);
+		} else {
+			GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
+		}
         GlStateManager.scale(-var14, -var14, var14);
         GlStateManager.disableLighting();
         GlStateManager.depthMask(false);

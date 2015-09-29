@@ -1602,6 +1602,9 @@ public class EntityRenderer implements IResourceManagerReloadListener
             this.func_175072_h();
         }
 
+        XIV.getInstance().getListenerManager().call(new Render3DEvent(partialTicks));
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
         GlStateManager.depthMask(false);
         GlStateManager.enableCull();
         this.mc.mcProfiler.endStartSection("weather");
@@ -1666,7 +1669,6 @@ public class EntityRenderer implements IResourceManagerReloadListener
         boolean viewBobbing = mc.gameSettings.viewBobbing;
         mc.gameSettings.viewBobbing = false;
         setupCameraTransform(partialTicks, pass);
-        XIV.getInstance().getListenerManager().call(new Render3DEvent(partialTicks));
         mc.gameSettings.viewBobbing = viewBobbing;
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         if (!handRendered && this.field_175074_C)
