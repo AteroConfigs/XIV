@@ -37,7 +37,7 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
             /* thanks anodise */
             if (currentMode.getValue() == Mode.BYPASS) {
                 // TODO: Fix this a bit more.
-                if (!mc.thePlayer.onGround) return;
+                if (!mc.thePlayer.onGround || mc.thePlayer.fallDistance > 0 || mc.thePlayer.isInWater()) return;
 
                 switch (this.delay) {
                     case 1: {
