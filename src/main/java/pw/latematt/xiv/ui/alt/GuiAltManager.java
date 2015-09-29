@@ -55,7 +55,7 @@ public class GuiAltManager extends GuiScreen {
 
         this.buttonList.add(new GuiButton(4, width / 2 - 51, height - 48, 98, 20, "Random"));
 
-        this.buttonList.add(new GuiButton(5, width - 28, height - 86, 20, 20, "S"));
+        this.buttonList.add(new GuiButton(5, width - 28, height - 86, 20, 20, "+"));
 
         this.username = new GuiTextField(0, mc.fontRendererObj, 8, height - 86, 150, 20);
         this.username.setVisible(true);

@@ -1,16 +1,32 @@
 package pw.latematt.xiv.mod.mods;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockBed;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderPearl;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.src.Reflector;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
@@ -49,14 +65,14 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     }
 
     public void onEventCalled(Render3DEvent event) {
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         mc.entityRenderer.func_175072_h();
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthMask(false);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GlStateManager.disableLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.disableDepth();
+        GlStateManager.depthMask(false);
+        GlStateManager.func_179090_x();
         GL11.glLineWidth(lineWidth.getValue());
 
         for (Entity entity : mc.theWorld.loadedEntityList) {
@@ -69,31 +85,36 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks - mc.getRenderManager().renderPosZ;
 
             if (boxes.getValue()) {
-                GL11.glPushMatrix();
-                GL11.glTranslated(x, y, z);
-                GL11.glRotatef(-entity.rotationYaw, 0.0F, entity.height,
-                        0.0F);
-                GL11.glTranslated(-x, -y, -z);
+            	GlStateManager.pushMatrix();
+                GlStateManager.translate(x, y, z);
+                GlStateManager.rotate(-entity.rotationYaw, 0.0F, entity.height, 0.0F);
+                GlStateManager.translate(-x, -y, -z);
                 drawBoxes(entity, x, y, z);
-                GL11.glPopMatrix();
+                GlStateManager.popMatrix();
+            }
+
+            if (spines.getValue()) {
+                drawSpines(entity, x, y, z);
             }
 
             if (tracerlines.getValue()) {
+            	GlStateManager.pushMatrix();
+				GlStateManager.loadIdentity();
+				mc.entityRenderer.orientCamera(partialTicks);
                 drawTracerLines(entity, x, y, z);
-            }
-            if (spines.getValue()) {
-                drawSpines(entity, x, y, z);
+            	GlStateManager.popMatrix();
             }
         }
 
         GL11.glLineWidth(2.0F);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDepthMask(true);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.func_179098_w();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableDepth();
+        GlStateManager.disableBlend();
+        GlStateManager.enableLighting();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         mc.entityRenderer.func_180436_i();
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     private boolean isValidEntity(Entity entity) {
@@ -158,11 +179,13 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             color = new float[]{0.0F, 0.90F, 0.0F};
         }
 
-        GL11.glColor4f(color[0], color[1], color[2], 1.0F);
-        GL11.glBegin(GL11.GL_LINES);
-        GL11.glVertex3d(0, mc.thePlayer.getEyeHeight(), 0);
-        GL11.glVertex3d(x, y, z);
-        GL11.glEnd();
+        GlStateManager.color(color[0], color[1], color[2], 1.0F);
+        Tessellator var2 = Tessellator.getInstance();
+        WorldRenderer var3 = var2.getWorldRenderer();
+        var3.startDrawing(2);
+        var3.addVertex(0, mc.thePlayer.getEyeHeight(), 0);
+        var3.addVertex(x, y, z);
+        var2.draw();
     }
 
     private void drawSpines(Entity entity, double x, double y, double z) {
@@ -180,11 +203,13 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             color = new float[]{0.0F, 0.9F, 0.0F};
         }
 
-        GL11.glColor4f(color[0], color[1], color[2], 1.0F);
-        GL11.glBegin(GL11.GL_LINES);
-        GL11.glVertex3d(x, y + entity.getEyeHeight(), z);
-        GL11.glVertex3d(x, y, z);
-        GL11.glEnd();
+        GlStateManager.color(color[0], color[1], color[2], 1.0F);
+        Tessellator var2 = Tessellator.getInstance();
+        WorldRenderer var3 = var2.getWorldRenderer();
+        var3.startDrawing(2);
+        var3.addVertex(x, y, z);
+        var3.addVertex(x, y + entity.getEyeHeight(), z);
+        var2.draw();
     }
 
     @Override
