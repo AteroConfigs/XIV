@@ -1,8 +1,5 @@
 package pw.latematt.xiv.mod.mods;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockBed;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
@@ -12,21 +9,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderPearl;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.src.Reflector;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
@@ -85,7 +72,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks - mc.getRenderManager().renderPosZ;
 
             if (boxes.getValue()) {
-            	GlStateManager.pushMatrix();
+                GlStateManager.pushMatrix();
                 GlStateManager.translate(x, y, z);
                 GlStateManager.rotate(-entity.rotationYaw, 0.0F, entity.height, 0.0F);
                 GlStateManager.translate(-x, -y, -z);
@@ -98,11 +85,11 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             }
 
             if (tracerlines.getValue()) {
-            	GlStateManager.pushMatrix();
-				GlStateManager.loadIdentity();
-				mc.entityRenderer.orientCamera(partialTicks);
+                GlStateManager.pushMatrix();
+                GlStateManager.loadIdentity();
+                mc.entityRenderer.orientCamera(partialTicks);
                 drawTracerLines(entity, x, y, z);
-            	GlStateManager.popMatrix();
+                GlStateManager.popMatrix();
             }
         }
 
