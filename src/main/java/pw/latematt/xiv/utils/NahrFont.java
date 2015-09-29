@@ -137,7 +137,8 @@ public class NahrFont {
                     drawChar(c, x, y);
                     GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                     x += getStringWidth(Character.toString(c)) * 2.0F;
-                } catch (final ArrayIndexOutOfBoundsException ignored) {}
+                } catch (final ArrayIndexOutOfBoundsException ignored) {
+                }
             }
     }
 
