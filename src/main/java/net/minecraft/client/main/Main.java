@@ -91,7 +91,7 @@ public class Main
         boolean var30 = var21.has("checkGlErrors");
         boolean var31 = var21.has("demo");
         String var32 = (String)var21.valueOf(var14);
-        PropertyMap var33 = (PropertyMap)(new GsonBuilder()).registerTypeAdapter(PropertyMap.class, new Serializer()).create().fromJson((String)var21.valueOf(var17), PropertyMap.class);
+        PropertyMap var33 = (new GsonBuilder()).registerTypeAdapter(PropertyMap.class, new Serializer()).create().fromJson((String)var21.valueOf(var17), PropertyMap.class);
         File var34 = (File)var21.valueOf(var4);
         File var35 = var21.has(var5) ? (File)var21.valueOf(var5) : new File(var34, "assets/");
         File var36 = var21.has(var6) ? (File)var21.valueOf(var6) : new File(var34, "resourcepacks/");
