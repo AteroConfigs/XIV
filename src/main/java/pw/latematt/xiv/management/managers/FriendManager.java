@@ -28,7 +28,7 @@ public class FriendManager extends MapManager<String, String> {
                 .handler(message -> {
                     String[] arguments = message.split(" ");
                     if (arguments.length < 3) {
-                        ChatLogger.print("Invalid arguments, valid: friend <add/del> <mcname> [alias]");
+                        ChatLogger.print("Invalid arguments, valid: friend <add/alias/del> <mcname> [alias]");
                     } else {
                         String action = arguments[1];
                         if (action.equalsIgnoreCase("add")) {
@@ -49,8 +49,16 @@ public class FriendManager extends MapManager<String, String> {
                             XIV.getInstance().getFriendManager().remove(mcname);
                             XIV.getInstance().getFileManager().saveFile("friends");
                             ChatLogger.print(String.format("Friend \"%s\" removed.", mcname));
+                        } else if (action.equalsIgnoreCase("alias")) {
+                            String mcname = arguments[2];
+                            String alias = arguments[3];
+
+                            XIV.getInstance().getFriendManager().remove(mcname);
+                            XIV.getInstance().getFriendManager().add(mcname, alias);
+                            XIV.getInstance().getFileManager().saveFile("friends");
+                            ChatLogger.print(String.format("Friend \"\2473%s\247r\" changed.", alias));
                         } else {
-                            ChatLogger.print("Invalid action, valid: add, del");
+                            ChatLogger.print("Invalid action, valid: add, alias, del");
                         }
                     }
                 }).build();

@@ -1,23 +1,26 @@
 package pw.latematt.xiv.ui.alt;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
-import org.lwjgl.input.Keyboard;
-import pw.latematt.xiv.XIV;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
+
+import org.lwjgl.input.Keyboard;
+
+import pw.latematt.xiv.XIV;
 
 public class GuiAltManager extends GuiScreen {
 
     private GuiScreen parent;
     private AltSlot slot;
 
-    public GuiTextField username, password, keyword, search;
-
+    public GuiTextField username, keyword, search;
+    public GuiPasswordField password;
+    
     public GuiAltManager(GuiScreen parent) {
         this.parent = parent;
         XIV.getInstance().getFileManager().loadFile("alts");
@@ -48,7 +51,7 @@ public class GuiAltManager extends GuiScreen {
         this.buttonList.clear();
         this.buttonList.add(new GuiButton(0, width / 2 - 100, height - 26, 200, 20, "Cancel"));
 
-        this.buttonList.add(new GuiButton(1, width / 2 - 100, height - 70, 200, 20, "Login"));
+        this.buttonList.add(new GuiButton(1, width / 2 + 2, height - 70, 98, 20, "Login"));
 
         this.buttonList.add(new GuiButton(2, width / 2 - 100, height - 92, 98, 20, "Add"));
         this.buttonList.add(new GuiButton(3, width / 2 + 2, height - 92, 98, 20, "Remove"));
@@ -57,10 +60,15 @@ public class GuiAltManager extends GuiScreen {
 
         this.buttonList.add(new GuiButton(5, width - 28, height - 86, 20, 20, "+"));
 
+        this.buttonList.add(new GuiButton(6, 7, height - 26, (153 / 2) - 2, 20, "Direct Login"));
+        this.buttonList.add(new GuiButton(7, 7 + (153 / 2), height - 26, (153 / 2) - 2, 20, "Set Current"));
+        
+        this.buttonList.add(new GuiButton(8, width / 2 - 100, height - 70, 98, 20, "Edit"));
+
         this.username = new GuiTextField(0, mc.fontRendererObj, 8, height - 86, 150, 20);
         this.username.setVisible(true);
 
-        this.password = new GuiTextField(1, mc.fontRendererObj, 8, height - 52, 150, 20);
+        this.password = new GuiPasswordField(1, mc.fontRendererObj, 8, height - 52, 150, 20);
         this.password.setVisible(true);
 
         this.keyword = new GuiTextField(3, mc.fontRendererObj, width - 182, height - 86, 150, 20);
@@ -95,6 +103,8 @@ public class GuiAltManager extends GuiScreen {
                     int next = random.nextInt(this.slot.getSize());
                     if (this.slot.getSelected() != next) {
                         this.slot.setSelected(next);
+                        
+                        this.actionPerformed(((GuiButton) buttonList.get(1)));
                     } else {
                         this.actionPerformed(button);
                     }
@@ -102,7 +112,28 @@ public class GuiAltManager extends GuiScreen {
             } else if (button.id == 5) {
                 slot.getAlt().setKeyword(keyword.getText());
             } else if (button.id == 6) {
+            	if(password.getText().equals("")) {
+            		/* TODO OFFLINE LOGIN */
+            	} else {
+            		AuthThread thread = new AuthThread(new AltAccount(username.getText(), password.getText()));
+            		thread.start();
+
+                    username.setText("");
+                    password.setText("");
+            	}
+            } else if (button.id == 7) {
+            	AltAccount current = this.slot.getAlt();
             	
+            	current.setUsername(username.getText());
+            	current.setPassword(password.getText());
+
+                username.setText("");
+                password.setText("");
+            } else if (button.id == 8) {
+            	AltAccount current = this.slot.getAlt();
+
+            	username.setText(current.getUsername());
+            	password.setText(current.getPassword());
             }
         }
     }
@@ -119,10 +150,12 @@ public class GuiAltManager extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         if (slot.getAlt() == null) {
+            ((GuiButton) buttonList.get(8)).enabled = false;
             ((GuiButton) buttonList.get(4)).enabled = false;
             ((GuiButton) buttonList.get(3)).enabled = false;
             ((GuiButton) buttonList.get(1)).enabled = false;
         } else {
+            ((GuiButton) buttonList.get(8)).enabled = true;
             ((GuiButton) buttonList.get(4)).enabled = true;
             ((GuiButton) buttonList.get(3)).enabled = true;
             ((GuiButton) buttonList.get(1)).enabled = true;
@@ -144,10 +177,22 @@ public class GuiAltManager extends GuiScreen {
         	}
         }
         
+        if (!username.getText().equals("")) {
+            ((GuiButton) buttonList.get(6)).enabled = true;
+        } else {
+            ((GuiButton) buttonList.get(6)).enabled = false;
+        }
+        
         if (!username.getText().equals("") && !password.getText().equals("")) {
             ((GuiButton) buttonList.get(2)).enabled = true;
         } else {
             ((GuiButton) buttonList.get(2)).enabled = false;
+        }
+
+        if (!username.getText().equals("") && !password.getText().equals("") && this.slot.getAlt() != null) {
+            ((GuiButton) buttonList.get(7)).enabled = true;
+        }else{
+            ((GuiButton) buttonList.get(7)).enabled = false;
         }
 
         mc.fontRendererObj.drawStringWithShadow("Username:", 8, height - 96, 0xFFFFFFFF);
