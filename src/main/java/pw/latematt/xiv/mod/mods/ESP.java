@@ -147,9 +147,9 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             color = new float[]{0.0F, 0.9F, 0.0F};
         }
 
-        GL11.glColor4f(color[0], color[1], color[2], 0.6F);
+        GlStateManager.color(color[0], color[1], color[2], 0.6F);
         RenderUtils.drawLines(box);
-        GL11.glColor4f(color[0], color[1], color[2], 0.6F);
+        GlStateManager.color(color[0], color[1], color[2], 0.6F);
         RenderGlobal.drawOutlinedBoundingBox(box, -1);
     }
 

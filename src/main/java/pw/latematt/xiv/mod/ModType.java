@@ -6,6 +6,7 @@ public enum ModType {
     PLAYER("Player"),
     MOVEMENT("Movement"),
     RENDER("Render"),
+    WORLD("World"),
     NONE("None");
 
     private String name;

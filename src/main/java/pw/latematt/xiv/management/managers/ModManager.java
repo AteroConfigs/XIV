@@ -22,8 +22,10 @@ public class ModManager extends ListManager<Mod> {
     @Override
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
+        contents.add(new AntiCactus());
         contents.add(new ClickGUI());
         contents.add(new ESP());
+        contents.add(new FastUse());
         contents.add(new Fly());
         contents.add(new HUD());
         contents.add(new InventoryWalk());

@@ -26,10 +26,8 @@ public class NahrFont {
     private final int endChar;
     private float extraSpacing = 0.0F;
     private final float fontSize;
-    private final Pattern patternControlCode = Pattern
-            .compile("(?i)\\u00A7[0-9A-FK-OG]");
-    private final Pattern patternUnsupported = Pattern
-            .compile("(?i)\\u00A7[K-O]");
+    private final Pattern patternControlCode = Pattern.compile("(?i)\\u00A7[0-9A-FK-OG]");
+    private final Pattern patternUnsupported = Pattern.compile("(?i)\\u00A7[K-O]");
     private ResourceLocation resourceLocation;
     private final int startChar;
     private Font theFont;
@@ -61,8 +59,7 @@ public class NahrFont {
             } else if (font instanceof File) {
                 this.theFont = Font.createFont(0, (File) font).deriveFont(size);
             } else if (font instanceof InputStream) {
-                this.theFont = Font.createFont(0, (InputStream) font)
-                        .deriveFont(size);
+                this.theFont = Font.createFont(0, (InputStream) font).deriveFont(size);
             } else if (font instanceof String) {
                 this.theFont = new Font((String) font, 0, Math.round(size));
             } else {
@@ -83,43 +80,28 @@ public class NahrFont {
         float x = 5.0F;
         float y = 5.0F;
         for (int i = this.startChar; i < this.endChar; i++) {
-            this.theGraphics.drawString(Character.toString((char) i), x, y
-                    + this.theMetrics.getAscent());
+            this.theGraphics.drawString(Character.toString((char) i), x, y + this.theMetrics.getAscent());
             this.xPos[i - this.startChar] = x;
             this.yPos[i - this.startChar] = y - this.theMetrics.getMaxDescent();
             x += this.theMetrics.stringWidth(Character.toString((char) i)) + 2.0F;
             if (x >= 250 - this.theMetrics.getMaxAdvance()) {
                 x = 5.0F;
-                y += this.theMetrics.getMaxAscent()
-                        + this.theMetrics.getMaxDescent() + this.fontSize
-                        / 2.0F;
+                y += this.theMetrics.getMaxAscent() + this.theMetrics.getMaxDescent() + this.fontSize / 2.0F;
             }
         }
-        this.resourceLocation = Minecraft
-                .getMinecraft()
-                .getTextureManager()
-                .getDynamicTextureLocation(
-                        "font" + font.toString() + size,
-                        this.dynamicTexture = new DynamicTexture(
-                                this.bufferedImage));
+        this.resourceLocation = Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation("font" + font.toString() + size, this.dynamicTexture = new DynamicTexture(this.bufferedImage));
     }
 
-    private void drawChar(char character, float x, float y)
-            throws ArrayIndexOutOfBoundsException {
-        final Rectangle2D bounds = this.theMetrics.getStringBounds(
-                Character.toString(character), this.theGraphics);
-        drawTexturedModalRect(x, y, this.xPos[character - this.startChar],
-                this.yPos[character - this.startChar],
-                (float) bounds.getWidth(), (float) bounds.getHeight()
-                        + this.theMetrics.getMaxDescent() + 1.0F);
+    private void drawChar(char character, float x, float y) throws ArrayIndexOutOfBoundsException {
+        final Rectangle2D bounds = this.theMetrics.getStringBounds(Character.toString(character), this.theGraphics);
+        drawTexturedModalRect(x, y, this.xPos[character - this.startChar], this.yPos[character - this.startChar], (float) bounds.getWidth(), (float) bounds.getHeight() + this.theMetrics.getMaxDescent() + 1.0F);
     }
 
     private void drawer(String text, float x, float y, int color) {
         x *= 2.0F;
         y *= 2.0F;
         GL11.glEnable(GL11.GL_TEXTURE_2D);
-        Minecraft.getMinecraft().getTextureManager()
-                .bindTexture(this.resourceLocation);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(this.resourceLocation);
         final float alpha = (color >> 24 & 0xFF) / 255.0F;
         final float red = (color >> 16 & 0xFF) / 255.0F;
         final float green = (color >> 8 & 0xFF) / 255.0F;
@@ -133,14 +115,11 @@ public class NahrFont {
                     y += this.theMetrics.getAscent() + 2;
                     x = startX;
                 }
-                final int colorCode = "0123456789abcdefklmnorg"
-                        .indexOf(oneMore);
+                final int colorCode = "0123456789abcdefklmnorg".indexOf(oneMore);
                 if (colorCode < 16) {
                     try {
                         final int newColor = Minecraft.getMinecraft().fontRendererObj.colorCode[colorCode];
-                        GL11.glColor4f((newColor >> 16) / 255.0F,
-                                (newColor >> 8 & 0xFF) / 255.0F,
-                                (newColor & 0xFF) / 255.0F, alpha);
+                        GL11.glColor4f((newColor >> 16) / 255.0F, (newColor >> 8 & 0xFF) / 255.0F, (newColor & 0xFF) / 255.0F, alpha);
                     } catch (final Exception exception) {
                         exception.printStackTrace();
                     }
@@ -156,6 +135,7 @@ public class NahrFont {
                 try {
                     final char c = text.charAt(i);
                     drawChar(c, x, y);
+                    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                     x += getStringWidth(Character.toString(c)) * 2.0F;
                 } catch (final ArrayIndexOutOfBoundsException ignored) {
                 }

@@ -30,7 +30,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class KillAura extends Mod implements CommandHandler {
     private final Listener motionUpdateListener;
     private final Listener sendPacketListener;
-    private final Value<Long> delay = new Value<>("killaura_delay", 83L);
+    private final Value<Long> delay = new Value<>("killaura_delay", 125L);
     private final Value<Double> range = new Value<>("killaura_range", 3.9);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
     private final Value<Boolean> mobs = new Value<>("killaura_mobs", false);
@@ -44,8 +44,8 @@ public class KillAura extends Mod implements CommandHandler {
     private final List<EntityLivingBase> entities;
     public EntityLivingBase entityToAttack;
     private boolean aimed;
+    private Timer entityTimer = new Timer();
     private Timer attackTimer = new Timer();
-    private Timer entityFindTimer = new Timer();
 
     public KillAura() {
         super("Kill Aura", ModType.COMBAT, Keyboard.KEY_R, 0xFFC6172B);
@@ -67,14 +67,14 @@ public class KillAura extends Mod implements CommandHandler {
                 }
 
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (entities.isEmpty() && entityFindTimer.hasReached(40)) {
+                    if (entities.isEmpty() && entityTimer.hasReached(65)) {
                         mc.theWorld.loadedEntityList.stream().filter(entity -> entity instanceof EntityLivingBase).forEach(entity -> {
                             EntityLivingBase living = (EntityLivingBase) entity;
                             if (isValidEntity(living)) {
                                 entities.add(living);
                             }
-                            entityFindTimer.reset();
                         });
+                        entityTimer.reset();
                     }
 
                     if (!entities.isEmpty()) {
@@ -149,10 +149,6 @@ public class KillAura extends Mod implements CommandHandler {
         int oldDamage = 0;
         if (mc.thePlayer.getCurrentEquippedItem() != null) {
             oldDamage = mc.thePlayer.getCurrentEquippedItem().getItemDamage();
-        }
-
-        if (autoblock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
-            mc.thePlayer.setEating(false);
         }
         mc.playerController.attackEntity(mc.thePlayer, target);
 

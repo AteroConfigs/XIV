@@ -26,10 +26,10 @@ public class GuiTab {
         this.countMenuSize(mc);
         float boxY = y;
 
-        RenderUtils.drawBorderedRect(x, y, x + menuWidth, y + menuHeight, 1, 0xFF000000, this.gui.getColourBody());
+        RenderUtils.drawBorderedRect(x, y, x + menuWidth, y + menuHeight, 1, 0x80000000, this.gui.getColourBody());
         for (int i = 0; i < this.mods.size(); i++) {
             if (this.gui.getSelectedItem() == i) {
-                RenderUtils.drawBorderedRect(x, boxY, x + menuWidth, boxY + 12, 1, 0xFF000000, this.gui.getColourBox());
+                RenderUtils.drawBorderedRect(x, boxY, x + menuWidth, boxY + 12, 1, 0x80000000, this.gui.getColourBox());
             }
 
             mc.fontRendererObj.drawStringWithShadow((this.mods.get(i).getMod().isEnabled() ? this.gui.getColourHightlight() : this.gui.getColourNormal()) + this.mods.get(i).getName(), x + 1, y + this.gui.getTabHeight() * i + 2, 0xFFFFFFFF);
@@ -48,7 +48,7 @@ public class GuiTab {
 
         this.menuWidth = maxWidth;
 
-        this.menuHeight = this.mods.size() * this.gui.getTabHeight() - 1;
+        this.menuHeight = this.mods.size() * this.gui.getTabHeight();
     }
 
     public String getTabName() {
