@@ -211,29 +211,4 @@
             </plugin>
         </plugins>
     </build>
-
-      <!-- Build Type -->
-  <profiles>
-    <profile>
-      <id>win32</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <build.type>win32</build.type>
-      </properties>
-    </profile>
-    <profile>
-      <id>linux</id>
-      <properties>
-        <build.type>linux</build.type>
-      </properties>
-    </profile>
-    <profile>
-      <id>mac</id>
-      <properties>
-        <build.type>mac</build.type>
-      </properties>
-    </profile>
-  </profiles>
 </project>

@@ -7,10 +7,12 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.ui.clickgui.element.Element;
+import pw.latematt.xiv.utils.NahrFont;
 
 public class ElementButton extends Element {
 
     private static Minecraft mc = Minecraft.getMinecraft();
+    private NahrFont font;
 
     private final Mod mod;
 
@@ -18,6 +20,7 @@ public class ElementButton extends Element {
         super(x, y, width, height);
 
         this.mod = mod;
+        this.font = new NahrFont("Verdana", 18);
     }
 
     @Override
@@ -27,6 +30,12 @@ public class ElementButton extends Element {
         String extra = mod.getKeybind() != 0 ? (" [\247b" + Keyboard.getKeyName(mod.getKeybind()) + "\247r]") : "";
 
         mc.fontRendererObj.drawStringWithShadow(mod.getName() + extra, getX() + (getWidth() / 2) - (mc.fontRendererObj.getStringWidth(mod.getName() + extra) / 2), getY() + 2, 0xFFFFFFFF);
+
+        if (mc.fontRendererObj.getStringWidth(mod.getName() + extra) > getWidth()) {
+//        	Size panel to buttons width, didn't finish so commented out.
+//        	
+//        	this.setWidth(mc.fontRendererObj.getStringWidth(mod.getName() + extra));
+        }
     }
 
     @Override

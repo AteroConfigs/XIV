@@ -9,6 +9,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.ClickGUI;
 import pw.latematt.xiv.ui.clickgui.element.Element;
+import pw.latematt.xiv.utils.NahrFont;
 
 import java.util.ArrayList;
 
@@ -23,6 +24,8 @@ public class Panel {
     private ModType type;
     private ArrayList<Element> elements;
 
+    private NahrFont font;
+
     public Panel(ModType type, ArrayList<Element> elements, float x, float y, float width, float height) {
         this.x = x;
         this.y = y;
@@ -31,6 +34,8 @@ public class Panel {
 
         this.type = type;
         this.elements = elements;
+
+        this.font = new NahrFont("Verdana", 18);
     }
 
     public float getX() {
@@ -132,6 +137,10 @@ public class Panel {
                 element.drawElement(mouseX, mouseY);
                 element.setX(getX() + 2);
                 element.setY(getY() + y + 2);
+
+                if (element.getWidth() + 4 > getWidth()) {
+                    this.setWidth(element.getWidth() + 4);
+                }
 
                 y += 13;
             }

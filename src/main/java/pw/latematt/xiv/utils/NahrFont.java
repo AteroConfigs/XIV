@@ -179,6 +179,10 @@ public class NahrFont {
         GL11.glScalef(2.0F, 2.0F, 2.0F);
     }
 
+    public void drawString(String text, float x, float y, FontType fontType, int color) {
+        this.drawString(text, x, y, fontType, color, (color & 16579836) >> 2 | color & -16777216);
+    }
+
     private void drawTexturedModalRect(float x, float y, float u, float v,
                                        float width, float height) {
         final float scale = 0.0039063F;
@@ -286,11 +290,8 @@ public class NahrFont {
                     }
                     break;
                 case ' ':
-                    var6 = var5;
                 case '-':
-                    var6 = var5;
                 case '_':
-                    var6 = var5;
                 case ':':
                     var6 = var5;
                 default:

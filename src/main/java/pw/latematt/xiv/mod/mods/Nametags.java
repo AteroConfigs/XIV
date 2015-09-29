@@ -53,6 +53,7 @@ public class Nametags extends Mod {
                 }
             }
         };
+        setEnabled(true);
     }
 
     private boolean isValidEntity(Entity entity) {

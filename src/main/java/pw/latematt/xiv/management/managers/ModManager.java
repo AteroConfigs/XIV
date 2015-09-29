@@ -31,11 +31,14 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Nametags());
         contents.add(new NoFall());
         contents.add(new NoSlowdown());
+        contents.add(new Regen());
         contents.add(new Speed());
         contents.add(new Sprint());
         contents.add(new Step());
-        contents.add(new TabGUI());
         contents.add(new Velocity());
+
+        /* ALWAYS LOAD TABGUI LAST!!! */
+        contents.add(new TabGUI());
 
         Command.newCommand()
                 .cmd("mods")

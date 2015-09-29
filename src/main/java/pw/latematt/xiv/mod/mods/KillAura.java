@@ -45,6 +45,7 @@ public class KillAura extends Mod implements CommandHandler {
     public EntityLivingBase entityToAttack;
     private boolean aimed;
     private Timer attackTimer = new Timer();
+    private Timer entityFindTimer = new Timer();
 
     public KillAura() {
         super("Kill Aura", ModType.COMBAT, Keyboard.KEY_R, 0xFFC6172B);
@@ -66,16 +67,23 @@ public class KillAura extends Mod implements CommandHandler {
                 }
 
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (entities.isEmpty()) {
+                    if (entities.isEmpty() && entityFindTimer.hasReached(40)) {
                         mc.theWorld.loadedEntityList.stream().filter(entity -> entity instanceof EntityLivingBase).forEach(entity -> {
                             EntityLivingBase living = (EntityLivingBase) entity;
                             if (isValidEntity(living)) {
                                 entities.add(living);
                             }
+                            entityFindTimer.reset();
                         });
                     }
 
                     if (!entities.isEmpty()) {
+                        if (autoblock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
+                            ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
+                            sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
+                            mc.playerController.updateController();
+                        }
+
                         EntityLivingBase firstInArray = entities.get(0);
                         if (isValidEntity(firstInArray)) {
                             entityToAttack = firstInArray;
@@ -144,9 +152,7 @@ public class KillAura extends Mod implements CommandHandler {
         }
 
         if (autoblock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
-            ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
-            sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
-            mc.playerController.updateController();
+            mc.thePlayer.setEating(false);
         }
         mc.playerController.attackEntity(mc.thePlayer, target);
 
@@ -176,6 +182,7 @@ public class KillAura extends Mod implements CommandHandler {
             return false;
         if (team.getValue() && entity.getTeam() != null && entity.getTeam().isSameTeam(mc.thePlayer.getTeam()))
             return false;
+        // 85.136.70.107
         if (entity instanceof EntityPlayer) {
             return players.getValue() && !XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName());
         } else if (entity instanceof IAnimals && !(entity instanceof IMob)) {

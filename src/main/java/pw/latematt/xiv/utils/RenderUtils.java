@@ -57,10 +57,10 @@ public class RenderUtils {
         GL11.glVertex2d((double) x, (double) y2);
         GL11.glVertex2d((double) x2, (double) y2);
         GL11.glVertex2d((double) x2, (double) y);
-        GL11.glVertex2d((double)x, (double)y);
-        GL11.glVertex2d((double)x2, (double)y);
-        GL11.glVertex2d((double)x, (double)y2);
-        GL11.glVertex2d((double)x2, (double)y2);
+        GL11.glVertex2d((double) x, (double) y);
+        GL11.glVertex2d((double) x2, (double) y);
+        GL11.glVertex2d((double) x, (double) y2);
+        GL11.glVertex2d((double) x2, (double) y2);
         GL11.glEnd();
         GL11.glEnable(3553);
         GL11.glDisable(3042);
