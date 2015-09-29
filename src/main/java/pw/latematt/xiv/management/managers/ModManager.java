@@ -34,6 +34,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Speed());
         contents.add(new Sprint());
         contents.add(new Step());
+        contents.add(new TabGUI());
         contents.add(new Velocity());
 
         Command.newCommand()
