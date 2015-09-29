@@ -5,6 +5,8 @@ import net.minecraft.block.BlockBed;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderPearl;
@@ -63,14 +65,14 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     }
 
     public void onEventCalled(Render3DEvent event) {
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         mc.entityRenderer.func_175072_h();
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthMask(false);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GlStateManager.disableLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.disableDepth();
+        GlStateManager.depthMask(false);
+        GlStateManager.func_179090_x();
         GL11.glLineWidth(lineWidth.getValue());
 
         for (Entity entity : mc.theWorld.loadedEntityList) {
@@ -83,36 +85,36 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks - mc.getRenderManager().renderPosZ;
 
             if (boxes.getValue()) {
-            	GL11.glPushMatrix();
-                GL11.glTranslated(x, y, z);
-                GL11.glRotatef(-entity.rotationYaw, 0.0F, entity.height,
-                        0.0F);
-                GL11.glTranslated(-x, -y, -z);
+            	GlStateManager.pushMatrix();
+                GlStateManager.translate(x, y, z);
+                GlStateManager.rotate(-entity.rotationYaw, 0.0F, entity.height, 0.0F);
+                GlStateManager.translate(-x, -y, -z);
                 drawBoxes(entity, x, y, z);
-                GL11.glPopMatrix();
+                GlStateManager.popMatrix();
+            }
+
+            if (spines.getValue()) {
+                drawSpines(entity, x, y, z);
             }
 
             if (tracerlines.getValue()) {
             	GlStateManager.pushMatrix();
 				GlStateManager.loadIdentity();
-				orientCamera(partialTicks);
+				mc.entityRenderer.orientCamera(partialTicks);
                 drawTracerLines(entity, x, y, z);
             	GlStateManager.popMatrix();
-            }
-            if (spines.getValue()) {
-                drawSpines(entity, x, y, z);
             }
         }
 
         GL11.glLineWidth(2.0F);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDepthMask(true);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.func_179098_w();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableDepth();
+        GlStateManager.disableBlend();
+        GlStateManager.enableLighting();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         mc.entityRenderer.func_180436_i();
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     private boolean isValidEntity(Entity entity) {
@@ -177,11 +179,13 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             color = new float[]{0.0F, 0.90F, 0.0F};
         }
 
-        GL11.glColor4f(color[0], color[1], color[2], 1.0F);
-        GL11.glBegin(GL11.GL_LINES);
-        GL11.glVertex3d(0, mc.thePlayer.getEyeHeight(), 0);
-        GL11.glVertex3d(x, y, z);
-        GL11.glEnd();
+        GlStateManager.color(color[0], color[1], color[2], 1.0F);
+        Tessellator var2 = Tessellator.getInstance();
+        WorldRenderer var3 = var2.getWorldRenderer();
+        var3.startDrawing(2);
+        var3.addVertex(0, mc.thePlayer.getEyeHeight(), 0);
+        var3.addVertex(x, y, z);
+        var2.draw();
     }
 
     private void drawSpines(Entity entity, double x, double y, double z) {
@@ -199,11 +203,13 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             color = new float[]{0.0F, 0.9F, 0.0F};
         }
 
-        GL11.glColor4f(color[0], color[1], color[2], 1.0F);
-        GL11.glBegin(GL11.GL_LINES);
-        GL11.glVertex3d(x, y + entity.getEyeHeight(), z);
-        GL11.glVertex3d(x, y, z);
-        GL11.glEnd();
+        GlStateManager.color(color[0], color[1], color[2], 1.0F);
+        Tessellator var2 = Tessellator.getInstance();
+        WorldRenderer var3 = var2.getWorldRenderer();
+        var3.startDrawing(2);
+        var3.addVertex(x, y, z);
+        var3.addVertex(x, y + entity.getEyeHeight(), z);
+        var2.draw();
     }
 
     @Override
@@ -281,119 +287,5 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
-    }
-    
-    public void orientCamera(float p_78467_1_)
-    {
-        Entity var2 = this.mc.func_175606_aa();
-        float var3 = var2.getEyeHeight();
-        double var4 = var2.prevPosX + (var2.posX - var2.prevPosX) * (double)p_78467_1_;
-        double var6 = var2.prevPosY + (var2.posY - var2.prevPosY) * (double)p_78467_1_ + (double)var3;
-        double var8 = var2.prevPosZ + (var2.posZ - var2.prevPosZ) * (double)p_78467_1_;
-
-        if (var2 instanceof EntityLivingBase && ((EntityLivingBase)var2).isPlayerSleeping())
-        {
-            var3 = (float)((double)var3 + 1.0D);
-            GlStateManager.translate(0.0F, 0.3F, 0.0F);
-
-            if (!this.mc.gameSettings.debugCamEnable)
-            {
-                BlockPos var27 = new BlockPos(var2);
-                IBlockState var11 = this.mc.theWorld.getBlockState(var27);
-                Block var29 = var11.getBlock();
-
-                if (Reflector.ForgeHooksClient_orientBedCamera.exists())
-                {
-                    Reflector.callVoid(Reflector.ForgeHooksClient_orientBedCamera, new Object[] {this.mc.theWorld, var27, var11, var2});
-                }
-                else if (var29 == Blocks.bed)
-                {
-                    int var30 = ((EnumFacing)var11.getValue(BlockBed.AGE)).getHorizontalIndex();
-                    GlStateManager.rotate((float)(var30 * 90), 0.0F, 1.0F, 0.0F);
-                }
-
-                GlStateManager.rotate(var2.prevRotationYaw + (var2.rotationYaw - var2.prevRotationYaw) * p_78467_1_ + 180.0F, 0.0F, -1.0F, 0.0F);
-                GlStateManager.rotate(var2.prevRotationPitch + (var2.rotationPitch - var2.prevRotationPitch) * p_78467_1_, -1.0F, 0.0F, 0.0F);
-            }
-        }
-        else if (this.mc.gameSettings.thirdPersonView > 0)
-        {
-            double var28 = (double)(4 + (4 - 4) * p_78467_1_);
-
-            if (this.mc.gameSettings.debugCamEnable)
-            {
-                GlStateManager.translate(0.0F, 0.0F, (float)(-var28));
-            }
-            else
-            {
-                float var12 = var2.rotationYaw;
-                float var13 = var2.rotationPitch;
-
-                if (this.mc.gameSettings.thirdPersonView == 2)
-                {
-                    var13 += 180.0F;
-                }
-
-                double var14 = (double)(-MathHelper.sin(var12 / 180.0F * (float)Math.PI) * MathHelper.cos(var13 / 180.0F * (float)Math.PI)) * var28;
-                double var16 = (double)(MathHelper.cos(var12 / 180.0F * (float)Math.PI) * MathHelper.cos(var13 / 180.0F * (float)Math.PI)) * var28;
-                double var18 = (double)(-MathHelper.sin(var13 / 180.0F * (float)Math.PI)) * var28;
-
-                for (int var20 = 0; var20 < 8; ++var20)
-                {
-                    float var21 = (float)((var20 & 1) * 2 - 1);
-                    float var22 = (float)((var20 >> 1 & 1) * 2 - 1);
-                    float var23 = (float)((var20 >> 2 & 1) * 2 - 1);
-                    var21 *= 0.1F;
-                    var22 *= 0.1F;
-                    var23 *= 0.1F;
-                    MovingObjectPosition var24 = this.mc.theWorld.rayTraceBlocks(new Vec3(var4 + (double)var21, var6 + (double)var22, var8 + (double)var23), new Vec3(var4 - var14 + (double)var21 + (double)var23, var6 - var18 + (double)var22, var8 - var16 + (double)var23));
-
-                    if (var24 != null)
-                    {
-                        double var25 = var24.hitVec.distanceTo(new Vec3(var4, var6, var8));
-
-                        if (var25 < var28)
-                        {
-                            var28 = var25;
-                        }
-                    }
-                }
-
-                if (this.mc.gameSettings.thirdPersonView == 2)
-                {
-                    GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-                }
-
-                GlStateManager.rotate(var2.rotationPitch - var13, 1.0F, 0.0F, 0.0F);
-                GlStateManager.rotate(var2.rotationYaw - var12, 0.0F, 1.0F, 0.0F);
-                GlStateManager.translate(0.0F, 0.0F, (float)(-var28));
-                GlStateManager.rotate(var12 - var2.rotationYaw, 0.0F, 1.0F, 0.0F);
-                GlStateManager.rotate(var13 - var2.rotationPitch, 1.0F, 0.0F, 0.0F);
-            }
-        }
-        else
-        {
-            GlStateManager.translate(0.0F, 0.0F, -0.1F);
-        }
-
-        if (!this.mc.gameSettings.debugCamEnable)
-        {
-            GlStateManager.rotate(var2.prevRotationPitch + (var2.rotationPitch - var2.prevRotationPitch) * p_78467_1_, 1.0F, 0.0F, 0.0F);
-
-            if (var2 instanceof EntityAnimal)
-            {
-                EntityAnimal var281 = (EntityAnimal)var2;
-                GlStateManager.rotate(var281.prevRotationYawHead + (var281.rotationYawHead - var281.prevRotationYawHead) * p_78467_1_ + 180.0F, 0.0F, 1.0F, 0.0F);
-            }
-            else
-            {
-                GlStateManager.rotate(var2.prevRotationYaw + (var2.rotationYaw - var2.prevRotationYaw) * p_78467_1_ + 180.0F, 0.0F, 1.0F, 0.0F);
-            }
-        }
-
-        GlStateManager.translate(0.0F, -var3, 0.0F);
-        var4 = var2.prevPosX + (var2.posX - var2.prevPosX) * (double)p_78467_1_;
-        var6 = var2.prevPosY + (var2.posY - var2.prevPosY) * (double)p_78467_1_ + (double)var3;
-        var8 = var2.prevPosZ + (var2.posZ - var2.prevPosZ) * (double)p_78467_1_;
     }
 }
