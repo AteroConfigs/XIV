@@ -1,9 +1,7 @@
 package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.network.play.client.C03PacketPlayer;
-
 import org.lwjgl.input.Keyboard;
-
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
@@ -22,10 +20,10 @@ public class Regen extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     public void onEventCalled(MotionUpdateEvent event) {
         double motionX = 0, motionY = 0, motionZ = 0;
 
-        if(mc.thePlayer.getHealth() < mc.thePlayer.getMaxHealth()) {
-        	for(int i = 0; i < 200; i++) {
-        		mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
-        	}
+        if (mc.thePlayer.getHealth() < mc.thePlayer.getMaxHealth()) {
+            for (int i = 0; i < 200; i++) {
+                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
+            }
         }
     }
 

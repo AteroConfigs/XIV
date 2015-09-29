@@ -87,12 +87,12 @@ public class Nametags extends Mod {
         GlStateManager.translate((float) x + 0.0F, (float) y + entity.height + 0.5F, (float) z);
         GL11.glNormal3f(0.0F, 1.0F, 0.0F);
         if (mc.gameSettings.thirdPersonView == 2) {
-			GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate(mc.getRenderManager().playerViewX, -1.0F, 0.0F, 0.0F);
-		} else {
-			GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
-		}
+            GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(mc.getRenderManager().playerViewX, -1.0F, 0.0F, 0.0F);
+        } else {
+            GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
+        }
         GlStateManager.scale(-var14, -var14, var14);
         GlStateManager.disableLighting();
         GlStateManager.depthMask(false);
@@ -110,10 +110,10 @@ public class Nametags extends Mod {
         var16.startDrawingQuads();
         int var18 = mc.fontRendererObj.getStringWidth(entityName) / 2;
         var16.func_178960_a(0.0F, 0.0F, 0.0F, 0.25F);
-        var16.addVertex((double)(-var18 - 2), (double)(-2 + var17), 0.0D);
-        var16.addVertex((double)(-var18 - 2), (double)(9 + var17), 0.0D);
-        var16.addVertex((double)(var18 + 2), (double)(9 + var17), 0.0D);
-        var16.addVertex((double)(var18 + 2), (double)(-2 + var17), 0.0D);
+        var16.addVertex((double) (-var18 - 2), (double) (-2 + var17), 0.0D);
+        var16.addVertex((double) (-var18 - 2), (double) (9 + var17), 0.0D);
+        var16.addVertex((double) (var18 + 2), (double) (9 + var17), 0.0D);
+        var16.addVertex((double) (var18 + 2), (double) (-2 + var17), 0.0D);
         var15.draw();
         GlStateManager.func_179098_w();
         mc.fontRendererObj.drawStringWithShadow(entityName, -var18, var17, getNametagColor(entity));
