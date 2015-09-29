@@ -18,7 +18,7 @@ public class Regen extends Mod implements Listener<MotionUpdateEvent> {
     private boolean set = false;
 
     public Regen() {
-        super("Regen", ModType.PLAYER, Keyboard.KEY_P, 0xFF0066FF);
+        super("Regen", ModType.PLAYER, Keyboard.KEY_P, 0xFF9681D6);
     }
 
     /**

@@ -4,9 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.input.Keyboard;
-
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.utils.NahrFont;
@@ -15,7 +13,7 @@ public class ElementButton extends Element {
 
     private static Minecraft mc = Minecraft.getMinecraft();
     private NahrFont font;
-    
+
     private final Mod mod;
 
     public ElementButton(Mod mod, float x, float y, float width, float height) {
@@ -32,8 +30,8 @@ public class ElementButton extends Element {
         String extra = mod.getKeybind() != 0 ? (" [\247b" + Keyboard.getKeyName(mod.getKeybind()) + "\247r]") : "";
 
         mc.fontRendererObj.drawStringWithShadow(mod.getName() + extra, getX() + (getWidth() / 2) - (mc.fontRendererObj.getStringWidth(mod.getName() + extra) / 2), getY() + 2, 0xFFFFFFFF);
-  
-        if(mc.fontRendererObj.getStringWidth(mod.getName() + extra) > getWidth()) {
+
+        if (mc.fontRendererObj.getStringWidth(mod.getName() + extra) > getWidth()) {
 //        	Size panel to buttons width, didn't finish so commented out.
 //        	
 //        	this.setWidth(mc.fontRendererObj.getStringWidth(mod.getName() + extra));

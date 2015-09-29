@@ -1,17 +1,15 @@
 package pw.latematt.xiv.ui.alt;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
+import org.lwjgl.input.Keyboard;
+import pw.latematt.xiv.XIV;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
-
-import org.lwjgl.input.Keyboard;
-
-import pw.latematt.xiv.XIV;
 
 public class GuiAltManager extends GuiScreen {
 
@@ -20,7 +18,7 @@ public class GuiAltManager extends GuiScreen {
 
     public GuiTextField username, keyword, search;
     public GuiPasswordField password;
-    
+
     public GuiAltManager(GuiScreen parent) {
         this.parent = parent;
         XIV.getInstance().getFileManager().loadFile("alts");
@@ -62,7 +60,7 @@ public class GuiAltManager extends GuiScreen {
 
         this.buttonList.add(new GuiButton(6, 7, height - 26, (153 / 2) - 2, 20, "Direct Login"));
         this.buttonList.add(new GuiButton(7, 7 + (153 / 2), height - 26, (153 / 2) - 2, 20, "Set Current"));
-        
+
         this.buttonList.add(new GuiButton(8, width / 2 - 100, height - 70, 98, 20, "Edit"));
 
         this.username = new GuiTextField(0, mc.fontRendererObj, 8, height - 86, 150, 20);
@@ -103,7 +101,7 @@ public class GuiAltManager extends GuiScreen {
                     int next = random.nextInt(this.slot.getSize());
                     if (this.slot.getSelected() != next) {
                         this.slot.setSelected(next);
-                        
+
                         this.actionPerformed(((GuiButton) buttonList.get(1)));
                     } else {
                         this.actionPerformed(button);
@@ -112,28 +110,28 @@ public class GuiAltManager extends GuiScreen {
             } else if (button.id == 5) {
                 slot.getAlt().setKeyword(keyword.getText());
             } else if (button.id == 6) {
-            	if(password.getText().equals("")) {
-            		/* TODO OFFLINE LOGIN */
-            	} else {
-            		AuthThread thread = new AuthThread(new AltAccount(username.getText(), password.getText()));
-            		thread.start();
+                if (password.getText().equals("")) {
+                    /* TODO OFFLINE LOGIN */
+                } else {
+                    AuthThread thread = new AuthThread(new AltAccount(username.getText(), password.getText()));
+                    thread.start();
 
                     username.setText("");
                     password.setText("");
-            	}
+                }
             } else if (button.id == 7) {
-            	AltAccount current = this.slot.getAlt();
-            	
-            	current.setUsername(username.getText());
-            	current.setPassword(password.getText());
+                AltAccount current = this.slot.getAlt();
+
+                current.setUsername(username.getText());
+                current.setPassword(password.getText());
 
                 username.setText("");
                 password.setText("");
             } else if (button.id == 8) {
-            	AltAccount current = this.slot.getAlt();
+                AltAccount current = this.slot.getAlt();
 
-            	username.setText(current.getUsername());
-            	password.setText(current.getPassword());
+                username.setText(current.getUsername());
+                password.setText(current.getPassword());
             }
         }
     }
@@ -184,7 +182,7 @@ public class GuiAltManager extends GuiScreen {
 
         if (!username.getText().equals("") && !password.getText().equals("") && this.slot.getAlt() != null) {
             ((GuiButton) buttonList.get(7)).enabled = true;
-        }else{
+        } else {
             ((GuiButton) buttonList.get(7)).enabled = false;
         }
 

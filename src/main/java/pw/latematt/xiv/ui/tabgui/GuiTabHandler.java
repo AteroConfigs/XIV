@@ -18,13 +18,10 @@ import java.util.Objects;
 /**
  * @author Jack
  */
-
 public class GuiTabHandler implements Listener<KeyPressEvent> {
     private final Minecraft mc = Minecraft.getMinecraft();
     private int colourBody = 0x95000400;
     private int colourBox = 0xFF4DB3FF;
-    private String colourHightlight = "\247f";
-    private String colourNormal = "\2477";
     private int guiHeight = 0;
     private int guiWidth = 76;
     private boolean mainMenu = true;
@@ -34,46 +31,35 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
     private final ArrayList<GuiTab> tabs = new ArrayList<>();
 
     public GuiTabHandler() {
-        final GuiTab tabCombat = new GuiTab(this, "Combat");
-        final GuiTab tabMovement = new GuiTab(this, "Movement");
-        final GuiTab tabPlayer = new GuiTab(this, "Player");
-        final GuiTab tabRender = new GuiTab(this, "Render");
+        for (ModType type : ModType.values()) {
+            if (type == ModType.NONE)
+                continue;
+            final GuiTab tab = new GuiTab(this, type.getName());
+            XIV.getInstance().getModManager().getContents().stream().filter(mod -> mod.getModType() == type).forEach(mod -> {
+                tab.getMods().add(new GuiItem(mod));
+            });
 
-        for (final Mod mod : XIV.getInstance().getModManager().getContents()) {
-            if (Objects.equals(mod.getModType(), ModType.COMBAT)) {
-                tabCombat.getMods().add(new GuiItem(mod));
-            } else if (Objects.equals(mod.getModType(), ModType.MOVEMENT)) {
-                tabMovement.getMods().add(new GuiItem(mod));
-            } else if (Objects.equals(mod.getModType(), ModType.PLAYER)) {
-                tabPlayer.getMods().add(new GuiItem(mod));
-            } else if (Objects.equals(mod.getModType(), ModType.RENDER)) {
-                tabRender.getMods().add(new GuiItem(mod));
-            }
+            tabs.add(tab);
         }
 
-        Arrays.asList(tabCombat, tabMovement, tabPlayer, tabRender).forEach(this.tabs::add);
-        this.guiHeight = tabHeight + this.tabs.size() * tabHeight;
+        guiHeight = this.tabs.size() * tabHeight;
         XIV.getInstance().getListenerManager().add(this);
     }
 
-    public void drawGui() {
-        int x = 2;
-        int y = 22;
-
-        RenderUtils.drawBorderedRect(2, 22, this.guiWidth - 2, 22 + (10 * this.tabs.size()) + 10, 1, 0xFF000000, this.colourBody);
+    public void drawGui(int x, int y) {
+        RenderUtils.drawBorderedRect(x, y, x + this.guiWidth - 2, y + guiHeight, 1, 0xFF000000, this.colourBody);
 
         int yOff = y + 2;
-
-        for (int i = 0; i < tabs.size(); i++)
-        {
+        for (int i = 0; i < tabs.size(); i++) {
+            GuiTab tab = this.tabs.get(i);
             if (Objects.equals(this.selectedTab, i)) {
-                RenderUtils.drawBorderedRect(x, i * 12 + 22, this.guiWidth - 2, i + (36 + (i * 11)), 1, 0xFF000000, this.colourBox);
+                RenderUtils.drawBorderedRect(x, i * 12 + y, x + this.guiWidth - 2, i + (y + 12 + (i * 11)), 1, 0xFF000000, this.colourBox);
             }
 
-            mc.fontRendererObj.drawStringWithShadow((this.tabs.get(i)).getTabName(), x + 2, yOff + 1, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow(tab.getTabName(), x + 2, yOff, 0xFFFFFFFF);
 
             if (Objects.equals(this.selectedTab, i) && !mainMenu) {
-                ((this.tabs.get(i))).drawTabMenu(this.mc, this.guiWidth, yOff - 2);
+                tab.drawTabMenu(this.mc, x + this.guiWidth, yOff - 2);
             }
 
             yOff += tabHeight;
@@ -86,7 +72,7 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
             if (this.mainMenu) {
                 this.selectedTab--;
                 if (this.selectedTab < 0) {
-                    this.selectedTab = this.tabs.size()-1;
+                    this.selectedTab = this.tabs.size() - 1;
                 }
             } else {
                 this.selectedItem--;
@@ -97,12 +83,12 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
         } else if (Objects.equals(event.getKeyCode(), Keyboard.KEY_DOWN)) {
             if (this.mainMenu) {
                 this.selectedTab++;
-                if (this.selectedTab > this.tabs.size()-1) {
+                if (this.selectedTab > this.tabs.size() - 1) {
                     this.selectedTab = 0;
                 }
             } else {
                 this.selectedItem++;
-                if (this.selectedItem>(this.tabs.get(this.selectedTab)).getMods().size() - 1) {
+                if (this.selectedItem > (this.tabs.get(this.selectedTab)).getMods().size() - 1) {
                     this.selectedItem = 0;
                 }
             }
@@ -131,11 +117,11 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
     }
 
     public String getColourHightlight() {
-        return colourHightlight;
+        return "\247f";
     }
 
     public String getColourNormal() {
-        return colourNormal;
+        return "\2477";
     }
 
     public int getSelectedItem() {

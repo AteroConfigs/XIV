@@ -4,9 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.input.Mouse;
-
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.ClickGUI;
@@ -25,7 +23,7 @@ public class Panel {
 
     private ModType type;
     private ArrayList<Element> elements;
-    
+
     private NahrFont font;
 
     public Panel(ModType type, ArrayList<Element> elements, float x, float y, float width, float height) {
@@ -139,9 +137,9 @@ public class Panel {
                 element.drawElement(mouseX, mouseY);
                 element.setX(getX() + 2);
                 element.setY(getY() + y + 2);
-                
-                if(element.getWidth() + 4 > getWidth()) {
-                	this.setWidth(element.getWidth() + 4);
+
+                if (element.getWidth() + 4 > getWidth()) {
+                    this.setWidth(element.getWidth() + 4);
                 }
 
                 y += 13;

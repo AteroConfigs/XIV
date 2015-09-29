@@ -5,7 +5,8 @@ public enum ModType {
     COMBAT("Combat"),
     PLAYER("Player"),
     MOVEMENT("Movement"),
-    RENDER("Render");
+    RENDER("Render"),
+    NONE("None");
 
     private String name;
 

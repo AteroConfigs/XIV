@@ -1,29 +1,15 @@
 package pw.latematt.xiv.management.managers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.lwjgl.input.Keyboard;
-
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.Mod;
-import pw.latematt.xiv.mod.mods.ClickGUI;
-import pw.latematt.xiv.mod.mods.ESP;
-import pw.latematt.xiv.mod.mods.Fly;
-import pw.latematt.xiv.mod.mods.HUD;
-import pw.latematt.xiv.mod.mods.InventoryWalk;
-import pw.latematt.xiv.mod.mods.KillAura;
-import pw.latematt.xiv.mod.mods.Nametags;
-import pw.latematt.xiv.mod.mods.NoFall;
-import pw.latematt.xiv.mod.mods.NoSlowdown;
-import pw.latematt.xiv.mod.mods.Regen;
-import pw.latematt.xiv.mod.mods.Speed;
-import pw.latematt.xiv.mod.mods.Sprint;
-import pw.latematt.xiv.mod.mods.Step;
-import pw.latematt.xiv.mod.mods.Velocity;
+import pw.latematt.xiv.mod.mods.*;
 import pw.latematt.xiv.utils.ChatLogger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Matthew
@@ -49,8 +35,10 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Speed());
         contents.add(new Sprint());
         contents.add(new Step());
-        contents.add(new TabGUI());
         contents.add(new Velocity());
+
+        /* ALWAYS LOAD TABGUI LAST!!! */
+        contents.add(new TabGUI());
 
         Command.newCommand()
                 .cmd("mods")

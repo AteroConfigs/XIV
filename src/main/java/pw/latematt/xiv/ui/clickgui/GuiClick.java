@@ -24,6 +24,8 @@ public class GuiClick extends GuiScreen {
         this.panels = new CopyOnWriteArrayList<Panel>();
 
         for (ModType type : ModType.values()) {
+            if (type == ModType.NONE)
+                continue;
             y = 18;
             ArrayList<Element> elements = new ArrayList<Element>();
 
