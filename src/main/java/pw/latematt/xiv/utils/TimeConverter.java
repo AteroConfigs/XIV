@@ -3,11 +3,11 @@ package pw.latematt.xiv.utils;
 /**
  * This class is to help with converting time to milliseconds. Used mainly for
  * Thread.sleep and other millisecond-related time measures.
- * 
+ *
  * @author Matthew/
  */
 public class TimeConverter {
-	private int second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24, week = day * 7;
+    private int second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24, week = day * 7;
 
     /* x to milliseconds */
     public int daysToMilliseconds(int days) {

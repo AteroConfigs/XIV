@@ -2,8 +2,6 @@ package pw.latematt.xiv.mod.mods;
 
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.command.Command;
-import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;

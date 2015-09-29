@@ -1,6 +1,5 @@
 package pw.latematt.xiv.mod.mods;
 
-import net.minecraft.block.BlockAnvil;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreenBook;
 import net.minecraft.client.gui.inventory.GuiEditSign;
@@ -24,7 +23,7 @@ public class InventoryWalk extends Mod implements Listener<MotionUpdateEvent> {
     public void onEventCalled(MotionUpdateEvent event) {
         if (mc.currentScreen == null) return;
 
-        if(mc.currentScreen instanceof GuiChat)
+        if (mc.currentScreen instanceof GuiChat)
             return;
 
         if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {

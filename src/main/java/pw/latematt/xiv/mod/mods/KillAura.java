@@ -41,10 +41,12 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> autosword = new Value<>("killaura_autosword", true);
     private final Value<Boolean> toggledeath = new Value<>("killaura_toggledeath", false);
     private final Value<Boolean> autoblock = new Value<>("killaura_autoblock", false);
+    private final Value<Integer> fov = new Value<>("killaura_fov", 360);
     private final List<EntityLivingBase> entities;
     public EntityLivingBase entityToAttack;
     private boolean aimed;
     private Timer attackTimer = new Timer();
+    private Timer entityFindTimer = new Timer();
 
     public KillAura() {
         super("Kill Aura", ModType.COMBAT, Keyboard.KEY_R, 0xFFC6172B);
@@ -66,16 +68,23 @@ public class KillAura extends Mod implements CommandHandler {
                 }
 
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (entities.isEmpty()) {
+                    if (entities.isEmpty() && entityFindTimer.hasReached(20)) {
                         mc.theWorld.loadedEntityList.stream().filter(entity -> entity instanceof EntityLivingBase).forEach(entity -> {
                             EntityLivingBase living = (EntityLivingBase) entity;
                             if (isValidEntity(living)) {
                                 entities.add(living);
                             }
+                            entityFindTimer.reset();
                         });
                     }
 
                     if (!entities.isEmpty()) {
+                        if (autoblock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
+                            ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
+                            sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
+                            mc.playerController.updateController();
+                        }
+
                         EntityLivingBase firstInArray = entities.get(0);
                         if (isValidEntity(firstInArray)) {
                             entityToAttack = firstInArray;
@@ -127,6 +136,10 @@ public class KillAura extends Mod implements CommandHandler {
         };
     }
 
+    public static float angleDifference(float a, float b) {
+        return ((((a - b) % 360f) + 540f) % 360f) - 180f;
+    }
+
     private void attack(EntityLivingBase target) {
         final boolean wasSprinting = mc.thePlayer.isSprinting();
         if (autosword.getValue()) {
@@ -144,9 +157,7 @@ public class KillAura extends Mod implements CommandHandler {
         }
 
         if (autoblock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
-            ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
-            sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
-            mc.playerController.updateController();
+            mc.thePlayer.setEating(false);
         }
         mc.playerController.attackEntity(mc.thePlayer, target);
 
@@ -175,6 +186,12 @@ public class KillAura extends Mod implements CommandHandler {
         if (!(invisible.getValue()) && entity.isInvisibleToPlayer(mc.thePlayer))
             return false;
         if (team.getValue() && entity.getTeam() != null && entity.getTeam().isSameTeam(mc.thePlayer.getTeam()))
+            return false;
+        // 85.136.70.107
+        float[] rotations = EntityUtils.getEntityRotations(entity);
+        if (angleDifference(rotations[0], mc.thePlayer.rotationYaw) > fov.getValue())
+            return false;
+        if (angleDifference(rotations[1], mc.thePlayer.rotationPitch) > fov.getValue())
             return false;
         if (entity instanceof EntityPlayer) {
             return players.getValue() && !XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName());
@@ -283,8 +300,28 @@ public class KillAura extends Mod implements CommandHandler {
                     autoblock.setValue(!autoblock.getValue());
                     ChatLogger.print(String.format("Kill Aura will %s automatically block for you.", (autoblock.getValue() ? "now" : "no longer")));
                     break;
+                case "fov":
+                    if (arguments.length >= 3) {
+                        String newFovString = arguments[2];
+                        try {
+                            int newFov = Integer.parseInt(newFovString);
+                            if (newFov < 10) {
+                                newFov = 10;
+                            } else if (newFov > 360) {
+                                newFov = 360;
+                            }
+
+                            fov.setValue(newFov);
+                            ChatLogger.print(String.format("Kill Aura FOV set to %s", fov.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newFovString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: killaura fov <number>");
+                    }
+                    break;
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, aps, range, players, mobs, animals, invisible, team, silent, autosword, autoblock");
+                    ChatLogger.print("Invalid action, valid: delay, aps, range, players, mobs, animals, invisible, team, silent, autosword, autoblock, fov");
                     break;
             }
         } else {

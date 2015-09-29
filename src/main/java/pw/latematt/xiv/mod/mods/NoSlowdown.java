@@ -19,6 +19,7 @@ import pw.latematt.xiv.mod.ModType;
 public class NoSlowdown extends Mod {
     private final Listener itemSlowdownListener;
     private final Listener motionUpdateListener;
+
     public NoSlowdown() {
         super("NoSlowdown", ModType.MOVEMENT, Keyboard.KEY_NONE);
         itemSlowdownListener = new Listener<UsingItemSlowdownEvent>() {

@@ -1,10 +1,13 @@
 package pw.latematt.xiv.utils;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,16 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 public class NahrFont {
-	public static enum FontType {
+	public enum FontType {
 		EMBOSS_BOTTOM, EMBOSS_TOP, NORMAL, OUTLINE_THIN, SHADOW_THICK, SHADOW_THIN;
 	}
 
@@ -162,9 +157,7 @@ public class NahrFont {
 					final char c = text.charAt(i);
 					drawChar(c, x, y);
 					x += getStringWidth(Character.toString(c)) * 2.0F;
-				} catch (final ArrayIndexOutOfBoundsException indexException) {
-					text.charAt(i);
-				}
+				} catch (final ArrayIndexOutOfBoundsException ignored) {}
 			}
 	}
 
@@ -316,11 +309,8 @@ public class NahrFont {
 				}
 				break;
 			case ' ':
-				var6 = var5;
 			case '-':
-				var6 = var5;
 			case '_':
-				var6 = var5;
 			case ':':
 				var6 = var5;
 			default:

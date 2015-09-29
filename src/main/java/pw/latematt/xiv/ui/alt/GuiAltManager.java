@@ -73,7 +73,7 @@ public class GuiAltManager extends GuiScreen {
 
         this.keyword = new GuiTextField(3, mc.fontRendererObj, width - 182, height - 86, 150, 20);
         this.keyword.setVisible(true);
-        if(slot.getAlt() != null)
+        if (slot.getAlt() != null)
             this.keyword.setText(slot.getAlt().getKeyword());
 
         this.search = new GuiTextField(3, mc.fontRendererObj, width - 182, height - 52, 150, 20);
@@ -164,25 +164,18 @@ public class GuiAltManager extends GuiScreen {
         if (slot.getAlt() == null) {
             ((GuiButton) buttonList.get(5)).enabled = false;
         } else {
-        	if (keyword.getText().equals("")) {
-    			((GuiButton) buttonList.get(5)).displayString = "x";
-        		if(slot.getAlt().getKeyword().equals("")) {
+            if (keyword.getText().equals("")) {
+                ((GuiButton) buttonList.get(5)).displayString = "x";
+                if (slot.getAlt().getKeyword().equals("")) {
                     ((GuiButton) buttonList.get(5)).enabled = false;
-        		} else {
+                } else {
                     ((GuiButton) buttonList.get(5)).enabled = true;
-        		}
-        	} else {
+                }
+            } else {
                 ((GuiButton) buttonList.get(5)).displayString = "+";
                 ((GuiButton) buttonList.get(5)).enabled = true;
-        	}
+            }
         }
-        
-        if (!username.getText().equals("")) {
-            ((GuiButton) buttonList.get(6)).enabled = true;
-        } else {
-            ((GuiButton) buttonList.get(6)).enabled = false;
-        }
-        
         if (!username.getText().equals("") && !password.getText().equals("")) {
             ((GuiButton) buttonList.get(2)).enabled = true;
         } else {
