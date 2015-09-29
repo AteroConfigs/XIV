@@ -63,9 +63,13 @@ public class Nametags extends Mod {
     public void drawNametags(EntityLivingBase entity, double x, double y, double z) {
         String entityName = entity.getDisplayName().getFormattedText();
         if (XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
-            entityName = StringUtils.stripControlCodes(entityName);
             entityName = XIV.getInstance().getFriendManager().replace(entityName, false);
         }
+
+        if (getNametagColor(entity) != 0xFFFFFFFF) {
+            entityName = StringUtils.stripControlCodes(entityName);
+        }
+
         int health = MathHelper.floor_double(entity.getHealth() / 2);
         String healthColor;
         if (health > 6) {

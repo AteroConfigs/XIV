@@ -18,24 +18,23 @@ public class TabGUI extends Mod implements Listener<IngameHUDRenderEvent> {
     private final Value<Boolean> watermark = (Value<Boolean>) XIV.getInstance().getValueManager().find("hud_watermark");
     private final Value<Boolean> rudysucks = (Value<Boolean>) XIV.getInstance().getValueManager().find("hud_rudysucks");
     private final Value<Boolean> time = (Value<Boolean>) XIV.getInstance().getValueManager().find("hud_time");
-    private final HUD hud = (HUD) XIV.getInstance().getModManager().find("HUD");
+    private final HUD hud = (HUD) XIV.getInstance().getModManager().find("hud");
 
     public TabGUI() {
-        super("TabGUI", ModType.NONE, Keyboard.KEY_NONE);
+        super("TabGUI", ModType.NONE);
     }
 
     public void onEventCalled(IngameHUDRenderEvent event) {
-        if (mc.gameSettings.showDebugInfo) {
+        if (mc.gameSettings.showDebugInfo)
             return;
-        }
 
         int tabY = 2;
+
         if (hud.isEnabled()) {
-            if ((watermark.getValue() || rudysucks.getValue() || time.getValue()))
+            if (watermark.getValue() || rudysucks.getValue() || time.getValue())
                 tabY += 9;
-            if (watermark.getValue() && rudysucks.getValue()) {
+            if (watermark.getValue() && rudysucks.getValue())
                 tabY += 9;
-            }
         }
 
         if (guiHandler == null)

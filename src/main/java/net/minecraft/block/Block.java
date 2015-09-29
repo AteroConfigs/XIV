@@ -33,6 +33,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.BlockAddBBEvent;
 
 public class Block
 {
@@ -476,7 +478,9 @@ public class Block
      */
     public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List list, Entity collidingEntity)
     {
-        AxisAlignedBB var7 = this.getCollisionBoundingBox(worldIn, pos, state);
+        BlockAddBBEvent event = new BlockAddBBEvent(worldIn.getBlockState(pos).getBlock(), pos, this.getCollisionBoundingBox(worldIn, pos, state));
+        XIV.getInstance().getListenerManager().call(event);
+        AxisAlignedBB var7 = event.getAxisAlignedBB();
 
         if (var7 != null && mask.intersectsWith(var7))
         {
