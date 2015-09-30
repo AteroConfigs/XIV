@@ -13,6 +13,7 @@ src/test
 
 # Minecraft Directory
 minecraft-directory
+logs
 
 # eclipse directories
 .settings
