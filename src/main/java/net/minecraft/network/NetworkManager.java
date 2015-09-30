@@ -24,6 +24,8 @@ import java.net.InetAddress;
 import java.net.SocketAddress;
 import java.util.Queue;
 import javax.crypto.SecretKey;
+
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
@@ -176,24 +178,28 @@ public class NetworkManager extends SimpleChannelInboundHandler
         if (this.channel != null && this.channel.isOpen())
         {
             this.flushOutboundQueue();
-            this.dispatchPacket(packetIn, (GenericFutureListener[])null);
+            this.dispatchPacket(sendPacketEvent.getPacket(), (GenericFutureListener[])null);
         }
         else
         {
-            this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, (GenericFutureListener[])null));
+            this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(sendPacketEvent.getPacket(), (GenericFutureListener[])null));
         }
     }
 
     public void sendPacket(Packet packetIn, GenericFutureListener listener, GenericFutureListener ... listeners)
     {
+        SendPacketEvent sendPacketEvent = new SendPacketEvent(packetIn);
+        XIV.getInstance().getListenerManager().call(sendPacketEvent);
+        if (sendPacketEvent.isCancelled())
+            return;
         if (this.channel != null && this.channel.isOpen())
         {
             this.flushOutboundQueue();
-            this.dispatchPacket(packetIn, (GenericFutureListener[])ArrayUtils.add(listeners, 0, listener));
+            this.dispatchPacket(sendPacketEvent.getPacket(), (GenericFutureListener[])ArrayUtils.add(listeners, 0, listener));
         }
         else
         {
-            this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, (GenericFutureListener[])ArrayUtils.add(listeners, 0, listener)));
+            this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(sendPacketEvent.getPacket(), (GenericFutureListener[])ArrayUtils.add(listeners, 0, listener)));
         }
     }
 

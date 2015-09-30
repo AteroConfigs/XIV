@@ -823,10 +823,7 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
 
     public void addToSendQueue(Packet p_147297_1_)
     {
-        SendPacketEvent sendPacketEvent = new SendPacketEvent(p_147297_1_);
-        XIV.getInstance().getListenerManager().call(sendPacketEvent);
-        if (sendPacketEvent.isCancelled()) return;
-        this.netManager.sendPacket(sendPacketEvent.getPacket());
+        this.netManager.sendPacket(p_147297_1_);
     }
 
     public void handleCollectItem(S0DPacketCollectItem packetIn)
