@@ -1,6 +1,7 @@
 package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.Entity;
@@ -88,7 +89,7 @@ public class Nametags extends Mod {
         float var13 = distance / 4 <= 2 ? 2.0F : distance / 4;
         float var14 = 0.016666668F * var13;
         GlStateManager.pushMatrix();
-        mc.entityRenderer.func_175072_h();
+        RenderHelper.enableStandardItemLighting();
         GlStateManager.translate((float) x + 0.0F, (float) y + entity.height + 0.5F, (float) z);
         GL11.glNormal3f(0.0F, 1.0F, 0.0F);
         if (mc.gameSettings.thirdPersonView == 2) {
@@ -127,7 +128,7 @@ public class Nametags extends Mod {
         GlStateManager.enableLighting();
         GlStateManager.disableBlend();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.entityRenderer.func_180436_i();
+        RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
     }
 
