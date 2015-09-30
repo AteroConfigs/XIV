@@ -339,6 +339,15 @@ public class ItemRenderer
                     case 4:
                         this.func_178096_b(var2, 0.0F);
                         this.func_178103_d();
+
+                        // Block Hitting Animation from 1.7.2
+                        final float var14 = MathHelper.sin(var4 * var4 * (float)Math.PI);
+                        final float var15 = MathHelper.sin(MathHelper.sqrt_float(var4) * (float)Math.PI);
+
+                        GlStateManager.rotate(-var14 * 20.0F, 0.0F, 1.0F, 0.0F);
+                        GlStateManager.rotate(-var15 * 20.0F, 0.0F, 0.0F, 1.0F);
+                        GlStateManager.rotate(-var15 * 80.0F, 1.0F, 0.0F, 0.0F);
+
                         break;
 
                     case 5:
