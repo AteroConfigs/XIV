@@ -211,6 +211,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.MapData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.SendPacketEvent;
 
 public class NetHandlerPlayClient implements INetHandlerPlayClient
 {
@@ -821,7 +823,10 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
 
     public void addToSendQueue(Packet p_147297_1_)
     {
-        this.netManager.sendPacket(p_147297_1_);
+        SendPacketEvent sendPacketEvent = new SendPacketEvent(p_147297_1_);
+        XIV.getInstance().getListenerManager().call(sendPacketEvent);
+        if (sendPacketEvent.isCancelled()) return;
+        this.netManager.sendPacket(sendPacketEvent.getPacket());
     }
 
     public void handleCollectItem(S0DPacketCollectItem packetIn)

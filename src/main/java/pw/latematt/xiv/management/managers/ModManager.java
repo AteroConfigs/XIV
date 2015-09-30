@@ -24,6 +24,7 @@ public class ModManager extends ListManager<Mod> {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         contents.add(new AntiCactus());
         contents.add(new ClickGUI());
+        contents.add(new Criticals());
         contents.add(new ESP());
         contents.add(new FastUse());
         contents.add(new Fly());

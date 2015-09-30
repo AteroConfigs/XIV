@@ -22,8 +22,6 @@ public class NoFall extends Mod implements Listener<SendPacketEvent> {
                 C03PacketPlayer packet = (C03PacketPlayer) event.getPacket();
                 packet.onGround = true;
                 packet.moving = true;
-
-                event.setPacket(packet);
             }
         }
 
