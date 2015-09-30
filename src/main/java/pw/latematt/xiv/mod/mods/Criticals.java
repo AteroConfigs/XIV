@@ -73,5 +73,6 @@ public class Criticals extends Mod {
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(sendPacketListener);
         XIV.getInstance().getListenerManager().remove(breakingBlockListener);
+        fallDist = 0.0F;
     }
 }

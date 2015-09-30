@@ -37,21 +37,6 @@ public class ListenerManager extends ListManager<Listener> {
                 }
             }
         });
-
-        add(new Listener<SendPacketEvent>() {
-            @Override
-            public void onEventCalled(SendPacketEvent event) {
-                if (event.getPacket() instanceof C03PacketPlayer) {
-                    C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    System.out.println("X: " + player.x);
-                    System.out.println("Y: " + player.y);
-                    System.out.println("Z: " + player.z);
-                    System.out.println("onGround: " + player.onGround);
-                    System.out.println("moving: " + player.moving);
-                    System.out.println("rotating: " + player.rotating);
-                }
-            }
-        });
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
     }
 
