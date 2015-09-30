@@ -5,14 +5,12 @@ import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.KeyPressEvent;
-import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.ui.tabgui.tab.GuiItem;
 import pw.latematt.xiv.ui.tabgui.tab.GuiTab;
 import pw.latematt.xiv.utils.RenderUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
