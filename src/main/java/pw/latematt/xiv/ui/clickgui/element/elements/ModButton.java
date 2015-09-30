@@ -8,6 +8,7 @@ import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.utils.NahrFont;
+import pw.latematt.xiv.utils.RenderUtils;
 
 public class ModButton extends Element {
 
@@ -25,7 +26,7 @@ public class ModButton extends Element {
 
     @Override
     public void drawElement(int mouseX, int mouseY) {
-        Gui.drawRect((int) getX(), (int) getY(), (int) getX() + (int) getWidth(), (int) getY() + (int) getHeight(), mod.isEnabled() ? isOverElement(mouseX, mouseY) ? 0xBB000000 : 0x99000000 : isOverElement(mouseX, mouseY) ? 0x66000000 : 0x33000000);
+        RenderUtils.drawRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), mod.isEnabled() ? isOverElement(mouseX, mouseY) ? 0xBB000000 : 0x99000000 : isOverElement(mouseX, mouseY) ? 0x66000000 : 0x33000000);
 
         font.drawString(mod.getName(), getX() + (getWidth() / 2) - (mc.fontRendererObj.getStringWidth(mod.getName()) / 2), getY() - 2, NahrFont.FontType.SHADOW_THIN, 0xFFFFFFFF);
     }

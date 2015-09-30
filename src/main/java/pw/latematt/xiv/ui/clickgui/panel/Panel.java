@@ -10,6 +10,7 @@ import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.ClickGUI;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.utils.NahrFont;
+import pw.latematt.xiv.utils.RenderUtils;
 
 import java.util.ArrayList;
 
@@ -111,12 +112,12 @@ public class Panel {
     }
 
     public void drawPanel(int mouseX, int mouseY) {
-        Gui.drawRect((int) getX(), (int) getY(), (int) getX() + (int) getWidth(), (int) getY() + (int) getHeight(), 0x55000000);
+        RenderUtils.drawRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x55000000);
 
         mc.fontRendererObj.drawStringWithShadow(type.getName(), getX() + (getWidth() / 2) - (mc.fontRendererObj.getStringWidth(type.getName()) / 2), getY() + 3, 0xFFFFFFFF);
 
         if (isOpen()) {
-            Gui.drawRect((int) getX() + 2, (int) getY() + (int) getOpenHeight() - 1, (int) getX() + (int) getWidth() - 2, (int) getY() + (int) getOpenHeight(), 0x55000000);
+            RenderUtils.drawRect(getX() + 2, getY() + getOpenHeight() - 1, getX() + getWidth() - 2, getY() + getOpenHeight(), 0x55000000);
         }
 
         if (isDragging()) {
