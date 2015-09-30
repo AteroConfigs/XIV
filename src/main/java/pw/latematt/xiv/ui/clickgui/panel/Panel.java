@@ -8,31 +8,32 @@ import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.ClickGUI;
+import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.utils.NahrFont;
+import pw.latematt.xiv.utils.RenderUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Panel {
 
     private static Minecraft mc = Minecraft.getMinecraft();
 
+    private final String name;
     private float x, y, width, height, openheight;
     private boolean dragging, open;
     private float dragX, dragY;
-
-    private ModType type;
     private ArrayList<Element> elements;
 
     private NahrFont font;
 
-    public Panel(ModType type, ArrayList<Element> elements, float x, float y, float width, float height) {
+    public Panel(String name, ArrayList<Element> elements, float x, float y, float width, float height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.openheight = this.height = height;
-
-        this.type = type;
+        this.name = name;
         this.elements = elements;
 
         this.font = new NahrFont("Verdana", 18);
@@ -94,12 +95,8 @@ public class Panel {
         this.open = open;
     }
 
-    public ModType getType() {
-        return type;
-    }
-
-    public void setType(ModType type) {
-        this.type = type;
+    public String getName() {
+        return name;
     }
 
     public ArrayList<Element> getElements() {
@@ -111,13 +108,7 @@ public class Panel {
     }
 
     public void drawPanel(int mouseX, int mouseY) {
-        Gui.drawRect((int) getX(), (int) getY(), (int) getX() + (int) getWidth(), (int) getY() + (int) getHeight(), 0x55000000);
-
-        mc.fontRendererObj.drawStringWithShadow(type.getName(), getX() + (getWidth() / 2) - (mc.fontRendererObj.getStringWidth(type.getName()) / 2), getY() + 3, 0xFFFFFFFF);
-
-        if (isOpen()) {
-            Gui.drawRect((int) getX() + 2, (int) getY() + (int) getOpenHeight() - 1, (int) getX() + (int) getWidth() - 2, (int) getY() + (int) getOpenHeight(), 0x55000000);
-        }
+        GuiClick.getTheme().renderPanel(this);
 
         if (isDragging()) {
             this.x = mouseX + dragX;
@@ -159,7 +150,12 @@ public class Panel {
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (isOverPanel(mouseX, mouseY)) {
-            mc.getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(new ResourceLocation("gui.button.press"), 1.0F));
+            try {
+                GuiClick.guiConfig.save();
+            } catch (IOException e) {
+                XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", GuiClick.guiConfig.getName(), GuiClick.guiConfig.getExtension()));
+                e.printStackTrace();
+            }
             if (mouseButton == 0) {
                 dragX = (getX() - mouseX);
                 dragY = (getY() - mouseY);

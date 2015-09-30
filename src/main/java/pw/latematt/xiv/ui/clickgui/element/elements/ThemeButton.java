@@ -8,25 +8,23 @@ import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
+import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.utils.RenderUtils;
-import pw.latematt.xiv.value.Value;
 
-public class ValueButton extends Element {
-    private static Minecraft mc = Minecraft.getMinecraft();
-    private final Value<Boolean> value;
-    private final String valuePrettyName;
+public class ThemeButton extends Element {
+    protected static Minecraft mc = Minecraft.getMinecraft();
+    protected final ClickTheme theme;
 
-    public ValueButton(Value<Boolean> value, String valuePrettyName, float x, float y, float width, float height) {
+    public ThemeButton(ClickTheme theme, float x, float y, float width, float height) {
         super(x, y, width, height);
 
-        this.value = value;
-        this.valuePrettyName = valuePrettyName;
+        this.theme = theme;
     }
 
     @Override
     public void drawElement(int mouseX, int mouseY) {
-        GuiClick.getTheme().renderValueButton(this, mouseX, mouseY);
+        GuiClick.getTheme().renderThemeButton(this, mouseX, mouseY);
     }
 
     @Override
@@ -38,16 +36,12 @@ public class ValueButton extends Element {
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (isOverElement(mouseX, mouseY) && mouseButton == 0) {
             mc.getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(new ResourceLocation("gui.button.press"), 1.0F));
-            value.setValue(!value.getValue());
+            GuiClick.setTheme(theme);
         }
     }
 
-    public Value<Boolean> getValue() {
-        return value;
-    }
-
-    public String getValuePrettyName() {
-        return valuePrettyName;
+    public ClickTheme getTheme() {
+        return theme;
     }
 
     @Override

@@ -1,6 +1,4 @@
 # Created by .ignore support plugin (hsz.mobi)
-### Example user template template
-### Example user template
 
 # IntelliJ project files
 .idea
@@ -13,12 +11,3 @@ src/test
 
 # Minecraft Directory
 minecraft-directory
-logs
-
-# eclipse directories
-.settings
-.classpath
-.project
-
-# gitignore
-.gitignore

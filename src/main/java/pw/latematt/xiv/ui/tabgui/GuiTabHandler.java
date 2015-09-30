@@ -48,7 +48,6 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
         RenderUtils.drawBorderedRect(x, y, x + this.guiWidth - 2, y + this.guiHeight, 0x80000000, this.colourBody);
 
         for (int i = 0; i < tabs.size(); i++) {
-
             int transitionTop = !this.mainMenu ? 0 : this.transition + (selectedTab == 0 && this.transition < 0 ? -this.transition : 0);
             int transitionBottom = !this.mainMenu ? 0 : this.transition + (selectedTab == tabs.size() - 1 && this.transition > 0 ? -this.transition : 0);
             if (Objects.equals(this.selectedTab, i)) {
