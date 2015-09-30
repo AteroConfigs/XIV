@@ -1,6 +1,5 @@
 package pw.latematt.xiv.mod.mods;
 
-import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.IngameHUDRenderEvent;

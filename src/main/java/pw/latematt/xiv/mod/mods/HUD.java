@@ -21,7 +21,6 @@ import pw.latematt.xiv.event.events.IngameHUDRenderEvent;
 import pw.latematt.xiv.management.file.XIVFile;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.ui.tabgui.GuiTabHandler;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.value.Value;
