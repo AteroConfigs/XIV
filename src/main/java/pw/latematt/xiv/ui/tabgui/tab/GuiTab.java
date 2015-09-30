@@ -24,12 +24,12 @@ public class GuiTab {
 
     public void drawTabMenu(Minecraft mc, int x, int y) {
         this.countMenuSize(mc);
-        float boxY = y;
+        int boxY = y;
 
-        RenderUtils.drawBorderedRect(x, y, x + this.menuWidth, y + this.menuHeight, 1, 0x80000000, this.gui.getColourBody());
+        RenderUtils.drawBorderedRect(x, y, x + this.menuWidth, y + this.menuHeight, 0x80000000, this.gui.getColourBody());
         for (int i = 0; i < this.mods.size(); i++) {
             if (this.gui.getSelectedItem() == i) {
-                RenderUtils.drawBorderedRect(x, boxY, x + this.menuWidth, boxY + 12, 1, 0x80000000, this.gui.getColourBox());
+                RenderUtils.drawBorderedRect(x, boxY, x + this.menuWidth, boxY + 12, 0x80000000, this.gui.getColourBox());
             }
 
             mc.fontRendererObj.drawStringWithShadow((this.mods.get(i).getMod().isEnabled() ? this.gui.getColourHightlight() : this.gui.getColourNormal()) + this.mods.get(i).getName(), x + 1, y + this.gui.getTabHeight() * i + 2, 0xFFFFFFFF);

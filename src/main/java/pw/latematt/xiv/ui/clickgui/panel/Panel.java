@@ -113,9 +113,7 @@ public class Panel {
     public void drawPanel(int mouseX, int mouseY) {
         Gui.drawRect((int) getX(), (int) getY(), (int) getX() + (int) getWidth(), (int) getY() + (int) getHeight(), 0x55000000);
 
-        String extra = elements.size() > 0 ? (" [\247b" + elements.size() + "\247r]") : "";
-
-        mc.fontRendererObj.drawStringWithShadow(type.getName() + extra, getX() + (getWidth() / 2) - (mc.fontRendererObj.getStringWidth(type.getName() + extra) / 2), getY() + 3, 0xFFFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(type.getName(), getX() + (getWidth() / 2) - (mc.fontRendererObj.getStringWidth(type.getName()) / 2), getY() + 3, 0xFFFFFFFF);
 
         if (isOpen()) {
             Gui.drawRect((int) getX() + 2, (int) getY() + (int) getOpenHeight() - 1, (int) getX() + (int) getWidth() - 2, (int) getY() + (int) getOpenHeight(), 0x55000000);

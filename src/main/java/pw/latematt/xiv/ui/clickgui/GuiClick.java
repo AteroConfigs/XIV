@@ -5,7 +5,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.ui.clickgui.element.Element;
-import pw.latematt.xiv.ui.clickgui.element.elements.ElementButton;
+import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 
 import java.io.IOException;
@@ -21,17 +21,17 @@ public class GuiClick extends GuiScreen {
         float x = 4;
         float y = 4;
 
-        this.panels = new CopyOnWriteArrayList<Panel>();
+        this.panels = new CopyOnWriteArrayList<>();
 
         for (ModType type : ModType.values()) {
             if (type == ModType.NONE)
                 continue;
             y = 18;
-            ArrayList<Element> elements = new ArrayList<Element>();
+            ArrayList<Element> elements = new ArrayList<>();
 
             for (Mod mod : XIV.getInstance().getModManager().getContents()) {
                 if (mod.getModType() == type) {
-                    elements.add(new ElementButton(mod, x + 2, y + 2, 96, 12));
+                    elements.add(new ModButton(mod, x + 2, y + 2, 96, 12));
                     y += 13;
                 }
             }
