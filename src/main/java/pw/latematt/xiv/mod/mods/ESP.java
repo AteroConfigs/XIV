@@ -30,15 +30,15 @@ import pw.latematt.xiv.value.Value;
  * @author TehNeon
  */
 public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler {
-    public Value<Boolean> players = new Value<>("esp_players", true);
-    public Value<Boolean> mobs = new Value<>("esp_mobs", false);
-    public Value<Boolean> animals = new Value<>("esp_animals", false);
-    public Value<Boolean> items = new Value<>("esp_items", false);
-    public Value<Boolean> enderpearls = new Value<>("esp_enderpearls", false);
-    public Value<Boolean> boxes = new Value<>("esp_boxes", true);
-    public Value<Boolean> spines = new Value<>("esp_spines", false);
-    public Value<Boolean> tracerlines = new Value<>("esp_tracerlines", false);
-    public Value<Float> lineWidth = new Value<>("esp_lineWidth", 1.0F);
+    public final Value<Boolean> players = new Value<>("esp_players", true);
+    public final Value<Boolean> mobs = new Value<>("esp_mobs", false);
+    public final Value<Boolean> animals = new Value<>("esp_animals", false);
+    public final Value<Boolean> items = new Value<>("esp_items", false);
+    public final Value<Boolean> enderpearls = new Value<>("esp_enderpearls", false);
+    public final Value<Boolean> boxes = new Value<>("esp_boxes", true);
+    public final Value<Boolean> spines = new Value<>("esp_spines", false);
+    public final Value<Boolean> tracerLines = new Value<>("esp_tracerlines", false);
+    public final Value<Float> lineWidth = new Value<>("esp_line_width", 1.0F);
 
     public ESP() {
         super("ESP", ModType.RENDER, Keyboard.KEY_I);
@@ -84,7 +84,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 drawSpines(entity, x, y, z);
             }
 
-            if (tracerlines.getValue()) {
+            if (tracerLines.getValue()) {
                 GlStateManager.pushMatrix();
                 GlStateManager.loadIdentity();
                 mc.entityRenderer.orientCamera(partialTicks);
@@ -235,8 +235,8 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                     break;
                 case "tracerlines":
                 case "tracers":
-                    tracerlines.setValue(!tracerlines.getValue());
-                    ChatLogger.print(String.format("ESP will %s display tracer lines.", (tracerlines.getValue() ? "now" : "no longer")));
+                    tracerLines.setValue(!tracerLines.getValue());
+                    ChatLogger.print(String.format("ESP will %s display tracer lines.", (tracerLines.getValue() ? "now" : "no longer")));
                     break;
                 case "spine":
                 case "spines":

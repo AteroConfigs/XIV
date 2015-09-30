@@ -1,12 +1,11 @@
 package pw.latematt.xiv.ui.clickgui;
 
 import net.minecraft.client.gui.GuiScreen;
-import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.mod.Mod;
-import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.ui.clickgui.element.Element;
-import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
+import pw.latematt.xiv.ui.clickgui.element.elements.ThemeButton;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
+import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
+import pw.latematt.xiv.ui.clickgui.theme.themes.TestingTheme;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,32 +13,33 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GuiClick extends GuiScreen {
-
     public final List<Panel> panels;
+    public final List<ClickTheme> themes;
+    private static ClickTheme theme = new TestingTheme();
 
     public GuiClick() {
         float x = 4;
         float y = 4;
 
         this.panels = new CopyOnWriteArrayList<>();
+        this.themes = new ArrayList<>();
+        themes.add(new TestingTheme());
 
-        for (ModType type : ModType.values()) {
-            if (type == ModType.NONE)
-                continue;
-            y = 18;
-            ArrayList<Element> elements = new ArrayList<>();
-
-            for (Mod mod : XIV.getInstance().getModManager().getContents()) {
-                if (mod.getModType() == type) {
-                    elements.add(new ModButton(mod, x + 2, y + 2, 96, 12));
-                    y += 13;
-                }
-            }
-
-            this.panels.add(new Panel(type, elements, x, 4, 100, 14));
-
-            x += 102;
+        ArrayList<Element> themesElements = new ArrayList<>();
+        for (ClickTheme theme : themes) {
+            themesElements.add(new ThemeButton(theme, x + 2, y + 2, 96, 12));
+            y += 13;
         }
+        this.panels.add(new Panel("Themes", themesElements, x, 4, 100, 14));
+        x += 102;
+    }
+
+    public static ClickTheme getTheme() {
+        return theme;
+    }
+
+    public static void setTheme(ClickTheme theme) {
+        GuiClick.theme = theme;
     }
 
     @Override
