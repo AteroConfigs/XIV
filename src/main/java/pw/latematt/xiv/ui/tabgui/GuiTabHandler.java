@@ -30,22 +30,20 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
 
     public GuiTabHandler() {
         for (ModType type : ModType.values()) {
-            if (type == ModType.NONE)
+            if (Objects.equals(type, ModType.NONE))
                 continue;
             final GuiTab tab = new GuiTab(this, type.getName());
-            XIV.getInstance().getModManager().getContents().stream().filter(mod -> mod.getModType() == type).forEach(mod -> {
-                tab.getMods().add(new GuiItem(mod));
-            });
+            XIV.getInstance().getModManager().getContents().stream().filter(mod -> mod.getModType() == type).forEach(mod -> tab.getMods().add(new GuiItem(mod)));
 
-            tabs.add(tab);
+            this.tabs.add(tab);
         }
 
-        guiHeight = this.tabs.size() * tabHeight;
+        this.guiHeight = this.tabs.size() * this.tabHeight;
         XIV.getInstance().getListenerManager().add(this);
     }
 
     public void drawGui(int x, int y) {
-        RenderUtils.drawBorderedRect(x, y, x + this.guiWidth - 2, y + guiHeight, 1, 0x80000000, this.colourBody);
+        RenderUtils.drawBorderedRect(x, y, x + this.guiWidth - 2, y + this.guiHeight, 1, 0x80000000, this.colourBody);
 
         int yOff = y + 2;
         for (int i = 0; i < tabs.size(); i++) {
@@ -56,11 +54,11 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
 
             mc.fontRendererObj.drawStringWithShadow(tab.getTabName(), x + 2, yOff, 0xFFFFFFFF);
 
-            if (Objects.equals(this.selectedTab, i) && !mainMenu) {
+            if (Objects.equals(this.selectedTab, i) && !this.mainMenu) {
                 tab.drawTabMenu(this.mc, x + this.guiWidth, yOff - 2);
             }
 
-            yOff += tabHeight;
+            yOff += this.tabHeight;
         }
     }
 
