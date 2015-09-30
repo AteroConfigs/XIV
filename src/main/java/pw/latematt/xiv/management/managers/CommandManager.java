@@ -2,6 +2,7 @@ package pw.latematt.xiv.management.managers;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.C01PacketChatMessage;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.event.Listener;
@@ -85,6 +86,16 @@ public class CommandManager extends ListManager<Command> {
                         }
                     } else {
                         ChatLogger.print("Invalid arguments, valid: vclip <blocks>");
+                    }
+                }).build();
+        Command.newCommand()
+                .cmd("damage")
+                .description("Force damage.")
+                .aliases("dmg")
+                .handler(message -> {
+                    for (int i = 0; i < 81; i++) {
+                        Minecraft.getMinecraft().getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY + 0.05D, Minecraft.getMinecraft().thePlayer.posZ, false));
+                        Minecraft.getMinecraft().getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ, false));
                     }
                 }).build();
 
