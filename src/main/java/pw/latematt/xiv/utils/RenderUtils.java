@@ -40,13 +40,35 @@ public class RenderUtils {
         tessellator.draw();
     }
 
-    public static void drawBorderedRect(int left, int top, int right, int bottom, int borderColor, int color) {
+    public static void drawRect(double left, double top, double right, double bottom, int color)
+    {
+        float alpha = (float)(color >> 24 & 255) / 255.0F;
+        float red = (float)(color >> 16 & 255) / 255.0F;
+        float green = (float)(color >> 8 & 255) / 255.0F;
+        float blue = (float)(color & 255) / 255.0F;
+        Tessellator var9 = Tessellator.getInstance();
+        WorldRenderer var10 = var9.getWorldRenderer();
+        GlStateManager.enableBlend();
+        GlStateManager.func_179090_x();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.color(red, green, blue, alpha);
+        var10.startDrawingQuads();
+        var10.addVertex(left, bottom, 0.0D);
+        var10.addVertex(right, bottom, 0.0D);
+        var10.addVertex(right, top, 0.0D);
+        var10.addVertex(left, top, 0.0D);
+        var9.draw();
+        GlStateManager.func_179098_w();
+        GlStateManager.disableBlend();
+    }
+
+    public static void drawBorderedRect(double left, double top, double right, double bottom, int borderColor, int color) {
         float alpha = (borderColor >> 24 & 0xFF) / 255.0f;
         float red = (borderColor >> 16 & 0xFF) / 255.0f;
         float green = (borderColor >> 8 & 0xFF) / 255.0f;
         float blue = (borderColor & 0xFF) / 255.0f;
         GlStateManager.pushMatrix();
-        Gui.drawRect(left, top, right, bottom, color);
+        drawRect(left, top, right, bottom, color);
         GlStateManager.enableBlend();
         GlStateManager.func_179090_x();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
