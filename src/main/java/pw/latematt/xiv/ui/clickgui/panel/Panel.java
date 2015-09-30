@@ -13,6 +13,7 @@ import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.utils.RenderUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Panel {
@@ -149,6 +150,12 @@ public class Panel {
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (isOverPanel(mouseX, mouseY)) {
+            try {
+                GuiClick.guiConfig.save();
+            } catch (IOException e) {
+                XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", GuiClick.guiConfig.getName(), GuiClick.guiConfig.getExtension()));
+                e.printStackTrace();
+            }
             if (mouseButton == 0) {
                 dragX = (getX() - mouseX);
                 dragY = (getY() - mouseY);
