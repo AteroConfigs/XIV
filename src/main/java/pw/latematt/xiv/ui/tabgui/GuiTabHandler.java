@@ -43,13 +43,13 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
     }
 
     public void drawGui(int x, int y) {
-        RenderUtils.drawBorderedRect(x, y, x + this.guiWidth - 2, y + this.guiHeight, 1, 0x80000000, this.colourBody);
+        RenderUtils.drawBorderedRect(x, y, x + this.guiWidth - 2, y + this.guiHeight, 0x80000000, this.colourBody);
 
         int yOff = y + 2;
         for (int i = 0; i < tabs.size(); i++) {
             GuiTab tab = this.tabs.get(i);
             if (Objects.equals(this.selectedTab, i)) {
-                RenderUtils.drawBorderedRect(x, i * 12 + y, x + this.guiWidth - 2, i + (y + 12 + (i * 11)), 1, 0x80000000, this.colourBox);
+                RenderUtils.drawBorderedRect(x, i * 12 + y, x + this.guiWidth - 2, i + (y + 12 + (i * 11)), 0x80000000, this.colourBox);
             }
 
             mc.fontRendererObj.drawStringWithShadow(tab.getTabName(), x + 2, yOff, 0xFFFFFFFF);

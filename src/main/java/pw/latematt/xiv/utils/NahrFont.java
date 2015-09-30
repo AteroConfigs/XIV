@@ -1,11 +1,11 @@
 package pw.latematt.xiv.utils;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -100,13 +100,13 @@ public class NahrFont {
     private void drawer(String text, float x, float y, int color) {
         x *= 2.0F;
         y *= 2.0F;
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GlStateManager.func_179098_w();
         Minecraft.getMinecraft().getTextureManager().bindTexture(this.resourceLocation);
         final float alpha = (color >> 24 & 0xFF) / 255.0F;
         final float red = (color >> 16 & 0xFF) / 255.0F;
         final float green = (color >> 8 & 0xFF) / 255.0F;
         final float blue = (color & 0xFF) / 255.0F;
-        GL11.glColor4f(red, green, blue, alpha);
+        GlStateManager.color(red, green, blue, alpha);
         final float startX = x;
         for (int i = 0; i < text.length(); i++)
             if (text.charAt(i) == '\247' && i + 1 < text.length()) {
@@ -119,38 +119,43 @@ public class NahrFont {
                 if (colorCode < 16) {
                     try {
                         final int newColor = Minecraft.getMinecraft().fontRendererObj.colorCode[colorCode];
-                        GL11.glColor4f((newColor >> 16) / 255.0F, (newColor >> 8 & 0xFF) / 255.0F, (newColor & 0xFF) / 255.0F, alpha);
+                        GlStateManager.color((newColor >> 16) / 255.0F, (newColor >> 8 & 0xFF) / 255.0F, (newColor & 0xFF) / 255.0F, alpha);
                     } catch (final Exception exception) {
                         exception.printStackTrace();
                     }
                 } else if (oneMore == 'f') {
-                    GL11.glColor4f(1.0F, 1.0F, 1.0F, alpha);
+                    GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
                 } else if (oneMore == 'r') {
-                    GL11.glColor4f(red, green, blue, alpha);
+                    GlStateManager.color(red, green, blue, alpha);
                 } else if (oneMore == 'g') {
-                    GL11.glColor4f(0.3F, 0.7F, 1.0F, alpha);
+                    GlStateManager.color(0.3F, 0.7F, 1.0F, alpha);
                 }
                 i++;
             } else {
                 try {
                     final char c = text.charAt(i);
                     drawChar(c, x, y);
-                    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                     x += getStringWidth(Character.toString(c)) * 2.0F;
                 } catch (final ArrayIndexOutOfBoundsException ignored) {
                 }
             }
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     public void drawString(String text, float x, float y, int color, int shadowColor) {
         this.drawString(text, x, y, FontType.SHADOW_THICK, color, shadowColor);
     }
 
+    public void drawString(String text, float x, float y, FontType fontType, int color) {
+        this.drawString(text, x, y, fontType, color, (color & 16579836) >> 2 | color & -16777216);
+    }
+
     public void drawString(String text, float x, float y, FontType fontType,
                            int color, int color2) {
         text = stripUnsupported(text);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glScalef(0.5F, 0.5F, 0.5F);
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.scale(0.5F, 0.5F, 0.5F);
         final String text2 = stripControlCodes(text);
         switch (fontType.ordinal()) {
             case 4:
@@ -176,11 +181,8 @@ public class NahrFont {
         }
 
         drawer(text, x, y, color);
-        GL11.glScalef(2.0F, 2.0F, 2.0F);
-    }
-
-    public void drawString(String text, float x, float y, FontType fontType, int color) {
-        this.drawString(text, x, y, fontType, color, (color & 16579836) >> 2 | color & -16777216);
+        GlStateManager.scale(2.0F, 2.0F, 2.0F);
+        GlStateManager.popMatrix();
     }
 
     private void drawTexturedModalRect(float x, float y, float u, float v,
