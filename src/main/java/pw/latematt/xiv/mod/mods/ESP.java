@@ -1,9 +1,6 @@
 package pw.latematt.xiv.mod.mods;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderPearl;
@@ -12,6 +9,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
@@ -53,7 +51,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
 
     public void onEventCalled(Render3DEvent event) {
         GlStateManager.pushMatrix();
-        mc.entityRenderer.func_175072_h();
+        RenderHelper.enableStandardItemLighting();
         GlStateManager.disableLighting();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -100,7 +98,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         GlStateManager.disableBlend();
         GlStateManager.enableLighting();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.entityRenderer.func_180436_i();
+        RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
     }
 
