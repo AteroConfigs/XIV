@@ -1,10 +1,12 @@
 package pw.latematt.xiv.management.managers;
 
+import net.minecraft.network.play.client.C03PacketPlayer;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Event;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.KeyPressEvent;
+import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.Mod;
 
@@ -32,6 +34,21 @@ public class ListenerManager extends ListManager<Listener> {
                     if (mod.getKeybind() == event.getKeyCode()) {
                         mod.toggle();
                     }
+                }
+            }
+        });
+
+        add(new Listener<SendPacketEvent>() {
+            @Override
+            public void onEventCalled(SendPacketEvent event) {
+                if (event.getPacket() instanceof C03PacketPlayer) {
+                    C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
+                    System.out.println("X: " + player.x);
+                    System.out.println("Y: " + player.y);
+                    System.out.println("Z: " + player.z);
+                    System.out.println("onGround: " + player.onGround);
+                    System.out.println("moving: " + player.moving);
+                    System.out.println("rotating: " + player.rotating);
                 }
             }
         });

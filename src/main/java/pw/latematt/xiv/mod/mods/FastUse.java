@@ -7,6 +7,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
@@ -27,6 +28,14 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
 
     public FastUse() {
         super("FastUse", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFEF60A9);
+
+        Command.newCommand()
+                .cmd("fastuse")
+                .description("Base command for FastUse mod.")
+                .arguments("<action>")
+                .aliases("fuse", "fu")
+                .handler(this)
+                .build();
     }
 
     @Override
@@ -81,7 +90,8 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
                     potions.setValue(!potions.getValue());
                     ChatLogger.print(String.format("FastUse will %s use potions quickly.", (potions.getValue() ? "now" : "no longer")));
                     break;
-                case "r":
+                case "tickstowait":
+                case "ticks":
                     if (arguments.length >= 3) {
                         String newTicksString = arguments[2];
                         try {
@@ -96,6 +106,7 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
                     }
                     break;
                 default:
+                    ChatLogger.print("Invalid action, valid: bow, food, milk, potions, tickstowait");
                     break;
             }
         } else {

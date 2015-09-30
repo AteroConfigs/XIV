@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  */
 public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandHandler {
     private final Value<Boolean> watermark = new Value<>("hud_watermark", false);
-    private final Value<Boolean> organize = new Value<>("hud_organize", true);
+    private final Value<Boolean> organize = new Value<>("hud_organize", false);
     private final Value<Boolean> arraylist = new Value<>("hud_arraylist", true);
     private final Value<Boolean> coords = new Value<>("hud_coords", true);
     private final Value<Boolean> fps = new Value<>("hud_fps", true);

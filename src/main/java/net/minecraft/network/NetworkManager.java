@@ -171,8 +171,8 @@ public class NetworkManager extends SimpleChannelInboundHandler
     {
         SendPacketEvent sendPacketEvent = new SendPacketEvent(packetIn);
         XIV.getInstance().getListenerManager().call(sendPacketEvent);
-        if (sendPacketEvent.isCancelled()) return;
-        packetIn = sendPacketEvent.getPacket();
+        if (sendPacketEvent.isCancelled())
+            return;
         if (this.channel != null && this.channel.isOpen())
         {
             this.flushOutboundQueue();
@@ -186,10 +186,6 @@ public class NetworkManager extends SimpleChannelInboundHandler
 
     public void sendPacket(Packet packetIn, GenericFutureListener listener, GenericFutureListener ... listeners)
     {
-        SendPacketEvent sendPacketEvent = new SendPacketEvent(packetIn);
-        XIV.getInstance().getListenerManager().call(sendPacketEvent);
-        if (sendPacketEvent.isCancelled()) return;
-        packetIn = sendPacketEvent.getPacket();
         if (this.channel != null && this.channel.isOpen())
         {
             this.flushOutboundQueue();

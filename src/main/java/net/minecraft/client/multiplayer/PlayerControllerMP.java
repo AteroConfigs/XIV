@@ -28,6 +28,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.BreakingBlockEvent;
+import pw.latematt.xiv.event.events.ClickBlockEvent;
 
 public class PlayerControllerMP
 {
@@ -192,6 +195,10 @@ public class PlayerControllerMP
 
     public boolean func_180511_b(BlockPos p_180511_1_, EnumFacing p_180511_2_)
     {
+        ClickBlockEvent event = new ClickBlockEvent(mc.theWorld.getBlockState(p_180511_1_).getBlock(), p_180511_1_);
+        XIV.getInstance().getListenerManager().call(event);
+        if (event.isCancelled())
+            return false;
         Block var3;
 
         if (this.currentGameType.isAdventure())
@@ -281,6 +288,10 @@ public class PlayerControllerMP
 
     public boolean func_180512_c(BlockPos p_180512_1_, EnumFacing p_180512_2_)
     {
+        BreakingBlockEvent event = new BreakingBlockEvent(mc.theWorld.getBlockState(p_180512_1_).getBlock(), p_180512_1_, blockHitDelay, 1.0);
+        XIV.getInstance().getListenerManager().call(event);
+        if (event.isCancelled())
+            return false;
         this.syncCurrentPlayItem();
 
         if (this.blockHitDelay > 0)
@@ -290,7 +301,7 @@ public class PlayerControllerMP
         }
         else if (this.currentGameType.isCreative() && this.mc.theWorld.getWorldBorder().contains(p_180512_1_))
         {
-            this.blockHitDelay = 5;
+            this.blockHitDelay = event.getHitDelay();
             this.netClientHandler.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.START_DESTROY_BLOCK, p_180512_1_, p_180512_2_));
             func_178891_a(this.mc, this, p_180512_1_, p_180512_2_);
             return true;
@@ -306,7 +317,7 @@ public class PlayerControllerMP
             }
             else
             {
-                this.curBlockDamageMP += var3.getPlayerRelativeBlockHardness(this.mc.thePlayer, this.mc.thePlayer.worldObj, p_180512_1_);
+                this.curBlockDamageMP += var3.getPlayerRelativeBlockHardness(this.mc.thePlayer, this.mc.thePlayer.worldObj, p_180512_1_) * event.getMultiplier();
 
                 if (this.stepSoundTickCounter % 4.0F == 0.0F)
                 {
@@ -322,7 +333,7 @@ public class PlayerControllerMP
                     this.func_178888_a(p_180512_1_, p_180512_2_);
                     this.curBlockDamageMP = 0.0F;
                     this.stepSoundTickCounter = 0.0F;
-                    this.blockHitDelay = 5;
+                    this.blockHitDelay = event.getHitDelay();
                 }
 
                 this.mc.theWorld.sendBlockBreakProgress(this.mc.thePlayer.getEntityId(), this.field_178895_c, (int)(this.curBlockDamageMP * 10.0F) - 1);
