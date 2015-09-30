@@ -28,6 +28,8 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
     private int tabHeight = 12;
     private final ArrayList<GuiTab> tabs = new ArrayList<>();
 
+    private int transition = 0;
+
     public GuiTabHandler() {
         for (ModType type : ModType.values()) {
             if (Objects.equals(type, ModType.NONE))
@@ -45,12 +47,18 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
     public void drawGui(int x, int y) {
         RenderUtils.drawBorderedRect(x, y, x + this.guiWidth - 2, y + this.guiHeight, 0x80000000, this.colourBody);
 
+        for (int i = 0; i < tabs.size(); i++) {
+
+            int transitionTop = !this.mainMenu ? 0 : this.transition + (selectedTab == 0 && this.transition < 0 ? -this.transition : 0);
+            int transitionBottom = !this.mainMenu ? 0 : this.transition + (selectedTab == tabs.size() - 1 && this.transition > 0 ? -this.transition : 0);
+            if (Objects.equals(this.selectedTab, i)) {
+                RenderUtils.drawBorderedRect(x, i * 12 + y + transitionTop, x + this.guiWidth - 2, i + (y + 12 + (i * 11)) + transitionBottom, 0x80000000, this.colourBox);
+            }
+        }
+
         int yOff = y + 2;
         for (int i = 0; i < tabs.size(); i++) {
             GuiTab tab = this.tabs.get(i);
-            if (Objects.equals(this.selectedTab, i)) {
-                RenderUtils.drawBorderedRect(x, i * 12 + y, x + this.guiWidth - 2, i + (y + 12 + (i * 11)), 0x80000000, this.colourBox);
-            }
 
             mc.fontRendererObj.drawStringWithShadow(tab.getTabName(), x + 2, yOff, 0xFFFFFFFF);
 
@@ -59,6 +67,12 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
             }
 
             yOff += this.tabHeight;
+        }
+
+        if(transition > 0) {
+            transition -= 1;
+        }else if(transition < 0) {
+            transition += 1;
         }
     }
 
@@ -71,10 +85,15 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
                     if (this.selectedTab < 0) {
                         this.selectedTab = this.tabs.size() - 1;
                     }
+                    this.transition = 11;
                 } else {
                     this.selectedItem--;
                     if (this.selectedItem < 0) {
                         this.selectedItem = (this.tabs.get(this.selectedTab)).getMods().size() - 1;
+                    }
+
+                    if(this.tabs.get(this.selectedTab).getMods().size() > 1) {
+                        this.transition = 11;
                     }
                 }
                 break;
@@ -84,10 +103,15 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
                     if (this.selectedTab > this.tabs.size() - 1) {
                         this.selectedTab = 0;
                     }
+                    this.transition = -11;
                 } else {
                     this.selectedItem++;
                     if (this.selectedItem > (this.tabs.get(this.selectedTab)).getMods().size() - 1) {
                         this.selectedItem = 0;
+                    }
+
+                    if(this.tabs.get(this.selectedTab).getMods().size() > 1) {
+                        this.transition = -11;
                     }
                 }
                 break;
@@ -134,5 +158,9 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
 
     public int getTabHeight() {
         return tabHeight;
+    }
+
+    public int getTransition() {
+        return transition;
     }
 }
