@@ -110,15 +110,11 @@ public class GuiAltManager extends GuiScreen {
             } else if (button.id == 5) {
                 slot.getAlt().setKeyword(keyword.getText());
             } else if (button.id == 6) {
-                if (password.getText().equals("")) {
-                    /* TODO OFFLINE LOGIN */
-                } else {
-                    AuthThread thread = new AuthThread(new AltAccount(username.getText(), password.getText()));
-                    thread.start();
+                AuthThread thread = new AuthThread(new AltAccount(username.getText(), password.getText()));
+                thread.start();
 
-                    username.setText("");
-                    password.setText("");
-                }
+                username.setText("");
+                password.setText("");
             } else if (button.id == 7) {
                 AltAccount current = this.slot.getAlt();
 

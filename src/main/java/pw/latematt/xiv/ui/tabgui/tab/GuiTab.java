@@ -29,10 +29,13 @@ public class GuiTab {
         RenderUtils.drawBorderedRect(x, y, x + this.menuWidth, y + this.menuHeight, 0x80000000, this.gui.getColourBody());
         for (int i = 0; i < this.mods.size(); i++) {
             if (this.gui.getSelectedItem() == i) {
-                RenderUtils.drawBorderedRect(x, boxY, x + this.menuWidth, boxY + 12, 0x80000000, this.gui.getColourBox());
+                int transitionTop = this.gui.getTransition() + (this.gui.getSelectedItem() == 0 && this.gui.getTransition() < 0 ? -this.gui.getTransition() : 0);
+                int transitionBottom = this.gui.getTransition() + (this.gui.getSelectedItem() == this.mods.size() - 1 && this.gui.getTransition() > 0 ? -this.gui.getTransition() : 0);
+
+                RenderUtils.drawBorderedRect(x, boxY + transitionTop, x + this.menuWidth, boxY + 12 + transitionBottom, 0x80000000, this.gui.getColourBox());
             }
 
-            mc.fontRendererObj.drawStringWithShadow((this.mods.get(i).getMod().isEnabled() ? this.gui.getColourHightlight() : this.gui.getColourNormal()) + this.mods.get(i).getName(), x + 1, y + this.gui.getTabHeight() * i + 2, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow((this.mods.get(i).getMod().isEnabled() ? this.gui.getColourHightlight() : this.gui.getColourNormal()) + this.mods.get(i).getName(), x + 2, y + this.gui.getTabHeight() * i + 2, 0xFFFFFFFF);
 
             boxY += 12;
         }

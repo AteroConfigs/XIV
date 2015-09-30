@@ -39,8 +39,12 @@ public class AuthThread extends Thread {
         session.setAccessible(true);
 
         try {
-            authentication.logIn();
-            session.set(mc, new Session(authentication.getSelectedProfile().getName(), authentication.getSelectedProfile().getId().toString(), authentication.getAuthenticatedToken(), Session.Type.MOJANG.toString()));
+            if(account.getPassword().equals("")) {
+                /* TODO: Offline Mode Login */
+            }else{
+                authentication.logIn();
+                session.set(mc, new Session(authentication.getSelectedProfile().getName(), authentication.getSelectedProfile().getId().toString(), authentication.getAuthenticatedToken(), Session.Type.MOJANG.toString()));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
