@@ -9,7 +9,7 @@ import pw.latematt.xiv.event.Event;
  */
 public class SendPacketEvent extends Event implements Cancellable {
     private boolean cancelled;
-    private Packet packet;
+    private final Packet packet;
 
     public SendPacketEvent(Packet packet) {
         this.packet = packet;
@@ -17,10 +17,6 @@ public class SendPacketEvent extends Event implements Cancellable {
 
     public Packet getPacket() {
         return packet;
-    }
-
-    public void setPacket(Packet packet) {
-        this.packet = packet;
     }
 
     public boolean isCancelled() {

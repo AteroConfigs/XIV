@@ -16,6 +16,9 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.mod.mods.aura.AuraMode;
+import pw.latematt.xiv.mod.mods.aura.Singular;
+import pw.latematt.xiv.mod.mods.aura.Switch;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.Timer;
@@ -30,22 +33,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class KillAura extends Mod implements CommandHandler {
     private final Listener motionUpdateListener;
     private final Listener sendPacketListener;
-    private final Value<Long> delay = new Value<>("killaura_delay", 125L);
-    private final Value<Double> range = new Value<>("killaura_range", 3.9);
+    public final Value<Long> delay = new Value<>("killaura_delay", 125L);
+    public final Value<Double> range = new Value<>("killaura_range", 3.9);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
     private final Value<Boolean> mobs = new Value<>("killaura_mobs", false);
     private final Value<Boolean> animals = new Value<>("killaura_animals", false);
     private final Value<Boolean> invisible = new Value<>("killaura_invisible", true);
     private final Value<Boolean> team = new Value<>("killaura_team", false);
-    private final Value<Boolean> silent = new Value<>("killaura_silent", true);
-    private final Value<Boolean> autosword = new Value<>("killaura_autosword", true);
+    public final Value<Boolean> silent = new Value<>("killaura_silent", true);
+    public final Value<Boolean> autosword = new Value<>("killaura_autosword", true);
     private final Value<Boolean> toggledeath = new Value<>("killaura_toggledeath", false);
-    private final Value<Boolean> autoblock = new Value<>("killaura_autoblock", false);
-    private final List<EntityLivingBase> entities;
-    public EntityLivingBase entityToAttack;
-    private boolean aimed;
-    private Timer entityTimer = new Timer();
-    private Timer attackTimer = new Timer();
+    public final Value<Boolean> autoblock = new Value<>("killaura_autoblock", false);
+    private final Value<AuraMode> mode = new Value<>("killaura_mode", new Singular(this));
 
     public KillAura() {
         super("Kill Aura", ModType.COMBAT, Keyboard.KEY_R, 0xFFC6172B);
@@ -58,7 +57,6 @@ public class KillAura extends Mod implements CommandHandler {
                 .handler(this)
                 .build();
 
-        entities = new CopyOnWriteArrayList<>();
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
@@ -67,51 +65,9 @@ public class KillAura extends Mod implements CommandHandler {
                 }
 
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (entities.isEmpty() && entityTimer.hasReached(65)) {
-                        mc.theWorld.loadedEntityList.stream().filter(entity -> entity instanceof EntityLivingBase).forEach(entity -> {
-                            EntityLivingBase living = (EntityLivingBase) entity;
-                            if (isValidEntity(living)) {
-                                entities.add(living);
-                            }
-                        });
-                        entityTimer.reset();
-                    }
-
-                    if (!entities.isEmpty()) {
-                        if (autoblock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
-                            ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
-                            sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
-                            mc.playerController.updateController();
-                        }
-
-                        EntityLivingBase firstInArray = entities.get(0);
-                        if (isValidEntity(firstInArray)) {
-                            entityToAttack = firstInArray;
-                        } else {
-                            entities.remove(firstInArray);
-                        }
-                    }
-
-                    if (entityToAttack != null) {
-                        float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
-                        if (silent.getValue()) {
-                            event.setYaw(rotations[0]);
-                            event.setPitch(rotations[1]);
-                        } else {
-                            mc.thePlayer.rotationYaw = rotations[0];
-                            mc.thePlayer.rotationPitch = rotations[1];
-                        }
-                    }
+                    mode.getValue().onPreMotionUpdate(event);
                 } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
-                    if (entityToAttack != null && aimed) {
-                        if (attackTimer.hasReached(delay.getValue())) {
-                            attack(entityToAttack);
-                            aimed = false;
-                            entities.remove(entityToAttack);
-                            entityToAttack = null;
-                            attackTimer.reset();
-                        }
-                    }
+                    mode.getValue().onPostMotionUpdate(event);
                 }
             }
         };
@@ -121,21 +77,15 @@ public class KillAura extends Mod implements CommandHandler {
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    if (entityToAttack != null) {
-                        float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
-                        if (silent.getValue()) {
-                            player.yaw = rotations[0];
-                            player.pitch = rotations[1];
-                            player.rotating = true;
-                        }
-                        aimed = true;
-                    }
+                    mode.getValue().onMotionPacket(player);
                 }
             }
         };
+
+        setTag(String.format("%s \2477%s", getName(), mode.getValue().getName()));
     }
 
-    private void attack(EntityLivingBase target) {
+    public void attack(EntityLivingBase target) {
         final boolean wasSprinting = mc.thePlayer.isSprinting();
         if (autosword.getValue()) {
             mc.thePlayer.inventory.currentItem = EntityUtils.getBestWeapon(target);
@@ -163,7 +113,7 @@ public class KillAura extends Mod implements CommandHandler {
         mc.thePlayer.setSprinting(wasSprinting);
     }
 
-    private boolean isValidEntity(EntityLivingBase entity) {
+    public boolean isValidEntity(EntityLivingBase entity) {
         if (entity == null)
             return false;
         if (entity == mc.thePlayer)
@@ -191,7 +141,7 @@ public class KillAura extends Mod implements CommandHandler {
 
     // used in autoblock
     public boolean shouldBlock() {
-        return entityToAttack == null && !aimed;
+        return mode.getValue().shouldBlock();
     }
 
     @Override
@@ -286,8 +236,29 @@ public class KillAura extends Mod implements CommandHandler {
                     autoblock.setValue(!autoblock.getValue());
                     ChatLogger.print(String.format("Kill Aura will %s automatically block for you.", (autoblock.getValue() ? "now" : "no longer")));
                     break;
+                case "mode":
+                    if (arguments.length >= 3) {
+                        String mode = arguments[2];
+                        switch (mode) {
+                            case "singular":
+                                this.mode.setValue(new Singular(this));
+                                ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
+                                break;
+                            case "switch":
+                                this.mode.setValue(new Switch(this));
+                                ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
+                                break;
+                            default:
+                                ChatLogger.print("Invalid mode, valid: singular, switch");
+                                break;
+                        }
+                        setTag(String.format("%s \2477%s", getName(), this.mode.getValue().getName()));
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: killaura mode <mode>");
+                    }
+                    break;
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, aps, range, players, mobs, animals, invisible, team, silent, autosword, autoblock");
+                    ChatLogger.print("Invalid action, valid: delay, aps, range, players, mobs, animals, invisible, team, silent, autosword, autoblock, mode");
                     break;
             }
         } else {
@@ -305,8 +276,6 @@ public class KillAura extends Mod implements CommandHandler {
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(motionUpdateListener);
         XIV.getInstance().getListenerManager().remove(sendPacketListener);
-        entities.clear();
-        entityToAttack = null;
-        aimed = false;
+        mode.getValue().onDisabled();
     }
 }

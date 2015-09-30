@@ -30,19 +30,21 @@ public class Criticals extends Mod {
                         fallDist += mc.thePlayer.fallDistance;
                     }
 
-                    if (fallDist >= 4.0F || isSafe()) {
-                        player.onGround = true;
-                        player.moving = true;
-                        fallDist = 0.0F;
-                        mc.thePlayer.fallDistance = 0.0F;
-                        setTag(getName());
-                    } else if (fallDist > 0.0F) {
-                        player.onGround = false;
-                        player.moving = true;
-                        setTag(String.format("%s \2477%s", getName(), "*"));
-                    } else {
-                        setTag(getName());
-                    }
+                    player.onGround = false;
+                    player.moving = true;
+//                    if (fallDist >= 4.0F || isSafe()) {
+//                        player.onGround = true;
+//                        player.moving = true;
+//                        fallDist = 0.0F;
+//                        mc.thePlayer.fallDistance = 0.0F;
+//                        setTag(getName());
+//                    } else if (fallDist > 0.0F) {
+//                        player.onGround = false;
+//                        player.moving = true;
+//                        setTag(String.format("%s \2477%s", getName(), "*"));
+//                    } else {
+//                        setTag(getName());
+//                    }
                 }
             }
         };
