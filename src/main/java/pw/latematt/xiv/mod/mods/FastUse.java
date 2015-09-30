@@ -26,7 +26,7 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
     private final Value<Integer> ticksToWait = new Value<>("fastuse_ticks_to_wait", 10);
 
     public FastUse() {
-        super("FastUse", ModType.PLAYER, Keyboard.KEY_P, 0xFFEF60A9);
+        super("FastUse", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFEF60A9);
     }
 
     @Override
