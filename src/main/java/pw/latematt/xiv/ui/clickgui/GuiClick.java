@@ -12,9 +12,7 @@ import pw.latematt.xiv.ui.clickgui.panel.panels.AuraPanel;
 import pw.latematt.xiv.ui.clickgui.panel.panels.ESPPanel;
 import pw.latematt.xiv.ui.clickgui.panel.panels.ThemePanel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
-import pw.latematt.xiv.ui.clickgui.theme.themes.SecondTestingTheme;
-import pw.latematt.xiv.ui.clickgui.theme.themes.TestingTheme;
-import pw.latematt.xiv.value.Value;
+import pw.latematt.xiv.ui.clickgui.theme.themes.DefaultTheme;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -33,8 +31,7 @@ public class GuiClick extends GuiScreen {
     public GuiClick() {
         panels = new CopyOnWriteArrayList<>();
         themes = new ArrayList<>();
-        themes.add(theme = new TestingTheme());
-        themes.add(new SecondTestingTheme());
+        themes.add(theme = new DefaultTheme());
 
         float x = 4;
         panels.add(new ThemePanel(x, 4, 100, 14));
