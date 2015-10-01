@@ -17,7 +17,7 @@ public class ThemePanel extends Panel {
         float elementY = 4;
         for (ClickTheme theme : GuiClick.getThemes()) {
             getElements().add(new ThemeButton(theme, x + 2, elementY + 2, GuiClick.getTheme().getElementWidth(), GuiClick.getTheme().getElementHeight()));
-            elementY += 13;
+            elementY += GuiClick.getTheme().getElementHeight() + 1;
         }
     }
 }

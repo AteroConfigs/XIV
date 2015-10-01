@@ -102,6 +102,7 @@ public class GuiClick extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
+        drawDefaultBackground();
 
         for (Panel panel : panels) {
             panel.drawPanel(mouseX, mouseY);

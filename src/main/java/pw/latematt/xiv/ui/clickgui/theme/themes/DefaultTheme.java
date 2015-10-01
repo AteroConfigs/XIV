@@ -1,15 +1,9 @@
 package pw.latematt.xiv.ui.clickgui.theme.themes;
 
-import pw.latematt.xiv.ui.clickgui.GuiClick;
-import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
-import pw.latematt.xiv.ui.clickgui.element.elements.ThemeButton;
-import pw.latematt.xiv.ui.clickgui.element.elements.ValueButton;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.utils.RenderUtils;
-
-import java.awt.*;
 
 /**
  * @author Matthew
@@ -18,9 +12,9 @@ public class DefaultTheme extends ClickTheme {
     protected NahrFont titleFont;
     protected NahrFont modFont;
     public DefaultTheme() {
-        super("Default", 24, 8);
-        this.titleFont = new NahrFont("Segoe UI", 20);
-        this.modFont = new NahrFont("Verdana", 17);
+        super("Default", 20, 11);
+        this.titleFont = new NahrFont("Segoe UI", 22);
+        this.modFont = new NahrFont("Segoe UI", 20);
     }
 
     @Override
@@ -33,30 +27,14 @@ public class DefaultTheme extends ClickTheme {
     }
 
     @Override
-    public void renderValueButton(ValueButton button, int mouseX, int mouseY) {
-        boolean enabled = button.getValue().getValue();
-        String textToDraw = button.getValuePrettyName();
-        int color = button.isOverElement(mouseX, mouseY) ? 0x66000000 : 0x33000000;
+    public void renderButton(String name, boolean enabled, float x, float y, float width, float height, boolean overElement) {
+        int color = overElement ? 0xFFD25842 : 0xFFD22300;
         if (enabled) {
-            color = button.isOverElement(mouseX, mouseY) ? 0xBB000000 : 0x99000000;
+            color = overElement ? 0xFF57D280 : 0xFF00D246;
         }
-        RenderUtils.drawRect(button.getX(), button.getY() + 2, button.getX() + button.getWidth(), button.getY() + button.getHeight() + 2, color);
-        modFont.drawString(textToDraw, button.getX() + button.getWidth() + 2, button.getY() - 2, NahrFont.FontType.NORMAL, 0xFF1E1E1E);
-    }
-
-    @Override
-    public void renderModButton(ModButton button, int mouseX, int mouseY) {
-        boolean enabled = button.getMod().isEnabled();
-        String textToDraw = button.getMod().getName();
-        RenderUtils.drawRect(button.getX(), button.getY(), button.getX() + button.getWidth(), button.getY() + button.getHeight(), enabled ? button.isOverElement(mouseX, mouseY) ? 0xBB000000 : 0x99000000 : button.isOverElement(mouseX, mouseY) ? 0x66000000 : 0x33000000);
-        modFont.drawString(textToDraw, button.getX() + (button.getWidth() / 2) - (modFont.getStringWidth(textToDraw) / 2), button.getY() - 2, NahrFont.FontType.SHADOW_THIN, 0xFFFFFFFF);
-    }
-
-    @Override
-    public void renderThemeButton(ThemeButton button, int mouseX, int mouseY) {
-        boolean enabled = GuiClick.getTheme() == button.getTheme();
-        String textToDraw = button.getTheme().getName();
-        RenderUtils.drawRect(button.getX(), button.getY(), button.getX() + button.getWidth(), button.getY() + button.getHeight(), enabled ? button.isOverElement(mouseX, mouseY) ? 0xBB000000 : 0x99000000 : button.isOverElement(mouseX, mouseY) ? 0x66000000 : 0x33000000);
-        modFont.drawString(textToDraw, button.getX() + (button.getWidth() / 2) - (modFont.getStringWidth(textToDraw) / 2), button.getY() - 2, NahrFont.FontType.SHADOW_THIN, 0xFFFFFFFF);
+        int shadowColor = (color & 16579836) >> 2 | color & -16777216;
+        RenderUtils.drawRect(x, y + 1, x + width + 1, y + height, shadowColor);
+        RenderUtils.drawRect(x, y + 1, x + width, y + height - 1, color);
+        modFont.drawString(name, x + width + 2, y - 4, NahrFont.FontType.NORMAL, 0xFF1E1E1E);
     }
 }

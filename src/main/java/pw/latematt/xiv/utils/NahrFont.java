@@ -260,8 +260,7 @@ public class NahrFont {
     private void setupGraphics2D() {
         this.bufferedImage = new BufferedImage(256, 256, 2);
         this.theGraphics = (Graphics2D) this.bufferedImage.getGraphics();
-        this.theGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        this.theGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     }
 
     private int sizeStringToWidth(String par1Str, float par2) {

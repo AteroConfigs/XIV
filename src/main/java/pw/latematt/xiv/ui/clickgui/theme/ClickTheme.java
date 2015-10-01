@@ -1,9 +1,6 @@
 package pw.latematt.xiv.ui.clickgui.theme;
 
 import net.minecraft.client.Minecraft;
-import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
-import pw.latematt.xiv.ui.clickgui.element.elements.ThemeButton;
-import pw.latematt.xiv.ui.clickgui.element.elements.ValueButton;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 
 /**
@@ -41,7 +38,5 @@ public abstract class ClickTheme {
     }
 
     public abstract void renderPanel(Panel panel);
-    public abstract void renderValueButton(ValueButton button, int mouseX, int mouseY);
-    public abstract void renderModButton(ModButton button, int mouseX, int mouseY);
-    public abstract void renderThemeButton(ThemeButton themeButton, int mouseX, int mouseY);
+    public abstract void renderButton(String name, boolean enabled, float x, float y, float width, float height, boolean overElement);
 }

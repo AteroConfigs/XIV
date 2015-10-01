@@ -21,7 +21,7 @@ public class AuraPanel extends Panel {
                 String actualName = value.getName().split("_")[1];
                 String prettyName = actualName.substring(0, 1).toUpperCase() + actualName.substring(1, actualName.length());
                 getElements().add(new ValueButton(value, prettyName, x + 2, elementY + 2, GuiClick.getTheme().getElementWidth(), GuiClick.getTheme().getElementHeight()));
-                elementY += 13;
+                elementY += GuiClick.getTheme().getElementHeight() + 1;
             }
         }
     }
