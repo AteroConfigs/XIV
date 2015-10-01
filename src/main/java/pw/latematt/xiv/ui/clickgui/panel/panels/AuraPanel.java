@@ -1,6 +1,7 @@
 package pw.latematt.xiv.ui.clickgui.panel.panels;
 
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.elements.ValueButton;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.value.Value;
@@ -19,7 +20,7 @@ public class AuraPanel extends Panel {
             if (value.getName().startsWith("killaura_") && value.getValue() instanceof Boolean) {
                 String actualName = value.getName().split("_")[1];
                 String prettyName = actualName.substring(0, 1).toUpperCase() + actualName.substring(1, actualName.length());
-                getElements().add(new ValueButton(value, prettyName, x + 2, elementY + 2, 96, 12));
+                getElements().add(new ValueButton(value, prettyName, x + 2, elementY + 2, GuiClick.getTheme().getElementWidth(), GuiClick.getTheme().getElementHeight()));
                 elementY += 13;
             }
         }

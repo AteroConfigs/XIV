@@ -69,9 +69,9 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
         }
 
         if(transition > 0) {
-            transition -= 2;
+            transition -= 1;
         }else if(transition < 0) {
-            transition += 2;
+            transition += 1;
         }
     }
 
