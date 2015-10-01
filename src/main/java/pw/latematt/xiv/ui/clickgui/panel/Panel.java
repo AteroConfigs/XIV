@@ -108,8 +108,6 @@ public class Panel {
     }
 
     public void drawPanel(int mouseX, int mouseY) {
-        GuiClick.getTheme().renderPanel(this);
-
         if (isDragging()) {
             this.x = mouseX + dragX;
             this.y = mouseY + dragY;
@@ -119,13 +117,15 @@ public class Panel {
             }
         }
 
+        GuiClick.getTheme().renderPanel(this);
+
         if (isOpen()) {
             float y = getOpenHeight();
 
             for (Element element : elements) {
-                element.drawElement(mouseX, mouseY);
                 element.setX(getX() + 2);
                 element.setY(getY() + y + 2);
+                element.drawElement(mouseX, mouseY);
 
                 if (element.getWidth() + 4 > getWidth()) {
                     this.setWidth(element.getWidth() + 4);

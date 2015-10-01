@@ -4,7 +4,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import org.lwjgl.input.Keyboard;
@@ -21,11 +20,9 @@ import pw.latematt.xiv.mod.mods.aura.Singular;
 import pw.latematt.xiv.mod.mods.aura.Switch;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
-import pw.latematt.xiv.utils.Timer;
 import pw.latematt.xiv.value.Value;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Matthew
@@ -140,8 +137,8 @@ public class KillAura extends Mod implements CommandHandler {
     }
 
     // used in autoblock
-    public boolean shouldBlock() {
-        return mode.getValue().shouldBlock();
+    public boolean isAttacking() {
+        return mode.getValue().isAttacking();
     }
 
     @Override
@@ -264,6 +261,14 @@ public class KillAura extends Mod implements CommandHandler {
         } else {
             ChatLogger.print("Invalid arguments, valid: killaura <action>");
         }
+    }
+
+    public AuraMode getMode() {
+        return mode.getValue();
+    }
+
+    public void setMode(AuraMode mode) {
+        this.mode.setValue(mode);
     }
 
     @Override

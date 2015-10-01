@@ -22,6 +22,6 @@ public abstract class AuraMode {
     public abstract void onPreMotionUpdate(MotionUpdateEvent event);
     public abstract void onPostMotionUpdate(MotionUpdateEvent event);
     public abstract void onMotionPacket(C03PacketPlayer packet);
-    public abstract boolean shouldBlock();
+    public abstract boolean isAttacking();
     public abstract void onDisabled();
 }

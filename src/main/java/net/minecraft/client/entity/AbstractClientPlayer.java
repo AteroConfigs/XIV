@@ -25,6 +25,8 @@ import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import org.apache.commons.io.FilenameUtils;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.FovModifierEvent;
 
 public abstract class AbstractClientPlayer extends EntityPlayer
 {
@@ -149,6 +151,10 @@ public abstract class AbstractClientPlayer extends EntityPlayer
 
             var1 *= 1.0F - var4 * 0.15F;
         }
+
+        FovModifierEvent event = new FovModifierEvent(this, var1);
+        XIV.getInstance().getListenerManager().call(event);
+        var1 = event.getFov();
 
         return Reflector.ForgeHooksClient_getOffsetFOV.exists() ? Reflector.callFloat(Reflector.ForgeHooksClient_getOffsetFOV, new Object[] {this, Float.valueOf(var1)}): var1;
     }

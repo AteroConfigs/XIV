@@ -13,7 +13,13 @@ public class ClickGUI extends Mod implements Listener<GuiScreenEvent> {
 
     public ClickGUI() {
         super("ClickGUI", ModType.NONE, Keyboard.KEY_RSHIFT);
-        this.setEnabled(false);
+    }
+
+    @Override
+    public void onEventCalled(GuiScreenEvent event) {
+        if (!(event.getScreen() instanceof GuiClick)) {
+            this.setEnabled(false);
+        }
     }
 
     @Override
@@ -24,23 +30,15 @@ public class ClickGUI extends Mod implements Listener<GuiScreenEvent> {
         }
 
         if (screen == null) {
-            this.screen = new GuiClick();
+            screen = new GuiClick();
         }
 
         XIV.getInstance().getListenerManager().add(this);
-
         this.mc.displayGuiScreen(screen);
     }
 
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
-    }
-
-    @Override
-    public void onEventCalled(GuiScreenEvent event) {
-        if (!(event.getScreen() instanceof GuiClick)) {
-            this.setEnabled(false);
-        }
     }
 }
