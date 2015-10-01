@@ -23,11 +23,11 @@ public class ModManager extends ListManager<Mod> {
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         contents.add(new AntiCactus());
-        contents.add(new ClickGUI());
         contents.add(new Criticals());
         contents.add(new ESP());
         contents.add(new FastUse());
         contents.add(new Fly());
+        contents.add(new FovFixer());
         contents.add(new HUD());
         contents.add(new InventoryWalk());
         contents.add(new KillAura());
@@ -40,8 +40,10 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Step());
         contents.add(new Velocity());
 
-        /* ALWAYS LOAD TABGUI LAST!!! */
+        /* always load tabgui after all the mods */
         contents.add(new TabGUI());
+        /* then load clickgui after tabgui */
+        contents.add(new ClickGUI());
 
         Command.newCommand()
                 .cmd("mods")

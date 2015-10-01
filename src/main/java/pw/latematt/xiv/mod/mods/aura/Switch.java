@@ -92,7 +92,7 @@ public class Switch extends AuraMode {
     }
 
     @Override
-    public boolean shouldBlock() {
+    public boolean isAttacking() {
         return entityToAttack != null && aimed;
     }
 

@@ -43,7 +43,7 @@ public class NoSlowdown extends Mod {
                     }
                 } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
                     KillAura aura = (KillAura) XIV.getInstance().getModManager().find("killaura");
-                    if (!aura.shouldBlock()) {
+                    if (aura.isAttacking()) {
                         mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
                     } else if (mc.thePlayer.isBlocking()) {
                         if (!blockingFix)
