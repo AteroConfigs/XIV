@@ -162,9 +162,9 @@ public class Panel {
 
                 dragging = true;
                 ClickGUI clickGUI = (ClickGUI) XIV.getInstance().getModManager().find(ClickGUI.class);
-                for (Panel pan : clickGUI.screen.panels) {
-                    if (pan.equals(this)) continue;
-                    pan.dragging = false;
+                for (Panel panel : clickGUI.screen.panels) {
+                    if (panel.equals(this)) continue;
+                    panel.dragging = false;
                 }
                 clickGUI.screen.panels.remove(this);
                 clickGUI.screen.panels.add(this);

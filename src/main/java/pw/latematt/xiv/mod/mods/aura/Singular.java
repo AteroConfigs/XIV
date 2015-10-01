@@ -80,11 +80,12 @@ public class Singular extends AuraMode {
 
     @Override
     public boolean shouldBlock() {
-        return false;
+        return entityToAttack != null && aimed;
     }
 
     @Override
     public void onDisabled() {
-
+        entityToAttack = null;
+        aimed = false;
     }
 }

@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 public class NahrFont {
     public enum FontType {
-        EMBOSS_BOTTOM, EMBOSS_TOP, NORMAL, OUTLINE_THIN, SHADOW_THICK, SHADOW_THIN;
+        NORMAL, EMBOSS_TOP, EMBOSS_BOTTOM, OUTLINE_THIN, SHADOW_THICK, SHADOW_THIN;
     }
 
     private BufferedImage bufferedImage;
@@ -260,8 +260,7 @@ public class NahrFont {
     private void setupGraphics2D() {
         this.bufferedImage = new BufferedImage(256, 256, 2);
         this.theGraphics = (Graphics2D) this.bufferedImage.getGraphics();
-        this.theGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        this.theGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     }
 
     private int sizeStringToWidth(String par1Str, float par2) {
