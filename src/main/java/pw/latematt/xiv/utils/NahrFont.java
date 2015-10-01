@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 public class NahrFont {
     public enum FontType {
-        NORMAL, EMBOSS_BOTTOM, EMBOSS_TOP, OUTLINE_THIN, SHADOW_THICK, SHADOW_THIN;
+        NORMAL, EMBOSS_TOP, EMBOSS_BOTTOM, OUTLINE_THIN, SHADOW_THICK, SHADOW_THIN;
     }
 
     private BufferedImage bufferedImage;

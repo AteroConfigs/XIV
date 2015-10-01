@@ -1,6 +1,5 @@
 package pw.latematt.xiv.utils;
 
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -40,12 +39,11 @@ public class RenderUtils {
         tessellator.draw();
     }
 
-    public static void drawRect(double left, double top, double right, double bottom, int color)
-    {
-        float alpha = (float)(color >> 24 & 255) / 255.0F;
-        float red = (float)(color >> 16 & 255) / 255.0F;
-        float green = (float)(color >> 8 & 255) / 255.0F;
-        float blue = (float)(color & 255) / 255.0F;
+    public static void drawRect(double left, double top, double right, double bottom, int color) {
+        float alpha = (float) (color >> 24 & 255) / 255.0F;
+        float red = (float) (color >> 16 & 255) / 255.0F;
+        float green = (float) (color >> 8 & 255) / 255.0F;
+        float blue = (float) (color & 255) / 255.0F;
         Tessellator var9 = Tessellator.getInstance();
         WorldRenderer var10 = var9.getWorldRenderer();
         GlStateManager.enableBlend();
@@ -60,6 +58,36 @@ public class RenderUtils {
         var9.draw();
         GlStateManager.func_179098_w();
         GlStateManager.disableBlend();
+    }
+
+    public static void drawGradientRect(double left, double top, double right, double bottom, int startColor, int endColor) {
+        float var7 = (float) (startColor >> 24 & 255) / 255.0F;
+        float var8 = (float) (startColor >> 16 & 255) / 255.0F;
+        float var9 = (float) (startColor >> 8 & 255) / 255.0F;
+        float var10 = (float) (startColor & 255) / 255.0F;
+        float var11 = (float) (endColor >> 24 & 255) / 255.0F;
+        float var12 = (float) (endColor >> 16 & 255) / 255.0F;
+        float var13 = (float) (endColor >> 8 & 255) / 255.0F;
+        float var14 = (float) (endColor & 255) / 255.0F;
+        GlStateManager.func_179090_x();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.shadeModel(7425);
+        Tessellator var15 = Tessellator.getInstance();
+        WorldRenderer var16 = var15.getWorldRenderer();
+        var16.startDrawingQuads();
+        var16.func_178960_a(var8, var9, var10, var7);
+        var16.addVertex(right, top, 0);
+        var16.addVertex(left, top, 0);
+        var16.func_178960_a(var12, var13, var14, var11);
+        var16.addVertex(left, bottom, 0);
+        var16.addVertex(right, bottom, 0);
+        var15.draw();
+        GlStateManager.shadeModel(7424);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.func_179098_w();
     }
 
     public static void drawBorderedRect(double left, double top, double right, double bottom, int borderColor, int color) {
@@ -94,17 +122,18 @@ public class RenderUtils {
         GlStateManager.popMatrix();
     }
 
-    public static void drawBorderedRectNoLineSmooth(double left, double top, double right, double bottom, int borderColor, int color) {
+    public static void drawBorderedGradientRect(double left, double top, double right, double bottom, int borderColor, int startColor, int endColor) {
         float alpha = (borderColor >> 24 & 0xFF) / 255.0f;
         float red = (borderColor >> 16 & 0xFF) / 255.0f;
         float green = (borderColor >> 8 & 0xFF) / 255.0f;
         float blue = (borderColor & 0xFF) / 255.0f;
         GlStateManager.pushMatrix();
-        drawRect(left, top, right, bottom, color);
+        drawGradientRect(left, top, right, bottom, startColor, endColor);
         GlStateManager.enableBlend();
         GlStateManager.func_179090_x();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(red, green, blue, alpha);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glLineWidth(1.0F);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldRenderer = tessellator.getWorldRenderer();
@@ -119,6 +148,7 @@ public class RenderUtils {
         worldRenderer.addVertex(right, bottom, 0.0F);
         tessellator.draw();
         GL11.glLineWidth(2.0F);
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GlStateManager.func_179098_w();
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
