@@ -23,6 +23,7 @@ public class ModManager extends ListManager<Mod> {
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         contents.add(new AntiCactus());
+        contents.add(new AutoHead());
         contents.add(new Criticals());
         contents.add(new ESP());
         contents.add(new FastUse());
@@ -36,9 +37,11 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new NoSlowdown());
         contents.add(new Regen());
         contents.add(new Speed());
+        contents.add(new Speedmine());
         contents.add(new Sprint());
         contents.add(new Step());
         contents.add(new Velocity());
+        contents.add(new Zoot());
 
         /* always load tabgui after all the mods */
         contents.add(new TabGUI());
