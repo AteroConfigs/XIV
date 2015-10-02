@@ -37,6 +37,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new NoSlowdown());
         contents.add(new Regen());
         contents.add(new Speed());
+        contents.add(new Speedmine());
         contents.add(new Sprint());
         contents.add(new Step());
         contents.add(new Velocity());

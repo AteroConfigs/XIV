@@ -31,7 +31,7 @@ public class AutoHead extends Mod implements Listener<MotionUpdateEvent>, Comman
     private final Timer timer = new Timer();
 
     public AutoHead() {
-        super("AutoHead", ModType.COMBAT, Keyboard.KEY_NONE, 16755200);
+        super("AutoHead", ModType.COMBAT, Keyboard.KEY_NONE, 0xFFFFAA00);
 
         Command.newCommand()
                 .cmd("autohead")
