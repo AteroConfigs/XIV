@@ -246,7 +246,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         if (arguments.length >= 2) {
             String action = arguments[1];
 
-            switch (action) {
+            switch (action.toLowerCase()) {
                 case "watermark":
                     watermark.setValue(!watermark.getValue());
                     ChatLogger.print(String.format("HUD will %s display the watermark.", (watermark.getValue() ? "now" : "no longer")));

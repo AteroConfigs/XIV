@@ -19,6 +19,7 @@ import java.util.Objects;
 public class Speedmine extends Mod {
     private final Listener motionUpdateListener;
     private final Listener breakingBlockListener;
+
     public Speedmine() {
         super("Speedmine", ModType.WORLD, Keyboard.KEY_G, 0xFF77A24E);
 

@@ -78,9 +78,9 @@ public class Nametags extends Mod {
 
         int health = MathHelper.floor_double(entity.getHealth() / 2);
         String healthColor;
-        if (health > 6) {
+        if (health > entity.getMaxHealth() * (2/3)) {
             healthColor = "2";
-        } else if (health > 3) {
+        } else if (health > entity.getMaxHealth() * (1/3)) {
             healthColor = "6";
         } else {
             healthColor = "4";
@@ -91,7 +91,7 @@ public class Nametags extends Mod {
         }
 
         float distance = mc.thePlayer.getDistanceToEntity(entity);
-        float var13 = distance / 4 <= 2 ? 2.0F : distance / 4;
+        float var13 = distance / 5 <= 2 ? 2.0F : distance / 5;
         float var14 = 0.016666668F * var13;
         GlStateManager.pushMatrix();
         RenderHelper.enableStandardItemLighting();

@@ -24,38 +24,45 @@ public class FriendManager extends MapManager<String, String> {
                 .cmd("friend")
                 .description("Manages a player's friend status so the client doesn't target him.")
                 .aliases("fr")
-                .arguments("<action>", "<mcname>", "[alias]")
+                .arguments("<action>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
-                    if (arguments.length < 3) {
-                        ChatLogger.print("Invalid arguments, valid: friend <action> <mcname> [alias]");
-                    } else {
+                    if (arguments.length >= 2) {
                         String action = arguments[1];
-                        switch (action) {
+                        switch (action.toLowerCase()) {
                             case "add":
+                            case "a":
                                 if (arguments.length == 3) {
                                     String mcname = arguments[2];
                                     XIV.getInstance().getFriendManager().add(mcname, mcname);
                                     XIV.getInstance().getFileManager().saveFile("friends");
                                     ChatLogger.print(String.format("Friend \"\2473%s\247r\" added.", mcname));
-                                } else if (arguments.length == 4) {
+                                } else if (arguments.length >= 4) {
                                     String mcname = arguments[2];
                                     String alias = arguments[3];
                                     XIV.getInstance().getFriendManager().add(mcname, alias);
                                     XIV.getInstance().getFileManager().saveFile("friends");
                                     ChatLogger.print(String.format("Friend \"\2473%s\247r\" added.", alias));
+                                } else {
+                                    ChatLogger.print("Invalid arguments, valid: friend add <mcname> [alias]");
                                 }
                                 break;
                             case "del":
-                                String mcname = arguments[2];
-                                XIV.getInstance().getFriendManager().remove(mcname);
-                                XIV.getInstance().getFileManager().saveFile("friends");
-                                ChatLogger.print(String.format("Friend \"%s\" removed.", mcname));
+                                if (arguments.length >= 3) {
+                                    String mcname = arguments[2];
+                                    XIV.getInstance().getFriendManager().remove(mcname);
+                                    XIV.getInstance().getFileManager().saveFile("friends");
+                                    ChatLogger.print(String.format("Friend \"%s\" removed.", mcname));
+                                } else {
+                                    ChatLogger.print("Invalid arguments, valid: friend del <mcname>");
+                                }
                                 break;
                             default:
                                 ChatLogger.print("Invalid action, valid: add, del");
                                 break;
                         }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: friend <action>");
                     }
                 }).build();
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");

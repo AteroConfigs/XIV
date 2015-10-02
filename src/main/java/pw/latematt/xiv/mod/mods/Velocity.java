@@ -54,8 +54,9 @@ public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandH
         String[] arguments = message.split(" ");
         if (arguments.length >= 2) {
             String action = arguments[1];
-            switch (action) {
+            switch (action.toLowerCase()) {
                 case "percent":
+                case "perc":
                     if (arguments.length >= 3) {
                         String newVelocityString = arguments[2];
                         try {

@@ -38,5 +38,6 @@ public abstract class ClickTheme {
     }
 
     public abstract void renderPanel(Panel panel);
+
     public abstract void renderButton(String name, boolean enabled, float x, float y, float width, float height, boolean overElement);
 }

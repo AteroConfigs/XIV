@@ -73,7 +73,7 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
         String[] arguments = message.split(" ");
         if (arguments.length >= 2) {
             String action = arguments[1];
-            switch (action) {
+            switch (action.toLowerCase()) {
                 case "bow":
                     bow.setValue(!bow.getValue());
                     ChatLogger.print(String.format("FastUse will %s use bow quickly.", (bow.getValue() ? "now" : "no longer")));

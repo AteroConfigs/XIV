@@ -2,6 +2,7 @@ package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.client.C03PacketPlayer;
@@ -22,8 +23,6 @@ import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
 
-import java.util.List;
-
 /**
  * @author Matthew
  */
@@ -38,9 +37,9 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> invisible = new Value<>("killaura_invisible", true);
     private final Value<Boolean> team = new Value<>("killaura_team", false);
     public final Value<Boolean> silent = new Value<>("killaura_silent", true);
-    public final Value<Boolean> autosword = new Value<>("killaura_autosword", true);
-    private final Value<Boolean> toggledeath = new Value<>("killaura_toggledeath", false);
-    public final Value<Boolean> autoblock = new Value<>("killaura_autoblock", false);
+    public final Value<Boolean> autoSword = new Value<>("killaura_auto_sword", true);
+    private final Value<Boolean> toggleDeath = new Value<>("killaura_toggle_death", false);
+    public final Value<Boolean> autoBlock = new Value<>("killaura_auto_block", false);
     private final Value<AuraMode> mode = new Value<>("killaura_mode", new Singular(this));
 
     public KillAura() {
@@ -57,7 +56,7 @@ public class KillAura extends Mod implements CommandHandler {
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                if (toggledeath.getValue() && mc.thePlayer.isDead) {
+                if (toggleDeath.getValue() && mc.thePlayer.isDead) {
                     toggle();
                 }
 
@@ -84,7 +83,7 @@ public class KillAura extends Mod implements CommandHandler {
 
     public void attack(EntityLivingBase target) {
         final boolean wasSprinting = mc.thePlayer.isSprinting();
-        if (autosword.getValue()) {
+        if (autoSword.getValue()) {
             mc.thePlayer.inventory.currentItem = EntityUtils.getBestWeapon(target);
             mc.playerController.updateController();
         }
@@ -129,6 +128,10 @@ public class KillAura extends Mod implements CommandHandler {
         if (entity instanceof EntityPlayer) {
             return players.getValue() && !XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName());
         } else if (entity instanceof IAnimals && !(entity instanceof IMob)) {
+            if (entity instanceof EntityHorse) {
+                EntityHorse horse = (EntityHorse) entity;
+                return animals.getValue() && horse.riddenByEntity != mc.thePlayer;
+            }
             return animals.getValue();
         } else if (entity instanceof IMob) {
             return mobs.getValue();
@@ -146,7 +149,7 @@ public class KillAura extends Mod implements CommandHandler {
         String[] arguments = message.split(" ");
         if (arguments.length >= 2) {
             String action = arguments[1];
-            switch (action) {
+            switch (action.toLowerCase()) {
                 case "delay":
                 case "d":
                     if (arguments.length >= 3) {
@@ -211,8 +214,8 @@ public class KillAura extends Mod implements CommandHandler {
                     break;
                 case "toggledeath":
                 case "tdeath":
-                    toggledeath.setValue(!toggledeath.getValue());
-                    ChatLogger.print(String.format("Kill Aura will %s toggle on death.", (toggledeath.getValue() ? "now" : "no longer")));
+                    toggleDeath.setValue(!toggleDeath.getValue());
+                    ChatLogger.print(String.format("Kill Aura will %s toggle on death.", (toggleDeath.getValue() ? "now" : "no longer")));
                     break;
                 case "team":
                     team.setValue(!team.getValue());
@@ -225,18 +228,18 @@ public class KillAura extends Mod implements CommandHandler {
                     break;
                 case "autosword":
                 case "as":
-                    autosword.setValue(!autosword.getValue());
-                    ChatLogger.print(String.format("Kill Aura will %s automatically switch to your sword.", (autosword.getValue() ? "now" : "no longer")));
+                    autoSword.setValue(!autoSword.getValue());
+                    ChatLogger.print(String.format("Kill Aura will %s automatically switch to your sword.", (autoSword.getValue() ? "now" : "no longer")));
                     break;
                 case "autoblock":
                 case "ab":
-                    autoblock.setValue(!autoblock.getValue());
-                    ChatLogger.print(String.format("Kill Aura will %s automatically block for you.", (autoblock.getValue() ? "now" : "no longer")));
+                    autoBlock.setValue(!autoBlock.getValue());
+                    ChatLogger.print(String.format("Kill Aura will %s automatically block for you.", (autoBlock.getValue() ? "now" : "no longer")));
                     break;
                 case "mode":
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
-                        switch (mode) {
+                        switch (mode.toLowerCase()) {
                             case "singular":
                                 this.mode.setValue(new Singular(this));
                                 ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));

@@ -157,26 +157,27 @@ public class NahrFont {
         GlStateManager.enableBlend();
         GlStateManager.scale(0.5F, 0.5F, 0.5F);
         final String text2 = stripControlCodes(text);
-        switch (fontType.ordinal()) {
-            case 4:
+        switch (fontType) {
+            case SHADOW_THICK:
                 drawer(text2, x + 1.0F, y + 1.0F, color2);
                 break;
-            case 5:
+            case SHADOW_THIN:
                 drawer(text2, x + 0.5F, y + 0.5F, color2);
                 break;
-            case 3:
+            case OUTLINE_THIN:
                 drawer(text2, x + 0.5F, y, color2);
                 drawer(text2, x - 0.5F, y, color2);
                 drawer(text2, x, y + 0.5F, color2);
                 drawer(text2, x, y - 0.5F, color2);
                 break;
-            case 2:
+            case EMBOSS_BOTTOM:
                 drawer(text2, x, y + 0.5F, color2);
                 break;
-            case 1:
+            case EMBOSS_TOP:
                 drawer(text2, x, y - 0.5F, color2);
                 break;
-            case 0:
+            case NORMAL:
+            default:
                 break;
         }
 

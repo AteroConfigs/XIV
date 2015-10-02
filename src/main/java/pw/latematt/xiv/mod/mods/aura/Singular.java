@@ -16,6 +16,7 @@ public class Singular extends AuraMode {
     public EntityLivingBase entityToAttack;
     private boolean aimed;
     private Timer timer = new Timer();
+
     public Singular(KillAura killAura) {
         super("Singular");
         this.killAura = killAura;
@@ -36,7 +37,12 @@ public class Singular extends AuraMode {
         }
 
         if (entityToAttack != null) {
-            if (killAura.autoblock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
+            if (!killAura.isValidEntity(entityToAttack)) {
+                entityToAttack = null;
+                return;
+            }
+
+            if (killAura.autoBlock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
                 ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
                 sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
                 mc.playerController.updateController();
@@ -58,9 +64,8 @@ public class Singular extends AuraMode {
         if (entityToAttack != null && aimed) {
             if (timer.hasReached(killAura.delay.getValue())) {
                 killAura.attack(entityToAttack);
-                aimed = false;
-                entityToAttack = null;
                 timer.reset();
+                aimed = false;
             }
         }
     }

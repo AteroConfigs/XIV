@@ -21,8 +21,7 @@ public class FovFixer extends Mod implements Listener<FovModifierEvent> {
     public void onEventCalled(FovModifierEvent event) {
         float var1 = 1.0F;
 
-        if (mc.thePlayer.capabilities.isFlying)
-        {
+        if (mc.thePlayer.capabilities.isFlying) {
             var1 *= 1.1F;
         }
 
@@ -33,22 +32,17 @@ public class FovFixer extends Mod implements Listener<FovModifierEvent> {
         }
         var1 = (var1 * ((walkSpeed / mc.thePlayer.capabilities.getWalkSpeed() + 1.0F) / 2.0F));
 
-        if (mc.thePlayer.capabilities.getWalkSpeed() == 0.0F || Float.isNaN(var1) || Float.isInfinite(var1))
-        {
+        if (mc.thePlayer.capabilities.getWalkSpeed() == 0.0F || Float.isNaN(var1) || Float.isInfinite(var1)) {
             var1 = 1.0F;
         }
 
-        if (mc.thePlayer.isUsingItem() && mc.thePlayer.getItemInUse().getItem() == Items.bow)
-        {
+        if (mc.thePlayer.isUsingItem() && mc.thePlayer.getItemInUse().getItem() == Items.bow) {
             int var3 = mc.thePlayer.getItemInUseDuration();
-            float var4 = (float)var3 / 20.0F;
+            float var4 = (float) var3 / 20.0F;
 
-            if (var4 > 1.0F)
-            {
+            if (var4 > 1.0F) {
                 var4 = 1.0F;
-            }
-            else
-            {
+            } else {
                 var4 *= var4;
             }
 

@@ -1,17 +1,12 @@
 package pw.latematt.xiv.ui.clickgui.panel;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.ClickGUI;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.utils.NahrFont;
-import pw.latematt.xiv.utils.RenderUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -38,6 +38,15 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
             /* thanks anodise */
             if (currentMode.getValue() == Mode.BYPASS) {
+                Step step = (Step) XIV.getInstance().getModManager().find("step");
+                boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
+                if (!mc.thePlayer.onGround || mc.thePlayer.isInWater() || editingPackets) {
+                    mc.timer.timerSpeed = 1.0F;
+                    mc.thePlayer.motionX *= 0.98D;
+                    mc.thePlayer.motionZ *= 0.98D;
+                    delay = 0;
+                    return;
+                }
                 switch (this.delay) {
                     case 1: {
                         mc.timer.timerSpeed = 1.0F;
@@ -46,36 +55,32 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                         break;
                     }
                     case 2: {
-                        Step step = (Step) XIV.getInstance().getModManager().find("step");
-                        boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
-                        if (mc.thePlayer.onGround && !mc.thePlayer.isInWater() && !editingPackets) {
-                            double speed = 5.0D;
+                        double speed = 5.0D;
 
-                            for (Object o : mc.thePlayer.getActivePotionEffects()) {
-                                final PotionEffect effect = (PotionEffect) o;
-                                Potion potion = Potion.potionTypes[effect.getPotionID()];
+                        for (Object o : mc.thePlayer.getActivePotionEffects()) {
+                            final PotionEffect effect = (PotionEffect) o;
+                            Potion potion = Potion.potionTypes[effect.getPotionID()];
 
-                                if (potion.getId() == Potion.moveSpeed.getId()) {
-                                    if (effect.getAmplifier() == 0) {
-                                        speed = 4.7D;
-                                    } else if (effect.getAmplifier() == 1) {
-                                        speed = 3.7D;
-                                    } else if (effect.getAmplifier() == 2) {
-                                        speed = 2.7D;
-                                    } else if (effect.getAmplifier() >= 3) {
-                                        speed = 1.7D;
-                                    }
+                            if (potion.getId() == Potion.moveSpeed.getId()) {
+                                if (effect.getAmplifier() == 0) {
+                                    speed = 4.7D;
+                                } else if (effect.getAmplifier() == 1) {
+                                    speed = 3.7D;
+                                } else if (effect.getAmplifier() == 2) {
+                                    speed = 2.7D;
+                                } else if (effect.getAmplifier() >= 3) {
+                                    speed = 1.7D;
                                 }
                             }
-
-                            if (mc.thePlayer.movementInput.moveStrafe != 0) {
-                                speed -= 0.1D;
-                            }
-
-                            mc.timer.timerSpeed = (mc.thePlayer.getHealth() == mc.thePlayer.getMaxHealth() ? 1.30F : 1.0F);
-                            mc.thePlayer.motionX *= speed;
-                            mc.thePlayer.motionZ *= speed;
                         }
+
+                        if (mc.thePlayer.movementInput.moveStrafe != 0) {
+                            speed -= 0.1D;
+                        }
+
+                        mc.timer.timerSpeed = (mc.thePlayer.getHealth() == mc.thePlayer.getMaxHealth() ? 1.30F : 1.0F);
+                        mc.thePlayer.motionX *= speed;
+                        mc.thePlayer.motionZ *= speed;
                         break;
                     }
                     case 3: {
@@ -96,9 +101,9 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                     }
                 }
                 this.delay++;
-            } else if (currentMode.getValue() == Mode.OLD) {
+            } /*else if (currentMode.getValue() == Mode.OLD) {
 
-            }
+            }*/
         }
     }
 
