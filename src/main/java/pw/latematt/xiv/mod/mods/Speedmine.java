@@ -49,6 +49,8 @@ public class Speedmine extends Mod {
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(motionUpdateListener);
         XIV.getInstance().getListenerManager().remove(breakingBlockListener);
-        mc.thePlayer.removePotionEffect(Potion.digSpeed.getId());
+        if (mc.thePlayer != null) {
+            mc.thePlayer.removePotionEffect(Potion.digSpeed.getId());
+        }
     }
 }

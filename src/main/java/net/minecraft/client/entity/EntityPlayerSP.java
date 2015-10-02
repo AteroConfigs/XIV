@@ -139,6 +139,20 @@ public class EntityPlayerSP extends AbstractClientPlayer
         {
             super.onUpdate();
 
+            MotionUpdateEvent pre = new MotionUpdateEvent(MotionUpdateEvent.State.PRE, rotationYaw, rotationPitch, posX, posY, posZ);
+            XIV.getInstance().getListenerManager().call(pre);
+            if (pre.isCancelled())
+                return;
+            float preYaw = rotationYaw;
+            float prePitch = rotationPitch;
+            double preX = posX;
+            double preY = posY;
+            double preZ = posZ;
+            rotationYaw = pre.getYaw();
+            rotationPitch = pre.getPitch();
+            posX = pre.getX();
+            posY = pre.getY();
+            posZ = pre.getZ();
             if (this.isRiding())
             {
                 this.sendQueue.addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(this.rotationYaw, this.rotationPitch, this.onGround));
@@ -148,26 +162,18 @@ public class EntityPlayerSP extends AbstractClientPlayer
             {
                 this.func_175161_p();
             }
+            rotationYaw = preYaw;
+            rotationPitch = prePitch;
+            posX = preX;
+            posY = preY;
+            posZ = preZ;
+            MotionUpdateEvent post = new MotionUpdateEvent(MotionUpdateEvent.State.POST, rotationYaw, rotationPitch, posX, posY, posZ);
+            XIV.getInstance().getListenerManager().call(post);
         }
     }
 
     public void func_175161_p()
     {
-        MotionUpdateEvent pre = new MotionUpdateEvent(MotionUpdateEvent.State.PRE, rotationYaw, rotationPitch, posX, posY, posZ);
-        XIV.getInstance().getListenerManager().call(pre);
-        if (pre.isCancelled())
-            return;
-        float preYaw = rotationYaw;
-        float prePitch = rotationPitch;
-        double preX = posX;
-        double preY = posY;
-        double preZ = posZ;
-        rotationYaw = pre.getYaw();
-        rotationPitch = pre.getPitch();
-        posX = pre.getX();
-        posY = pre.getY();
-        posZ = pre.getZ();
-
         boolean var1 = this.isSprinting();
 
         if (var1 != this.field_175171_bO)
@@ -251,13 +257,6 @@ public class EntityPlayerSP extends AbstractClientPlayer
                 this.field_175165_bM = this.rotationPitch;
             }
         }
-        rotationYaw = preYaw;
-        rotationPitch = prePitch;
-        posX = preX;
-        posY = preY;
-        posZ = preZ;
-        MotionUpdateEvent post = new MotionUpdateEvent(MotionUpdateEvent.State.POST, rotationYaw, rotationPitch, posX, posY, posZ);
-        XIV.getInstance().getListenerManager().call(post);
     }
 
     /**

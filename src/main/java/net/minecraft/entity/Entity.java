@@ -704,7 +704,10 @@ public abstract class Entity implements ICommandSender
 
             this.func_174826_a(this.getEntityBoundingBox().offset(0.0D, 0.0D, z));
 
-            if (this.stepHeight > 0.0F && var54 && (var13 != x || var17 != z))
+            boolean canStep = this.stepHeight > 0.0F && var54 && (var13 != x || var17 != z);
+            EntityStepEvent event = new EntityStepEvent(this, canStep);
+            XIV.getInstance().getListenerManager().call(event);
+            if (canStep && !event.isCancelled())
             {
                 double var56 = x;
                 double var25 = y;
@@ -717,8 +720,6 @@ public abstract class Entity implements ICommandSender
                 AxisAlignedBB var32 = var31.addCoord(var13, 0.0D, var17);
                 double var33 = y;
                 AxisAlignedBB var36;
-                EntityStepEvent event = new EntityStepEvent(this);
-                XIV.getInstance().getListenerManager().call(event);
 
                 for (Iterator var35 = var30.iterator(); var35.hasNext(); var33 = var36.calculateYOffset(var32, var33))
                 {
