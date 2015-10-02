@@ -234,7 +234,7 @@ public class KillAura extends Mod implements CommandHandler {
                 case "mode":
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
-                        switch (mode) {
+                        switch (mode.toLowerCase()) {
                             case "singular":
                                 this.mode.setValue(new Singular(this));
                                 ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
