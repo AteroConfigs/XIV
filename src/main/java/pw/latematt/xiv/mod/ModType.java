@@ -3,8 +3,8 @@ package pw.latematt.xiv.mod;
 public enum ModType {
 
     COMBAT("Combat"),
-    PLAYER("Player"),
     MOVEMENT("Movement"),
+    PLAYER("Player"),
     RENDER("Render"),
     WORLD("World"),
     NONE("None");

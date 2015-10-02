@@ -1,0 +1,567 @@
+[23:12:22] [Client thread/ERROR]: Can't find the resource index file: E:\Programming\Java\XIV\minecraft-directory\assets\indexes\1.8.json
+[23:12:22] [Client thread/INFO]: Setting user: d
+[23:12:22] [Client thread/INFO]: (Session ID is token:d:d)
+[23:12:23] [Client thread/INFO]: == Begin XIV setup == 
+[23:12:23] [Client thread/INFO]: Starting to setup AltManager.
+[23:12:23] [Client thread/INFO]: Successfully setup AltManager.
+[23:12:23] [Client thread/INFO]: Starting to setup CommandManager...
+[23:12:23] [Client thread/INFO]: Successfully setup CommandManager.
+[23:12:23] [Client thread/INFO]: Starting to setup ListenerManager...
+[23:12:23] [Client thread/INFO]: Successfully setup ListenerManager.
+[23:12:23] [Client thread/INFO]: Starting to setup ModManager...
+[23:12:23] [Client thread/WARN]: ClickGUI was attempted to be removed when it's not in the list.
+[23:12:23] [Client thread/INFO]: Successfully setup ModManager.
+[23:12:23] [Client thread/INFO]: Starting to setup FriendManager...
+[23:12:23] [Client thread/INFO]: Successfully setup FriendManager.
+[23:12:23] [Client thread/INFO]: Starting to setup FileManager.
+[23:12:23] [Client thread/WARN]: ClickGUI was attempted to be removed when it's not in the list.
+[23:12:23] [Client thread/WARN]:  was attempted to be removed when it's not in the list.
+[23:12:23] [Client thread/WARN]:  was attempted to be removed when it's not in the list.
+[23:12:23] [Client thread/WARN]: Fly was attempted to be removed when it's not in the list.
+[23:12:23] [Client thread/WARN]: HUD was attempted to be added when it's already in the list.
+[23:12:23] [Client thread/WARN]:  was attempted to be removed when it's not in the list.
+[23:12:23] [Client thread/WARN]:  was attempted to be removed when it's not in the list.
+[23:12:23] [Client thread/WARN]:  was attempted to be added when it's already in the list.
+[23:12:23] [Client thread/WARN]:  was attempted to be added when it's already in the list.
+[23:12:23] [Client thread/WARN]: NoFall was attempted to be removed when it's not in the list.
+[23:12:23] [Client thread/WARN]:  was attempted to be added when it's already in the list.
+[23:12:23] [Client thread/WARN]:  was attempted to be added when it's already in the list.
+[23:12:23] [Client thread/WARN]: Regen was attempted to be removed when it's not in the list.
+[23:12:23] [Client thread/WARN]: Step was attempted to be removed when it's not in the list.
+[23:12:23] [Client thread/WARN]:  was attempted to be removed when it's not in the list.
+[23:12:23] [Client thread/INFO]: Successfully setup FileManager.
+[23:12:23] [Client thread/INFO]: ==  End XIV setup  == 
+[23:12:23] [Client thread/INFO]: LWJGL Version: 2.9.1
+[23:12:24] [Client thread/INFO]: Reloading ResourceManager: Default
+[23:12:24] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[23:12:24] [Thread-7/INFO]: Initializing LWJGL OpenAL
+[23:12:24] [Thread-7/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[23:12:25] [Thread-7/INFO]: OpenAL initialized.
+[23:12:25] [Sound Library Loader/INFO]: Sound engine started
+[23:12:26] [Client thread/ERROR]: Using missing texture, unable to load minecraft:mcpatcher/ctm/default/empty.png, java.io.FileNotFoundException
+[23:12:26] [Client thread/INFO]: Created: 512x512 textures-atlas
+[23:12:34] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:music.menu
+[23:12:34] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[23:12:35] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[23:12:36] [Thread-10/INFO]: Logging in with username & password
+[23:12:37] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[23:12:38] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[23:12:39] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[23:12:44] [Client thread/INFO]: Connecting to ncp.odiegaming.com, 25565
+[23:12:44] [Client thread/ERROR]: Failed to save options
+java.io.FileNotFoundException: E:\Programming\Java\XIV\minecraft-directory\options.txt (The device is not ready)
+	at java.io.FileOutputStream.open0(Native Method) ~[?:1.8.0_51]
+	at java.io.FileOutputStream.open(FileOutputStream.java:270) ~[?:1.8.0_51]
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:213) ~[?:1.8.0_51]
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:162) ~[?:1.8.0_51]
+	at java.io.FileWriter.<init>(FileWriter.java:90) ~[?:1.8.0_51]
+	at net.minecraft.client.settings.GameSettings.saveOptions(GameSettings.java:1269) [classes/:?]
+	at net.minecraft.client.gui.GuiScreenServerList.onGuiClosed(GuiScreenServerList.java:52) [classes/:?]
+	at net.minecraft.client.Minecraft.displayGuiScreen(Minecraft.java:979) [classes/:?]
+	at net.minecraft.client.gui.GuiMultiplayer.connectToServer(GuiMultiplayer.java:392) [classes/:?]
+	at net.minecraft.client.gui.GuiMultiplayer.confirmClicked(GuiMultiplayer.java:216) [classes/:?]
+	at net.minecraft.client.gui.GuiScreenServerList.actionPerformed(GuiScreenServerList.java:66) [classes/:?]
+	at net.minecraft.client.gui.GuiScreenServerList.keyTyped(GuiScreenServerList.java:83) [classes/:?]
+	at net.minecraft.client.gui.GuiScreen.handleKeyboardInput(GuiScreen.java:611) [classes/:?]
+	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:562) [classes/:?]
+	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1779) [classes/:?]
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1112) [classes/:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:418) [classes/:?]
+	at net.minecraft.client.main.Main.main(Main.java:115) [classes/:?]
+	at pw.latematt.xiv.main.XIVMain.main(XIVMain.java:11) [classes/:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_51]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_51]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_51]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[?:1.8.0_51]
+	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:140) [idea_rt.jar:?]
+[23:12:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:music.menu
+[23:12:51] [Client thread/INFO]: [CHAT]                                      
+[23:12:51] [Client thread/INFO]: [CHAT] PvPLogging prevented by JackProehl's [CombatLog] plugin.
+[23:12:51] [Client thread/INFO]: [CHAT] [TestNCP] Your inputs: tumourhumour
+[23:12:51] [Client thread/INFO]: [CHAT] TumourHumour joined the game.
+[23:12:52] [Client thread/INFO]: [CHAT] You have 6 messages! Type /mail read to view your mail.
+[23:12:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:liquid.lava
+[23:12:52] [Texture Downloader #3/ERROR]: Couldn't download http texture
+java.io.IOException: Directory 'E:\Programming\Java\XIV\minecraft-directory\assets\skins\10' could not be created
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:363) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:326) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.copyInputStreamToFile(FileUtils.java:1510) ~[commons-io-2.4.jar:2.4]
+	at net.minecraft.client.renderer.ThreadDownloadImageData$1.run(ThreadDownloadImageData.java:134) [classes/:?]
+[23:12:53] [Texture Downloader #6/ERROR]: Couldn't download http texture
+java.io.IOException: Directory 'E:\Programming\Java\XIV\minecraft-directory\assets\skins\90' could not be created
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:363) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:326) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.copyInputStreamToFile(FileUtils.java:1510) ~[commons-io-2.4.jar:2.4]
+	at net.minecraft.client.renderer.ThreadDownloadImageData$1.run(ThreadDownloadImageData.java:134) [classes/:?]
+[23:12:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:liquid.lavapop
+[23:12:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:music.game
+[23:12:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:12:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:12:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:12:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:liquid.lava
+[23:12:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:58] [Texture Downloader #7/ERROR]: Couldn't download http texture
+java.io.IOException: Directory 'E:\Programming\Java\XIV\minecraft-directory\assets\skins\7c' could not be created
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:363) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:326) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.copyInputStreamToFile(FileUtils.java:1510) ~[commons-io-2.4.jar:2.4]
+	at net.minecraft.client.renderer.ThreadDownloadImageData$1.run(ThreadDownloadImageData.java:134) [classes/:?]
+[23:12:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:12:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:12:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:12:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:12:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:12:59] [Texture Downloader #8/ERROR]: Couldn't download http texture
+java.io.IOException: Directory 'E:\Programming\Java\XIV\minecraft-directory\assets\skins\cf' could not be created
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:363) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:326) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.copyInputStreamToFile(FileUtils.java:1510) ~[commons-io-2.4.jar:2.4]
+	at net.minecraft.client.renderer.ThreadDownloadImageData$1.run(ThreadDownloadImageData.java:134) [classes/:?]
+[23:12:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:12:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:12:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:liquid.lavapop
+[23:13:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:02] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:02] [Texture Downloader #10/ERROR]: Couldn't download http texture
+java.io.IOException: Directory 'E:\Programming\Java\XIV\minecraft-directory\assets\skins\5a' could not be created
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:363) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:326) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.copyInputStreamToFile(FileUtils.java:1510) ~[commons-io-2.4.jar:2.4]
+	at net.minecraft.client.renderer.ThreadDownloadImageData$1.run(ThreadDownloadImageData.java:134) [classes/:?]
+[23:13:02] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:02] [Texture Downloader #12/ERROR]: Couldn't download http texture
+java.io.IOException: Directory 'E:\Programming\Java\XIV\minecraft-directory\assets\skins\5e' could not be created
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:363) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:326) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.copyInputStreamToFile(FileUtils.java:1510) ~[commons-io-2.4.jar:2.4]
+	at net.minecraft.client.renderer.ThreadDownloadImageData$1.run(ThreadDownloadImageData.java:134) [classes/:?]
+[23:13:02] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:02] [Client thread/INFO]: [CHAT] [TestNCP] TumourHumour MOVING_SURVIVALFLY vl 16.206 (+16.206) Ticks[Lag]: 1@1.92 5@1.548 10@1.734 20@1.827 1200@1.898
+[23:13:02] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:02] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:05] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:05] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:06] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:06] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:08] [Client thread/INFO]: [CHAT] §3[XIV]:§r Kill Aura will now automatically block for you.
+[23:13:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:09] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:09] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:10] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:10] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.cloth
+[23:13:11] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:11] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:11] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:11] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:11] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:11] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:11] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:11] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:11] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.sand
+[23:13:12] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:12] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:12] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:12] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:12] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:12] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:12] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:12] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:12] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:16] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:17] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:17] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:18] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:18] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:18] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:18] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:18] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:18] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:18] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:18] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:19] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:19] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:19] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:19] [Client thread/INFO]: [CHAT] [TestNCP] TumourHumour MOVING_SURVIVALFLY vl 22.303 (+22.303) Ticks[Lag]: 1@1.94 5@1.564 10@1.752 20@1.846 1200@1.916
+[23:13:19] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:20] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:20] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:20] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:20] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:20] [Client thread/INFO]: [CHAT] Nazu joined the game.
+[23:13:20] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:23] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:24] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:24] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:25] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:26] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:26] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:27] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:27] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:28] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:28] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:29] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:31] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:31] [Texture Downloader #14/ERROR]: Couldn't download http texture
+java.io.IOException: Directory 'E:\Programming\Java\XIV\minecraft-directory\assets\skins\47' could not be created
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:363) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.openOutputStream(FileUtils.java:326) ~[commons-io-2.4.jar:2.4]
+	at org.apache.commons.io.FileUtils.copyInputStreamToFile(FileUtils.java:1510) ~[commons-io-2.4.jar:2.4]
+	at net.minecraft.client.renderer.ThreadDownloadImageData$1.run(ThreadDownloadImageData.java:134) [classes/:?]
+[23:13:31] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.wood
+[23:13:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.wood
+[23:13:34] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:34] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.wood
+[23:13:35] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:35] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:35] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:36] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:37] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:37] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:38] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:38] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:38] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:39] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:39] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:39] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:40] [Client thread/INFO]: [CHAT] Hey! Sorry, but you can't PvP here.
+[23:13:40] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:40] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:41] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:41] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:liquid.water
+[23:13:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:liquid.water
+[23:13:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:liquid.water
+[23:13:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:liquid.water
+[23:13:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:44] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:44] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:liquid.water
+[23:13:45] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:45] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:liquid.water
+[23:13:46] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:46] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:51] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:51] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:liquid.lavapop
+[23:13:51] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:51] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:13:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:13:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:13:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:13:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:14:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:14:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[23:14:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[23:14:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:14:02] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:14:02] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:14:02] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:14:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:14:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.wood
+[23:14:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:08] [Client thread/INFO]: [CHAT] creeperking408 left the game.
+[23:14:08] [Client thread/INFO]: [CHAT] creeperking408 joined the game.
+[23:14:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:14:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:14:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[23:14:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[23:14:11] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[23:14:12] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[23:14:12] [Client thread/INFO]: Stopping!
+[23:14:12] [Client thread/INFO]: SoundSystem shutting down...
+[23:14:12] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
