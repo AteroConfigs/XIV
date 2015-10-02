@@ -29,6 +29,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new FastUse());
         contents.add(new Fly());
         contents.add(new FovFixer());
+        contents.add(new Freecam());
         contents.add(new HUD());
         contents.add(new InventoryWalk());
         contents.add(new KillAura());
