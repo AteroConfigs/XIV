@@ -144,7 +144,7 @@ public class KillAura extends Mod implements CommandHandler {
         String[] arguments = message.split(" ");
         if (arguments.length >= 2) {
             String action = arguments[1];
-            switch (action) {
+            switch (action.toLowerCase()) {
                 case "delay":
                 case "d":
                     if (arguments.length >= 3) {
