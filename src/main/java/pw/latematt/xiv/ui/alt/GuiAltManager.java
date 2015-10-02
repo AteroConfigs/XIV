@@ -13,12 +13,12 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class GuiAltManager extends GuiScreen {
-
     private GuiScreen parent;
     private AltSlot slot;
 
     public GuiTextField username, keyword, search;
     public GuiPasswordField password;
+    private AuthThread thread;
 
     public GuiAltManager(GuiScreen parent) {
         this.parent = parent;
@@ -80,7 +80,7 @@ public class GuiAltManager extends GuiScreen {
             if (button.id == 0) {
                 mc.displayGuiScreen(parent);
             } else if (button.id == 1) {
-                AuthThread thread = new AuthThread(this.slot.getAlt());
+                thread = new AuthThread(this.slot.getAlt());
                 thread.start();
             } else if (button.id == 2) {
                 XIV.getInstance().getAltManager().add(username.getText(), password.getText());
@@ -104,7 +104,7 @@ public class GuiAltManager extends GuiScreen {
             } else if (button.id == 5) {
                 slot.getAlt().setKeyword(keyword.getText());
             } else if (button.id == 6) {
-                AuthThread thread = new AuthThread(new AltAccount(username.getText(), password.getText()));
+                thread = new AuthThread(new AltAccount(username.getText(), password.getText()));
                 thread.start();
 
                 username.setText("");
@@ -154,27 +154,14 @@ public class GuiAltManager extends GuiScreen {
         } else {
             if (keyword.getText().equals("")) {
                 ((GuiButton) buttonList.get(5)).displayString = "x";
-                if (slot.getAlt().getKeyword().equals("")) {
-                    ((GuiButton) buttonList.get(5)).enabled = false;
-                } else {
-                    ((GuiButton) buttonList.get(5)).enabled = true;
-                }
+                ((GuiButton) buttonList.get(5)).enabled = !slot.getAlt().getKeyword().equals("");
             } else {
                 ((GuiButton) buttonList.get(5)).displayString = "+";
                 ((GuiButton) buttonList.get(5)).enabled = true;
             }
         }
-        if (!username.getText().equals("") && !password.getText().equals("")) {
-            ((GuiButton) buttonList.get(2)).enabled = true;
-        } else {
-            ((GuiButton) buttonList.get(2)).enabled = false;
-        }
-
-        if (!username.getText().equals("") && !password.getText().equals("") && this.slot.getAlt() != null) {
-            ((GuiButton) buttonList.get(7)).enabled = true;
-        } else {
-            ((GuiButton) buttonList.get(7)).enabled = false;
-        }
+        ((GuiButton) buttonList.get(2)).enabled = !username.getText().equals("") && !password.getText().equals("");
+        ((GuiButton) buttonList.get(7)).enabled = !username.getText().equals("") && !password.getText().equals("") && this.slot.getAlt() != null;
 
         mc.fontRendererObj.drawStringWithShadow("Username:", 8, height - 96, 0xFFFFFFFF);
         username.drawTextBox();
@@ -189,7 +176,7 @@ public class GuiAltManager extends GuiScreen {
         search.drawTextBox();
 
         drawCenteredString(mc.fontRendererObj, String.format("Accounts: %s/%s/%s", getAccounts().size(), XIV.getInstance().getAltManager().getContents().size() - getAccounts().size(), XIV.getInstance().getAltManager().getContents().size()), width / 2, 2, 0xFFFFFFFF);
-        drawCenteredString(mc.fontRendererObj, String.format("Logged in as %s", mc.getSession().getUsername()), width / 2, 12, 0xFFFFFFFF);
+        drawCenteredString(mc.fontRendererObj, thread == null ? "\247aLogged in as\247r " + mc.getSession().getUsername() : thread.getStatus(), width / 2, 12, 0xFFFFFFFF);
 
     }
 
