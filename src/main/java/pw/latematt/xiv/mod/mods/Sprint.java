@@ -18,7 +18,14 @@ public class Sprint extends Mod implements Listener<MotionUpdateEvent> {
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-            mc.thePlayer.setSprinting((mc.thePlayer.movementInput.moveForward > 0 || mc.thePlayer.movementInput.moveStrafe != 0) && !mc.thePlayer.isCollidedHorizontally);
+            boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
+            boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+            boolean moving = movingForward || strafing;
+
+            boolean sneaking = mc.thePlayer.isSneaking();
+            boolean collided = mc.thePlayer.isCollidedHorizontally;
+            boolean hungry = mc.thePlayer.getFoodStats().getFoodLevel() <= 6;
+            mc.thePlayer.setSprinting(moving && !sneaking && !collided && !hungry);
         }
     }
 

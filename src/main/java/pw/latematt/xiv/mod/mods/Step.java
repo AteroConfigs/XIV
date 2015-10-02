@@ -18,7 +18,7 @@ import pw.latematt.xiv.value.Value;
 public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandler {
     private final Listener sendPacketListener;
     private boolean editPackets;
-    private Value<Float> height = new Value<>("step_height", 1.5F);
+    private Value<Float> height = new Value<>("step_height", 1.25F);
 
     public Step() {
         super("Step", ModType.MOVEMENT);
@@ -47,13 +47,15 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
 
     @Override
     public void onEventCalled(EntityStepEvent event) {
-        if (mc.thePlayer == null) return;
+        if (mc.thePlayer == null || !event.canStep())
+            return;
 
-        final boolean shouldStep = event.getEntity() == mc.thePlayer
-                && mc.thePlayer.onGround && !mc.thePlayer.isInWater()
-                && !mc.thePlayer.isCollidedHorizontally;
-        mc.thePlayer.stepHeight = mc.thePlayer.isInWater() ? 0.50F : height.getValue();
-        editPackets = shouldStep;
+        if (mc.thePlayer.stepHeight != height.getValue()) {
+            mc.thePlayer.stepHeight = height.getValue();
+        }
+
+        editPackets = event.getEntity() == mc.thePlayer && mc.thePlayer.onGround && !mc.thePlayer.isInWater() && mc.thePlayer.fallDistance <= 0.0;
+        event.setCancelled(!editPackets);
     }
 
     @Override
@@ -73,6 +75,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                                 newHeight = 0.5F;
                             }
                             height.setValue(newHeight);
+                            mc.thePlayer.stepHeight = height.getValue();
                             ChatLogger.print(String.format("Step Height set to %s", height.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newHeightString));
@@ -102,12 +105,16 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
         XIV.getInstance().getListenerManager().add(sendPacketListener);
+        if (mc.thePlayer != null) {
+            mc.thePlayer.stepHeight = height.getValue();
+        }
     }
 
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
         XIV.getInstance().getListenerManager().remove(sendPacketListener);
+        editPackets = false;
         if (mc.thePlayer != null) {
             mc.thePlayer.stepHeight = 0.5F;
         }

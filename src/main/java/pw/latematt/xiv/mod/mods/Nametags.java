@@ -63,6 +63,11 @@ public class Nametags extends Mod {
 
     public void drawNametags(EntityLivingBase entity, double x, double y, double z) {
         String entityName = entity.getDisplayName().getFormattedText();
+
+        if (entity.getDistanceToEntity(mc.thePlayer) >= 64) {
+            entityName = "\2472* \247r" + entityName;
+        }
+
         if (XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             entityName = XIV.getInstance().getFriendManager().replace(entityName, false);
         }
@@ -90,7 +95,7 @@ public class Nametags extends Mod {
         float var14 = 0.016666668F * var13;
         GlStateManager.pushMatrix();
         RenderHelper.enableStandardItemLighting();
-        GlStateManager.translate((float) x + 0.0F, (float) y + entity.height + 0.5F, (float) z);
+        GlStateManager.translate(x + 0.0F, y + entity.height + 0.5F, z);
         GL11.glNormal3f(0.0F, 1.0F, 0.0F);
         if (mc.gameSettings.thirdPersonView == 2) {
             GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
@@ -107,7 +112,7 @@ public class Nametags extends Mod {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         Tessellator var15 = Tessellator.getInstance();
         WorldRenderer var16 = var15.getWorldRenderer();
-        byte var17 = 0;
+        int var17 = 0;
         if (entity.isSneaking()) {
             var17 += 4;
         }
@@ -116,10 +121,10 @@ public class Nametags extends Mod {
         var16.startDrawingQuads();
         int var18 = mc.fontRendererObj.getStringWidth(entityName) / 2;
         var16.func_178960_a(0.0F, 0.0F, 0.0F, 0.25F);
-        var16.addVertex((double) (-var18 - 2), (double) (-2 + var17), 0.0D);
-        var16.addVertex((double) (-var18 - 2), (double) (9 + var17), 0.0D);
-        var16.addVertex((double) (var18 + 2), (double) (9 + var17), 0.0D);
-        var16.addVertex((double) (var18 + 2), (double) (-2 + var17), 0.0D);
+        var16.addVertex(-var18 - 2, -2 + var17, 0.0D);
+        var16.addVertex(-var18 - 2, 9 + var17, 0.0D);
+        var16.addVertex(var18 + 2, 9 + var17, 0.0D);
+        var16.addVertex(var18 + 2, -2 + var17, 0.0D);
         var15.draw();
         GlStateManager.func_179098_w();
         mc.fontRendererObj.drawStringWithShadow(entityName, -var18, var17, getNametagColor(entity));
@@ -138,8 +143,6 @@ public class Nametags extends Mod {
             color = 0xFF4DB3FF;
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
             color = 0xFFFFE600;
-        } else if (mc.thePlayer.getDistanceToEntity(entity) >= 64 || (mc.thePlayer.isSneaking() && !entity.canEntityBeSeen(mc.thePlayer))) {
-            color = 0xFF00FF00;
         } else if (entity.isSneaking()) {
             color = 0xFFFF0000;
         }

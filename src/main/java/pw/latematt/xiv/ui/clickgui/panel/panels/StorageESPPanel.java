@@ -1,9 +1,6 @@
 package pw.latematt.xiv.ui.clickgui.panel.panels;
 
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.mod.mods.KillAura;
-import pw.latematt.xiv.mod.mods.aura.Singular;
-import pw.latematt.xiv.mod.mods.aura.Switch;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.elements.ValueButton;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
@@ -14,14 +11,14 @@ import java.util.ArrayList;
 /**
  * @author Matthew
  */
-public class AuraPanel extends Panel {
-    public AuraPanel(float x, float y, float width, float height) {
-        super("Aura", new ArrayList<>(), x, y, width, height);
+public class StorageESPPanel extends Panel {
+    public StorageESPPanel(float x, float y, float width, float height) {
+        super("StorageESP", new ArrayList<>(), x, y, width, height);
 
         float elementY = 4;
         for (Value value : XIV.getInstance().getValueManager().getContents()) {
-            if (value.getName().startsWith("killaura_") && value.getValue() instanceof Boolean) {
-                String actualName = value.getName().replaceAll("killaura_", "");
+            if (value.getName().startsWith("storage_esp_") && value.getValue() instanceof Boolean) {
+                String actualName = value.getName().replaceAll("storage_esp_", "");
                 String prettyName = "";
                 String[] actualNameSplit = actualName.split("_");
                 if (actualNameSplit.length > 0) {
