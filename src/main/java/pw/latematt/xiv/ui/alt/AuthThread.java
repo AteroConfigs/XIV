@@ -1,30 +1,41 @@
 package pw.latematt.xiv.ui.alt;
 
 import com.mojang.authlib.Agent;
+import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
+import pw.latematt.xiv.XIV;
 
 import java.lang.reflect.Field;
 import java.net.Proxy;
-import java.util.UUID;
 
 public class AuthThread extends Thread {
-
     private final Minecraft mc = Minecraft.getMinecraft();
     private final AltAccount account;
+    private String status;
 
     public AuthThread(AltAccount account) {
         this.account = account;
     }
 
+    private Session createSession(String username, String password) {
+        final YggdrasilAuthenticationService service = new YggdrasilAuthenticationService(Proxy.NO_PROXY, "");
+        final YggdrasilUserAuthentication auth = (YggdrasilUserAuthentication) service.createUserAuthentication(Agent.MINECRAFT);
+        auth.setUsername(username);
+        auth.setPassword(password);
+        try {
+            auth.logIn();
+            return new Session(auth.getSelectedProfile().getName(), auth.getSelectedProfile().getId().toString(), auth.getAuthenticatedToken(), "mojang");
+        } catch (AuthenticationException e) {
+            return null;
+        }
+    }
+
     @Override
     public void run() {
-        YggdrasilUserAuthentication authentication = new YggdrasilUserAuthentication(new YggdrasilAuthenticationService(Proxy.NO_PROXY, UUID.randomUUID().toString()), Agent.MINECRAFT);
-        authentication.setUsername(account.getUsername());
-        authentication.setPassword(account.getPassword());
-
+        status = "\247o\247eLogging in...";
         Field session = null;
         for (Field field : Minecraft.class.getDeclaredFields()) {
             if (field.getName().equalsIgnoreCase("session") || field.getType() == Session.class) {
@@ -38,15 +49,30 @@ public class AuthThread extends Thread {
 
         session.setAccessible(true);
 
-        try {
-            if (account.getPassword().equals("")) {
-                /* TODO: Offline Mode Login */
-            } else {
-                authentication.logIn();
-                session.set(mc, new Session(authentication.getSelectedProfile().getName(), authentication.getSelectedProfile().getId().toString(), authentication.getAuthenticatedToken(), Session.Type.MOJANG.toString()));
+        if (account.getPassword().equals("")) {
+            Session newSession = new Session(account.getUsername(), "", "", "mojang");
+            try {
+                session.set(mc, newSession);
+                status = "\247aLogged in as\247r " + newSession.getUsername();
+            } catch (IllegalAccessException e) {
+                XIV.getInstance().getLogger().warn("Failed to set session for alt login, a stacktrace has been printed.");
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            Session newSession = createSession(account.getUsername(), account.getPassword());
+            if (newSession != null) {
+                try {
+                    session.set(mc, newSession);
+                    status = "\247aLogged in as\247r " + newSession.getUsername();
+                } catch (IllegalAccessException e) {
+                    XIV.getInstance().getLogger().warn("Failed to set session for alt login, a stacktrace has been printed.");
+                    e.printStackTrace();
+                }
+            }
         }
+    }
+
+    public String getStatus() {
+        return status;
     }
 }
