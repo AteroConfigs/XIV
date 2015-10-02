@@ -29,6 +29,7 @@ public class AuthThread extends Thread {
             auth.logIn();
             return new Session(auth.getSelectedProfile().getName(), auth.getSelectedProfile().getId().toString(), auth.getAuthenticatedToken(), "mojang");
         } catch (AuthenticationException e) {
+            status = "\247cLogin failed.";
             return null;
         }
     }
