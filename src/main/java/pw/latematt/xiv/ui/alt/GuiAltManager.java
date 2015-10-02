@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class GuiAltManager extends GuiScreen {
 
@@ -26,14 +27,7 @@ public class GuiAltManager extends GuiScreen {
 
     public List<AltAccount> getAccounts() {
         if (search != null && search.getText().length() > 0) {
-            ArrayList<AltAccount> accounts = new ArrayList<>();
-            for (AltAccount account : XIV.getInstance().getAltManager().getContents()) {
-                if (account.getUsername().toLowerCase().contains(search.getText().toLowerCase()) || account.getKeyword().toLowerCase().contains(search.getText().toLowerCase())) {
-                    accounts.add(account);
-                }
-            }
-
-            return accounts;
+            return XIV.getInstance().getAltManager().getContents().stream().filter(account -> account.getUsername().toLowerCase().contains(search.getText().toLowerCase()) || account.getKeyword().toLowerCase().contains(search.getText().toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
         } else {
             return XIV.getInstance().getAltManager().getContents();
         }

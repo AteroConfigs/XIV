@@ -10,6 +10,7 @@ import pw.latematt.xiv.management.file.XIVFile;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.panel.panels.AuraPanel;
 import pw.latematt.xiv.ui.clickgui.panel.panels.ESPPanel;
+import pw.latematt.xiv.ui.clickgui.panel.panels.StorageESPPanel;
 import pw.latematt.xiv.ui.clickgui.panel.panels.ThemePanel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.ui.clickgui.theme.themes.DefaultTheme;
@@ -39,6 +40,8 @@ public class GuiClick extends GuiScreen {
         panels.add(new AuraPanel(x, 4, 100, 14));
         x += 102;
         panels.add(new ESPPanel(x, 4, 100, 14));
+        x += 102;
+        panels.add(new StorageESPPanel(x, 4, 100, 14));
 
         if (guiConfig == null) {
             guiConfig = new XIVFile("gui", "json") {

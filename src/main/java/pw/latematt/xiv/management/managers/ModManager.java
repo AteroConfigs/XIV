@@ -40,6 +40,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Speedmine());
         contents.add(new Sprint());
         contents.add(new Step());
+        contents.add(new StorageESP());
         contents.add(new Velocity());
         contents.add(new Zoot());
 

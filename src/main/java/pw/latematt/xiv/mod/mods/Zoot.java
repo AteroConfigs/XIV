@@ -19,7 +19,7 @@ import java.util.Objects;
 
 public class Zoot extends Mod implements Listener<MotionUpdateEvent> {
     public Zoot() {
-        super("Zoot", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFD298ED); // TODO: Values? ModType, Keybind, Colour
+        super("Zoot", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFD298ED);
     }
 
     @Override

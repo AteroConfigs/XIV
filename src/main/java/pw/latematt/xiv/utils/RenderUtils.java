@@ -38,6 +38,71 @@ public class RenderUtils {
         worldRenderer.addVertex(bb.minX, bb.maxY, bb.maxZ);
         tessellator.draw();
     }
+    
+    public static void drawFilledBox(AxisAlignedBB bb) {
+        final Tessellator tessellator = Tessellator.getInstance();
+        final WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+        worldRenderer.startDrawingQuads();
+        worldRenderer.addVertex(bb.minX, bb.minY, bb.minZ);
+        worldRenderer.addVertex(bb.minX, bb.maxY, bb.minZ);
+        worldRenderer.addVertex(bb.maxX, bb.minY, bb.minZ);
+        worldRenderer.addVertex(bb.maxX, bb.maxY, bb.minZ);
+        worldRenderer.addVertex(bb.maxX, bb.minY, bb.maxZ);
+        worldRenderer.addVertex(bb.maxX, bb.maxY, bb.maxZ);
+        worldRenderer.addVertex(bb.minX, bb.minY, bb.maxZ);
+        worldRenderer.addVertex(bb.minX, bb.maxY, bb.maxZ);
+        tessellator.draw();
+        worldRenderer.startDrawingQuads();
+        worldRenderer.addVertex(bb.maxX, bb.maxY, bb.minZ);
+        worldRenderer.addVertex(bb.maxX, bb.minY, bb.minZ);
+        worldRenderer.addVertex(bb.minX, bb.maxY, bb.minZ);
+        worldRenderer.addVertex(bb.minX, bb.minY, bb.minZ);
+        worldRenderer.addVertex(bb.minX, bb.maxY, bb.maxZ);
+        worldRenderer.addVertex(bb.minX, bb.minY, bb.maxZ);
+        worldRenderer.addVertex(bb.maxX, bb.maxY, bb.maxZ);
+        worldRenderer.addVertex(bb.maxX, bb.minY, bb.maxZ);
+        tessellator.draw();
+        worldRenderer.startDrawingQuads();
+        worldRenderer.addVertex(bb.minX, bb.maxY, bb.minZ);
+        worldRenderer.addVertex(bb.maxX, bb.maxY, bb.minZ);
+        worldRenderer.addVertex(bb.maxX, bb.maxY, bb.maxZ);
+        worldRenderer.addVertex(bb.minX, bb.maxY, bb.maxZ);
+        worldRenderer.addVertex(bb.minX, bb.maxY, bb.minZ);
+        worldRenderer.addVertex(bb.minX, bb.maxY, bb.maxZ);
+        worldRenderer.addVertex(bb.maxX, bb.maxY, bb.maxZ);
+        worldRenderer.addVertex(bb.maxX, bb.maxY, bb.minZ);
+        tessellator.draw();
+        worldRenderer.startDrawingQuads();
+        worldRenderer.addVertex(bb.minX, bb.minY, bb.minZ);
+        worldRenderer.addVertex(bb.maxX, bb.minY, bb.minZ);
+        worldRenderer.addVertex(bb.maxX, bb.minY, bb.maxZ);
+        worldRenderer.addVertex(bb.minX, bb.minY, bb.maxZ);
+        worldRenderer.addVertex(bb.minX, bb.minY, bb.minZ);
+        worldRenderer.addVertex(bb.minX, bb.minY, bb.maxZ);
+        worldRenderer.addVertex(bb.maxX, bb.minY, bb.maxZ);
+        worldRenderer.addVertex(bb.maxX, bb.minY, bb.minZ);
+        tessellator.draw();
+        worldRenderer.startDrawingQuads();
+        worldRenderer.addVertex(bb.minX, bb.minY, bb.minZ);
+        worldRenderer.addVertex(bb.minX, bb.maxY, bb.minZ);
+        worldRenderer.addVertex(bb.minX, bb.minY, bb.maxZ);
+        worldRenderer.addVertex(bb.minX, bb.maxY, bb.maxZ);
+        worldRenderer.addVertex(bb.maxX, bb.minY, bb.maxZ);
+        worldRenderer.addVertex(bb.maxX, bb.maxY, bb.maxZ);
+        worldRenderer.addVertex(bb.maxX, bb.minY, bb.minZ);
+        worldRenderer.addVertex(bb.maxX, bb.maxY, bb.minZ);
+        tessellator.draw();
+        worldRenderer.startDrawingQuads();
+        worldRenderer.addVertex(bb.minX, bb.maxY, bb.maxZ);
+        worldRenderer.addVertex(bb.minX, bb.minY, bb.maxZ);
+        worldRenderer.addVertex(bb.minX, bb.maxY, bb.minZ);
+        worldRenderer.addVertex(bb.minX, bb.minY, bb.minZ);
+        worldRenderer.addVertex(bb.maxX, bb.maxY, bb.minZ);
+        worldRenderer.addVertex(bb.maxX, bb.minY, bb.minZ);
+        worldRenderer.addVertex(bb.maxX, bb.maxY, bb.maxZ);
+        worldRenderer.addVertex(bb.maxX, bb.minY, bb.maxZ);
+        tessellator.draw();
+    }
 
     public static void drawRect(double left, double top, double right, double bottom, int color) {
         float alpha = (float) (color >> 24 & 255) / 255.0F;

@@ -27,7 +27,7 @@ import java.util.Objects;
 
 public class AutoHead extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private final Value<Long> delay = new Value<>("autohead_delay", 5000L);
-    private final Value<Double> health = new Value<>("autohead_health", 20D);
+    private final Value<Float> health = new Value<>("autohead_health", 20.0F);
     private final Timer timer = new Timer();
 
     public AutoHead() {
@@ -143,13 +143,13 @@ public class AutoHead extends Mod implements Listener<MotionUpdateEvent>, Comman
                     if (arguments.length >= 3) {
                         final String newHealthString = arguments[2];
                         try {
-                            final double newHealth = Double.parseDouble(newHealthString);
+                            final float newHealth = Float.parseFloat(newHealthString);
                             this.health.setValue(newHealth);
 
-                            if (this.health.getValue() > 39D) {
-                                this.health.setValue(39D);
-                            } else if (this.health.getValue() < 1D) {
-                                this.health.setValue(1D);
+                            if (this.health.getValue() > 39.0F) {
+                                this.health.setValue(39.0F);
+                            } else if (this.health.getValue() < 1.0F) {
+                                this.health.setValue(1.0F);
                             }
 
                             ChatLogger.print(String.format("AutoHead Health set to %s", this.health.getValue()));
@@ -174,7 +174,7 @@ public class AutoHead extends Mod implements Listener<MotionUpdateEvent>, Comman
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
-        if (mc.thePlayer.getMaxHealth() != 40D) {
+        if (mc.thePlayer.getMaxHealth() != 40.0F) {
             ChatLogger.print("You must be in UHC to use this mod.");
             this.toggle();
         }
