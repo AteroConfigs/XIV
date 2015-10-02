@@ -9,6 +9,7 @@ import pw.latematt.xiv.event.Event;
 public class FovModifierEvent extends Event {
     private final Entity entity;
     private float fov;
+
     public FovModifierEvent(Entity entity, float fov) {
         this.entity = entity;
         this.fov = fov;

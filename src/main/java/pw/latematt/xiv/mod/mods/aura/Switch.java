@@ -20,6 +20,7 @@ public class Switch extends AuraMode {
     public EntityLivingBase entityToAttack;
     private boolean aimed;
     private Timer timer = new Timer();
+
     public Switch(KillAura killAura) {
         super("Switch");
         this.killAura = killAura;

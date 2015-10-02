@@ -2,14 +2,9 @@ package pw.latematt.xiv.ui.clickgui.element.elements;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.input.Keyboard;
-import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
-import pw.latematt.xiv.utils.NahrFont;
-import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
 public class ValueButton extends Element {

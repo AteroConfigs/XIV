@@ -47,7 +47,7 @@ public class AutoHead extends Mod implements Listener<MotionUpdateEvent>, Comman
         if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
             if ((mc.thePlayer.getHealth() <= this.health.getValue() || this.doesFriendNeedHealth()) && this.timer.hasReached(this.delay.getValue())) {
                 if (this.doesHotbarHaveHeads()) {
-                    for (int i = 36;  i < 45; i++) {
+                    for (int i = 36; i < 45; i++) {
                         final ItemStack stack = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
                         if (Objects.nonNull(stack) && stack.getItem() instanceof ItemSkull) {
                             final int oldSlot = mc.thePlayer.inventory.currentItem;
@@ -94,9 +94,9 @@ public class AutoHead extends Mod implements Listener<MotionUpdateEvent>, Comman
 
     private boolean doesFriendNeedHealth() {
         for (final Object o : mc.theWorld.getLoadedEntityList()) {
-            final Entity entity = (Entity)o;
+            final Entity entity = (Entity) o;
             if (o instanceof EntityPlayer) {
-                final EntityPlayer player = (EntityPlayer)entity;
+                final EntityPlayer player = (EntityPlayer) entity;
                 if (XIV.getInstance().getFriendManager().isFriend(player.getName())) {
                     if (player.getHealth() <= this.health.getValue()) {
                         return true;
@@ -112,7 +112,7 @@ public class AutoHead extends Mod implements Listener<MotionUpdateEvent>, Comman
     public void onCommandRan(String message) {
         final String[] arguments = message.split(" ");
         if (arguments.length >= 2) {
-            switch (arguments[1]) {
+            switch (arguments[1].toLowerCase()) {
                 case "delay":
                 case "d": {
                     if (arguments.length >= 3) {

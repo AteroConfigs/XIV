@@ -22,8 +22,6 @@ import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
 
-import java.util.List;
-
 /**
  * @author Matthew
  */

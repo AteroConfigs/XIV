@@ -29,6 +29,7 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
     public final Value<Boolean> droppers = new Value<>("storage_esp_droppers", false);
     public final Value<Boolean> dispensers = new Value<>("storage_esp_dispensers", false);
     public final Value<Float> lineWidth = new Value<>("storage_esp_line_width", 1.0F);
+
     public StorageESP() {
         super("StorageESP", ModType.RENDER);
     }

@@ -9,7 +9,6 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
@@ -203,7 +202,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         if (arguments.length >= 2) {
             String action = arguments[1];
 
-            switch (action) {
+            switch (action.toLowerCase()) {
                 case "players":
                 case "plyrs":
                     players.setValue(!players.getValue());

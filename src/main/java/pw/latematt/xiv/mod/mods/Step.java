@@ -63,7 +63,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
         String[] arguments = message.split(" ");
         if (arguments.length >= 2) {
             String action = arguments[1];
-            switch (action) {
+            switch (action.toLowerCase()) {
                 case "height":
                     if (arguments.length >= 3) {
                         String newHeightString = arguments[2];

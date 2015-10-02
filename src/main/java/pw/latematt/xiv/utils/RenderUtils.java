@@ -38,7 +38,7 @@ public class RenderUtils {
         worldRenderer.addVertex(bb.minX, bb.maxY, bb.maxZ);
         tessellator.draw();
     }
-    
+
     public static void drawFilledBox(AxisAlignedBB bb) {
         final Tessellator tessellator = Tessellator.getInstance();
         final WorldRenderer worldRenderer = tessellator.getWorldRenderer();

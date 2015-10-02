@@ -68,9 +68,9 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
             yOff += this.tabHeight;
         }
 
-        if(transition > 0) {
+        if (transition > 0) {
             transition -= 1;
-        }else if(transition < 0) {
+        } else if (transition < 0) {
             transition += 1;
         }
     }
@@ -91,7 +91,7 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
                         this.selectedItem = (this.tabs.get(this.selectedTab)).getMods().size() - 1;
                     }
 
-                    if(this.tabs.get(this.selectedTab).getMods().size() > 1) {
+                    if (this.tabs.get(this.selectedTab).getMods().size() > 1) {
                         this.transition = 11;
                     }
                 }
@@ -109,7 +109,7 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
                         this.selectedItem = 0;
                     }
 
-                    if(this.tabs.get(this.selectedTab).getMods().size() > 1) {
+                    if (this.tabs.get(this.selectedTab).getMods().size() > 1) {
                         this.transition = -11;
                     }
                 }

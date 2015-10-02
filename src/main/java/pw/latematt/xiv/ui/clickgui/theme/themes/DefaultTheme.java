@@ -14,6 +14,7 @@ import java.awt.*;
 public class DefaultTheme extends ClickTheme {
     protected NahrFont titleFont;
     protected NahrFont modFont;
+
     public DefaultTheme() {
         super("Default", 12, 12);
         this.titleFont = new NahrFont(new Font("Tahoma", Font.BOLD, 22), 22);
