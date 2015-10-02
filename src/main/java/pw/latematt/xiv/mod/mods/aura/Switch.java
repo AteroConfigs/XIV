@@ -39,7 +39,7 @@ public class Switch extends AuraMode {
         }
 
         if (!entities.isEmpty()) {
-            if (killAura.autoblock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
+            if (killAura.autoBlock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
                 ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
                 sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
                 mc.playerController.updateController();

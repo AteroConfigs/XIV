@@ -288,7 +288,7 @@ public class PlayerControllerMP
 
     public boolean func_180512_c(BlockPos p_180512_1_, EnumFacing p_180512_2_)
     {
-        BreakingBlockEvent event = new BreakingBlockEvent(mc.theWorld.getBlockState(p_180512_1_).getBlock(), p_180512_1_, blockHitDelay, 1.0);
+        BreakingBlockEvent event = new BreakingBlockEvent(mc.theWorld.getBlockState(p_180512_1_).getBlock(), p_180512_1_, 4, 1.0);
         XIV.getInstance().getListenerManager().call(event);
         if (event.isCancelled())
             return false;
@@ -474,7 +474,7 @@ public class PlayerControllerMP
             int var4 = itemStackIn.stackSize;
             ItemStack var5 = itemStackIn.useItemRightClick(worldIn, playerIn);
 
-            if (var5 == itemStackIn && (var5 == null || var5.stackSize == var4))
+            if (var5 == itemStackIn && (var5.stackSize == var4))
             {
                 return false;
             }

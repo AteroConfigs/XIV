@@ -28,8 +28,6 @@ public class FriendManager extends MapManager<String, String> {
                 .handler(message -> {
                     String[] arguments = message.split(" ");
                     if (arguments.length >= 2) {
-                        ChatLogger.print("Invalid arguments, valid: friend <action>");
-                    } else {
                         String action = arguments[1];
                         switch (action.toLowerCase()) {
                             case "add":
@@ -63,6 +61,8 @@ public class FriendManager extends MapManager<String, String> {
                                 ChatLogger.print("Invalid action, valid: add, del");
                                 break;
                         }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: friend <action>");
                     }
                 }).build();
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
