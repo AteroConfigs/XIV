@@ -171,35 +171,27 @@ public class NetworkManager extends SimpleChannelInboundHandler
 
     public void sendPacket(Packet packetIn)
     {
-        SendPacketEvent sendPacketEvent = new SendPacketEvent(packetIn);
-        XIV.getInstance().getListenerManager().call(sendPacketEvent);
-        if (sendPacketEvent.isCancelled())
-            return;
         if (this.channel != null && this.channel.isOpen())
         {
             this.flushOutboundQueue();
-            this.dispatchPacket(sendPacketEvent.getPacket(), (GenericFutureListener[])null);
+            this.dispatchPacket(packetIn, (GenericFutureListener[])null);
         }
         else
         {
-            this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(sendPacketEvent.getPacket(), (GenericFutureListener[])null));
+            this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, (GenericFutureListener[])null));
         }
     }
 
     public void sendPacket(Packet packetIn, GenericFutureListener listener, GenericFutureListener ... listeners)
     {
-        SendPacketEvent sendPacketEvent = new SendPacketEvent(packetIn);
-        XIV.getInstance().getListenerManager().call(sendPacketEvent);
-        if (sendPacketEvent.isCancelled())
-            return;
         if (this.channel != null && this.channel.isOpen())
         {
             this.flushOutboundQueue();
-            this.dispatchPacket(sendPacketEvent.getPacket(), (GenericFutureListener[])ArrayUtils.add(listeners, 0, listener));
+            this.dispatchPacket(packetIn, (GenericFutureListener[])ArrayUtils.add(listeners, 0, listener));
         }
         else
         {
-            this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(sendPacketEvent.getPacket(), (GenericFutureListener[])ArrayUtils.add(listeners, 0, listener)));
+            this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, (GenericFutureListener[])ArrayUtils.add(listeners, 0, listener)));
         }
     }
 

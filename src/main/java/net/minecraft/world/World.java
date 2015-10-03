@@ -53,6 +53,8 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldInfo;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.AddWeatherEvent;
 
 public abstract class World implements IBlockAccess
 {
@@ -1137,7 +1139,9 @@ public abstract class World implements IBlockAccess
      */
     public boolean addWeatherEffect(Entity p_72942_1_)
     {
-        this.weatherEffects.add(p_72942_1_);
+        AddWeatherEvent event = new AddWeatherEvent(p_72942_1_);
+        XIV.getInstance().getListenerManager().call(event);
+        this.weatherEffects.add(event.getEntity());
         return true;
     }
 

@@ -9,6 +9,7 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.value.Value;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -97,6 +98,30 @@ public class CommandManager extends ListManager<Command> {
                         Minecraft.getMinecraft().getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY + 0.05D, Minecraft.getMinecraft().thePlayer.posZ, false));
                         Minecraft.getMinecraft().getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ, false));
                     }
+                }).build();
+        Command.newCommand()
+                .cmd("linewidth")
+                .description("Manages the line width of rendering mods.")
+                .aliases("lwidth", "linew", "lw")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if (arguments.length >= 2) {
+                        Float lineWidth = Float.parseFloat(arguments[1]);
+                        Value<Float> value = (Value<Float>) XIV.getInstance().getValueManager().find("render_line_width");
+                        value.setValue(lineWidth);
+                        ChatLogger.print(String.format("Render Line Width set to: %s", value.getValue()));
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: linewidth <float>");
+                    }
+                }).build();
+        Command.newCommand()
+                .cmd("antialiasing")
+                .description("Manages the anti aliasing of rendering mods.")
+                .aliases("aaliasing", "antia", "aa")
+                .handler(message -> {
+                    Value<Boolean> value = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_anti_aliasing");
+                    value.setValue(!value.getValue());
+                    ChatLogger.print(String.format("Render mods will %s use antialiasing.", value.getValue() ? "now" : "no longer"));
                 }).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {

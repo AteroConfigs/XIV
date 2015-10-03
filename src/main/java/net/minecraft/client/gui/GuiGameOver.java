@@ -6,6 +6,8 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumChatFormatting;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.PlayerDeathEvent;
 
 public class GuiGameOver extends GuiScreen implements GuiYesNoCallback
 {
@@ -18,6 +20,8 @@ public class GuiGameOver extends GuiScreen implements GuiYesNoCallback
      */
     public void initGui()
     {
+        PlayerDeathEvent event = new PlayerDeathEvent();
+        XIV.getInstance().getListenerManager().call(event);
         this.buttonList.clear();
 
         if (this.mc.theWorld.getWorldInfo().isHardcoreModeEnabled())

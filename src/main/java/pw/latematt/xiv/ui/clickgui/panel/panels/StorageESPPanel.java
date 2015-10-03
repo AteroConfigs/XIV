@@ -19,35 +19,23 @@ public class StorageESPPanel extends Panel {
 
         float elementY = 4;
         for (Value value : XIV.getInstance().getValueManager().getContents()) {
-            if (value.getName().startsWith("storage_esp_") && value.getValue() instanceof Boolean) {
-                String actualName = value.getName().replaceAll("storage_esp_", "");
-                String prettyName = "";
-                String[] actualNameSplit = actualName.split("_");
-                if (actualNameSplit.length > 0) {
-                    for (String arg : actualNameSplit) {
-                        arg = arg.substring(0, 1).toUpperCase() + arg.substring(1, arg.length());
-                        prettyName += arg + " ";
-                    }
-                } else {
-                    prettyName = actualNameSplit[0].substring(0, 1).toUpperCase() + actualNameSplit[0].substring(1, actualNameSplit[0].length());
+            if (!value.getName().startsWith("storage_esp_"))
+                continue;
+            String actualName = value.getName().replaceAll("storage_esp_", "");
+            String prettyName = "";
+            String[] actualNameSplit = actualName.split("_");
+            if (actualNameSplit.length > 0) {
+                for (String arg : actualNameSplit) {
+                    arg = arg.substring(0, 1).toUpperCase() + arg.substring(1, arg.length());
+                    prettyName += arg + " ";
                 }
-                getElements().add(new ValueButton(value, prettyName, x + 2, elementY + 2, GuiClick.getTheme().getElementWidth(), GuiClick.getTheme().getElementHeight()));
-                elementY += GuiClick.getTheme().getElementHeight() + 1;
-            } else if (value.getName().startsWith("storage_esp_") && value instanceof SliderValue) {
-                String actualName = value.getName().replaceAll("storage_esp_", "");
-                String prettyName = "";
-                String[] actualNameSplit = actualName.split("_");
-                if (actualNameSplit.length > 0) {
-                    for (String arg : actualNameSplit) {
-                        arg = arg.substring(0, 1).toUpperCase() + arg.substring(1, arg.length());
-                        prettyName += arg + " ";
-                    }
-                } else {
-                    prettyName = actualNameSplit[0].substring(0, 1).toUpperCase() + actualNameSplit[0].substring(1, actualNameSplit[0].length());
-                }
-                getElements().add(new ValueSlider((SliderValue) value, prettyName, x + 2, elementY + 2, GuiClick.getTheme().getElementWidth(), GuiClick.getTheme().getElementHeight()));
-                elementY += GuiClick.getTheme().getElementHeight() + 1;
+            } else {
+                prettyName = actualNameSplit[0].substring(0, 1).toUpperCase() + actualNameSplit[0].substring(1, actualNameSplit[0].length());
             }
+            if (value.getName().startsWith("storage_esp_") && value.getValue() instanceof Boolean) {
+                getElements().add(new ValueButton(value, prettyName, x + 2, elementY + 2, GuiClick.getTheme().getElementWidth(), GuiClick.getTheme().getElementHeight()));
+            }
+            elementY += GuiClick.getTheme().getElementHeight() + 1;
         }
     }
 }
