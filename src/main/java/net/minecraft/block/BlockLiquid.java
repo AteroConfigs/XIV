@@ -19,6 +19,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColorHelper;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.LiquidVelocityEvent;
 
 public abstract class BlockLiquid extends Block
 {
@@ -199,6 +201,9 @@ public abstract class BlockLiquid extends Block
             }
         }
 
+        LiquidVelocityEvent event = new LiquidVelocityEvent(var3);
+        XIV.getInstance().getListenerManager().call(event);
+        var3 = event.getVelocity();
         return var3.normalize();
     }
 
