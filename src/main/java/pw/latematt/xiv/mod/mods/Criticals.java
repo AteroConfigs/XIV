@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.BreakingBlockEvent;
+import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
@@ -16,7 +17,7 @@ import pw.latematt.xiv.mod.ModType;
  */
 public class Criticals extends Mod {
     private final Listener sendPacketListener;
-    private final Listener breakingBlockListener;
+    private final Listener motionUpdateListener;
     private float fallDist;
 
     public Criticals() {
@@ -26,10 +27,6 @@ public class Criticals extends Mod {
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    if (!isSafe()) {
-                        fallDist += mc.thePlayer.fallDistance;
-                    }
-
                     if (fallDist >= 4.0F || isSafe()) {
                         player.onGround = true;
                         player.moving = true;
@@ -47,10 +44,26 @@ public class Criticals extends Mod {
             }
         };
 
-        breakingBlockListener = new Listener<BreakingBlockEvent>() {
+        motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
-            public void onEventCalled(BreakingBlockEvent event) {
-                fallDist = 4.0F;
+            public void onEventCalled(MotionUpdateEvent event) {
+                if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                    if (!isSafe()) {
+                        fallDist += mc.thePlayer.fallDistance;
+                    }
+
+                    if (fallDist >= 4.0F || isSafe()) {
+                        event.setOnGround(true);
+                        fallDist = 0.0F;
+                        mc.thePlayer.fallDistance = 0.0F;
+                        setTag(getName());
+                    } else if (fallDist > 0.0F) {
+                        event.setOnGround(false);
+                        setTag(String.format("%s \2477%s", getName(), "*"));
+                    } else {
+                        setTag(getName());
+                    }
+                }
             }
         };
     }
@@ -66,13 +79,13 @@ public class Criticals extends Mod {
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(sendPacketListener);
-        XIV.getInstance().getListenerManager().add(breakingBlockListener);
+        XIV.getInstance().getListenerManager().add(motionUpdateListener);
     }
 
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(sendPacketListener);
-        XIV.getInstance().getListenerManager().remove(breakingBlockListener);
+        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
         fallDist = 0.0F;
     }
 }

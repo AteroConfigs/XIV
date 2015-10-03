@@ -35,7 +35,6 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     public final Value<Boolean> boxes = new Value<>("esp_boxes", true);
     public final Value<Boolean> spines = new Value<>("esp_spines", false);
     public final Value<Boolean> tracerLines = new Value<>("esp_tracer_lines", false);
-    public final Value<Float> lineWidth = new Value<>("esp_line_width", 1.0F);
 
     public ESP() {
         super("ESP", ModType.RENDER, Keyboard.KEY_I);
@@ -49,16 +48,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     }
 
     public void onEventCalled(Render3DEvent event) {
-        GlStateManager.pushMatrix();
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.disableLighting();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GlStateManager.disableDepth();
-        GlStateManager.depthMask(false);
-        GlStateManager.func_179090_x();
-        GL11.glLineWidth(lineWidth.getValue());
-
+        RenderUtils.beginGl();
         for (Entity entity : mc.theWorld.loadedEntityList) {
             if (!isValidEntity(entity))
                 continue;
@@ -78,7 +68,9 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             }
 
             if (spines.getValue()) {
+                GlStateManager.pushMatrix();
                 drawSpines(entity, x, y, z);
+                GlStateManager.popMatrix();
             }
 
             if (tracerLines.getValue()) {
@@ -89,16 +81,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 GlStateManager.popMatrix();
             }
         }
-
-        GL11.glLineWidth(2.0F);
-        GlStateManager.func_179098_w();
-        GlStateManager.depthMask(true);
-        GlStateManager.enableDepth();
-        GlStateManager.disableBlend();
-        GlStateManager.enableLighting();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.popMatrix();
+        RenderUtils.endGl();
     }
 
     private boolean isValidEntity(Entity entity) {
@@ -237,20 +220,6 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 case "spines":
                     spines.setValue(!spines.getValue());
                     ChatLogger.print(String.format("ESP will %s display player spines.", (spines.getValue() ? "now" : "no longer")));
-                    break;
-                case "linewidth":
-                case "width":
-                    if (arguments.length == 3) {
-                        try {
-                            float newLineWidth = Float.parseFloat(arguments[2]);
-                            lineWidth.setValue(newLineWidth);
-                            ChatLogger.print(String.format("ESP Line Width set to %s", lineWidth.getValue()));
-                        } catch (NumberFormatException e) {
-                            ChatLogger.print(String.format("\"%s\" is not a valid number", arguments[2]));
-                        }
-                    } else {
-                        ChatLogger.print("Invalid arguments, valid: esp linewidth <float>");
-                    }
                     break;
                 default:
                     ChatLogger.print("Invalid action, valid: players, mobs, animals, items, enderpearls, boxes, tracerlines, linewidth, spines");

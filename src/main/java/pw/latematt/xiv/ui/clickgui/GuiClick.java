@@ -8,10 +8,7 @@ import net.minecraft.client.gui.GuiScreen;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.management.file.XIVFile;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
-import pw.latematt.xiv.ui.clickgui.panel.panels.AuraPanel;
-import pw.latematt.xiv.ui.clickgui.panel.panels.ESPPanel;
-import pw.latematt.xiv.ui.clickgui.panel.panels.StorageESPPanel;
-import pw.latematt.xiv.ui.clickgui.panel.panels.ThemePanel;
+import pw.latematt.xiv.ui.clickgui.panel.panels.*;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.ui.clickgui.theme.themes.DarculaTheme;
 import pw.latematt.xiv.ui.clickgui.theme.themes.IXTheme;
@@ -39,14 +36,11 @@ public class GuiClick extends GuiScreen {
         themes.add(new IXTheme(this));
         themes.add(new NorthStarTheme(this));
 
-        float x = 4;
-        panels.add(new ThemePanel(x, 4, 100, 14));
-        x += 102;
-        panels.add(new AuraPanel(x, 4, 100, 14));
-        x += 102;
-        panels.add(new ESPPanel(x, 4, 100, 14));
-        x += 102;
-        panels.add(new StorageESPPanel(x, 4, 100, 14));
+        panels.add(new ThemePanel(4, 4, 100, 14));
+        panels.add(new AuraPanel(106, 4, 100, 14));
+        panels.add(new ESPPanel(208, 4, 100, 14));
+        panels.add(new StorageESPPanel(312, 4, 100, 14));
+        panels.add(new WaypointsPanel(4, 19, 100, 14));
 
         if (guiConfig == null) {
             guiConfig = new XIVFile("gui", "json") {

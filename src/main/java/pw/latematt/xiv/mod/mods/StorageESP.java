@@ -31,7 +31,6 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
     public final Value<Boolean> enchantmentTables = new Value<>("storage_esp_enchantment_tables", false);
     public final Value<Boolean> boxes = new Value<>("storage_esp_boxes", true);
     public final Value<Boolean> tracerLines = new Value<>("storage_esp_tracer_lines", false);
-    public final Value<Float> lineWidth = new Value<>("storage_esp_line_width", 1.0F);
 
     public StorageESP() {
         super("StorageESP", ModType.RENDER);
@@ -39,15 +38,7 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
 
     @Override
     public void onEventCalled(Render3DEvent event) {
-        GlStateManager.pushMatrix();
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.disableLighting();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GlStateManager.disableDepth();
-        GlStateManager.depthMask(false);
-        GlStateManager.func_179090_x();
-        GL11.glLineWidth(lineWidth.getValue());
+        RenderUtils.beginGl();
         for (Object o : mc.theWorld.loadedTileEntityList) {
             TileEntity tileEntity = (TileEntity) o;
             float partialTicks = event.getPartialTicks();
@@ -124,15 +115,7 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
                 drawESP(tileEnchantmentTable.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             }
         }
-        GL11.glLineWidth(2.0F);
-        GlStateManager.func_179098_w();
-        GlStateManager.depthMask(true);
-        GlStateManager.enableDepth();
-        GlStateManager.disableBlend();
-        GlStateManager.enableLighting();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.popMatrix();
+        RenderUtils.endGl();
     }
 
     private void drawESP(Block block, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, float partialTicks) {

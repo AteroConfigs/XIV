@@ -1,15 +1,43 @@
 package pw.latematt.xiv.utils;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.opengl.GL11;
+import pw.latematt.xiv.value.Value;
 
 /**
  * @author Matthew
  */
 public class RenderUtils {
+    private static final Value<Float> LINE_WIDTH = new Value<>("render_line_width", 1.0F);
+
+    public static void beginGl() {
+        GlStateManager.pushMatrix();
+        RenderHelper.enableStandardItemLighting();
+        GlStateManager.disableLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.disableDepth();
+        GlStateManager.depthMask(false);
+        GlStateManager.func_179090_x();
+        GL11.glLineWidth(LINE_WIDTH.getValue());
+    }
+
+    public static void endGl() {
+        GL11.glLineWidth(2.0F);
+        GlStateManager.func_179098_w();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableDepth();
+        GlStateManager.disableBlend();
+        GlStateManager.enableLighting();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.popMatrix();
+    }
+
     public static void drawLines(AxisAlignedBB bb) {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldRenderer = tessellator.getWorldRenderer();

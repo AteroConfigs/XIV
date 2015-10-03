@@ -5,12 +5,15 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.client.renderer.*;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
+import pw.latematt.xiv.event.events.AddWeatherEvent;
+import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.management.file.XIVFile;
 import pw.latematt.xiv.mod.Mod;
@@ -29,19 +32,97 @@ import java.util.stream.Collectors;
 /**
  * @author Matthew
  */
-public class Waypoints extends Mod implements Listener<Render3DEvent>, CommandHandler {
+public class Waypoints extends Mod implements CommandHandler {
     private final float[] color = new float[]{0.68F, 0.45F, 0.76F};
     private final List<Waypoint> points;
+    private final Value<Boolean> lightningEsp = new Value<>("waypoints_lightning_esp", false);
     private final Value<Boolean> boxes = new Value<>("waypoints_boxes", true);
     private final Value<Boolean> tracerLines = new Value<>("waypoints_tracer_lines", true);
     private final Value<Boolean> nametags = new Value<>("waypoints_nametags", true);
-    private final Value<Float> lineWidth = new Value<>("waypoints_line_width", 1.0F);
     private final XIVFile waypointFile;
+    private final Listener render3DListener;
+    private final Listener motionUpdateListener;
+    private final Listener addWeatherListener;
 
     public Waypoints() {
         super("Waypoints", ModType.RENDER);
 
         points = new CopyOnWriteArrayList<>();
+        render3DListener = new Listener<Render3DEvent>() {
+            @Override
+            public void onEventCalled(Render3DEvent event) {
+                RenderUtils.beginGl();
+                for (Waypoint waypoint : points) {
+                    String server;
+                    if (mc.getCurrentServerData() == null) {
+                        server = "singleplayer";
+                    } else {
+                        server = mc.getCurrentServerData().serverIP;
+                    }
+                    if (!waypoint.getServer().equals(server))
+                        continue;
+
+                    if (boxes.getValue()) {
+                        GlStateManager.pushMatrix();
+                        drawBoxes(waypoint);
+                        GlStateManager.popMatrix();
+                    }
+
+                    if (tracerLines.getValue()) {
+                        GlStateManager.pushMatrix();
+                        GlStateManager.loadIdentity();
+                        mc.entityRenderer.orientCamera(event.getPartialTicks());
+                        drawTracerLines(waypoint);
+                        GlStateManager.popMatrix();
+                    }
+
+                    if (nametags.getValue()) {
+                        drawNametags(waypoint);
+                    }
+                }
+                RenderUtils.endGl();
+            }
+        };
+
+        motionUpdateListener = new Listener<MotionUpdateEvent>() {
+            @Override
+            public void onEventCalled(MotionUpdateEvent event) {
+                if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                    for (Waypoint waypoint : points) {
+                        if (!waypoint.isTemporary())
+                            continue;
+                        String server;
+                        if (mc.getCurrentServerData() == null) {
+                            server = "singleplayer";
+                        } else {
+                            server = mc.getCurrentServerData().serverIP;
+                        }
+                        if (!waypoint.getServer().equals(server))
+                            continue;
+                        double distance = mc.thePlayer.getDistance(waypoint.getX(), waypoint.getY(), waypoint.getZ());
+                        if (distance <= 3) {
+                            points.remove(waypoint);
+                            ChatLogger.print(String.format("Waypoint \"%s\" reached!", waypoint.getName()));
+                        }
+                    }
+                }
+            }
+        };
+
+        addWeatherListener = new Listener<AddWeatherEvent>() {
+            @Override
+            public void onEventCalled(AddWeatherEvent event) {
+                if (!lightningEsp.getValue())
+                    return;
+                if (event.getEntity() instanceof EntityLightningBolt) {
+                    EntityLightningBolt lightningBolt = (EntityLightningBolt) event.getEntity();
+                    Waypoint point = new Waypoint("Lightning", mc.getCurrentServerData().serverIP, lightningBolt.posX, lightningBolt.posY, lightningBolt.posZ, true);
+                    points.add(point);
+                    ChatLogger.print(String.format("Waypoint \"%s\" added at %s, %s, %s", point.getName(), point.getX(), point.getY(), point.getZ()));
+                }
+            }
+        };
+
         waypointFile = new XIVFile("waypoints", "json") {
             @Override
             public void load() throws IOException {
@@ -73,60 +154,10 @@ public class Waypoints extends Mod implements Listener<Render3DEvent>, CommandHa
         }
     }
 
-    @Override
-    public void onEventCalled(Render3DEvent event) {
-        GlStateManager.pushMatrix();
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.disableLighting();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GlStateManager.disableDepth();
-        GlStateManager.depthMask(false);
-        GlStateManager.func_179090_x();
-        GL11.glLineWidth(lineWidth.getValue());
-        for (Waypoint waypoint : points) {
-            String server;
-            if (mc.getCurrentServerData() == null) {
-                server = "singleplayer";
-            } else {
-                server = mc.getCurrentServerData().serverIP;
-            }
-            if (!waypoint.getServer().equals(server))
-                continue;
-
-            double x = waypoint.getX() + 0.5F - mc.getRenderManager().renderPosX;
-            double y = waypoint.getY() - mc.getRenderManager().renderPosY;
-            double z = waypoint.getZ() + 0.5F - mc.getRenderManager().renderPosZ;
-
-            if (boxes.getValue()) {
-                drawBoxes(x, y, z);
-            }
-
-            if (tracerLines.getValue()) {
-                GlStateManager.pushMatrix();
-                GlStateManager.loadIdentity();
-                mc.entityRenderer.orientCamera(event.getPartialTicks());
-                drawTracerLines(x, y, z);
-                GlStateManager.popMatrix();
-            }
-
-            if (nametags.getValue()) {
-                drawNametags(waypoint, x, y, z);
-            }
-        }
-
-        GL11.glLineWidth(2.0F);
-        GlStateManager.func_179098_w();
-        GlStateManager.depthMask(true);
-        GlStateManager.enableDepth();
-        GlStateManager.disableBlend();
-        GlStateManager.enableLighting();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.popMatrix();
-    }
-
-    private void drawBoxes(double x, double y, double z) {
+    private void drawBoxes(Waypoint waypoint) {
+        double x = waypoint.getX() + 0.5F - mc.getRenderManager().renderPosX;
+        double y = waypoint.getY() - mc.getRenderManager().renderPosY;
+        double z = waypoint.getZ() + 0.5F - mc.getRenderManager().renderPosZ;
         AxisAlignedBB box = AxisAlignedBB.fromBounds(x - 0.5D, y, z - 0.5D, x + 0.5D, y + 1.0D, z + 0.5D);
         GlStateManager.color(color[0], color[1], color[2], 0.6F);
         RenderUtils.drawLines(box);
@@ -135,7 +166,10 @@ public class Waypoints extends Mod implements Listener<Render3DEvent>, CommandHa
         RenderUtils.drawFilledBox(box);
     }
 
-    private void drawTracerLines(double x, double y, double z) {
+    private void drawTracerLines(Waypoint waypoint) {
+        double x = waypoint.getX() + 0.5F - mc.getRenderManager().renderPosX;
+        double y = waypoint.getY() - mc.getRenderManager().renderPosY;
+        double z = waypoint.getZ() + 0.5F - mc.getRenderManager().renderPosZ;
         GlStateManager.color(color[0], color[1], color[2], 1.0F);
         Tessellator var2 = Tessellator.getInstance();
         WorldRenderer var3 = var2.getWorldRenderer();
@@ -145,9 +179,12 @@ public class Waypoints extends Mod implements Listener<Render3DEvent>, CommandHa
         var2.draw();
     }
 
-    private void drawNametags(Waypoint point, double x, double y, double z) {
-        final double dist = mc.thePlayer.getDistance(point.getX(), point.getY(), point.getZ());
-        final String text = point.getName() + " \2477" + Math.round(dist) + "m\247r";
+    private void drawNametags(Waypoint waypoint) {
+        double x = waypoint.getX() + 0.5F - mc.getRenderManager().renderPosX;
+        double y = waypoint.getY() - mc.getRenderManager().renderPosY;
+        double z = waypoint.getZ() + 0.5F - mc.getRenderManager().renderPosZ;
+        final double dist = mc.thePlayer.getDistance(waypoint.getX(), waypoint.getY(), waypoint.getZ());
+        final String text = waypoint.getName() + " \2477" + Math.round(dist) + "m\247r";
         double far = this.mc.gameSettings.renderDistanceChunks * 12.8D;
         double dl = Math.sqrt(x * x + z * z + y * y);
         double d;
@@ -156,7 +193,6 @@ public class Waypoints extends Mod implements Listener<Render3DEvent>, CommandHa
             x *= d;
             z *= d;
             y *= d;
-            dl = far;
         }
 
         float var13 = (float) dist / 5 <= 2 ? 2.0F : (float) dist / 5;
@@ -216,21 +252,22 @@ public class Waypoints extends Mod implements Listener<Render3DEvent>, CommandHa
                             final int x = Integer.parseInt(arguments[2]);
                             final int y = Integer.parseInt(arguments[3]);
                             final int z = Integer.parseInt(arguments[4]);
-                            final String name = message.substring((arguments[0] + " " + arguments[1] + " " + arguments[2] + " " + arguments[3] + " " + arguments[4] + " ").length());
+                            final String name = message.substring((String.format("%s %s %s %s %s ", arguments[0], arguments[1], arguments[2], arguments[3], arguments[4])).length());
                             String server;
                             if (mc.getCurrentServerData() == null) {
                                 server = "singleplayer";
                             } else {
                                 server = mc.getCurrentServerData().serverIP;
                             }
-                            points.add(new Waypoint(name, server, x, y, z, true));
+                            Waypoint waypoint = new Waypoint(name, server, x, y, z, true);
+                            points.add(waypoint);
                             try {
                                 waypointFile.save();
                             } catch (IOException e) {
                                 XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
                                 e.printStackTrace();
                             }
-                            ChatLogger.print("Waypoint \"" + name + "\" added at " + x + ", " + y + ", " + z);
+                            ChatLogger.print(String.format("Waypoint \"%s\" added at %s, %s, %s", waypoint.getName(), waypoint.getX(), waypoint.getY(), waypoint.getZ()));
                         } else {
                             ChatLogger.print("You did not enter an Integer for x, y, or z.");
                         }
@@ -240,24 +277,28 @@ public class Waypoints extends Mod implements Listener<Render3DEvent>, CommandHa
                     break;
                 case "del":
                 case "d":
-                    final String name = message.substring((arguments[0] + " " + arguments[1] + " ").length());
-                    boolean found = false;
-                    for (final Waypoint waypoint : points) {
-                        if (waypoint.getName().toLowerCase().startsWith(name.toLowerCase())) {
-                            points.remove(waypoint);
-                            try {
-                                waypointFile.save();
-                            } catch (IOException e) {
-                                XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
-                                e.printStackTrace();
+                    if (arguments.length >= 3) {
+                        final String name = message.substring((String.format("%s %s ", arguments[0], arguments[1])).length());
+                        boolean found = false;
+                        for (final Waypoint waypoint : points) {
+                            if (waypoint.getName().toLowerCase().startsWith(name.toLowerCase())) {
+                                points.remove(waypoint);
+                                try {
+                                    waypointFile.save();
+                                } catch (IOException e) {
+                                    XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
+                                    e.printStackTrace();
+                                }
+                                ChatLogger.print(String.format("Waypoint \"%s\" deleted.", waypoint.getName()));
+                                found = true;
                             }
-                            ChatLogger.print("Waypoint \"" + waypoint.getName() + "\" deleted.");
-                            found = true;
                         }
-                    }
 
-                    if (!found) {
-                        ChatLogger.print("Waypoint \"" + name + "\" not found.");
+                        if (!found) {
+                            ChatLogger.print("Waypoint \"" + name + "\" not found.");
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: waypoints del <name>");
                     }
                     break;
                 case "tracerlines":
@@ -286,7 +327,7 @@ public class Waypoints extends Mod implements Listener<Render3DEvent>, CommandHa
     private boolean isInteger(String text) {
         try {
             Integer.parseInt(text);
-        } catch (final Exception e) {
+        } catch (NumberFormatException e) {
             return false;
         }
         return true;
@@ -298,11 +339,15 @@ public class Waypoints extends Mod implements Listener<Render3DEvent>, CommandHa
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
+        XIV.getInstance().getListenerManager().add(render3DListener);
+        XIV.getInstance().getListenerManager().add(motionUpdateListener);
+        XIV.getInstance().getListenerManager().add(addWeatherListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
+        XIV.getInstance().getListenerManager().remove(render3DListener);
+        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
+        XIV.getInstance().getListenerManager().remove(addWeatherListener);
     }
 }
