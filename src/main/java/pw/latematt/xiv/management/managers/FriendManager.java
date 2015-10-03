@@ -48,6 +48,7 @@ public class FriendManager extends MapManager<String, String> {
                                 }
                                 break;
                             case "del":
+                            case "d":
                                 if (arguments.length >= 3) {
                                     String mcname = arguments[2];
                                     XIV.getInstance().getFriendManager().remove(mcname);
