@@ -21,7 +21,10 @@ import pw.latematt.xiv.mod.mods.aura.Singular;
 import pw.latematt.xiv.mod.mods.aura.Switch;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
+import pw.latematt.xiv.value.SliderValue;
 import pw.latematt.xiv.value.Value;
+
+import java.text.DecimalFormat;
 
 /**
  * @author Matthew
@@ -29,7 +32,7 @@ import pw.latematt.xiv.value.Value;
 public class KillAura extends Mod implements CommandHandler {
     private final Listener motionUpdateListener;
     private final Listener sendPacketListener;
-    public final Value<Long> delay = new Value<>("killaura_delay", 125L);
+    public final SliderValue<Long> delay = new SliderValue<>("killaura_delay", 125L, 0L, 1000L, new DecimalFormat("0"));
     public final Value<Double> range = new Value<>("killaura_range", 3.9);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
     private final Value<Boolean> mobs = new Value<>("killaura_mobs", false);

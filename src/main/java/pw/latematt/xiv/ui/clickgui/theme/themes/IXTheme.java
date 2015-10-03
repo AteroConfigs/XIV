@@ -1,6 +1,5 @@
 package pw.latematt.xiv.ui.clickgui.theme.themes;
 
-import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
@@ -46,5 +45,17 @@ public class IXTheme extends ClickTheme {
         RenderUtils.drawBorderedRect(x, y, x + 96, y + height, enabled ? 0xFFFF9900 : 0xBB212121, 0x00000000);
 
         modFont.drawString(name, x + 14.5F, y - 2, NahrFont.FontType.EMBOSS_BOTTOM, enabled ? 0xFFFFAA00 : 0xFFFFFFFF);
+    }
+
+    @Override
+    public void renderSlider(String name, float value, float x, float y, float width, float height, float sliderX, boolean overElement, Element element) {
+        element.setWidth(96);
+        element.setHeight(this.getElementHeight());
+
+        RenderUtils.drawBorderedRect(x, y + 1, x + element.getWidth(), y + height, 0x801E1E1E, 0xBB212121);
+        RenderUtils.drawBorderedRect(x, y + 1, x + sliderX, y + height, 0xFFFF9900, 0xFFB18716);
+
+        modFont.drawString(name, x + 2, y - 1, NahrFont.FontType.EMBOSS_BOTTOM, 0xFFFFFFFF);
+        modFont.drawString(value + "", x + element.getWidth() - modFont.getStringWidth(value + "") - 2, y - 1, NahrFont.FontType.EMBOSS_BOTTOM, 0xFFFFFFFF);
     }
 }

@@ -162,6 +162,11 @@ public class Nametags extends Mod implements CommandHandler {
             var17 += 4;
         }
 
+        var17 -= distance / 5;
+        if (var17 < -8) {
+            var17 = -8;
+        }
+
         GlStateManager.func_179090_x();
         worldRenderer.startDrawingQuads();
         int var18 = mc.fontRendererObj.getStringWidth(entityName) / 2;

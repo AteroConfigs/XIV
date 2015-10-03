@@ -3,9 +3,12 @@ package pw.latematt.xiv.ui.clickgui.element.elements;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
+import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
+
+import java.io.IOException;
 
 public class ThemeButton extends Element {
     protected static Minecraft mc = Minecraft.getMinecraft();
@@ -32,6 +35,12 @@ public class ThemeButton extends Element {
         if (isOverElement(mouseX, mouseY) && mouseButton == 0) {
             mc.getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(new ResourceLocation("gui.button.press"), 1.0F));
             GuiClick.setTheme(theme);
+            try {
+                GuiClick.themeConfig.save();
+            } catch (IOException e) {
+                XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not load, a stack trace has been printed.", GuiClick.themeConfig.getName(), GuiClick.themeConfig.getExtension()));
+                e.printStackTrace();
+            }
         }
     }
 

@@ -18,14 +18,12 @@ import pw.latematt.xiv.utils.Timer;
 /**
  * @author Rederpz
  */
-
-//TODO: please rename this mod god dammit
-public class SpontaneousCombustion extends Mod implements Listener<MotionUpdateEvent> {
+public class Instinct extends Mod implements Listener<MotionUpdateEvent> {
     private final Timer timer = new Timer();
     private BlockPos placed = null;
 
-    public SpontaneousCombustion() {
-        super("Spontaneous Combustion", ModType.PLAYER, Keyboard.KEY_0, 0xFF006600);
+    public Instinct() {
+        super("Instinct", ModType.PLAYER, Keyboard.KEY_0, 0xFF006600);
     }
 
     public void onEventCalled(MotionUpdateEvent event) {

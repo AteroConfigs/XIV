@@ -1,8 +1,6 @@
 package pw.latematt.xiv.ui.clickgui.theme;
 
 import net.minecraft.client.Minecraft;
-import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.mod.mods.ClickGUI;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
@@ -20,8 +18,8 @@ public abstract class ClickTheme {
         this.elementWidth = elementWidth;
         this.elementHeight = elementHeight;
 
-        for(Panel panel: gui.panels) {
-            for(Element element: panel.getElements()) {
+        for (Panel panel : gui.panels) {
+            for (Element element : panel.getElements()) {
                 element.setWidth(this.getElementWidth());
                 element.setHeight(this.getElementHeight());
             }
@@ -51,4 +49,6 @@ public abstract class ClickTheme {
     public abstract void renderPanel(Panel panel);
 
     public abstract void renderButton(String name, boolean enabled, float x, float y, float width, float height, boolean overElement, Element element);
+
+    public abstract void renderSlider(String name, float value, float x, float y, float width, float height, float sliderX, boolean overElement, Element element);
 }

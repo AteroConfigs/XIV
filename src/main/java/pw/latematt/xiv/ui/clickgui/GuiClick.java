@@ -13,7 +13,7 @@ import pw.latematt.xiv.ui.clickgui.panel.panels.ESPPanel;
 import pw.latematt.xiv.ui.clickgui.panel.panels.StorageESPPanel;
 import pw.latematt.xiv.ui.clickgui.panel.panels.ThemePanel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
-import pw.latematt.xiv.ui.clickgui.theme.themes.DefaultTheme;
+import pw.latematt.xiv.ui.clickgui.theme.themes.DarculaTheme;
 import pw.latematt.xiv.ui.clickgui.theme.themes.IXTheme;
 import pw.latematt.xiv.ui.clickgui.theme.themes.NorthStarTheme;
 
@@ -30,11 +30,12 @@ public class GuiClick extends GuiScreen {
     public static List<ClickTheme> themes;
     private static ClickTheme theme;
     public static XIVFile guiConfig;
+    public static XIVFile themeConfig;
 
     public GuiClick() {
         panels = new CopyOnWriteArrayList<>();
         themes = new ArrayList<>();
-        themes.add(theme = new DefaultTheme(this));
+        themes.add(theme = new DarculaTheme(this));
         themes.add(new IXTheme(this));
         themes.add(new NorthStarTheme(this));
 
@@ -76,6 +77,31 @@ public class GuiClick extends GuiScreen {
             guiConfig.load();
         } catch (IOException e) {
             XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not load, a stack trace has been printed.", guiConfig.getName(), guiConfig.getExtension()));
+            e.printStackTrace();
+        }
+
+        if (themeConfig == null) {
+            themeConfig = new XIVFile("guiTheme", "cfg") {
+                @Override
+                public void load() throws IOException {
+                    BufferedReader reader = new BufferedReader(new FileReader(file));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        final String finalizedLine = line;
+                        GuiClick.themes.stream().filter(theme -> finalizedLine.equals(theme.getName())).forEach(GuiClick::setTheme);
+                    }
+                }
+
+                @Override
+                public void save() throws IOException {
+                    Files.write(GuiClick.getTheme().getName().getBytes("UTF-8"), file);
+                }
+            };
+        }
+        try {
+            themeConfig.load();
+        } catch (IOException e) {
+            XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not load, a stack trace has been printed.", themeConfig.getName(), themeConfig.getExtension()));
             e.printStackTrace();
         }
     }

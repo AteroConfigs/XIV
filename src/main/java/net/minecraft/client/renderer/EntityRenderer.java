@@ -80,6 +80,7 @@ import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Project;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.Render3DEvent;
+import pw.latematt.xiv.event.events.WorldBobbingEvent;
 
 public class EntityRenderer implements IResourceManagerReloadListener
 {
@@ -842,7 +843,12 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
         if (this.mc.gameSettings.viewBobbing)
         {
-            this.setupViewBobbing(partialTicks);
+            WorldBobbingEvent event = new WorldBobbingEvent();
+            XIV.getInstance().getListenerManager().call(event);
+
+            if(!event.isCancelled()) {
+                this.setupViewBobbing(partialTicks);
+            }
         }
 
         float var4 = this.mc.thePlayer.prevTimeInPortal + (this.mc.thePlayer.timeInPortal - this.mc.thePlayer.prevTimeInPortal) * partialTicks;
