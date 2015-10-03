@@ -52,4 +52,16 @@ public class DefaultTheme extends ClickTheme {
         RenderUtils.drawBorderedGradientRect(x, y + 1, x + width, y + height - 1, borderColor, startColor, endColor);
         modFont.drawString(name, x + width + 2, y - 2, NahrFont.FontType.EMBOSS_BOTTOM, 0xFFBBBBBB);
     }
+
+    @Override
+    public void renderSlider(String name, float value, float x, float y, float width, float height, float sliderX, boolean overElement, Element element) {
+        element.setWidth(96);
+        element.setHeight(this.getElementHeight());
+
+        RenderUtils.drawBorderedGradientRect(x, y + 1, x + element.getWidth(), y + height, 0x801E1E1E, 0xFF515658, 0xFF44494B);
+        RenderUtils.drawBorderedGradientRect(x, y + 1, x + sliderX, y + height, 0x801E1E1E, 0xFF344A64, 0xFF263649);
+
+        modFont.drawString(name, x + 2, y - 1, NahrFont.FontType.EMBOSS_BOTTOM, 0xFF888888);
+        modFont.drawString(value + "", x + element.getWidth() - modFont.getStringWidth(value + "") - 2, y - 1, NahrFont.FontType.EMBOSS_BOTTOM, 0xFF888888);
+    }
 }
