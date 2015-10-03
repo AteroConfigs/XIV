@@ -1,6 +1,5 @@
 package pw.latematt.xiv.ui.clickgui.theme.themes;
 
-import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;

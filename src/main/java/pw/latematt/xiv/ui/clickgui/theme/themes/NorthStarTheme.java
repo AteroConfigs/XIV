@@ -1,14 +1,11 @@
 package pw.latematt.xiv.ui.clickgui.theme.themes;
 
-import net.minecraft.client.gui.FontRenderer;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.utils.RenderUtils;
-
-import java.awt.*;
 
 /**
  * @author Matthew

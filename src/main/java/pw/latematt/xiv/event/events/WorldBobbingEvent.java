@@ -7,11 +7,11 @@ import pw.latematt.xiv.event.Event;
  * @author Matthew
  */
 public class WorldBobbingEvent extends Event implements Cancellable {
+    private boolean cancelled;
+
     public WorldBobbingEvent() {
         this.setCancelled(true); // The Alimighty Underlord Latematt said to just disable this completely.
     }
-
-    private boolean cancelled;
 
     @Override
     public boolean isCancelled() {

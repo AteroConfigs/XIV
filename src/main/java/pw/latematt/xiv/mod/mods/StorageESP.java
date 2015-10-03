@@ -2,8 +2,6 @@ package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.AxisAlignedBB;
@@ -196,7 +194,7 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
         }
 
         AxisAlignedBB bb = AxisAlignedBB.fromBounds(minX, minY, minZ, maxX, maxY, maxZ);
-        if(boxes.getValue()) {
+        if (boxes.getValue()) {
             GlStateManager.color(color[0], color[1], color[2], 0.6F);
             RenderUtils.drawLines(bb);
             RenderGlobal.drawOutlinedBoundingBox(bb, -1);
@@ -204,7 +202,7 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
             RenderUtils.drawFilledBox(bb);
         }
 
-        if(tracerLines.getValue()) {
+        if (tracerLines.getValue()) {
             GlStateManager.color(color[0], color[1], color[2], 1.0F);
             GlStateManager.pushMatrix();
             GlStateManager.loadIdentity();
@@ -214,7 +212,7 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
             WorldRenderer var3 = var2.getWorldRenderer();
             var3.startDrawing(2);
             var3.addVertex(0, mc.thePlayer.getEyeHeight(), 0);
-            var3.addVertex(minX + 0.5D, minY + (maxY - minY) - ((maxY - minY) / 2), minZ + 0.5D);
+            var3.addVertex(maxX - ((maxX - minX) / 2), maxY - ((maxY - minY) / 2), maxZ - ((maxZ - minZ) / 2));
             var2.draw();
 
             GlStateManager.popMatrix();

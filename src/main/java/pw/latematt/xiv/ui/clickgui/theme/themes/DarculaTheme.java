@@ -13,14 +13,14 @@ import java.awt.*;
 /**
  * @author Matthew
  */
-public class DefaultTheme extends ClickTheme {
+public class DarculaTheme extends ClickTheme {
     protected NahrFont titleFont;
     protected NahrFont modFont;
 
     protected GuiClick gui;
 
-    public DefaultTheme(GuiClick gui) {
-        super("Default", 12, 12, gui);
+    public DarculaTheme(GuiClick gui) {
+        super("Darcula", 12, 12, gui);
         this.titleFont = new NahrFont(new Font("Tahoma", Font.BOLD, 22), 22);
         this.modFont = new NahrFont("Tahoma", 17);
 

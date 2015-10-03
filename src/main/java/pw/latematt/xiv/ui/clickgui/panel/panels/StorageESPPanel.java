@@ -33,7 +33,7 @@ public class StorageESPPanel extends Panel {
                 }
                 getElements().add(new ValueButton(value, prettyName, x + 2, elementY + 2, GuiClick.getTheme().getElementWidth(), GuiClick.getTheme().getElementHeight()));
                 elementY += GuiClick.getTheme().getElementHeight() + 1;
-            }else if (value.getName().startsWith("storage_esp_") && value instanceof SliderValue) {
+            } else if (value.getName().startsWith("storage_esp_") && value instanceof SliderValue) {
                 String actualName = value.getName().replaceAll("storage_esp_", "");
                 String prettyName = "";
                 String[] actualNameSplit = actualName.split("_");
