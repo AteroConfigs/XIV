@@ -2,6 +2,7 @@ package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -20,7 +21,7 @@ import java.util.Objects;
  * @author Matthew
  */
 public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
-    private int delay;
+    private int delay, ground;
     private Value<Mode> currentMode = new Value<>("speed_mode", Mode.BYPASS);
 
     public Speed() {
@@ -102,9 +103,116 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                     }
                 }
                 this.delay++;
-            } /*else if (currentMode.getValue() == Mode.OLD) {
+            } else if (currentMode.getValue() == Mode.OLD || currentMode.getValue() == Mode.REDERPZ) {
+                double speed = currentMode.getValue() == Mode.OLD ? 1.3D : 3.15D;
+                double slow = 1.425D;
+                double offset = currentMode.getValue() == Mode.OLD ? 0.55D : 4.75D;
 
-            }*/
+                if(mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed()) {
+                    boolean iceBelow = false;
+                    boolean shouldSpeed = !mc.thePlayer.isSneaking();
+                    boolean shouldOffset = true;
+
+                    if(BlockUtils.isOnIce(mc.thePlayer)) {
+                        iceBelow = true;
+                        shouldSpeed = false;
+                    }
+
+                    for(Object o: mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().expand(0.5D, 0.0D, 0.5D))) {
+                        if(o instanceof AxisAlignedBB) {
+                            AxisAlignedBB bb = (AxisAlignedBB) o;
+
+                            if(bb != null) {
+                                shouldOffset = false;
+                            }
+                        }
+                    }
+
+                    boolean liquidBelow = false;
+                    if(BlockUtils.isOnLiquid(mc.thePlayer) && XIV.getInstance().getModManager().find(Jesus.class).isEnabled()) {
+                        liquidBelow = true;
+                        shouldSpeed = false;
+                    }
+
+                    if(mc.thePlayer.onGround && ground < 1) {
+                        ground += 0.2F;
+                    }
+
+                    if(!mc.thePlayer.onGround) {
+                        ground = 0;
+                    }
+
+                    if(iceBelow) {
+                        mc.thePlayer.motionX *= 1.51D;
+                        mc.thePlayer.motionZ *= 1.51D;
+                    }
+
+                    if(ground == 0 && liquidBelow) {
+                        if(delay > 2) {
+                            delay = 0;
+                        }
+
+                        ++delay;
+                        switch(delay) {
+                            case 1:
+                                mc.thePlayer.motionX *= 1.5D;
+                                mc.thePlayer.motionZ *= 1.5D;
+                                break;
+                            case 2:
+                                mc.thePlayer.motionX /= 1.375D;
+                                mc.thePlayer.motionZ /= 1.375D;
+                                delay = 0;
+                                break;
+                        }
+                    }
+
+                    if(ground == 1 && shouldSpeed) {
+                        if(!mc.thePlayer.isSprinting()) {
+                            offset += 0.8D;
+                        }
+
+                        if(mc.thePlayer.moveStrafing != 0.0F) {
+                            speed -= 0.1D;
+                            offset += 0.5D;
+                        }
+
+                        if(mc.thePlayer.isInWater()) {
+                            speed -= 0.1D;
+                        }
+
+                        ++delay;
+                        switch(delay) {
+                            case 1:
+                                mc.timer.timerSpeed = 1.325F;
+                                mc.thePlayer.motionX *= speed;
+                                mc.thePlayer.motionZ *= speed;
+                                break;
+                            case 2:
+                                mc.timer.timerSpeed = 1.0F;
+                                mc.thePlayer.motionX /= slow;
+                                mc.thePlayer.motionZ /= slow;
+                                break;
+                            case 3:
+                                mc.timer.timerSpeed = 1.05F;
+                                break;
+                            case 4:
+                                mc.timer.timerSpeed = 1.0F;
+
+                                if(shouldOffset) {
+                                    mc.thePlayer.setPosition(mc.thePlayer.posX + mc.thePlayer.motionX / offset, mc.thePlayer.posY, mc.thePlayer.posZ + mc.thePlayer.motionZ / offset);
+                                }
+
+                                delay = 0;
+                                break;
+                        }
+
+                    }else if(mc.timer.timerSpeed > 1.0F) {
+                        mc.timer.timerSpeed = 1.0F;
+                    }
+                }else if(mc.timer.timerSpeed > 1.0F) {
+                    mc.timer.timerSpeed = 1.0F;
+                }
+            }
         }
     }
 
@@ -144,6 +252,6 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     }
 
     public enum Mode {
-        BYPASS, OLD
+        BYPASS, OLD, REDERPZ
     }
 }

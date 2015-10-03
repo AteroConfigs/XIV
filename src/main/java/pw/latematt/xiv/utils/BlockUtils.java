@@ -1,8 +1,6 @@
 package pw.latematt.xiv.utils;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
-import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -65,6 +63,24 @@ public class BlockUtils {
                 final Block block = mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
                 if (block != null && !(block instanceof BlockAir)) {
                     if (!(block instanceof BlockLiquid))
+                        return false;
+                    onLiquid = true;
+                }
+            }
+        }
+        return onLiquid;
+    }
+
+    public static boolean isOnIce(Entity entity) {
+        if (entity == null)
+            return false;
+        boolean onLiquid = false;
+        final int y = (int) entity.getEntityBoundingBox().offset(0.0D, -0.01D, 0.0D).minY;
+        for (int x = MathHelper.floor_double(entity.getEntityBoundingBox().minX); x < MathHelper.floor_double(entity.getEntityBoundingBox().maxX) + 1; x++) {
+            for (int z = MathHelper.floor_double(entity.getEntityBoundingBox().minZ); z < MathHelper.floor_double(entity.getEntityBoundingBox().maxZ) + 1; z++) {
+                final Block block = mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
+                if (block != null && !(block instanceof BlockAir)) {
+                    if (!(block instanceof BlockIce) && !(block instanceof BlockPackedIce))
                         return false;
                     onLiquid = true;
                 }
