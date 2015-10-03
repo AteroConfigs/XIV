@@ -172,6 +172,28 @@ public class RenderItem implements IResourceManagerReloadListener
         GlStateManager.popMatrix();
     }
 
+    public void renderItemWithoutGlint(ItemStack p_180454_1_, IBakedModel p_180454_2_)
+    {
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(0.5F, 0.5F, 0.5F);
+
+        if (p_180454_2_.isBuiltInRenderer())
+        {
+            GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.enableRescaleNormal();
+            TileEntityRendererChestHelper.instance.renderByItem(p_180454_1_);
+        }
+        else
+        {
+            GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+            this.func_175036_a(p_180454_2_, p_180454_1_);
+        }
+
+        GlStateManager.popMatrix();
+    }
+
     private void renderEffect(IBakedModel p_180451_1_)
     {
         GlStateManager.depthMask(false);
@@ -1080,6 +1102,82 @@ public class RenderItem implements IResourceManagerReloadListener
     public void onResourceManagerReload(IResourceManager p_110549_1_)
     {
         this.itemModelMesher.rebuildCache();
+    }
+
+    public void renderItemIntoGUIWithoutGlint(ItemStack p_175042_1_, int p_175042_2_, int p_175042_3_)
+    {
+        IBakedModel var4 = this.itemModelMesher.getItemModel(p_175042_1_);
+        GlStateManager.pushMatrix();
+        this.field_175057_n.bindTexture(TextureMap.locationBlocksTexture);
+        this.field_175057_n.getTexture(TextureMap.locationBlocksTexture).func_174936_b(false, false);
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.enableAlpha();
+        GlStateManager.alphaFunc(516, 0.1F);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(770, 771);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        this.func_180452_a(p_175042_2_, p_175042_3_, var4.isAmbientOcclusionEnabled());
+        this.func_175034_a(var4.getItemCameraTransforms().field_178354_e);
+        this.renderItemWithoutGlint(p_175042_1_, var4);
+        GlStateManager.disableAlpha();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.disableLighting();
+        GlStateManager.popMatrix();
+        this.field_175057_n.bindTexture(TextureMap.locationBlocksTexture);
+        this.field_175057_n.getTexture(TextureMap.locationBlocksTexture).func_174935_a();
+    }
+
+    public void renderItemAboveHead(final ItemStack stack, int xPosition, int yPosition)
+    {
+        if (stack != null)
+        {
+            this.zLevel += 50.0F;
+
+            try
+            {
+                this.renderItemIntoGUIWithoutGlint(stack, xPosition, yPosition);
+            }
+            catch (Throwable var7)
+            {
+                CrashReport var5 = CrashReport.makeCrashReport(var7, "Rendering item");
+                CrashReportCategory var6 = var5.makeCategory("Item being rendered");
+                var6.addCrashSectionCallable("Item Type", new Callable()
+                {
+                    private static final String __OBFID = "CL_00001004";
+                    public String call()
+                    {
+                        return String.valueOf(stack.getItem());
+                    }
+                });
+                var6.addCrashSectionCallable("Item Aux", new Callable()
+                {
+                    private static final String __OBFID = "CL_00001005";
+                    public String call()
+                    {
+                        return String.valueOf(stack.getMetadata());
+                    }
+                });
+                var6.addCrashSectionCallable("Item NBT", new Callable()
+                {
+                    private static final String __OBFID = "CL_00001006";
+                    public String call()
+                    {
+                        return String.valueOf(stack.getTagCompound());
+                    }
+                });
+                var6.addCrashSectionCallable("Item Foil", new Callable()
+                {
+                    private static final String __OBFID = "CL_00001007";
+                    public String call()
+                    {
+                        return String.valueOf(stack.hasEffect());
+                    }
+                });
+                throw new ReportedException(var5);
+            }
+
+            this.zLevel -= 50.0F;
+        }
     }
 
     static final class SwitchTransformType

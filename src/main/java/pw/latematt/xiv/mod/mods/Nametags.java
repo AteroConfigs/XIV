@@ -4,27 +4,38 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StringUtils;
 import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.command.Command;
+import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.NametagRenderEvent;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Matthew
  */
-public class Nametags extends Mod {
+public class Nametags extends Mod implements CommandHandler {
     private final Listener nametagRenderListener;
     private final Listener render3DListener;
     private Value<Boolean> health = new Value<>("nametags_health", true);
+    private Value<Boolean> armor = new Value<>("nametags_armor", false);
 
     public Nametags() {
         super("Nametags", ModType.RENDER);
@@ -54,7 +65,37 @@ public class Nametags extends Mod {
                 }
             }
         };
+        Command.newCommand()
+                .cmd("nametags")
+                .description("Base command for the Nametags mod.")
+                .arguments("<action>")
+                .aliases("tags", "nt")
+                .handler(this)
+                .build();
         setEnabled(true);
+    }
+
+    @Override
+    public void onCommandRan(String message) {
+        String[] arguments = message.split(" ");
+        if (arguments.length >= 2) {
+            String action = arguments[1];
+            switch (action.toLowerCase()) {
+                case "health":
+                    health.setValue(!health.getValue());
+                    ChatLogger.print(String.format("Nametags will %s show health.", health.getValue() ? "now" : "no longer"));
+                    break;
+                case "armor":
+                    armor.setValue(!armor.getValue());
+                    ChatLogger.print(String.format("Nametags will %s show armor.", armor.getValue() ? "now" : "no longer"));
+                    break;
+                default:
+                    ChatLogger.print("Invalid action, valid: health, armor");
+                    break;
+            }
+        } else {
+            ChatLogger.print("Invalid arguments, valid: nametags <action>");
+        }
     }
 
     private boolean isValidEntity(Entity entity) {
@@ -64,10 +105,6 @@ public class Nametags extends Mod {
     public void drawNametags(EntityLivingBase entity, double x, double y, double z) {
         String entityName = entity.getDisplayName().getFormattedText();
 
-        if (entity.getDistanceToEntity(mc.thePlayer) >= 64) {
-            entityName = "\2472* \247r" + entityName;
-        }
-
         if (XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             entityName = XIV.getInstance().getFriendManager().replace(entityName, false);
         }
@@ -76,18 +113,26 @@ public class Nametags extends Mod {
             entityName = StringUtils.stripControlCodes(entityName);
         }
 
-        int health = MathHelper.floor_double(entity.getHealth() / 2);
+        if (entity.getDistanceToEntity(mc.thePlayer) >= 64) {
+            entityName = "\2472* \247r" + entityName;
+        }
+
+        double health = entity.getHealth() / 2;
+        double maxHealth = entity.getMaxHealth() / 2;
+        double percentage = 100 * (health / maxHealth);
         String healthColor;
-        if (health > entity.getMaxHealth() * (2/3)) {
+        if (percentage > 75) {
             healthColor = "2";
-        } else if (health > entity.getMaxHealth() * (1/3)) {
+        } else if (percentage > 50) {
+            healthColor = "e";
+        } else if (percentage > 25) {
             healthColor = "6";
         } else {
             healthColor = "4";
         }
 
         if (this.health.getValue()) {
-            entityName = String.format("%s \247%s%s", entityName, healthColor, health);
+            entityName = String.format("%s \247%s%s", entityName, healthColor, MathHelper.floor_double(health));
         }
 
         float distance = mc.thePlayer.getDistanceToEntity(entity);
@@ -110,24 +155,91 @@ public class Nametags extends Mod {
         GlStateManager.disableDepth();
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        Tessellator var15 = Tessellator.getInstance();
-        WorldRenderer var16 = var15.getWorldRenderer();
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
         int var17 = 0;
         if (entity.isSneaking()) {
             var17 += 4;
         }
 
         GlStateManager.func_179090_x();
-        var16.startDrawingQuads();
+        worldRenderer.startDrawingQuads();
         int var18 = mc.fontRendererObj.getStringWidth(entityName) / 2;
-        var16.func_178960_a(0.0F, 0.0F, 0.0F, 0.25F);
-        var16.addVertex(-var18 - 2, -2 + var17, 0.0D);
-        var16.addVertex(-var18 - 2, 9 + var17, 0.0D);
-        var16.addVertex(var18 + 2, 9 + var17, 0.0D);
-        var16.addVertex(var18 + 2, -2 + var17, 0.0D);
-        var15.draw();
+        worldRenderer.func_178960_a(0.0F, 0.0F, 0.0F, 0.25F);
+        worldRenderer.addVertex(-var18 - 2, -2 + var17, 0.0D);
+        worldRenderer.addVertex(-var18 - 2, 9 + var17, 0.0D);
+        worldRenderer.addVertex(var18 + 2, 9 + var17, 0.0D);
+        worldRenderer.addVertex(var18 + 2, -2 + var17, 0.0D);
+        tessellator.draw();
         GlStateManager.func_179098_w();
         mc.fontRendererObj.drawStringWithShadow(entityName, -var18, var17, getNametagColor(entity));
+        if (armor.getValue() && entity instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) entity;
+            final List<ItemStack> items = new ArrayList<>();
+            if (player.getCurrentEquippedItem() != null) {
+                items.add(player.getCurrentEquippedItem());
+            }
+
+            for (int index = 3; index >= 0; index--) {
+                final ItemStack stack = player.inventory.armorInventory[index];
+                if (stack != null) {
+                    items.add(stack);
+                }
+            }
+
+            final int offset = var18 - (items.size() - 1) * 9 - 9;
+            int xPos = 0;
+            for (final ItemStack stack : items) {
+                final NBTTagList enchants = stack.getEnchantmentTagList();
+                GlStateManager.pushMatrix();
+                RenderHelper.enableStandardItemLighting();
+                mc.getRenderItem().zLevel = -150.0F;
+                mc.getRenderItem().renderItemAboveHead(stack, -var18 + offset + xPos, var17 - 20);
+                mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, -var18 + offset + xPos, var17 - 20);
+                mc.getRenderItem().zLevel = 0.0F;
+                GlStateManager.disableCull();
+                GlStateManager.enableAlpha();
+                GlStateManager.disableBlend();
+                GlStateManager.disableLighting();
+                RenderHelper.disableStandardItemLighting();
+                GlStateManager.enableDepth();
+                GlStateManager.popMatrix();
+
+                GlStateManager.pushMatrix();
+                GlStateManager.disableLighting();
+                GlStateManager.depthMask(false);
+                GlStateManager.disableDepth();
+                GlStateManager.scale(0.50F, 0.50F, 0.50F);
+                if (stack.getItem() == Items.golden_apple && stack.hasEffect()) {
+                    mc.fontRendererObj.drawStringWithShadow("god", (-var18 + offset + xPos) * 2, (var17 - 20) * 2, 0xFFFF0000);
+                } else if (enchants != null) {
+                    int ency = 0;
+                    if (enchants.tagCount() >= 6) {
+                        mc.fontRendererObj.drawStringWithShadow("god", (-var18 + offset + xPos) * 2, (var17 - 20) * 2, 0xFFFF0000);
+                    } else {
+                        for (int index = 0; index < enchants.tagCount(); ++index) {
+                            final short id = enchants.getCompoundTagAt(index).getShort("id");
+                            final short level = enchants.getCompoundTagAt(index).getShort("lvl");
+                            final Enchantment enc = Enchantment.func_180306_c(id);
+
+                            if (enc != null) {
+                                String encName = enc.getTranslatedName(level).substring(0, 1).toLowerCase();
+                                if (level > 10) {
+                                    encName = encName + "10+";
+                                } else {
+                                    encName = encName + level;
+                                }
+                                mc.fontRendererObj.drawStringWithShadow(encName, (-var18 + offset + xPos) * 2, (var17 - 20 + ency) * 2, 0xFFAAAAAA);
+                                ency += 5;
+                            }
+                        }
+                    }
+                }
+                GlStateManager.enableLighting();
+                GlStateManager.popMatrix();
+                xPos += 18;
+            }
+        }
         GlStateManager.enableDepth();
         GlStateManager.depthMask(true);
         GlStateManager.enableLighting();

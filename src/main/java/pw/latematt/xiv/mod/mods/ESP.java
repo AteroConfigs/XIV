@@ -34,7 +34,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     public final Value<Boolean> enderpearls = new Value<>("esp_enderpearls", false);
     public final Value<Boolean> boxes = new Value<>("esp_boxes", true);
     public final Value<Boolean> spines = new Value<>("esp_spines", false);
-    public final Value<Boolean> tracerLines = new Value<>("esp_tracerlines", false);
+    public final Value<Boolean> tracerLines = new Value<>("esp_tracer_lines", false);
     public final Value<Float> lineWidth = new Value<>("esp_line_width", 1.0F);
 
     public ESP() {

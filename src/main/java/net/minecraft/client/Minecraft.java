@@ -191,6 +191,7 @@ import org.lwjgl.util.glu.GLU;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.GuiScreenEvent;
 import pw.latematt.xiv.event.events.KeyPressEvent;
+import pw.latematt.xiv.event.events.LoadWorldEvent;
 
 public class Minecraft implements IThreadListener, IPlayerUsage
 {
@@ -2318,6 +2319,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     public void loadWorld(WorldClient worldClientIn, String loadingMessage)
     {
+        LoadWorldEvent event = new LoadWorldEvent(worldClientIn);
+        XIV.getInstance().getListenerManager().call(event);
         if (worldClientIn == null)
         {
             NetHandlerPlayClient var3 = this.getNetHandler();

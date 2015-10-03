@@ -34,7 +34,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> players = new Value<>("killaura_players", true);
     private final Value<Boolean> mobs = new Value<>("killaura_mobs", false);
     private final Value<Boolean> animals = new Value<>("killaura_animals", false);
-    private final Value<Boolean> invisible = new Value<>("killaura_invisible", true);
+    private final Value<Boolean> invisible = new Value<>("killaura_invisible", false);
     private final Value<Boolean> team = new Value<>("killaura_team", false);
     public final Value<Boolean> silent = new Value<>("killaura_silent", true);
     public final Value<Boolean> autoSword = new Value<>("killaura_auto_sword", true);
@@ -120,9 +120,9 @@ public class KillAura extends Mod implements CommandHandler {
             return false;
         if (mc.thePlayer.getDistanceToEntity(entity) > range.getValue())
             return false;
-        if (!(invisible.getValue()) && entity.isInvisibleToPlayer(mc.thePlayer))
+        if (!invisible.getValue() && entity.isInvisibleToPlayer(mc.thePlayer))
             return false;
-        if (team.getValue() && entity.getTeam() != null && entity.getTeam().isSameTeam(mc.thePlayer.getTeam()))
+        if (!team.getValue() && entity.getTeam() != null && entity.getTeam().isSameTeam(mc.thePlayer.getTeam()))
             return false;
         // 85.136.70.107
         if (entity instanceof EntityPlayer) {
@@ -219,7 +219,7 @@ public class KillAura extends Mod implements CommandHandler {
                     break;
                 case "team":
                     team.setValue(!team.getValue());
-                    ChatLogger.print(String.format("Kill Aura will %s attack your team.", (team.getValue() ? "no longer" : "now")));
+                    ChatLogger.print(String.format("Kill Aura will %s attack your team.", (team.getValue() ? "now" : "no longer")));
                     break;
                 case "silent":
                 case "sil":
