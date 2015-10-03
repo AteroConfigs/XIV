@@ -176,15 +176,13 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         final float distance = mc.thePlayer.getDistanceToEntity(entity);
         float[] color;
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
-            color = new float[]{0.3F, 0.7F, 1.0F};
+            color = new float[]{0.30F, 0.7F, 1.0F};
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
             color = new float[]{1.0F, 0.9F, 0.0F};
-        } else if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).hurtTime > 0) {
-            color = new float[]{1.0F, 0.66F, 0.0F};
-        } else if (distance <= 3.9F) {
-            color = new float[]{0.9F, 0.0F, 0.0F};
+        } else if (distance <= 64.0F) {
+            color = new float[]{0.9F, distance / 64.0F, 0.0F};
         } else {
-            color = new float[]{0.0F, 0.9F, 0.0F};
+            color = new float[]{0.0F, 0.90F, 0.0F};
         }
 
         GlStateManager.color(color[0], color[1], color[2], 1.0F);
