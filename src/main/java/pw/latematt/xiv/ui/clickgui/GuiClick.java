@@ -15,6 +15,7 @@ import pw.latematt.xiv.ui.clickgui.panel.panels.ThemePanel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.ui.clickgui.theme.themes.DefaultTheme;
 import pw.latematt.xiv.ui.clickgui.theme.themes.IXTheme;
+import pw.latematt.xiv.ui.clickgui.theme.themes.NorthStarTheme;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -33,8 +34,9 @@ public class GuiClick extends GuiScreen {
     public GuiClick() {
         panels = new CopyOnWriteArrayList<>();
         themes = new ArrayList<>();
-        themes.add(theme = new DefaultTheme());
-        themes.add(new IXTheme());
+        themes.add(theme = new DefaultTheme(this));
+        themes.add(new IXTheme(this));
+        themes.add(new NorthStarTheme(this));
 
         float x = 4;
         panels.add(new ThemePanel(x, 4, 100, 14));

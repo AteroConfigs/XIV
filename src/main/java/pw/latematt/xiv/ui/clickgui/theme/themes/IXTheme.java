@@ -1,5 +1,8 @@
 package pw.latematt.xiv.ui.clickgui.theme.themes;
 
+import org.lwjgl.input.Mouse;
+import pw.latematt.xiv.ui.clickgui.GuiClick;
+import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.utils.NahrFont;
@@ -14,10 +17,14 @@ public class IXTheme extends ClickTheme {
     protected NahrFont titleFont;
     protected NahrFont modFont;
 
-    public IXTheme() {
-        super("IX", 96, 12);
+    protected GuiClick gui;
+
+    public IXTheme(GuiClick gui) {
+        super("IX", 96, 12, gui);
         this.titleFont = new NahrFont(new Font("Verdana", Font.BOLD, 20), 20);
         this.modFont = new NahrFont("Tahoma", 17);
+
+        this.gui = gui;
     }
 
     @Override
@@ -31,7 +38,10 @@ public class IXTheme extends ClickTheme {
     }
 
     @Override
-    public void renderButton(String name, boolean enabled, float x, float y, float width, float height, boolean overElement) {
+    public void renderButton(String name, boolean enabled, float x, float y, float width, float height, boolean overElement, Element element) {
+        element.setWidth(this.getElementWidth());
+        element.setHeight(this.getElementHeight());
+
         RenderUtils.drawBorderedRect(x, y, x + 12, y + height, enabled ? 0xFFFF9900 : 0xBB313131, enabled ? 0xFFB18716 : 0xBB232323);
         RenderUtils.drawBorderedRect(x, y, x + 96, y + height, enabled ? 0xFFFF9900 : 0xBB212121, 0x00000000);
 

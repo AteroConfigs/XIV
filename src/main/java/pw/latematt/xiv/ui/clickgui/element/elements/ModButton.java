@@ -19,7 +19,7 @@ public class ModButton extends Element {
 
     @Override
     public void drawElement(int mouseX, int mouseY) {
-        GuiClick.getTheme().renderButton(mod.getName(), mod.isEnabled(), getX(), getY(), getWidth(), getHeight(), isOverElement(mouseX, mouseY));
+        GuiClick.getTheme().renderButton(mod.getName(), mod.isEnabled(), getX(), getY(), getWidth(), getHeight(), isOverElement(mouseX, mouseY), this);
     }
 
     @Override

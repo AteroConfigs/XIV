@@ -21,7 +21,7 @@ public class ValueButton extends Element {
 
     @Override
     public void drawElement(int mouseX, int mouseY) {
-        GuiClick.getTheme().renderButton(getValuePrettyName(), getValue().getValue(), getX(), getY(), getWidth(), getHeight(), isOverElement(mouseX, mouseY));
+        GuiClick.getTheme().renderButton(getValuePrettyName(), getValue().getValue(), getX(), getY(), getWidth(), getHeight(), isOverElement(mouseX, mouseY), this);
     }
 
     @Override
