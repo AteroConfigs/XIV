@@ -2,7 +2,6 @@ package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -192,7 +191,7 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                             break;
                         case 4:
                             mc.timer.timerSpeed = 1.0F;
-                            if(currentMode.getValue() == Mode.NORMAL) {
+                            if (currentMode.getValue() == Mode.NORMAL) {
                                 mc.thePlayer.setPosition(mc.thePlayer.posX + mc.thePlayer.motionX / offset, mc.thePlayer.posY, mc.thePlayer.posZ + mc.thePlayer.motionZ / offset);
                             }
                             delay = 0;
