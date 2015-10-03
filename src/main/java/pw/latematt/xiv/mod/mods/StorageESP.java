@@ -66,157 +66,64 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
                 Block border3 = mc.theWorld.getBlockState(new BlockPos(tileChest.getPos().getX() - 1, tileChest.getPos().getY(), tileChest.getPos().getZ())).getBlock();
                 Block border4 = mc.theWorld.getBlockState(new BlockPos(tileChest.getPos().getX() + 1, tileChest.getPos().getY(), tileChest.getPos().getZ())).getBlock();
                 if (chest == Blocks.chest) {
-                    if (boxes.getValue()) {
-                        if (border != Blocks.chest) {
-                            if (border2 == Blocks.chest) {
-                                drawBox(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 2.0D);
-                            } else if (border4 == Blocks.chest) {
-                                drawBox(tileChest.getBlockType(), x, y, z, x + 2.0D, y + 1.0D, z + 1.0D);
-                            } else if (border4 == Blocks.chest) {
-                                drawBox(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
-                            } else if ((border != Blocks.chest) && (border2 != Blocks.chest) && (border3 != Blocks.chest) && (border4 != Blocks.chest)) {
-                                drawBox(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
-                            }
+                    if (border != Blocks.chest) {
+                        if (border2 == Blocks.chest) {
+                            drawESP(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 2.0D, partialTicks);
+                        } else if (border4 == Blocks.chest) {
+                            drawESP(tileChest.getBlockType(), x, y, z, x + 2.0D, y + 1.0D, z + 1.0D, partialTicks);
+                        } else if (border4 == Blocks.chest) {
+                            drawESP(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                        } else if ((border != Blocks.chest) && (border2 != Blocks.chest) && (border3 != Blocks.chest) && (border4 != Blocks.chest)) {
+                            drawESP(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
                         }
                     }
                 } else if ((chest == Blocks.trapped_chest) && (border != Blocks.trapped_chest)) {
-                    if (boxes.getValue()) {
-                        if (border2 == Blocks.trapped_chest) {
-                            drawBox(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 2.0D);
-                        } else if (border4 == Blocks.trapped_chest) {
-                            drawBox(tileChest.getBlockType(), x, y, z, x + 2.0D, y + 1.0D, z + 1.0D);
-                        } else if (border4 == Blocks.trapped_chest) {
-                            drawBox(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
-                        } else if ((border != Blocks.trapped_chest) && (border2 != Blocks.trapped_chest) && (border3 != Blocks.trapped_chest) && (border4 != Blocks.trapped_chest)) {
-                            drawBox(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
-                        }
+                    if (border2 == Blocks.trapped_chest) {
+                        drawESP(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 2.0D, partialTicks);
+                    } else if (border4 == Blocks.trapped_chest) {
+                        drawESP(tileChest.getBlockType(), x, y, z, x + 2.0D, y + 1.0D, z + 1.0D, partialTicks);
+                    } else if (border4 == Blocks.trapped_chest) {
+                        drawESP(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                    } else if ((border != Blocks.trapped_chest) && (border2 != Blocks.trapped_chest) && (border3 != Blocks.trapped_chest) && (border4 != Blocks.trapped_chest)) {
+                        drawESP(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
                     }
-                }
-
-                if (tracerLines.getValue()) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.loadIdentity();
-                    mc.entityRenderer.orientCamera(partialTicks);
-                    drawTracerLines(tileChest.getBlockType(), x, y, z);
-                    GlStateManager.popMatrix();
                 }
             } else if (tileEntity instanceof TileEntityEnderChest && enderchests.getValue()) {
                 TileEntityEnderChest tileEnderChest = (TileEntityEnderChest) tileEntity;
-                if (boxes.getValue()) {
-                    drawBox(tileEnderChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
-                }
 
-                if (tracerLines.getValue()) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.loadIdentity();
-                    mc.entityRenderer.orientCamera(partialTicks);
-                    drawTracerLines(tileEnderChest.getBlockType(), x, y, z);
-                    GlStateManager.popMatrix();
-                }
+                drawESP(tileEnderChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityFurnace && furnaces.getValue()) {
                 TileEntityFurnace tileFurnace = (TileEntityFurnace) tileEntity;
-                if (boxes.getValue()) {
-                    drawBox(tileFurnace.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
-                }
 
-                if (tracerLines.getValue()) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.loadIdentity();
-                    mc.entityRenderer.orientCamera(partialTicks);
-                    drawTracerLines(tileFurnace.getBlockType(), x, y, z);
-                    GlStateManager.popMatrix();
-                }
+                drawESP(tileFurnace.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityBrewingStand && brewingStands.getValue()) {
                 TileEntityBrewingStand tileBrewingStand = (TileEntityBrewingStand) tileEntity;
-                if (boxes.getValue()) {
-                    drawBox(tileBrewingStand.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
-                }
 
-                if (tracerLines.getValue()) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.loadIdentity();
-                    mc.entityRenderer.orientCamera(partialTicks);
-                    drawTracerLines(tileBrewingStand.getBlockType(), x, y, z);
-                    GlStateManager.popMatrix();
-                }
+                drawESP(tileBrewingStand.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityHopper && hoppers.getValue()) {
                 TileEntityHopper tileHopper = (TileEntityHopper) tileEntity;
-                if (boxes.getValue()) {
-                    drawBox(tileHopper.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
-                }
 
-                if (tracerLines.getValue()) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.loadIdentity();
-                    mc.entityRenderer.orientCamera(partialTicks);
-                    drawTracerLines(tileHopper.getBlockType(), x, y, z);
-                    GlStateManager.popMatrix();
-                }
+                drawESP(tileHopper.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityDropper && droppers.getValue()) {
                 TileEntityDropper tileDropper = (TileEntityDropper) tileEntity;
-                if (boxes.getValue()) {
-                    drawBox(tileDropper.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
-                }
 
-                if (tracerLines.getValue()) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.loadIdentity();
-                    mc.entityRenderer.orientCamera(partialTicks);
-                    drawTracerLines(tileDropper.getBlockType(), x, y, z);
-                    GlStateManager.popMatrix();
-                }
+                drawESP(tileDropper.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityDispenser && dispensers.getValue()) {
                 TileEntityDispenser tileDispenser = (TileEntityDispenser) tileEntity;
-                if (boxes.getValue()) {
-                    drawBox(tileDispenser.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
-                }
 
-                if (tracerLines.getValue()) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.loadIdentity();
-                    mc.entityRenderer.orientCamera(partialTicks);
-                    drawTracerLines(tileDispenser.getBlockType(), x, y, z);
-                    GlStateManager.popMatrix();
-                }
+                drawESP(tileDispenser.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityCommandBlock && commandBlocks.getValue()) {
                 TileEntityCommandBlock tileCommandBlock = (TileEntityCommandBlock) tileEntity;
-                if (boxes.getValue()) {
-                    drawBox(tileCommandBlock.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
-                }
 
-                if (tracerLines.getValue()) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.loadIdentity();
-                    mc.entityRenderer.orientCamera(partialTicks);
-                    drawTracerLines(tileCommandBlock.getBlockType(), x, y, z);
-                    GlStateManager.popMatrix();
-                }
+                drawESP(tileCommandBlock.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityMobSpawner && mobSpawners.getValue()) {
                 TileEntityMobSpawner tileMobSpawner = (TileEntityMobSpawner) tileEntity;
-                if (boxes.getValue()) {
-                    drawBox(tileMobSpawner.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
-                }
 
-                if (tracerLines.getValue()) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.loadIdentity();
-                    mc.entityRenderer.orientCamera(partialTicks);
-                    drawTracerLines(tileMobSpawner.getBlockType(), x, y, z);
-                    GlStateManager.popMatrix();
-                }
+                drawESP(tileMobSpawner.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityEnchantmentTable && enchantmentTables.getValue()) {
                 TileEntityEnchantmentTable tileEnchantmentTable = (TileEntityEnchantmentTable) tileEntity;
-                if (boxes.getValue()) {
-                    drawBox(tileEnchantmentTable.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
-                }
 
-                if (tracerLines.getValue()) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.loadIdentity();
-                    mc.entityRenderer.orientCamera(partialTicks);
-                    drawTracerLines(tileEnchantmentTable.getBlockType(), x, y, z);
-                    GlStateManager.popMatrix();
-                }
+                drawESP(tileEnchantmentTable.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             }
         }
         GL11.glLineWidth(2.0F);
@@ -230,42 +137,7 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
         GlStateManager.popMatrix();
     }
 
-    public void drawTracerLines(Block block, double x, double y, double z) {
-        float[] color = new float[]{1.0F, 1.0F, 1.0F};
-        if (block == Blocks.ender_chest) {
-            color = new float[]{0.4F, 0.2F, 1.0F};
-        } else if (block == Blocks.chest) {
-            color = new float[]{1.0F, 1.0F, 0.0F};
-        } else if (block == Blocks.trapped_chest) {
-            color = new float[]{1.0F, 0.6F, 0.0F};
-        } else if (block == Blocks.brewing_stand) {
-            color = new float[]{1.0F, 0.3F, 0.3F};
-        } else if (block == Blocks.furnace) {
-            color = new float[]{0.6F, 0.6F, 0.6F};
-        } else if (block == Blocks.lit_furnace) {
-            color = new float[]{0.2F, 0.6F, 0.6F};
-        } else if ((block == Blocks.dropper) || (block == Blocks.dispenser)) {
-            color = new float[]{0.4F, 0.4F, 0.4F};
-        } else if ((block == Blocks.hopper)) {
-            color = new float[]{0.4F, 0.4F, 0.4F};
-        } else if ((block == Blocks.mob_spawner)) {
-            color = new float[]{1.0F, 0.2F, 0.2F};
-        } else if ((block == Blocks.command_block)) {
-            color = new float[]{0.0F, 0.9F, 0.5F};
-        } else if ((block == Blocks.enchanting_table)) {
-            color = new float[]{0.4F, 0.0F, 1.0F};
-        }
-
-        GlStateManager.color(color[0], color[1], color[2], 1.0F);
-        Tessellator var2 = Tessellator.getInstance();
-        WorldRenderer var3 = var2.getWorldRenderer();
-        var3.startDrawing(2);
-        var3.addVertex(0, mc.thePlayer.getEyeHeight(), 0);
-        var3.addVertex(x, y, z);
-        var2.draw();
-    }
-
-    private void drawBox(Block block, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+    private void drawESP(Block block, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, float partialTicks) {
         float[] color = new float[]{1.0F, 1.0F, 1.0F};
         if (block == Blocks.ender_chest) {
             color = new float[]{0.4F, 0.2F, 1.0F};
@@ -325,8 +197,25 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
 
         AxisAlignedBB bb = AxisAlignedBB.fromBounds(minX, minY, minZ, maxX, maxY, maxZ);
         GlStateManager.color(color[0], color[1], color[2], 0.6F);
-        RenderUtils.drawLines(bb);
-        RenderGlobal.drawOutlinedBoundingBox(bb, -1);
+        if(boxes.getValue()) {
+            RenderUtils.drawLines(bb);
+            RenderGlobal.drawOutlinedBoundingBox(bb, -1);
+        }
+
+        if(tracerLines.getValue()) {
+            GlStateManager.pushMatrix();
+            GlStateManager.loadIdentity();
+            mc.entityRenderer.orientCamera(partialTicks);
+
+            Tessellator var2 = Tessellator.getInstance();
+            WorldRenderer var3 = var2.getWorldRenderer();
+            var3.startDrawing(2);
+            var3.addVertex(0, mc.thePlayer.getEyeHeight(), 0);
+            var3.addVertex(minX + 0.5D, minY + (maxY - minY) - ((maxY - minY) / 2), minZ + 0.5D);
+            var2.draw();
+            
+            GlStateManager.popMatrix();
+        }
         GlStateManager.color(color[0], color[1], color[2], 0.11F);
         RenderUtils.drawFilledBox(bb);
     }
