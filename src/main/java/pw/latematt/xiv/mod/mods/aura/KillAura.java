@@ -1,4 +1,4 @@
-package pw.latematt.xiv.mod.mods;
+package pw.latematt.xiv.mod.mods.aura;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
@@ -16,9 +16,6 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.mod.mods.aura.AuraMode;
-import pw.latematt.xiv.mod.mods.aura.Singular;
-import pw.latematt.xiv.mod.mods.aura.Switch;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.SliderValue;

@@ -6,6 +6,8 @@ import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.mods.*;
+import pw.latematt.xiv.mod.mods.aura.KillAura;
+import pw.latematt.xiv.mod.mods.waypoints.Waypoints;
 import pw.latematt.xiv.utils.ChatLogger;
 
 import java.util.ArrayList;
@@ -45,6 +47,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Step());
         contents.add(new StorageESP());
         contents.add(new Velocity());
+        contents.add(new Waypoints());
         contents.add(new Zoot());
 
         /* always load tabgui after all the mods */

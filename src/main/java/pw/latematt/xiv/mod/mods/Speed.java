@@ -2,7 +2,6 @@ package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -107,9 +106,9 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                 }
                 this.delay++;
             } else if (currentMode.getValue() == Mode.OLD || currentMode.getValue() == Mode.NORMAL) {
-                double speed = currentMode.getValue() == Mode.OLD ? 1.3D : 3.15D;
+                double speed = currentMode.getValue() == Mode.NORMAL ? 1.3D : 3.05D;
                 double slow = 1.425D;
-                double offset = currentMode.getValue() == Mode.OLD ? 0.55D : 4.75D;
+                double offset = currentMode.getValue() == Mode.NORMAL ? 0.55D : 4.9D;
                 boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
                 boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
                 boolean moving = movingForward || strafing;
@@ -192,7 +191,9 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                             break;
                         case 4:
                             mc.timer.timerSpeed = 1.0F;
-                            mc.thePlayer.setPosition(mc.thePlayer.posX + mc.thePlayer.motionX / offset, mc.thePlayer.posY, mc.thePlayer.posZ + mc.thePlayer.motionZ / offset);
+                            if (currentMode.getValue() == Mode.NORMAL) {
+                                mc.thePlayer.setPosition(mc.thePlayer.posX + mc.thePlayer.motionX / offset, mc.thePlayer.posY, mc.thePlayer.posZ + mc.thePlayer.motionZ / offset);
+                            }
                             delay = 0;
                             break;
                     }

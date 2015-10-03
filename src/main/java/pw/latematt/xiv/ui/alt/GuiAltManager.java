@@ -82,6 +82,7 @@ public class GuiAltManager extends GuiScreen {
             } else if (button.id == 1) {
                 thread = new AuthThread(this.slot.getAlt());
                 thread.start();
+                login(slot.getAlt());
             } else if (button.id == 2) {
                 XIV.getInstance().getAltManager().add(username.getText(), password.getText());
                 username.setText("");
@@ -104,8 +105,7 @@ public class GuiAltManager extends GuiScreen {
             } else if (button.id == 5) {
                 slot.getAlt().setKeyword(keyword.getText());
             } else if (button.id == 6) {
-                thread = new AuthThread(new AltAccount(username.getText(), password.getText()));
-                thread.start();
+                login(new AltAccount(username.getText(), password.getText()));
 
                 username.setText("");
                 password.setText("");
@@ -239,5 +239,10 @@ public class GuiAltManager extends GuiScreen {
         super.handleMouseInput();
 
         this.slot.func_178039_p();
+    }
+
+    public void login(AltAccount alt) {
+        thread = new AuthThread(alt);
+        thread.start();
     }
 }

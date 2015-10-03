@@ -1,7 +1,6 @@
 package pw.latematt.xiv.mod;
 
 import net.minecraft.client.Minecraft;
-import pw.latematt.xiv.XIV;
 
 /**
  * @author Matthew
