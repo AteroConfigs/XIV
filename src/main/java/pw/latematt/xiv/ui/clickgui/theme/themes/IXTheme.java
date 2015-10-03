@@ -1,11 +1,8 @@
 package pw.latematt.xiv.ui.clickgui.theme.themes;
 
-<<<<<<< HEAD
 import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
-=======
->>>>>>> 13a264ef1899deee6682f3d1b78af4cf3905ec05
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.utils.NahrFont;
