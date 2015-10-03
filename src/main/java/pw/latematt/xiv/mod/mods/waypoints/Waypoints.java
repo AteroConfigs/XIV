@@ -14,6 +14,7 @@ import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.AddWeatherEvent;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
+import pw.latematt.xiv.event.events.PlayerDeathEvent;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.management.file.XIVFile;
 import pw.latematt.xiv.mod.Mod;
@@ -43,6 +44,7 @@ public class Waypoints extends Mod implements CommandHandler {
     private final Listener render3DListener;
     private final Listener motionUpdateListener;
     private final Listener addWeatherListener;
+    private final Listener playerDeathListener;
 
     public Waypoints() {
         super("Waypoints", ModType.RENDER);
@@ -51,7 +53,6 @@ public class Waypoints extends Mod implements CommandHandler {
         render3DListener = new Listener<Render3DEvent>() {
             @Override
             public void onEventCalled(Render3DEvent event) {
-                RenderUtils.beginGl();
                 for (Waypoint waypoint : points) {
                     String server;
                     if (mc.getCurrentServerData() == null) {
@@ -62,6 +63,7 @@ public class Waypoints extends Mod implements CommandHandler {
                     if (!waypoint.getServer().equals(server))
                         continue;
 
+                    RenderUtils.beginGl();
                     if (boxes.getValue()) {
                         GlStateManager.pushMatrix();
                         drawBoxes(waypoint);
@@ -75,12 +77,12 @@ public class Waypoints extends Mod implements CommandHandler {
                         drawTracerLines(waypoint);
                         GlStateManager.popMatrix();
                     }
+                    RenderUtils.endGl();
 
                     if (nametags.getValue()) {
                         drawNametags(waypoint);
                     }
                 }
-                RenderUtils.endGl();
             }
         };
 
@@ -118,8 +120,17 @@ public class Waypoints extends Mod implements CommandHandler {
                     EntityLightningBolt lightningBolt = (EntityLightningBolt) event.getEntity();
                     Waypoint point = new Waypoint("Lightning", mc.getCurrentServerData().serverIP, lightningBolt.posX, lightningBolt.posY, lightningBolt.posZ, true);
                     points.add(point);
-                    ChatLogger.print(String.format("Waypoint \"%s\" added at %s, %s, %s", point.getName(), point.getX(), point.getY(), point.getZ()));
+                    ChatLogger.print(String.format("Lightning Waypoint added at %s, %s, %s", point.getX(), point.getY(), point.getZ()));
                 }
+            }
+        };
+
+        playerDeathListener = new Listener<PlayerDeathEvent>() {
+            @Override
+            public void onEventCalled(PlayerDeathEvent event) {
+                Waypoint point = new Waypoint("Lightning", mc.getCurrentServerData().serverIP, mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true);
+                points.add(point);
+                ChatLogger.print(String.format("Death Waypoint added at %s, %s, %s", point.getX(), point.getY(), point.getZ()));
             }
         };
 

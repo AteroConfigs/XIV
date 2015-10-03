@@ -13,6 +13,7 @@ import pw.latematt.xiv.value.Value;
  */
 public class RenderUtils {
     private static final Value<Float> LINE_WIDTH = new Value<>("render_line_width", 1.0F);
+    private static final Value<Boolean> ANTIALIASING = new Value<>("render_anti_aliasing", false);
 
     public static void beginGl() {
         GlStateManager.pushMatrix();
@@ -23,11 +24,17 @@ public class RenderUtils {
         GlStateManager.disableDepth();
         GlStateManager.depthMask(false);
         GlStateManager.func_179090_x();
+        if (ANTIALIASING.getValue()) {
+            GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        }
         GL11.glLineWidth(LINE_WIDTH.getValue());
     }
 
     public static void endGl() {
         GL11.glLineWidth(2.0F);
+        if (ANTIALIASING.getValue()) {
+            GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        }
         GlStateManager.func_179098_w();
         GlStateManager.depthMask(true);
         GlStateManager.enableDepth();

@@ -13,6 +13,7 @@ import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
+import pw.latematt.xiv.event.events.PlayerDeathEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
@@ -29,6 +30,7 @@ import java.text.DecimalFormat;
 public class KillAura extends Mod implements CommandHandler {
     private final Listener motionUpdateListener;
     private final Listener sendPacketListener;
+    private final Listener playerDeathListener;
     public final SliderValue<Long> delay = new SliderValue<>("killaura_delay", 125L, 0L, 1000L, new DecimalFormat("0"));
     public final Value<Double> range = new Value<>("killaura_range", 3.9);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
@@ -75,6 +77,13 @@ public class KillAura extends Mod implements CommandHandler {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
                     mode.getValue().onMotionPacket(player);
                 }
+            }
+        };
+
+        playerDeathListener = new Listener<PlayerDeathEvent>() {
+            @Override
+            public void onEventCalled(PlayerDeathEvent event) {
+                toggle();
             }
         };
 
@@ -278,12 +287,14 @@ public class KillAura extends Mod implements CommandHandler {
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(motionUpdateListener);
         XIV.getInstance().getListenerManager().add(sendPacketListener);
+        XIV.getInstance().getListenerManager().add(playerDeathListener);
     }
 
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(motionUpdateListener);
         XIV.getInstance().getListenerManager().remove(sendPacketListener);
+        XIV.getInstance().getListenerManager().remove(playerDeathListener);
         mode.getValue().onDisabled();
     }
 }
