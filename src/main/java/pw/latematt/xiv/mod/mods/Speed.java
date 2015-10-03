@@ -1,5 +1,6 @@
 package pw.latematt.xiv.mod.mods;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import org.lwjgl.input.Keyboard;
@@ -235,12 +236,18 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
+
+        Blocks.ice.slipperiness = 0.6F;
+        Blocks.packed_ice.slipperiness = 0.6F;
     }
 
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
         mc.timer.timerSpeed = 1.0F;
+
+        Blocks.ice.slipperiness = 0.98F;
+        Blocks.packed_ice.slipperiness = 0.98F;
     }
 
     public enum Mode {
