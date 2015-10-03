@@ -1,8 +1,6 @@
 package pw.latematt.xiv.ui.alt;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.*;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 
@@ -12,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class GuiAltManager extends GuiScreen {
+public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
     private GuiScreen parent;
     private AltSlot slot;
 
@@ -88,7 +86,8 @@ public class GuiAltManager extends GuiScreen {
                 username.setText("");
                 password.setText("");
             } else if (button.id == 3) {
-                XIV.getInstance().getAltManager().remove(slot.getAlt().getUsername());
+                GuiYesNo gui = new GuiYesNo(this, "Are you sure you want to remove the alt \"" + this.slot.getAlt().getUsername() + "\"", "If no, click no and return back to the alt manager.", 2);
+                mc.displayGuiScreen(gui);
             } else if (button.id == 4) {
                 Random random = new Random();
 
@@ -244,5 +243,16 @@ public class GuiAltManager extends GuiScreen {
     public void login(AltAccount alt) {
         thread = new AuthThread(alt);
         thread.start();
+    }
+
+    @Override
+    public void confirmClicked(boolean yes, int idk) {
+        if(yes) {
+            XIV.getInstance().getAltManager().remove(slot.getAlt().getUsername());
+
+            mc.displayGuiScreen(this);
+        }else{
+            mc.displayGuiScreen(this);
+        }
     }
 }
