@@ -196,13 +196,16 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
         }
 
         AxisAlignedBB bb = AxisAlignedBB.fromBounds(minX, minY, minZ, maxX, maxY, maxZ);
-        GlStateManager.color(color[0], color[1], color[2], 0.6F);
         if(boxes.getValue()) {
+            GlStateManager.color(color[0], color[1], color[2], 0.6F);
             RenderUtils.drawLines(bb);
             RenderGlobal.drawOutlinedBoundingBox(bb, -1);
+            GlStateManager.color(color[0], color[1], color[2], 0.11F);
+            RenderUtils.drawFilledBox(bb);
         }
 
         if(tracerLines.getValue()) {
+            GlStateManager.color(color[0], color[1], color[2], 1.0F);
             GlStateManager.pushMatrix();
             GlStateManager.loadIdentity();
             mc.entityRenderer.orientCamera(partialTicks);
@@ -216,8 +219,6 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
 
             GlStateManager.popMatrix();
         }
-        GlStateManager.color(color[0], color[1], color[2], 0.11F);
-        RenderUtils.drawFilledBox(bb);
     }
 
     @Override
