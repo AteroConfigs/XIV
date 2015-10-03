@@ -78,7 +78,7 @@ public class Freecam extends Mod {
                 }
 
                 if (event.getPacket() instanceof C03PacketPlayer) {
-                    final C03PacketPlayer packetPlayer = (C03PacketPlayer)event.getPacket();
+                    final C03PacketPlayer packetPlayer = (C03PacketPlayer) event.getPacket();
                     packetPlayer.x = x;
                     packetPlayer.y = y;
                     packetPlayer.z = z;
