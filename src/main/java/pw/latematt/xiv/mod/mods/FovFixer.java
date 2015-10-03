@@ -16,8 +16,9 @@ import pw.latematt.xiv.value.Value;
 /**
  * @author Matthew
  */
-public class FovFixer extends Mod implements Listener<FovModifierEvent>,CommandHandler {
+public class FovFixer extends Mod implements Listener<FovModifierEvent>, CommandHandler {
     private final Value<Boolean> noFov = new Value<>("fov_fixer_no_fov", false);
+
     public FovFixer() {
         super("FovFixer", ModType.RENDER);
 

@@ -15,7 +15,7 @@ import pw.latematt.xiv.value.Value;
 /**
  * @author Matthew
  */
-public class Fullbright extends Mod implements Listener<LoadWorldEvent>,CommandHandler {
+public class Fullbright extends Mod implements Listener<LoadWorldEvent>, CommandHandler {
     private final Value<Float> brightness = new Value<>("fullbright_brightness", 0.4F);
 
     public Fullbright() {

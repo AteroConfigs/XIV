@@ -1,11 +1,13 @@
 package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
+import net.minecraft.util.Vec3;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
+import pw.latematt.xiv.event.events.LiquidVelocityEvent;
 import pw.latematt.xiv.event.events.ReadPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
@@ -15,8 +17,10 @@ import pw.latematt.xiv.value.Value;
 /**
  * @author TehNeon
  */
-public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandHandler {
-    public Value<Float> reducedVelocity = new Value<>("velocity_reduction", 0.0F);
+public class Velocity extends Mod implements CommandHandler {
+    private final Value<Float> reducedVelocity = new Value<>("velocity_reduction", 0.0F);
+    private final Listener readPacketListener;
+    private final Listener liquidVelocityListener;
 
     public Velocity() {
         super("Velocity", ModType.MOVEMENT, Keyboard.KEY_BACKSLASH, 0xFF36454F, true);
@@ -29,24 +33,38 @@ public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandH
                 .arguments("<action>")
                 .handler(this)
                 .build();
-    }
 
-    @Override
-    public void onEventCalled(ReadPacketEvent event) {
-        if (event.getPacket() instanceof S12PacketEntityVelocity) {
-            S12PacketEntityVelocity packet = (S12PacketEntityVelocity) event.getPacket();
+        readPacketListener = new Listener<ReadPacketEvent>() {
+            @Override
+            public void onEventCalled(ReadPacketEvent event) {
+                if (event.getPacket() instanceof S12PacketEntityVelocity) {
+                    S12PacketEntityVelocity packet = (S12PacketEntityVelocity) event.getPacket();
 
-            if (mc.thePlayer.getEntityId() == packet.getEntityID()) {
-                event.setCancelled(true);
-                double velX = packet.getVelocityX() * reducedVelocity.getValue() / 8000;
-                double velY = packet.getVelocityY() * reducedVelocity.getValue() / 8000;
-                double velZ = packet.getVelocityZ() * reducedVelocity.getValue() / 8000;
+                    if (mc.thePlayer.getEntityId() == packet.getEntityID()) {
+                        event.setCancelled(true);
+                        double velX = packet.getVelocityX() * reducedVelocity.getValue() / 8000;
+                        double velY = packet.getVelocityY() * reducedVelocity.getValue() / 8000;
+                        double velZ = packet.getVelocityZ() * reducedVelocity.getValue() / 8000;
 
-                mc.thePlayer.motionX += velX;
-                mc.thePlayer.motionY += velY;
-                mc.thePlayer.motionZ += velZ;
+                        mc.thePlayer.motionX += velX;
+                        mc.thePlayer.motionY += velY;
+                        mc.thePlayer.motionZ += velZ;
+                    }
+                }
             }
-        }
+        };
+
+        liquidVelocityListener = new Listener<LiquidVelocityEvent>() {
+            @Override
+            public void onEventCalled(LiquidVelocityEvent event) {
+                Vec3 velocity = event.getVelocity();
+                double velX = velocity.xCoord * reducedVelocity.getValue() / 8000;
+                double velY = velocity.yCoord * reducedVelocity.getValue() / 8000;
+                double velZ = velocity.zCoord * reducedVelocity.getValue() / 8000;
+
+                event.setVelocity(new Vec3(velX, velY, velZ));
+            }
+        };
     }
 
     @Override
@@ -87,11 +105,13 @@ public class Velocity extends Mod implements Listener<ReadPacketEvent>, CommandH
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
+        XIV.getInstance().getListenerManager().add(readPacketListener);
+        XIV.getInstance().getListenerManager().add(liquidVelocityListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
+        XIV.getInstance().getListenerManager().remove(readPacketListener);
+        XIV.getInstance().getListenerManager().remove(liquidVelocityListener);
     }
 }

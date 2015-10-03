@@ -10,6 +10,7 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
 
@@ -40,7 +41,7 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
             if (currentMode.getValue() == Mode.BYPASS) {
                 Step step = (Step) XIV.getInstance().getModManager().find("step");
                 boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
-                if (!mc.thePlayer.onGround || mc.thePlayer.isInWater() || editingPackets) {
+                if (!mc.thePlayer.onGround || BlockUtils.isInLiquid(mc.thePlayer) || editingPackets || BlockUtils.isOnLiquid(mc.thePlayer)) {
                     mc.timer.timerSpeed = 1.0F;
                     mc.thePlayer.motionX *= 0.98D;
                     mc.thePlayer.motionZ *= 0.98D;

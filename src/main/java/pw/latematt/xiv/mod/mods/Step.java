@@ -9,6 +9,7 @@ import pw.latematt.xiv.event.events.EntityStepEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
 
@@ -54,7 +55,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
             mc.thePlayer.stepHeight = height.getValue();
         }
 
-        editPackets = event.getEntity() == mc.thePlayer && mc.thePlayer.onGround && !mc.thePlayer.isInWater() && mc.thePlayer.fallDistance <= 0.0;
+        editPackets = event.getEntity() == mc.thePlayer && mc.thePlayer.onGround && !BlockUtils.isOnLiquid(mc.thePlayer) && !BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.fallDistance <= 0.0;
         event.setCancelled(!editPackets);
     }
 
