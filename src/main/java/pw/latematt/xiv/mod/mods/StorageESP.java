@@ -28,6 +28,9 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
     public final Value<Boolean> hoppers = new Value<>("storage_esp_hoppers", false);
     public final Value<Boolean> droppers = new Value<>("storage_esp_droppers", false);
     public final Value<Boolean> dispensers = new Value<>("storage_esp_dispensers", false);
+    public final Value<Boolean> commandBlocks = new Value<>("storage_esp_command_blocks", false);
+    public final Value<Boolean> mobSpawners = new Value<>("storage_esp_mob_spawners", false);
+    public final Value<Boolean> enchantmentTables = new Value<>("storage_esp_enchantment_tables", false);
     public final Value<Float> lineWidth = new Value<>("storage_esp_line_width", 1.0F);
 
     public StorageESP() {
@@ -100,6 +103,15 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
             } else if (tileEntity instanceof TileEntityDispenser && dispensers.getValue()) {
                 TileEntityDispenser tileDispenser = (TileEntityDispenser) tileEntity;
                 drawBox(tileDispenser.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
+            } else if (tileEntity instanceof TileEntityCommandBlock && commandBlocks.getValue()) {
+                TileEntityCommandBlock tileCommandBlock = (TileEntityCommandBlock) tileEntity;
+                drawBox(tileCommandBlock.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
+            } else if (tileEntity instanceof TileEntityMobSpawner && commandBlocks.getValue()) {
+                TileEntityMobSpawner tileMobSpawner = (TileEntityMobSpawner) tileEntity;
+                drawBox(tileMobSpawner.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
+            } else if (tileEntity instanceof TileEntityEnchantmentTable && commandBlocks.getValue()) {
+                TileEntityEnchantmentTable tileEnchantmentTable = (TileEntityEnchantmentTable) tileEntity;
+                drawBox(tileEnchantmentTable.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D);
             }
         }
         GL11.glLineWidth(2.0F);
@@ -118,46 +130,57 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
         if (block == Blocks.ender_chest) {
             color = new float[]{0.4F, 0.2F, 1.0F};
 
-            minX += 0.0500000007450581D;
-            minZ += 0.0500000007450581D;
+            minX += 0.05;
+            minZ += 0.05;
 
-            maxX -= 0.1000000014901161D;
-            maxY -= 0.1000000014901161D;
-            maxZ -= 0.1000000014901161D;
+            maxX -= 0.05;
+            maxY -= 0.1;
+            maxZ -= 0.05;
         } else if (block == Blocks.chest) {
             color = new float[]{1.0F, 1.0F, 0.0F};
 
-            minX += 0.0500000007450581D;
-            minZ += 0.0500000007450581D;
+            minX += 0.05;
+            minZ += 0.05;
 
-            maxX -= 0.1000000014901161D;
-            maxY -= 0.1000000014901161D;
-            maxZ -= 0.1000000014901161D;
+            maxX -= 0.05;
+            maxY -= 0.1;
+            maxZ -= 0.05;
         } else if (block == Blocks.trapped_chest) {
             color = new float[]{1.0F, 0.6F, 0.0F};
 
-            minX += 0.0500000007450581D;
-            minZ += 0.0500000007450581D;
+            minX += 0.05;
+            minZ += 0.05;
 
-            maxX -= 0.1000000014901161D;
-            maxY -= 0.1000000014901161D;
-            maxZ -= 0.1000000014901161D;
+            maxX -= 0.05;
+            maxY -= 0.1;
+            maxZ -= 0.05;
         } else if (block == Blocks.brewing_stand) {
             color = new float[]{1.0F, 0.3F, 0.3F};
 
-            minX += 0.0500000007450581D;
-            minZ += 0.0500000007450581D;
+            minX += 0.1;
+            minZ += 0.05;
 
-            maxX -= 0.1000000014901161D;
-            maxY -= 0.1000000014901161D;
-            maxZ -= 0.1000000014901161D;
+            maxX -= 0.05;
+            maxY -= 0.85;
+            maxZ -= 0.05;
         } else if (block == Blocks.furnace) {
             color = new float[]{0.6F, 0.6F, 0.6F};
         } else if (block == Blocks.lit_furnace) {
-            color = new float[]{0.4F, 0.2F, 1.0F};
-        } else if ((block == Blocks.hopper) || (block == Blocks.dispenser)
-                || (block == Blocks.dropper)) {
-            color = new float[]{0.3F, 0.3F, 0.3F};
+            color = new float[]{0.2F, 0.6F, 0.6F};
+        } else if ((block == Blocks.dropper) || (block == Blocks.dispenser)) {
+            color = new float[]{0.4F, 0.4F, 0.4F};
+        } else if ((block == Blocks.hopper)) {
+            color = new float[]{0.4F, 0.4F, 0.4F};
+
+            minY += 0.625;
+        } else if ((block == Blocks.mob_spawner)) {
+            color = new float[]{1.0F, 0.2F, 0.2F};
+        } else if ((block == Blocks.command_block)) {
+            color = new float[]{0.0F, 0.9F, 0.5F};
+        } else if ((block == Blocks.enchanting_table)) {
+            color = new float[]{0.4F, 0.0F, 1.0F};
+
+            maxY -= 0.25;
         }
 
         AxisAlignedBB bb = AxisAlignedBB.fromBounds(minX, minY, minZ, maxX, maxY, maxZ);
