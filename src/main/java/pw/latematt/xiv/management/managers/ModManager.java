@@ -23,7 +23,7 @@ public class ModManager extends ListManager<Mod> {
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         contents.add(new AntiCactus());
-        contents.add(new AutoHead());
+        contents.add(new AutoTool());
         contents.add(new Criticals());
         contents.add(new ESP());
         contents.add(new FastUse());
@@ -79,6 +79,7 @@ public class ModManager extends ListManager<Mod> {
                         if (mod != null) {
                             mod.toggle();
                             ChatLogger.print(String.format("%s has been toggled %s.", mod.getName(), mod.isEnabled() ? "on" : "off"));
+                            XIV.getInstance().getFileManager().saveFile("modconfig");
                         } else {
                             ChatLogger.print(String.format("Invalid module \"%s\"", modName));
                         }
@@ -101,6 +102,7 @@ public class ModManager extends ListManager<Mod> {
                         if (mod != null) {
                             mod.setVisible(!mod.isVisible());
                             ChatLogger.print(String.format("%s will %s be shown in the arraylist.", mod.getName(), mod.isVisible() ? "now" : "no longer"));
+                            XIV.getInstance().getFileManager().saveFile("modconfig");
                         } else {
                             ChatLogger.print(String.format("Invalid module \"%s\"", modName));
                         }
@@ -123,6 +125,7 @@ public class ModManager extends ListManager<Mod> {
                             String newBindName = arguments[2].toUpperCase();
                             int newBind = Keyboard.getKeyIndex(newBindName);
                             mod.setKeybind(newBind);
+                            XIV.getInstance().getFileManager().saveFile("modconfig");
                             ChatLogger.print(String.format("%s is now bound to %s", mod.getName(), Keyboard.getKeyName(newBind)));
                         } else {
                             ChatLogger.print(String.format("Invalid module \"%s\"", modName));

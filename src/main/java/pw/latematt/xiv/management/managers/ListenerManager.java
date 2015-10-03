@@ -31,6 +31,7 @@ public class ListenerManager extends ListManager<Listener> {
 
                     if (mod.getKeybind() == event.getKeyCode()) {
                         mod.toggle();
+                        XIV.getInstance().getFileManager().saveFile("modconfig");
                     }
                 }
             }

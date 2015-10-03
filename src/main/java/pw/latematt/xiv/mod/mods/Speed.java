@@ -21,7 +21,7 @@ import java.util.Objects;
  * @author Matthew
  */
 public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
-    private int delay, ground;
+    private int delay;
     private Value<Mode> currentMode = new Value<>("speed_mode", Mode.BYPASS);
 
     public Speed() {
@@ -42,7 +42,10 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
             if (currentMode.getValue() == Mode.BYPASS) {
                 Step step = (Step) XIV.getInstance().getModManager().find("step");
                 boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
-                if (!mc.thePlayer.onGround || BlockUtils.isInLiquid(mc.thePlayer) || editingPackets || BlockUtils.isOnLiquid(mc.thePlayer)) {
+                boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
+                boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+                boolean moving = movingForward || strafing;
+                if (!mc.thePlayer.onGround || BlockUtils.isInLiquid(mc.thePlayer) || editingPackets || BlockUtils.isOnLiquid(mc.thePlayer) || !moving) {
                     mc.timer.timerSpeed = 1.0F;
                     mc.thePlayer.motionX *= 0.98D;
                     mc.thePlayer.motionZ *= 0.98D;
@@ -103,113 +106,98 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                     }
                 }
                 this.delay++;
-            } else if (currentMode.getValue() == Mode.OLD || currentMode.getValue() == Mode.REDERPZ) {
+            } else if (currentMode.getValue() == Mode.OLD || currentMode.getValue() == Mode.NORMAL) {
                 double speed = currentMode.getValue() == Mode.OLD ? 1.3D : 3.15D;
                 double slow = 1.425D;
                 double offset = currentMode.getValue() == Mode.OLD ? 0.55D : 4.75D;
+                boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
+                boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+                boolean moving = movingForward || strafing;
 
-                if(mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed()) {
-                    boolean iceBelow = false;
-                    boolean shouldSpeed = !mc.thePlayer.isSneaking();
-                    boolean shouldOffset = true;
+                boolean iceBelow = false;
+                boolean liquidBelow = false;
 
-                    if(BlockUtils.isOnIce(mc.thePlayer)) {
-                        iceBelow = true;
-                        shouldSpeed = false;
+                boolean shouldSpeed = !mc.thePlayer.isSneaking();
+                Step step = (Step) XIV.getInstance().getModManager().find("step");
+                boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
+                if (!mc.thePlayer.onGround || editingPackets || !moving) {
+                    mc.timer.timerSpeed = 1.0F;
+                    mc.thePlayer.motionX *= 0.98D;
+                    mc.thePlayer.motionZ *= 0.98D;
+                    shouldSpeed = false;
+                }
+
+                if (BlockUtils.isOnIce(mc.thePlayer)) {
+                    iceBelow = true;
+                    shouldSpeed = false;
+                }
+
+                if (BlockUtils.isOnLiquid(mc.thePlayer) && XIV.getInstance().getModManager().find(Jesus.class).isEnabled()) {
+                    liquidBelow = true;
+                    shouldSpeed = false;
+                }
+
+                if (iceBelow) {
+                    mc.thePlayer.motionX *= 1.51D;
+                    mc.thePlayer.motionZ *= 1.51D;
+                }
+
+                if (liquidBelow) {
+                    if (delay > 2) {
+                        delay = 0;
                     }
 
-                    for(Object o: mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().expand(0.5D, 0.0D, 0.5D))) {
-                        if(o instanceof AxisAlignedBB) {
-                            AxisAlignedBB bb = (AxisAlignedBB) o;
-
-                            if(bb != null) {
-                                shouldOffset = false;
-                            }
-                        }
-                    }
-
-                    boolean liquidBelow = false;
-                    if(BlockUtils.isOnLiquid(mc.thePlayer) && XIV.getInstance().getModManager().find(Jesus.class).isEnabled()) {
-                        liquidBelow = true;
-                        shouldSpeed = false;
-                    }
-
-                    if(mc.thePlayer.onGround && ground < 1) {
-                        ground += 0.2F;
-                    }
-
-                    if(!mc.thePlayer.onGround) {
-                        ground = 0;
-                    }
-
-                    if(iceBelow) {
-                        mc.thePlayer.motionX *= 1.51D;
-                        mc.thePlayer.motionZ *= 1.51D;
-                    }
-
-                    if(ground == 0 && liquidBelow) {
-                        if(delay > 2) {
+                    ++delay;
+                    switch (delay) {
+                        case 1:
+                            mc.thePlayer.motionX *= 1.5D;
+                            mc.thePlayer.motionZ *= 1.5D;
+                            break;
+                        case 2:
+                            mc.thePlayer.motionX /= 1.375D;
+                            mc.thePlayer.motionZ /= 1.375D;
                             delay = 0;
-                        }
+                            break;
+                    }
+                }
 
-                        ++delay;
-                        switch(delay) {
-                            case 1:
-                                mc.thePlayer.motionX *= 1.5D;
-                                mc.thePlayer.motionZ *= 1.5D;
-                                break;
-                            case 2:
-                                mc.thePlayer.motionX /= 1.375D;
-                                mc.thePlayer.motionZ /= 1.375D;
-                                delay = 0;
-                                break;
-                        }
+                if (shouldSpeed) {
+                    if (!mc.thePlayer.isSprinting()) {
+                        offset += 0.8D;
                     }
 
-                    if(ground == 1 && shouldSpeed) {
-                        if(!mc.thePlayer.isSprinting()) {
-                            offset += 0.8D;
-                        }
-
-                        if(mc.thePlayer.moveStrafing != 0.0F) {
-                            speed -= 0.1D;
-                            offset += 0.5D;
-                        }
-
-                        if(mc.thePlayer.isInWater()) {
-                            speed -= 0.1D;
-                        }
-
-                        ++delay;
-                        switch(delay) {
-                            case 1:
-                                mc.timer.timerSpeed = 1.325F;
-                                mc.thePlayer.motionX *= speed;
-                                mc.thePlayer.motionZ *= speed;
-                                break;
-                            case 2:
-                                mc.timer.timerSpeed = 1.0F;
-                                mc.thePlayer.motionX /= slow;
-                                mc.thePlayer.motionZ /= slow;
-                                break;
-                            case 3:
-                                mc.timer.timerSpeed = 1.05F;
-                                break;
-                            case 4:
-                                mc.timer.timerSpeed = 1.0F;
-
-                                if(shouldOffset) {
-                                    mc.thePlayer.setPosition(mc.thePlayer.posX + mc.thePlayer.motionX / offset, mc.thePlayer.posY, mc.thePlayer.posZ + mc.thePlayer.motionZ / offset);
-                                }
-
-                                delay = 0;
-                                break;
-                        }
-
-                    }else if(mc.timer.timerSpeed > 1.0F) {
-                        mc.timer.timerSpeed = 1.0F;
+                    if (mc.thePlayer.moveStrafing != 0.0F) {
+                        speed -= 0.1D;
+                        offset += 0.5D;
                     }
-                }else if(mc.timer.timerSpeed > 1.0F) {
+
+                    if (mc.thePlayer.isInWater()) {
+                        speed -= 0.1D;
+                    }
+
+                    ++delay;
+                    switch (delay) {
+                        case 1:
+                            mc.timer.timerSpeed = 1.325F;
+                            mc.thePlayer.motionX *= speed;
+                            mc.thePlayer.motionZ *= speed;
+                            break;
+                        case 2:
+                            mc.timer.timerSpeed = 1.0F;
+                            mc.thePlayer.motionX /= slow;
+                            mc.thePlayer.motionZ /= slow;
+                            break;
+                        case 3:
+                            mc.timer.timerSpeed = 1.05F;
+                            break;
+                        case 4:
+                            mc.timer.timerSpeed = 1.0F;
+                            mc.thePlayer.setPosition(mc.thePlayer.posX + mc.thePlayer.motionX / offset, mc.thePlayer.posY, mc.thePlayer.posZ + mc.thePlayer.motionZ / offset);
+                            delay = 0;
+                            break;
+                    }
+
+                } else if (mc.timer.timerSpeed > 1.0F) {
                     mc.timer.timerSpeed = 1.0F;
                 }
             }
@@ -221,18 +209,21 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
         String[] arguments = message.split(" ");
         if (arguments.length >= 2) {
             String action = arguments[1];
-            // TODO: Make this actually function!
-            ChatLogger.print("Command not functional yet. :(");
-
             switch (action.toLowerCase()) {
                 case "bypass":
-                case "anodise":
+                    currentMode.setValue(Mode.BYPASS);
+                    ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().name()));
+                    break;
+                case "normal":
+                    currentMode.setValue(Mode.NORMAL);
+                    ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().name()));
                     break;
                 case "old":
-                case "rederpz":
+                    currentMode.setValue(Mode.OLD);
+                    ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().name()));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: bypass, old");
+                    ChatLogger.print("Invalid action, valid: bypass, normal, old");
                     break;
             }
         } else {
@@ -252,6 +243,6 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     }
 
     public enum Mode {
-        BYPASS, OLD, REDERPZ
+        BYPASS, NORMAL, OLD
     }
 }

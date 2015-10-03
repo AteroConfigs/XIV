@@ -13,9 +13,8 @@ import net.minecraft.util.MathHelper;
 public class BlockUtils {
     private static Minecraft mc = Minecraft.getMinecraft();
 
-    public static int getBestTool(int x, int y, int z) {
-        final Block block = mc.theWorld.getBlockState(new BlockPos(x, y, z))
-                .getBlock();
+    public static int getBestTool(BlockPos pos) {
+        final Block block = mc.theWorld.getBlockState(pos).getBlock();
         int slot = 0;
         float dmg = 0.1F;
         for (int index = 36; index < 45; index++) {
