@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * @author Jack
  */
-
+// TODO: fix
 public class AutoHead extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private final Value<Long> delay = new Value<>("autohead_delay", 5000L);
     private final Value<Float> health = new Value<>("autohead_health", 20.0F);
