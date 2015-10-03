@@ -46,12 +46,9 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                 boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
                 boolean moving = movingForward || strafing;
                 if (!mc.thePlayer.onGround || BlockUtils.isInLiquid(mc.thePlayer) || editingPackets || BlockUtils.isOnLiquid(mc.thePlayer) || !moving) {
-                    mc.timer.timerSpeed = 1.0F;
-                    mc.thePlayer.motionX *= 0.98D;
-                    mc.thePlayer.motionZ *= 0.98D;
                     delay = 0;
-                    return;
                 }
+
                 switch (this.delay) {
                     case 1: {
                         mc.timer.timerSpeed = 1.0F;
@@ -132,8 +129,12 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                     shouldSpeed = false;
                 }
 
-                if (BlockUtils.isOnLiquid(mc.thePlayer) && XIV.getInstance().getModManager().find(Jesus.class).isEnabled()) {
+                if (BlockUtils.isOnLiquid(mc.thePlayer)) {
                     liquidBelow = true;
+                    shouldSpeed = false;
+                }
+
+                if (BlockUtils.isInLiquid(mc.thePlayer)) {
                     shouldSpeed = false;
                 }
 
@@ -150,8 +151,8 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                     ++delay;
                     switch (delay) {
                         case 1:
-                            mc.thePlayer.motionX *= 1.5D;
-                            mc.thePlayer.motionZ *= 1.5D;
+                            mc.thePlayer.motionX *= 1.45D;
+                            mc.thePlayer.motionZ *= 1.45D;
                             break;
                         case 2:
                             mc.thePlayer.motionX /= 1.375D;
@@ -212,20 +213,31 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
         if (arguments.length >= 2) {
             String action = arguments[1];
             switch (action.toLowerCase()) {
-                case "bypass":
-                    currentMode.setValue(Mode.BYPASS);
-                    ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().name()));
-                    break;
-                case "normal":
-                    currentMode.setValue(Mode.NORMAL);
-                    ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().name()));
-                    break;
-                case "old":
-                    currentMode.setValue(Mode.OLD);
-                    ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().name()));
+                case "mode":
+                    if (arguments.length >= 3) {
+                        String mode = arguments[2];
+                        switch (mode.toLowerCase()) {
+                            case "bypass":
+                                currentMode.setValue(Mode.BYPASS);
+                                ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().name()));
+                                break;
+                            case "normal":
+                                currentMode.setValue(Mode.NORMAL);
+                                ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().name()));
+                                break;
+                            case "old":
+                                currentMode.setValue(Mode.OLD);
+                                ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().name()));
+                                break;
+                            default:
+                                ChatLogger.print("Invalid mode, valid: bypass, normal, old");
+                                break;
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: speed mode <mode>");
+                    }
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: bypass, normal, old");
                     break;
             }
         } else {
