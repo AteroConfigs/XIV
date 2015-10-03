@@ -19,7 +19,7 @@ import pw.latematt.xiv.value.Value;
 public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandler {
     private final Listener sendPacketListener;
     private boolean editPackets;
-    private Value<Float> height = new Value<>("step_height", 1.25F);
+    private Value<Float> height = new Value<>("step_height", 1.06499999761581421F);
 
     public Step() {
         super("Step", ModType.MOVEMENT);
@@ -55,7 +55,10 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
             mc.thePlayer.stepHeight = height.getValue();
         }
 
-        editPackets = event.getEntity() == mc.thePlayer && mc.thePlayer.onGround && !BlockUtils.isOnLiquid(mc.thePlayer) && !BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.fallDistance <= 0.0;
+        if (event.getEntity() != mc.thePlayer)
+            return;
+
+        editPackets = mc.thePlayer.onGround && !mc.thePlayer.isCollidedHorizontally && !BlockUtils.isInLiquid(mc.thePlayer) && !BlockUtils.isOnLiquid(mc.thePlayer);
         event.setCancelled(!editPackets);
     }
 

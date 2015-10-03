@@ -1,4 +1,4 @@
-package pw.latematt.xiv.mod.mods;
+package pw.latematt.xiv.mod.mods.aura;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;

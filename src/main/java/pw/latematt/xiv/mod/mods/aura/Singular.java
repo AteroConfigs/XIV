@@ -4,7 +4,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
-import pw.latematt.xiv.mod.mods.KillAura;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.Timer;
 

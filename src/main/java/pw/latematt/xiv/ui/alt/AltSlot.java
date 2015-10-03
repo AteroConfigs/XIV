@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
 
 public class AltSlot extends GuiSlot {
-
     private GuiAltManager screen;
     private int selected;
 
@@ -28,6 +27,10 @@ public class AltSlot extends GuiSlot {
     protected void elementClicked(int slot, boolean var2, int var3, int var4) {
         this.selected = slot;
         this.screen.keyword.setText(getAlt().getKeyword());
+
+        if (var2) {
+            screen.login(getAlt());
+        }
     }
 
     @Override

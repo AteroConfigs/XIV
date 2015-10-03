@@ -12,6 +12,7 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.UsingItemSlowdownEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.mod.mods.aura.KillAura;
 
 /**
  * @author Matthew
