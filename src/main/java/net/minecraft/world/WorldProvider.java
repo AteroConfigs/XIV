@@ -37,7 +37,7 @@ public abstract class WorldProvider
     protected boolean hasNoSky;
 
     /** Light to brightness conversion table */
-    protected final float[] lightBrightnessTable = new float[16];
+    public final float[] lightBrightnessTable = new float[16];
 
     /** The id for the dimension (ex. -1: Nether, 0: Overworld, 1: The End) */
     protected int dimensionId;

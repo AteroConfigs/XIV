@@ -3,6 +3,7 @@ package pw.latematt.xiv.mod.mods;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
+import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
@@ -27,7 +28,7 @@ public class Freecam extends Mod {
     private Listener moveListener;
 
     public Freecam() {
-        super("Freecam", ModType.RENDER); // TODO: Keybind?
+        super("Freecam", ModType.RENDER, Keyboard.KEY_V);
 
         this.motionListener = new Listener<MotionUpdateEvent>() {
             @Override
