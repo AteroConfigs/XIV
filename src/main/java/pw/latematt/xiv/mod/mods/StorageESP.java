@@ -211,7 +211,7 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
             WorldRenderer var3 = var2.getWorldRenderer();
             var3.startDrawing(2);
             var3.addVertex(0, mc.thePlayer.getEyeHeight(), 0);
-            var3.addVertex(minX + 0.5D, minY + (maxY - minY) - ((maxY - minY) / 2), minZ + 0.5D);
+            var3.addVertex(maxX - ((maxX - minX) / 2), maxY - ((maxY - minY) / 2), maxZ - ((maxZ - minZ) / 2));
             var2.draw();
             
             GlStateManager.popMatrix();

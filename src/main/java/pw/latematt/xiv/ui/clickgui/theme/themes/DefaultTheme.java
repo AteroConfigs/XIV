@@ -1,6 +1,8 @@
 package pw.latematt.xiv.ui.clickgui.theme.themes;
 
 import org.lwjgl.input.Mouse;
+import pw.latematt.xiv.ui.clickgui.GuiClick;
+import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.utils.NahrFont;
@@ -15,10 +17,14 @@ public class DefaultTheme extends ClickTheme {
     protected NahrFont titleFont;
     protected NahrFont modFont;
 
-    public DefaultTheme() {
-        super("Default", 12, 12);
+    protected GuiClick gui;
+
+    public DefaultTheme(GuiClick gui) {
+        super("Default", 12, 12, gui);
         this.titleFont = new NahrFont(new Font("Tahoma", Font.BOLD, 22), 22);
         this.modFont = new NahrFont("Tahoma", 17);
+
+        this.gui = gui;
     }
 
     @Override
@@ -35,7 +41,10 @@ public class DefaultTheme extends ClickTheme {
     }
 
     @Override
-    public void renderButton(String name, boolean enabled, float x, float y, float width, float height, boolean overElement) {
+    public void renderButton(String name, boolean enabled, float x, float y, float width, float height, boolean overElement, Element element) {
+        element.setWidth(this.getElementWidth());
+        element.setHeight(this.getElementHeight());
+
         int startColor = enabled ? 0xFF344A64 : 0xFF515658;
         int endColor = enabled ? 0xFF263649 : 0xFF44494B;
         int borderColor = overElement && Mouse.isButtonDown(0) ? 0xFF4E78A2 : 0xFF555A61;
