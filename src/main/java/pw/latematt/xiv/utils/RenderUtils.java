@@ -14,6 +14,7 @@ import pw.latematt.xiv.value.Value;
 public class RenderUtils {
     private static final Value<Float> LINE_WIDTH = new Value<>("render_line_width", 1.0F);
     private static final Value<Boolean> ANTIALIASING = new Value<>("render_anti_aliasing", false);
+    private static final Value<Boolean> WORLDBOBBING = new Value<>("render_world_bobbing", false);
 
     public static void beginGl() {
         GlStateManager.pushMatrix();
