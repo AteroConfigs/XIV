@@ -20,7 +20,7 @@ public class NoFall extends Mod implements Listener<SendPacketEvent> {
         if (event.getPacket() instanceof C03PacketPlayer) {
             if (mc.thePlayer.fallDistance >= 3F) {
                 C03PacketPlayer packet = (C03PacketPlayer) event.getPacket();
-                packet.moving = true;
+                packet.onGround = true;
             }
         }
 

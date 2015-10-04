@@ -314,7 +314,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
 
                 if (packetIn.onGround() && packetIn.getPositionY() == -999.0D)
                 {
-                    packetIn.setOnGround(false);
+                    packetIn.setMoving(false);
                 }
 
                 if (packetIn.onGround())

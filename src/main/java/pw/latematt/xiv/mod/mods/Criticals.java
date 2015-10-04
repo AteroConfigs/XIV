@@ -28,12 +28,12 @@ public class Criticals extends Mod implements Listener<SendPacketEvent> {
                 fallDist += mc.thePlayer.fallDistance;
 
             if (fallDist >= 4.0F || isSafe()) {
-                player.moving = true;
+                player.onGround = true;
                 fallDist = 0.0F;
                 mc.thePlayer.fallDistance = 0.0F;
                 setTag(getName());
             } else if (fallDist > 0.0F) {
-                player.moving = false;
+                player.onGround = false;
                 setTag(String.format("%s \2477%s", getName(), "*"));
             } else {
                 setTag(getName());
