@@ -1,7 +1,6 @@
 package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
-import net.minecraft.network.play.server.S14PacketEntity;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.ReadPacketEvent;
