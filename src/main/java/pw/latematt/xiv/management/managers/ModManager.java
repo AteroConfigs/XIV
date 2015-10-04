@@ -39,6 +39,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new KillAura());
         contents.add(new Nametags());
         contents.add(new NoFall());
+        contents.add(new NoRotationSet());
         contents.add(new NoSlowdown());
         contents.add(new Regen());
         contents.add(new Speed());

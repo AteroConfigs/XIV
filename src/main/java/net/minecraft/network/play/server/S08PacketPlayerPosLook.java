@@ -14,8 +14,8 @@ public class S08PacketPlayerPosLook implements Packet
     private double field_148940_a;
     private double field_148938_b;
     private double field_148939_c;
-    private float field_148936_d;
-    private float field_148937_e;
+    public float field_148936_d;
+    public float field_148937_e;
     private Set field_179835_f;
 
 

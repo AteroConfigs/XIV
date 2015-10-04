@@ -247,11 +247,11 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
 
     @Override
     public void confirmClicked(boolean yes, int idk) {
-        if(yes) {
+        if (yes) {
             XIV.getInstance().getAltManager().remove(slot.getAlt().getUsername());
 
             mc.displayGuiScreen(this);
-        }else{
+        } else {
             mc.displayGuiScreen(this);
         }
     }
