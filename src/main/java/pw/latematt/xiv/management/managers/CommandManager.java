@@ -7,6 +7,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.SendPacketEvent;
+import pw.latematt.xiv.event.events.WorldBobbingEvent;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
@@ -14,6 +15,7 @@ import pw.latematt.xiv.value.Value;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Matthew
@@ -100,28 +102,45 @@ public class CommandManager extends ListManager<Command> {
                     }
                 }).build();
         Command.newCommand()
-                .cmd("linewidth")
-                .description("Manages the line width of rendering mods.")
-                .aliases("lwidth", "linew", "lw")
+                .cmd("render")
+                .description("Manages options for render mods.")
+                .arguments("<action>")
+                .aliases("rnd")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
                     if (arguments.length >= 2) {
-                        Float lineWidth = Float.parseFloat(arguments[1]);
-                        Value<Float> value = (Value<Float>) XIV.getInstance().getValueManager().find("render_line_width");
-                        value.setValue(lineWidth);
-                        ChatLogger.print(String.format("Render Line Width set to: %s", value.getValue()));
+                        String action = arguments[1];
+                        switch (action) {
+                            case "linewidth":
+                            case "lw":
+                                if (arguments.length >= 3) {
+                                    Float lineWidth = Float.parseFloat(arguments[2]);
+                                    Value<Float> value = (Value<Float>) XIV.getInstance().getValueManager().find("render_line_width");
+                                    value.setValue(lineWidth);
+                                    ChatLogger.print(String.format("Render Line Width set to: %s", value.getValue()));
+                                } else {
+                                    ChatLogger.print("Invalid arguments, valid: linewidth <float>");
+                                }
+                                break;
+                            case "antialiasing":
+                            case "aa":
+                                Value<Boolean> antiAliasing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_anti_aliasing");
+                                antiAliasing.setValue(!antiAliasing.getValue());
+                                ChatLogger.print(String.format("Render mods will %s use antialiasing.", antiAliasing.getValue() ? "now" : "no longer"));
+                                break;
+                            case "worldbobbing":
+                            case "wb":
+                                Value<Boolean> worldBobbing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_world_bobbing");
+                                worldBobbing.setValue(!worldBobbing.getValue());
+                                ChatLogger.print(String.format("Render mods will %s render world bobbing.", worldBobbing.getValue() ? "now" : "no longer"));
+                                break;
+                            default:
+                                ChatLogger.print("Invalid action, valid: linewidth, antialiasing, worldbobbing");
+                                break;
+                        }
                     } else {
-                        ChatLogger.print("Invalid arguments, valid: linewidth <float>");
+                        ChatLogger.print("Invalid arguments, valid: render <action>");
                     }
-                }).build();
-        Command.newCommand()
-                .cmd("antialiasing")
-                .description("Manages the anti aliasing of rendering mods.")
-                .aliases("aaliasing", "antia", "aa")
-                .handler(message -> {
-                    Value<Boolean> value = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_anti_aliasing");
-                    value.setValue(!value.getValue());
-                    ChatLogger.print(String.format("Render mods will %s use antialiasing.", value.getValue() ? "now" : "no longer"));
                 }).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {
@@ -137,7 +156,7 @@ public class CommandManager extends ListManager<Command> {
                                 return;
                             }
 
-                            if (command.getAliases() != null) {
+                            if (!Objects.isNull(command.getAliases())) {
                                 for (String alias : command.getAliases()) {
                                     if (spaceSplit[0].equalsIgnoreCase(prefix + alias)) {
                                         command.getHandler().onCommandRan(packet.getMessage());
@@ -147,9 +166,18 @@ public class CommandManager extends ListManager<Command> {
                                 }
                             }
                         }
-                        ChatLogger.print("Invalid command \"" + spaceSplit[0] + "\"");
+                        ChatLogger.print(String.format("Invalid command \"%s\"", spaceSplit[0]));
                         event.setCancelled(true);
                     }
+                }
+            }
+        });
+
+        XIV.getInstance().getListenerManager().add(new Listener<WorldBobbingEvent>() {
+            public void onEventCalled(WorldBobbingEvent event) {
+                Value<Boolean> worldBobbing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_world_bobbing");
+                if (!Objects.isNull(worldBobbing)) {
+                    event.setCancelled(!worldBobbing.getValue());
                 }
             }
         });
