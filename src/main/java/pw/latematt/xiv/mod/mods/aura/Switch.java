@@ -85,7 +85,6 @@ public class Switch extends AuraMode {
             if (killAura.silent.getValue()) {
                 packet.yaw = rotations[0];
                 packet.pitch = rotations[1];
-                packet.rotating = true;
             }
             aimed = true;
         }

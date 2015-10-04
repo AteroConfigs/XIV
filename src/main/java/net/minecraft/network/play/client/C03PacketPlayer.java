@@ -13,8 +13,8 @@ public class C03PacketPlayer implements Packet
     public double z;
     public float yaw;
     public float pitch;
-    public boolean moving;
     public boolean onGround;
+    public boolean moving;
     public boolean rotating;
 
 
@@ -22,7 +22,7 @@ public class C03PacketPlayer implements Packet
 
     public C03PacketPlayer(boolean p_i45256_1_)
     {
-        this.moving = p_i45256_1_;
+        this.onGround = p_i45256_1_;
     }
 
     /**
@@ -38,7 +38,7 @@ public class C03PacketPlayer implements Packet
      */
     public void readPacketData(PacketBuffer data) throws IOException
     {
-        this.moving = data.readUnsignedByte() != 0;
+        this.onGround = data.readUnsignedByte() != 0;
     }
 
     /**
@@ -46,7 +46,7 @@ public class C03PacketPlayer implements Packet
      */
     public void writePacketData(PacketBuffer data) throws IOException
     {
-        data.writeByte(this.moving ? 1 : 0);
+        data.writeByte(this.onGround ? 1 : 0);
     }
 
     public double getPositionX()
@@ -76,12 +76,12 @@ public class C03PacketPlayer implements Packet
 
     public boolean func_149465_i()
     {
-        return this.moving;
+        return this.onGround;
     }
 
     public boolean onGround()
     {
-        return this.onGround;
+        return this.moving;
     }
 
     public boolean getRotating()
@@ -89,9 +89,9 @@ public class C03PacketPlayer implements Packet
         return this.rotating;
     }
 
-    public void setOnGround(boolean p_149469_1_)
+    public void setMoving(boolean p_149469_1_)
     {
-        this.onGround = p_149469_1_;
+        this.moving = p_149469_1_;
     }
 
     /**
@@ -108,7 +108,7 @@ public class C03PacketPlayer implements Packet
 
         public C04PacketPlayerPosition()
         {
-            this.onGround = true;
+            this.moving = true;
         }
 
         public C04PacketPlayerPosition(double p_i45942_1_, double p_i45942_3_, double p_i45942_5_, boolean p_i45942_7_)
@@ -116,8 +116,8 @@ public class C03PacketPlayer implements Packet
             this.x = p_i45942_1_;
             this.y = p_i45942_3_;
             this.z = p_i45942_5_;
-            this.moving = p_i45942_7_;
-            this.onGround = true;
+            this.onGround = p_i45942_7_;
+            this.moving = true;
         }
 
         public void readPacketData(PacketBuffer data) throws IOException
@@ -155,7 +155,7 @@ public class C03PacketPlayer implements Packet
         {
             this.yaw = p_i45255_1_;
             this.pitch = p_i45255_2_;
-            this.moving = p_i45255_3_;
+            this.onGround = p_i45255_3_;
             this.rotating = true;
         }
 
@@ -185,7 +185,7 @@ public class C03PacketPlayer implements Packet
 
         public C06PacketPlayerPosLook()
         {
-            this.onGround = true;
+            this.moving = true;
             this.rotating = true;
         }
 
@@ -196,9 +196,9 @@ public class C03PacketPlayer implements Packet
             this.z = p_i45941_5_;
             this.yaw = p_i45941_7_;
             this.pitch = p_i45941_8_;
-            this.moving = p_i45941_9_;
+            this.onGround = p_i45941_9_;
             this.rotating = true;
-            this.onGround = true;
+            this.moving = true;
         }
 
         public void readPacketData(PacketBuffer data) throws IOException
