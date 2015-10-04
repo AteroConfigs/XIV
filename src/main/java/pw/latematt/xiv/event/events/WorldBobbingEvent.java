@@ -7,7 +7,7 @@ import pw.latematt.xiv.event.Event;
  * @author Matthew
  */
 public class WorldBobbingEvent extends Event implements Cancellable {
-    private boolean cancelled;
+    private boolean cancelled = true;
 
     @Override
     public boolean isCancelled() {
