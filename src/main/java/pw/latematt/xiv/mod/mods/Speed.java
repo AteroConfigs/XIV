@@ -151,8 +151,8 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                     ++delay;
                     switch (delay) {
                         case 1:
-                            mc.thePlayer.motionX *= 1.45D;
-                            mc.thePlayer.motionZ *= 1.45D;
+                            mc.thePlayer.motionX *= 1.4D;
+                            mc.thePlayer.motionZ *= 1.4D;
                             break;
                         case 2:
                             mc.thePlayer.motionX /= 1.375D;
