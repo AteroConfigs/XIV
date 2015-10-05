@@ -147,28 +147,7 @@ public class CommandManager extends ListManager<Command> {
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C01PacketChatMessage) {
                     C01PacketChatMessage packet = (C01PacketChatMessage) event.getPacket();
-                    String[] spaceSplit = packet.getMessage().split(" ");
-                    if (spaceSplit[0].startsWith(prefix)) {
-                        for (Command command : contents) {
-                            if (spaceSplit[0].equalsIgnoreCase(prefix + command.getCmd())) {
-                                command.getHandler().onCommandRan(packet.getMessage());
-                                event.setCancelled(true);
-                                return;
-                            }
-
-                            if (!Objects.isNull(command.getAliases())) {
-                                for (String alias : command.getAliases()) {
-                                    if (spaceSplit[0].equalsIgnoreCase(prefix + alias)) {
-                                        command.getHandler().onCommandRan(packet.getMessage());
-                                        event.setCancelled(true);
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                        ChatLogger.print(String.format("Invalid command \"%s\"", spaceSplit[0]));
-                        event.setCancelled(true);
-                    }
+                    event.setCancelled(parseCommand(packet.getMessage()));
                 }
             }
         });
@@ -182,6 +161,30 @@ public class CommandManager extends ListManager<Command> {
             }
         });
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
+    }
+
+    public boolean parseCommand(String message) {
+        String[] spaceSplit = message.split(" ");
+        if (spaceSplit[0].startsWith(prefix)) {
+            for (Command command : contents) {
+                if (spaceSplit[0].equalsIgnoreCase(prefix + command.getCmd())) {
+                    command.getHandler().onCommandRan(message);
+                    return true;
+                }
+
+                if (!Objects.isNull(command.getAliases())) {
+                    for (String alias : command.getAliases()) {
+                        if (spaceSplit[0].equalsIgnoreCase(prefix + alias)) {
+                            command.getHandler().onCommandRan(message);
+                            return true;
+                        }
+                    }
+                }
+            }
+            ChatLogger.print(String.format("Invalid command \"%s\"", spaceSplit[0]));
+            return true;
+        }
+        return false;
     }
 
     public Command find(Class clazz) {

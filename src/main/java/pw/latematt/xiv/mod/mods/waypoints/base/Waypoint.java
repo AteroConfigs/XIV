@@ -1,4 +1,4 @@
-package pw.latematt.xiv.mod.mods.waypoints;
+package pw.latematt.xiv.mod.mods.waypoints.base;
 
 /**
  * @author Matthew

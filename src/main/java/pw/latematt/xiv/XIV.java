@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pw.latematt.xiv.config.ConfigManager;
 import pw.latematt.xiv.management.managers.*;
 
 /**
@@ -11,20 +12,21 @@ import pw.latematt.xiv.management.managers.*;
  */
 public class XIV {
     /* static instance of main class */
-    private static XIV instance = new XIV();
+    private static final XIV instance = new XIV();
 
     public static XIV getInstance() {
         return instance;
     }
 
     /* Management */
-    private ModManager modManager = new ModManager();
-    private AltManager altManager = new AltManager();
-    private CommandManager commandManager = new CommandManager();
-    private ListenerManager listenerManager = new ListenerManager();
-    private FileManager fileManager = new FileManager();
-    private FriendManager friendManager = new FriendManager();
-    private ValueManager valueManager = new ValueManager();
+    private final ModManager modManager = new ModManager();
+    private final AltManager altManager = new AltManager();
+    private final CommandManager commandManager = new CommandManager();
+    private final ListenerManager listenerManager = new ListenerManager();
+    private final FileManager fileManager = new FileManager();
+    private final FriendManager friendManager = new FriendManager();
+    private final ValueManager valueManager = new ValueManager();
+    private final ConfigManager configManager = new ConfigManager();
 
     public ModManager getModManager() {
         return modManager;
@@ -54,8 +56,12 @@ public class XIV {
         return valueManager;
     }
 
+    public ConfigManager getConfigManager() {
+        return configManager;
+    }
+
     /* logger */
-    private Logger logger = LogManager.getLogger("XIV");
+    private final Logger logger = LogManager.getLogger("XIV");
 
     public Logger getLogger() {
         return logger;
@@ -73,6 +79,7 @@ public class XIV {
         modManager.setup();
         friendManager.setup();
         fileManager.setup();
+        configManager.setup();
 
         logger.info("==  End XIV setup  == ");
     }

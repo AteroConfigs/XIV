@@ -1,60 +1,47 @@
-package pw.latematt.xiv.mod.mods.aura;
+package pw.latematt.xiv.mod.mods.aura.mode.modes;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
+import pw.latematt.xiv.mod.mods.aura.KillAura;
+import pw.latematt.xiv.mod.mods.aura.mode.AuraMode;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.Timer;
-
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Matthew
  */
-public class Switch extends AuraMode {
-    private KillAura killAura;
-    private final List<EntityLivingBase> entities;
+public class Singular extends AuraMode {
     public EntityLivingBase entityToAttack;
-    private boolean aimed;
     private Timer timer = new Timer();
 
-    public Switch(KillAura killAura) {
-        super("Switch");
-        this.killAura = killAura;
-        entities = new CopyOnWriteArrayList<>();
+    public Singular(KillAura killAura) {
+        super("Singular", killAura);
     }
 
     @Override
     public void onPreMotionUpdate(MotionUpdateEvent event) {
-        if (entities.isEmpty()) {
+        if (entityToAttack == null) {
+            final double[] maxDistance = {killAura.range.getValue()};
             mc.theWorld.loadedEntityList.stream().filter(entity -> entity instanceof EntityLivingBase).forEach(entity -> {
                 EntityLivingBase living = (EntityLivingBase) entity;
-                if (killAura.isValidEntity(living)) {
-                    entities.add(living);
+                double distance = mc.thePlayer.getDistanceToEntity(living);
+                if (distance < maxDistance[0] && killAura.isValidEntity(living)) {
+                    maxDistance[0] = distance;
+                    entityToAttack = living;
                 }
             });
         }
 
-        if (!entities.isEmpty()) {
+        if (killAura.isValidEntity(entityToAttack)) {
             if (killAura.autoBlock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
                 ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
                 sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
                 mc.playerController.updateController();
             }
 
-            EntityLivingBase firstInArray = entities.get(0);
-            if (killAura.isValidEntity(firstInArray)) {
-                entityToAttack = firstInArray;
-            } else {
-                entities.remove(firstInArray);
-            }
-        }
-
-        if (entityToAttack != null) {
             float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
-
             if (killAura.silent.getValue()) {
                 event.setYaw(rotations[0]);
                 event.setPitch(rotations[1]);
@@ -62,17 +49,16 @@ public class Switch extends AuraMode {
                 mc.thePlayer.rotationYaw = rotations[0];
                 mc.thePlayer.rotationPitch = rotations[1];
             }
+        } else {
+            entityToAttack = null;
         }
     }
 
     @Override
     public void onPostMotionUpdate(MotionUpdateEvent event) {
-        if (entityToAttack != null && aimed) {
+        if (entityToAttack != null) {
             if (timer.hasReached(killAura.delay.getValue())) {
                 killAura.attack(entityToAttack);
-                aimed = false;
-                entities.remove(entityToAttack);
-                entityToAttack = null;
                 timer.reset();
             }
         }
@@ -86,19 +72,16 @@ public class Switch extends AuraMode {
                 packet.yaw = rotations[0];
                 packet.pitch = rotations[1];
             }
-            aimed = true;
         }
     }
 
     @Override
     public boolean isAttacking() {
-        return entityToAttack != null && aimed;
+        return entityToAttack != null;
     }
 
     @Override
     public void onDisabled() {
-        entities.clear();
         entityToAttack = null;
-        aimed = false;
     }
 }
