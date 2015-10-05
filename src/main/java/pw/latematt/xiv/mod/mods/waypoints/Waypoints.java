@@ -19,6 +19,7 @@ import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.management.file.XIVFile;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.mod.mods.waypoints.base.Waypoint;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
@@ -36,7 +37,8 @@ import java.util.stream.Collectors;
 public class Waypoints extends Mod implements CommandHandler {
     private final float[] color = new float[]{0.68F, 0.45F, 0.76F};
     private final List<Waypoint> points;
-    private final Value<Boolean> lightningEsp = new Value<>("waypoints_lightning_esp", false);
+    private final Value<Boolean> lightningPoints = new Value<>("waypoints_lightning_points", false);
+    private final Value<Boolean> deathPoints = new Value<>("waypoints_death_points", false);
     private final Value<Boolean> boxes = new Value<>("waypoints_boxes", true);
     private final Value<Boolean> tracerLines = new Value<>("waypoints_tracer_lines", true);
     private final Value<Boolean> nametags = new Value<>("waypoints_nametags", true);
@@ -114,7 +116,7 @@ public class Waypoints extends Mod implements CommandHandler {
         addWeatherListener = new Listener<AddWeatherEvent>() {
             @Override
             public void onEventCalled(AddWeatherEvent event) {
-                if (!lightningEsp.getValue())
+                if (!lightningPoints.getValue())
                     return;
                 if (event.getEntity() instanceof EntityLightningBolt) {
                     EntityLightningBolt lightningBolt = (EntityLightningBolt) event.getEntity();
@@ -128,12 +130,15 @@ public class Waypoints extends Mod implements CommandHandler {
         playerDeathListener = new Listener<PlayerDeathEvent>() {
             @Override
             public void onEventCalled(PlayerDeathEvent event) {
-                Waypoint point = new Waypoint("Lightning", mc.getCurrentServerData().serverIP, mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true);
+                if (!deathPoints.getValue())
+                    return;
+                Waypoint point = new Waypoint("Death", mc.getCurrentServerData().serverIP, mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true);
                 points.add(point);
                 ChatLogger.print(String.format("Death Waypoint added at %s, %s, %s", point.getX(), point.getY(), point.getZ()));
             }
         };
 
+        setEnabled(true);
         waypointFile = new XIVFile("waypoints", "json") {
             @Override
             public void load() throws IOException {
@@ -353,6 +358,7 @@ public class Waypoints extends Mod implements CommandHandler {
         XIV.getInstance().getListenerManager().add(render3DListener);
         XIV.getInstance().getListenerManager().add(motionUpdateListener);
         XIV.getInstance().getListenerManager().add(addWeatherListener);
+        XIV.getInstance().getListenerManager().add(playerDeathListener);
     }
 
     @Override
@@ -360,5 +366,6 @@ public class Waypoints extends Mod implements CommandHandler {
         XIV.getInstance().getListenerManager().remove(render3DListener);
         XIV.getInstance().getListenerManager().remove(motionUpdateListener);
         XIV.getInstance().getListenerManager().remove(addWeatherListener);
+        XIV.getInstance().getListenerManager().remove(playerDeathListener);
     }
 }

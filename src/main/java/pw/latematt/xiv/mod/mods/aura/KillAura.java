@@ -17,6 +17,9 @@ import pw.latematt.xiv.event.events.PlayerDeathEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.mod.mods.aura.mode.AuraMode;
+import pw.latematt.xiv.mod.mods.aura.mode.modes.Singular;
+import pw.latematt.xiv.mod.mods.aura.mode.modes.Switch;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.SliderValue;
@@ -58,10 +61,6 @@ public class KillAura extends Mod implements CommandHandler {
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                if (toggleDeath.getValue() && mc.thePlayer.isDead) {
-                    toggle();
-                }
-
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
                     mode.getValue().onPreMotionUpdate(event);
                 } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
@@ -83,7 +82,9 @@ public class KillAura extends Mod implements CommandHandler {
         playerDeathListener = new Listener<PlayerDeathEvent>() {
             @Override
             public void onEventCalled(PlayerDeathEvent event) {
-                toggle();
+                if (toggleDeath.getValue()) {
+                    toggle();
+                }
             }
         };
 

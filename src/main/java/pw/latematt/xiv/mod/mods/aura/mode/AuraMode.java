@@ -1,18 +1,21 @@
-package pw.latematt.xiv.mod.mods.aura;
+package pw.latematt.xiv.mod.mods.aura.mode;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
+import pw.latematt.xiv.mod.mods.aura.KillAura;
 
 /**
  * @author Matthew
  */
 public abstract class AuraMode {
     private String name;
+    protected final KillAura killAura;
     protected final Minecraft mc = Minecraft.getMinecraft();
 
-    public AuraMode(String name) {
+    public AuraMode(String name, KillAura killAura) {
         this.name = name;
+        this.killAura = killAura;
     }
 
     public String getName() {

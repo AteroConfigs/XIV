@@ -22,9 +22,9 @@ public class FileManager extends ListManager<XIVFile> {
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + ".");
         if ((!XIVFile.XIV_DIRECTORY.exists()) && XIVFile.XIV_DIRECTORY.mkdirs()) {
-            XIV.getInstance().getLogger().info("Successfully created XIV Directory at \"" + XIVFile.XIV_DIRECTORY.getAbsolutePath() + "\".");
+            XIV.getInstance().getLogger().info("Successfully created XIV directory at \"" + XIVFile.XIV_DIRECTORY.getAbsolutePath() + "\".");
         } else if (!XIVFile.XIV_DIRECTORY.exists()) {
-            XIV.getInstance().getLogger().info("Failed to create XIV Directory.");
+            XIV.getInstance().getLogger().info("Failed to create XIV directory.");
         }
 
         contents.add(new AltConfig());

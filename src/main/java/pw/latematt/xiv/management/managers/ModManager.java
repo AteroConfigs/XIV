@@ -24,9 +24,10 @@ public class ModManager extends ListManager<Mod> {
     @Override
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
-        contents.add(new AntiCactus());
+        contents.add(new BlockBBFixer());
         contents.add(new AntiDrown());
-//        contents.add(new AutoHead());
+        //contents.add(new AutoHead());
+        contents.add(new AutoRespawn());
         contents.add(new AutoTool());
         contents.add(new Criticals());
         contents.add(new ESP());
@@ -36,6 +37,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Freecam());
         contents.add(new Fullbright());
         contents.add(new HUD());
+        //contents.add(new Instinct());
         contents.add(new InventoryWalk());
         contents.add(new Jesus());
         contents.add(new KillAura());
@@ -84,8 +86,8 @@ public class ModManager extends ListManager<Mod> {
 
                         if (mod != null) {
                             mod.toggle();
-                            ChatLogger.print(String.format("%s has been toggled %s.", mod.getName(), mod.isEnabled() ? "on" : "off"));
                             XIV.getInstance().getFileManager().saveFile("modconfig");
+                            ChatLogger.print(String.format("%s has been toggled %s.", mod.getName(), mod.isEnabled() ? "on" : "off"));
                         } else {
                             ChatLogger.print(String.format("Invalid module \"%s\"", modName));
                         }
@@ -107,8 +109,8 @@ public class ModManager extends ListManager<Mod> {
 
                         if (mod != null) {
                             mod.setVisible(!mod.isVisible());
-                            ChatLogger.print(String.format("%s will %s be shown in the arraylist.", mod.getName(), mod.isVisible() ? "now" : "no longer"));
                             XIV.getInstance().getFileManager().saveFile("modconfig");
+                            ChatLogger.print(String.format("%s will %s be shown in the arraylist.", mod.getName(), mod.isVisible() ? "now" : "no longer"));
                         } else {
                             ChatLogger.print(String.format("Invalid module \"%s\"", modName));
                         }
