@@ -75,9 +75,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 }
 
                 if (spines.getValue()) {
-                    GlStateManager.pushMatrix();
                     drawSpines(entity, x, y, z);
-                    GlStateManager.popMatrix();
                 }
 
                 if (tracerLines.getValue()) {
