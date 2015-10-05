@@ -24,9 +24,6 @@ import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * @author Matthew
  * @author TehNeon
@@ -53,41 +50,38 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     }
 
     public void onEventCalled(Render3DEvent event) {
-        List<EntityPlayer> withoutDuplicates = mc.theWorld.playerEntities.stream().distinct().collect(Collectors.toList());
-        if (!withoutDuplicates.isEmpty()) {
-            RenderUtils.beginGl();
-            for (Entity entity : withoutDuplicates) {
-                if (!isValidEntity(entity))
-                    continue;
+        RenderUtils.beginGl();
+        for (Entity entity : mc.theWorld.playerEntities) {
+            if (!isValidEntity(entity))
+                continue;
 
-                float partialTicks = event.getPartialTicks();
-                double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks - mc.getRenderManager().renderPosX;
-                double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks - mc.getRenderManager().renderPosY;
-                double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks - mc.getRenderManager().renderPosZ;
+            float partialTicks = event.getPartialTicks();
+            double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks - mc.getRenderManager().renderPosX;
+            double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks - mc.getRenderManager().renderPosY;
+            double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks - mc.getRenderManager().renderPosZ;
 
-                if (boxes.getValue()) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.translate(x, y, z);
-                    GlStateManager.rotate(-entity.rotationYaw, 0.0F, entity.height, 0.0F);
-                    GlStateManager.translate(-x, -y, -z);
-                    drawBoxes(entity, x, y, z);
-                    GlStateManager.popMatrix();
-                }
-
-                if (spines.getValue()) {
-                    drawSpines(entity, x, y, z);
-                }
-
-                if (tracerLines.getValue()) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.loadIdentity();
-                    mc.entityRenderer.orientCamera(partialTicks);
-                    drawTracerLines(entity, x, y, z);
-                    GlStateManager.popMatrix();
-                }
+            if (boxes.getValue()) {
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(x, y, z);
+                GlStateManager.rotate(-entity.rotationYaw, 0.0F, entity.height, 0.0F);
+                GlStateManager.translate(-x, -y, -z);
+                drawBoxes(entity, x, y, z);
+                GlStateManager.popMatrix();
             }
-            RenderUtils.endGl();
+
+            if (spines.getValue()) {
+                drawSpines(entity, x, y, z);
+            }
+
+            if (tracerLines.getValue()) {
+                GlStateManager.pushMatrix();
+                GlStateManager.loadIdentity();
+                mc.entityRenderer.orientCamera(partialTicks);
+                drawTracerLines(entity, x, y, z);
+                GlStateManager.popMatrix();
+            }
         }
+        RenderUtils.endGl();
     }
 
     private boolean isValidEntity(Entity entity) {
