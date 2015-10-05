@@ -53,8 +53,7 @@ public class Nametags extends Mod implements CommandHandler {
         render3DListener = new Listener<Render3DEvent>() {
             @Override
             public void onEventCalled(Render3DEvent event) {
-                List<EntityPlayer> withoutDuplicates = mc.theWorld.playerEntities.stream().distinct().collect(Collectors.toList());
-                for (EntityPlayer player : withoutDuplicates) {
+                for (EntityPlayer player : mc.theWorld.playerEntities) {
                     if (!isValidEntity(player))
                         continue;
 
