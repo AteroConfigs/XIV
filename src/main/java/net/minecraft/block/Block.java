@@ -478,7 +478,7 @@ public class Block
      */
     public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List list, Entity collidingEntity)
     {
-        BlockAddBBEvent event = new BlockAddBBEvent(worldIn.getBlockState(pos).getBlock(), pos, this.getCollisionBoundingBox(worldIn, pos, state));
+        BlockAddBBEvent event = new BlockAddBBEvent(worldIn.getBlockState(pos).getBlock(), pos, this.getCollisionBoundingBox(worldIn, pos, state), collidingEntity);
         XIV.getInstance().getListenerManager().call(event);
         AxisAlignedBB var7 = event.getAxisAlignedBB();
 

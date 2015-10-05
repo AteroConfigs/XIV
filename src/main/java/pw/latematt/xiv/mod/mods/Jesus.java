@@ -34,7 +34,7 @@ public class Jesus extends Mod {
                     if (mc.thePlayer == null)
                         return;
                     BlockPos pos = event.getPos();
-                    if (event.getBlock() instanceof BlockLiquid && !BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.fallDistance < 3.0F && !mc.thePlayer.isSneaking()) {
+                    if (event.getBlock() instanceof BlockLiquid && !BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.fallDistance < 3.0F && !mc.thePlayer.isSneaking() && event.getEntity() == mc.thePlayer) {
                         event.setAxisAlignedBB(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
                     }
                 }
