@@ -9,7 +9,6 @@ import pw.latematt.xiv.mod.mods.aura.mode.AuraMode;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.Timer;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;

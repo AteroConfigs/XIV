@@ -17,9 +17,9 @@ import pw.latematt.xiv.value.Value;
  * @author Matthew
  */
 public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandler {
+    private final Value<Float> height = new Value<>("step_height", 1.0646F);
     private final Listener sendPacketListener;
     private boolean editPackets;
-    private Value<Float> height = new Value<>("step_height", 1.0646F);
 
     public Step() {
         super("Step", ModType.MOVEMENT);
