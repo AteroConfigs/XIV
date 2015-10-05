@@ -1,5 +1,6 @@
 package pw.latematt.xiv.mod.mods;
 
+import com.sun.javafx.geom.Vec3d;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -44,9 +45,10 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
         for (Object o : mc.theWorld.loadedTileEntityList) {
             TileEntity tileEntity = (TileEntity) o;
             float partialTicks = event.getPartialTicks();
-            final double x = tileEntity.getPos().getX() - mc.getRenderManager().renderPosX;
-            final double y = tileEntity.getPos().getY() - mc.getRenderManager().renderPosY;
-            final double z = tileEntity.getPos().getZ() - mc.getRenderManager().renderPosZ;
+            Vec3d vec3d = new Vec3d(tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ());
+            final double x = vec3d.x - mc.getRenderManager().renderPosX;
+            final double y = vec3d.y - mc.getRenderManager().renderPosY;
+            final double z = vec3d.z - mc.getRenderManager().renderPosZ;
 
             if (tileEntity instanceof TileEntityChest && chests.getValue()) {
                 TileEntityChest tileChest = (TileEntityChest) tileEntity;
@@ -59,68 +61,59 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
                 if (chest == Blocks.chest) {
                     if (border != Blocks.chest) {
                         if (border2 == Blocks.chest) {
-                            drawESP(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 2.0D, partialTicks);
+                            draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 2.0D, partialTicks);
                         } else if (border4 == Blocks.chest) {
-                            drawESP(tileChest.getBlockType(), x, y, z, x + 2.0D, y + 1.0D, z + 1.0D, partialTicks);
+                            draw(tileChest.getBlockType(), x, y, z, x + 2.0D, y + 1.0D, z + 1.0D, partialTicks);
                         } else if (border4 == Blocks.chest) {
-                            drawESP(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                            draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
                         } else if ((border != Blocks.chest) && (border2 != Blocks.chest) && (border3 != Blocks.chest) && (border4 != Blocks.chest)) {
-                            drawESP(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                            draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
                         }
                     }
                 } else if ((chest == Blocks.trapped_chest) && (border != Blocks.trapped_chest)) {
                     if (border2 == Blocks.trapped_chest) {
-                        drawESP(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 2.0D, partialTicks);
+                        draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 2.0D, partialTicks);
                     } else if (border4 == Blocks.trapped_chest) {
-                        drawESP(tileChest.getBlockType(), x, y, z, x + 2.0D, y + 1.0D, z + 1.0D, partialTicks);
+                        draw(tileChest.getBlockType(), x, y, z, x + 2.0D, y + 1.0D, z + 1.0D, partialTicks);
                     } else if (border4 == Blocks.trapped_chest) {
-                        drawESP(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                        draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
                     } else if ((border != Blocks.trapped_chest) && (border2 != Blocks.trapped_chest) && (border3 != Blocks.trapped_chest) && (border4 != Blocks.trapped_chest)) {
-                        drawESP(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                        draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
                     }
                 }
             } else if (tileEntity instanceof TileEntityEnderChest && enderchests.getValue()) {
                 TileEntityEnderChest tileEnderChest = (TileEntityEnderChest) tileEntity;
-
-                drawESP(tileEnderChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                draw(tileEnderChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityFurnace && furnaces.getValue()) {
                 TileEntityFurnace tileFurnace = (TileEntityFurnace) tileEntity;
-
-                drawESP(tileFurnace.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                draw(tileFurnace.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityBrewingStand && brewingStands.getValue()) {
                 TileEntityBrewingStand tileBrewingStand = (TileEntityBrewingStand) tileEntity;
-
-                drawESP(tileBrewingStand.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                draw(tileBrewingStand.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityHopper && hoppers.getValue()) {
                 TileEntityHopper tileHopper = (TileEntityHopper) tileEntity;
-
-                drawESP(tileHopper.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                draw(tileHopper.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityDropper && droppers.getValue()) {
                 TileEntityDropper tileDropper = (TileEntityDropper) tileEntity;
-
-                drawESP(tileDropper.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                draw(tileDropper.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityDispenser && dispensers.getValue()) {
                 TileEntityDispenser tileDispenser = (TileEntityDispenser) tileEntity;
-
-                drawESP(tileDispenser.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                draw(tileDispenser.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityCommandBlock && commandBlocks.getValue()) {
                 TileEntityCommandBlock tileCommandBlock = (TileEntityCommandBlock) tileEntity;
-
-                drawESP(tileCommandBlock.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                draw(tileCommandBlock.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityMobSpawner && mobSpawners.getValue()) {
                 TileEntityMobSpawner tileMobSpawner = (TileEntityMobSpawner) tileEntity;
-
-                drawESP(tileMobSpawner.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                draw(tileMobSpawner.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityEnchantmentTable && enchantmentTables.getValue()) {
                 TileEntityEnchantmentTable tileEnchantmentTable = (TileEntityEnchantmentTable) tileEntity;
-
-                drawESP(tileEnchantmentTable.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+                draw(tileEnchantmentTable.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             }
         }
         RenderUtils.endGl();
     }
 
-    private void drawESP(Block block, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, float partialTicks) {
+    private void draw(Block block, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, float partialTicks) {
         float[] color = new float[]{1.0F, 1.0F, 1.0F};
         if (block == Blocks.ender_chest) {
             color = new float[]{0.4F, 0.2F, 1.0F};
@@ -180,28 +173,36 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
 
         AxisAlignedBB bb = AxisAlignedBB.fromBounds(minX, minY, minZ, maxX, maxY, maxZ);
         if (boxes.getValue()) {
-            GlStateManager.color(color[0], color[1], color[2], 0.6F);
-            RenderUtils.drawLines(bb);
-            RenderGlobal.drawOutlinedBoundingBox(bb, -1);
-            GlStateManager.color(color[0], color[1], color[2], 0.11F);
-            RenderUtils.drawFilledBox(bb);
+            drawBoxes(bb, color);
         }
 
         if (tracerLines.getValue()) {
-            GlStateManager.color(color[0], color[1], color[2], 1.0F);
-            GlStateManager.pushMatrix();
-            GlStateManager.loadIdentity();
-            mc.entityRenderer.orientCamera(partialTicks);
-
-            Tessellator var2 = Tessellator.getInstance();
-            WorldRenderer var3 = var2.getWorldRenderer();
-            var3.startDrawing(2);
-            var3.addVertex(0, mc.thePlayer.getEyeHeight(), 0);
-            var3.addVertex(maxX - ((maxX - minX) / 2), maxY - ((maxY - minY) / 2), maxZ - ((maxZ - minZ) / 2));
-            var2.draw();
-
-            GlStateManager.popMatrix();
+            drawTracerLines(minX, minY, minZ, maxX, maxY, maxZ, partialTicks, color);
         }
+    }
+
+    private void drawBoxes(AxisAlignedBB bb, float[] color) {
+        GlStateManager.color(color[0], color[1], color[2], 0.6F);
+        RenderUtils.drawLines(bb);
+        RenderGlobal.drawOutlinedBoundingBox(bb, -1);
+        GlStateManager.color(color[0], color[1], color[2], 0.11F);
+        RenderUtils.drawFilledBox(bb);
+    }
+
+    private void drawTracerLines(double minX, double minY, double minZ, double maxX, double maxY, double maxZ, float partialTicks, float[] color) {
+        GlStateManager.color(color[0], color[1], color[2], 1.0F);
+        GlStateManager.pushMatrix();
+        GlStateManager.loadIdentity();
+        mc.entityRenderer.orientCamera(partialTicks);
+
+        Tessellator var2 = Tessellator.getInstance();
+        WorldRenderer var3 = var2.getWorldRenderer();
+        var3.startDrawing(2);
+        var3.addVertex(0, mc.thePlayer.getEyeHeight(), 0);
+        var3.addVertex(maxX - ((maxX - minX) / 2), maxY - ((maxY - minY) / 2), maxZ - ((maxZ - minZ) / 2));
+        var2.draw();
+
+        GlStateManager.popMatrix();
     }
 
     @Override

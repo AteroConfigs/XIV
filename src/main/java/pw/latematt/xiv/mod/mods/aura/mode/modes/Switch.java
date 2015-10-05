@@ -11,14 +11,15 @@ import pw.latematt.xiv.utils.Timer;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 /**
  * @author Matthew
  */
 public class Switch extends AuraMode {
     private final List<EntityLivingBase> entities;
-    public EntityLivingBase entityToAttack;
-    private Timer timer = new Timer();
+    private EntityLivingBase entityToAttack;
+    private final Timer timer = new Timer();
 
     public Switch(KillAura killAura) {
         super("Switch", killAura);
@@ -34,6 +35,14 @@ public class Switch extends AuraMode {
                     entities.add(living);
                 }
             });
+
+            List<EntityLivingBase> sortedEntities = entities.stream().sorted((entity1, entity2) -> {
+                double entity1Distance = mc.thePlayer.getDistanceToEntity(entity1);
+                double entity2Distance = mc.thePlayer.getDistanceToEntity(entity2);
+                return entity1Distance > entity2Distance ? 1 : entity2Distance > entity1Distance ? -1 : 0;
+            }).collect(Collectors.toList());
+            entities.clear();
+            entities.addAll(sortedEntities);
         }
 
         if (!entities.isEmpty()) {
@@ -63,6 +72,10 @@ public class Switch extends AuraMode {
         }
     }
 
+    private static float angleDifference(float a, float b) {
+        return ((((a - b) % 360f) + 540f) % 360f) - 180f;
+    }
+
     @Override
     public void onPostMotionUpdate(MotionUpdateEvent event) {
         if (entityToAttack != null) {
@@ -80,8 +93,8 @@ public class Switch extends AuraMode {
         if (entityToAttack != null) {
             float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
             if (killAura.silent.getValue()) {
-                packet.yaw = rotations[0];
-                packet.pitch = rotations[1];
+                packet.setYaw(rotations[0]);
+                packet.setPitch(rotations[1]);
             }
         }
     }

@@ -13,15 +13,15 @@ import pw.latematt.xiv.mod.ModType;
  */
 public class NoFall extends Mod implements Listener<SendPacketEvent> {
     public NoFall() {
-        super("NoFall", ModType.PLAYER, Keyboard.KEY_N, 0xFFf5b8cd);
+        super("NoFall", ModType.PLAYER, Keyboard.KEY_N, 0xFFF5B8CD);
     }
 
     public void onEventCalled(SendPacketEvent event) {
         if (event.getPacket() instanceof C03PacketPlayer) {
-            if (mc.thePlayer.fallDistance >= 3F) {
-                C03PacketPlayer packet = (C03PacketPlayer) event.getPacket();
-                packet.onGround = true;
-            }
+            if (mc.thePlayer.fallDistance < 3)
+                return;
+            C03PacketPlayer packet = (C03PacketPlayer) event.getPacket();
+            packet.setOnGround(true);
         }
 
     }

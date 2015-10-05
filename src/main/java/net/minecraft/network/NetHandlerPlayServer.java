@@ -224,11 +224,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
             double var5 = this.playerEntity.posY;
             double var7 = this.playerEntity.posZ;
             double var9 = 0.0D;
-            double var11 = packetIn.getPositionX() - this.lastPosX;
-            double var13 = packetIn.getPositionY() - this.lastPosY;
-            double var15 = packetIn.getPositionZ() - this.lastPosZ;
+            double var11 = packetIn.getX() - this.lastPosX;
+            double var13 = packetIn.getY() - this.lastPosY;
+            double var15 = packetIn.getZ() - this.lastPosZ;
 
-            if (packetIn.onGround())
+            if (packetIn.isMoving())
             {
                 var9 = var11 * var11 + var13 * var13 + var15 * var15;
 
@@ -254,13 +254,13 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                     var21 = this.playerEntity.posY;
                     var23 = this.playerEntity.posZ;
 
-                    if (packetIn.getRotating())
+                    if (packetIn.isRotating())
                     {
                         var47 = packetIn.getYaw();
                         var18 = packetIn.getPitch();
                     }
 
-                    this.playerEntity.onGround = packetIn.func_149465_i();
+                    this.playerEntity.onGround = packetIn.isOnGround();
                     this.playerEntity.onUpdateEntity();
                     this.playerEntity.setPositionAndRotation(var19, var21, var23, var47, var18);
 
@@ -312,25 +312,25 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                 float var25 = this.playerEntity.rotationYaw;
                 float var26 = this.playerEntity.rotationPitch;
 
-                if (packetIn.onGround() && packetIn.getPositionY() == -999.0D)
+                if (packetIn.isMoving() && packetIn.getY() == -999.0D)
                 {
                     packetIn.setMoving(false);
                 }
 
-                if (packetIn.onGround())
+                if (packetIn.isOnGround())
                 {
-                    var19 = packetIn.getPositionX();
-                    var21 = packetIn.getPositionY();
-                    var23 = packetIn.getPositionZ();
+                    var19 = packetIn.getX();
+                    var21 = packetIn.getY();
+                    var23 = packetIn.getZ();
 
-                    if (Math.abs(packetIn.getPositionX()) > 3.0E7D || Math.abs(packetIn.getPositionZ()) > 3.0E7D)
+                    if (Math.abs(packetIn.getX()) > 3.0E7D || Math.abs(packetIn.getZ()) > 3.0E7D)
                     {
                         this.kickPlayerFromServer("Illegal position");
                         return;
                     }
                 }
 
-                if (packetIn.getRotating())
+                if (packetIn.isOnGround())
                 {
                     var25 = packetIn.getYaw();
                     var26 = packetIn.getPitch();
@@ -362,13 +362,13 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                 float var41 = 0.0625F;
                 boolean var42 = var2.getCollidingBoundingBoxes(this.playerEntity, this.playerEntity.getEntityBoundingBox().contract((double)var41, (double)var41, (double)var41)).isEmpty();
 
-                if (this.playerEntity.onGround && !packetIn.func_149465_i() && var29 > 0.0D)
+                if (this.playerEntity.onGround && !packetIn.isOnGround() && var29 > 0.0D)
                 {
                     this.playerEntity.jump();
                 }
 
                 this.playerEntity.moveEntity(var27, var29, var31);
-                this.playerEntity.onGround = packetIn.func_149465_i();
+                this.playerEntity.onGround = packetIn.isOnGround();
                 double var43 = var29;
                 var27 = var19 - this.playerEntity.posX;
                 var29 = var21 - this.playerEntity.posY;
@@ -423,9 +423,9 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, IUpdatePlaye
                     this.floatingTickCount = 0;
                 }
 
-                this.playerEntity.onGround = packetIn.func_149465_i();
+                this.playerEntity.onGround = packetIn.isOnGround();
                 this.serverController.getConfigurationManager().serverUpdateMountedMovingPlayer(this.playerEntity);
-                this.playerEntity.handleFalling(this.playerEntity.posY - var17, packetIn.func_149465_i());
+                this.playerEntity.handleFalling(this.playerEntity.posY - var17, packetIn.isOnGround());
             }
             else if (this.networkTickCount - this.field_175090_f > 20)
             {

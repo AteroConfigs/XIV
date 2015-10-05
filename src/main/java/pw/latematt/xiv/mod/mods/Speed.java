@@ -22,7 +22,7 @@ import java.util.Objects;
  */
 public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private int delay;
-    private Value<Mode> currentMode = new Value<>("speed_mode", Mode.BYPASS);
+    private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.BYPASS);
 
     public Speed() {
         super("Speed", ModType.MOVEMENT, Keyboard.KEY_F, 0xFFDC5B18);
@@ -38,13 +38,13 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-            /* thanks anodise */
             if (currentMode.getValue() == Mode.BYPASS) {
+                /* thanks anodise */
                 Step step = (Step) XIV.getInstance().getModManager().find("step");
                 boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
                 boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
                 boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-                boolean moving = movingForward || strafing;
+                boolean moving = movingForward && strafing || movingForward;
                 if (!mc.thePlayer.onGround || BlockUtils.isInLiquid(mc.thePlayer) || editingPackets || BlockUtils.isOnLiquid(mc.thePlayer) || !moving) {
                     delay = 0;
                 }
@@ -107,9 +107,9 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                 double speed = currentMode.getValue() == Mode.NORMAL ? 1.3D : 3.05D;
                 double slow = 1.425D;
                 double offset = currentMode.getValue() == Mode.NORMAL ? 0.55D : 4.9D;
-                boolean moving = mc.thePlayer.movementInput.moveForward != 0;
+                boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
                 boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-                boolean movingCheck = moving || strafing;
+                boolean moving = movingForward && strafing || movingForward;
 
                 boolean iceBelow = false;
                 boolean liquidBelow = false;
@@ -117,7 +117,7 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                 boolean shouldSpeed = !mc.thePlayer.isSneaking();
                 Step step = (Step) XIV.getInstance().getModManager().find("step");
                 boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
-                if (!mc.thePlayer.onGround || editingPackets || !movingCheck) {
+                if (!mc.thePlayer.onGround || editingPackets || !moving) {
                     mc.timer.timerSpeed = 1.0F;
                     mc.thePlayer.motionX *= 0.98D;
                     mc.thePlayer.motionZ *= 0.98D;

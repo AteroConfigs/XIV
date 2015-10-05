@@ -23,9 +23,9 @@ public class Freecam extends Mod {
     private Timer timer = new Timer();
     private double x, y, z;
     private float yaw, pitch;
-    private Listener packetListener;
-    private Listener motionListener;
-    private Listener moveListener;
+    private final Listener packetListener;
+    private final Listener motionListener;
+    private final Listener moveListener;
 
     public Freecam() {
         super("Freecam", ModType.RENDER, Keyboard.KEY_V);
@@ -79,12 +79,11 @@ public class Freecam extends Mod {
 
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     final C03PacketPlayer packetPlayer = (C03PacketPlayer) event.getPacket();
-                    packetPlayer.x = x;
-                    packetPlayer.y = y;
-                    packetPlayer.z = z;
-                    packetPlayer.yaw = yaw;
-                    packetPlayer.pitch = pitch;
-                    event.setCancelled(true);
+                    packetPlayer.setX(x);
+                    packetPlayer.setY(y);
+                    packetPlayer.setZ(z);
+                    packetPlayer.setYaw(yaw);
+                    packetPlayer.setPitch(pitch);
                 }
             }
         };

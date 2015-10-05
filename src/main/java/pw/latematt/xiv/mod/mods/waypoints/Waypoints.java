@@ -67,9 +67,7 @@ public class Waypoints extends Mod implements CommandHandler {
 
                     RenderUtils.beginGl();
                     if (boxes.getValue()) {
-                        GlStateManager.pushMatrix();
                         drawBoxes(waypoint);
-                        GlStateManager.popMatrix();
                     }
 
                     if (tracerLines.getValue()) {
@@ -95,17 +93,17 @@ public class Waypoints extends Mod implements CommandHandler {
                     for (Waypoint waypoint : points) {
                         if (!waypoint.isTemporary())
                             continue;
-                        String server;
-                        if (mc.getCurrentServerData() == null) {
-                            server = "singleplayer";
-                        } else {
-                            server = mc.getCurrentServerData().serverIP;
-                        }
-                        if (!waypoint.getServer().equals(server))
+                        if (!waypoint.getServer().equals(getCurrentServerIP()))
                             continue;
                         double distance = mc.thePlayer.getDistance(waypoint.getX(), waypoint.getY(), waypoint.getZ());
                         if (distance <= 3) {
                             points.remove(waypoint);
+                            try {
+                                waypointFile.save();
+                            } catch (IOException e) {
+                                XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
+                                e.printStackTrace();
+                            }
                             ChatLogger.print(String.format("Waypoint \"%s\" reached!", waypoint.getName()));
                         }
                     }
@@ -120,8 +118,14 @@ public class Waypoints extends Mod implements CommandHandler {
                     return;
                 if (event.getEntity() instanceof EntityLightningBolt) {
                     EntityLightningBolt lightningBolt = (EntityLightningBolt) event.getEntity();
-                    Waypoint point = new Waypoint("Lightning", mc.getCurrentServerData().serverIP, lightningBolt.posX, lightningBolt.posY, lightningBolt.posZ, true);
+                    Waypoint point = new Waypoint("Lightning", getCurrentServerIP(), lightningBolt.posX, lightningBolt.posY, lightningBolt.posZ, true);
                     points.add(point);
+                    try {
+                        waypointFile.save();
+                    } catch (IOException e) {
+                        XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
+                        e.printStackTrace();
+                    }
                     ChatLogger.print(String.format("Lightning Waypoint added at %s, %s, %s", point.getX(), point.getY(), point.getZ()));
                 }
             }
@@ -132,8 +136,14 @@ public class Waypoints extends Mod implements CommandHandler {
             public void onEventCalled(PlayerDeathEvent event) {
                 if (!deathPoints.getValue())
                     return;
-                Waypoint point = new Waypoint("Death", mc.getCurrentServerData().serverIP, mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true);
+                Waypoint point = new Waypoint("Death", getCurrentServerIP(), mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true);
                 points.add(point);
+                try {
+                    waypointFile.save();
+                } catch (IOException e) {
+                    XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
+                    e.printStackTrace();
+                }
                 ChatLogger.print(String.format("Death Waypoint added at %s, %s, %s", point.getX(), point.getY(), point.getZ()));
             }
         };
@@ -255,6 +265,10 @@ public class Waypoints extends Mod implements CommandHandler {
         GlStateManager.popMatrix();
     }
 
+    private String getCurrentServerIP() {
+        return mc.getCurrentServerData() == null ? "singleplayer" : mc.getCurrentServerData().serverIP;
+    }
+
     @Override
     public void onCommandRan(String message) {
         String[] arguments = message.split(" ");
@@ -264,18 +278,12 @@ public class Waypoints extends Mod implements CommandHandler {
                 case "add":
                 case "a":
                     if (arguments.length >= 6) {
-                        if (isInteger(arguments[2])) {
-                            final int x = Integer.parseInt(arguments[2]);
-                            final int y = Integer.parseInt(arguments[3]);
-                            final int z = Integer.parseInt(arguments[4]);
-                            final String name = message.substring((String.format("%s %s %s %s %s ", arguments[0], arguments[1], arguments[2], arguments[3], arguments[4])).length());
-                            String server;
-                            if (mc.getCurrentServerData() == null) {
-                                server = "singleplayer";
-                            } else {
-                                server = mc.getCurrentServerData().serverIP;
-                            }
-                            Waypoint waypoint = new Waypoint(name, server, x, y, z, true);
+                        if (isInteger(arguments[2]) && isInteger(arguments[3]) && isInteger(arguments[4])) {
+                            int x = Integer.parseInt(arguments[2]);
+                            int y = Integer.parseInt(arguments[3]);
+                            int z = Integer.parseInt(arguments[4]);
+                            String name = message.substring((String.format("%s %s %s %s %s ", arguments[0], arguments[1], arguments[2], arguments[3], arguments[4])).length());
+                            Waypoint waypoint = new Waypoint(name, getCurrentServerIP(), x, y, z, true);
                             points.add(waypoint);
                             try {
                                 waypointFile.save();
@@ -285,7 +293,7 @@ public class Waypoints extends Mod implements CommandHandler {
                             }
                             ChatLogger.print(String.format("Waypoint \"%s\" added at %s, %s, %s", waypoint.getName(), waypoint.getX(), waypoint.getY(), waypoint.getZ()));
                         } else {
-                            ChatLogger.print("You did not enter an Integer for x, y, or z.");
+                            ChatLogger.print("Invalid integer, valid arguments: waypoints add <x> <y> <z> <name>");
                         }
                     } else {
                         ChatLogger.print("Invalid arguments, valid: waypoints add <x> <y> <z> <name>");

@@ -27,6 +27,7 @@ import pw.latematt.xiv.value.Value;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Matthew
@@ -52,7 +53,8 @@ public class Nametags extends Mod implements CommandHandler {
         render3DListener = new Listener<Render3DEvent>() {
             @Override
             public void onEventCalled(Render3DEvent event) {
-                for (EntityPlayer player : mc.theWorld.playerEntities) {
+                List<EntityPlayer> withoutDuplicates = mc.theWorld.playerEntities.stream().distinct().collect(Collectors.toList());
+                for (EntityPlayer player : withoutDuplicates) {
                     if (!isValidEntity(player))
                         continue;
 
@@ -65,6 +67,8 @@ public class Nametags extends Mod implements CommandHandler {
                 }
             }
         };
+        setEnabled(true);
+
         Command.newCommand()
                 .cmd("nametags")
                 .description("Base command for the Nametags mod.")
@@ -72,7 +76,6 @@ public class Nametags extends Mod implements CommandHandler {
                 .aliases("tags", "nt")
                 .handler(this)
                 .build();
-        setEnabled(true);
     }
 
     @Override

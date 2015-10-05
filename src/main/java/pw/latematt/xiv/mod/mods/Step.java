@@ -17,9 +17,9 @@ import pw.latematt.xiv.value.Value;
  * @author Matthew
  */
 public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandler {
+    private final Value<Float> height = new Value<>("step_height", 1.0646F);
     private final Listener sendPacketListener;
     private boolean editPackets;
-    private Value<Float> height = new Value<>("step_height", 1.0646F);
 
     public Step() {
         super("Step", ModType.MOVEMENT);
@@ -37,7 +37,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
                     if (editPackets) {
-                        player.y += 0.0646D;
+                        player.setY(player.getY() + 0.0646D);
                         editPackets = false;
                     }
                 }
@@ -98,10 +98,6 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
 
     public boolean isEditingPackets() {
         return editPackets;
-    }
-
-    public void setEditPackets(boolean editPackets) {
-        this.editPackets = editPackets;
     }
 
     @Override

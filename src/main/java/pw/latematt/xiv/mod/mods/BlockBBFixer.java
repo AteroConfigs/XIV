@@ -49,11 +49,11 @@ public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>, Comm
             switch (action.toLowerCase()) {
                 case "cactus":
                     cactus.setValue(!cactus.getValue());
-                    ChatLogger.print(String.format("BlockBBFixer will %s fix the bounding box of Cacti.", !cactus.getValue() ? "now" : "no longer"));
+                    ChatLogger.print(String.format("BlockBBFixer will %s fix the bounding box of Cacti.", cactus.getValue() ? "now" : "no longer"));
                     break;
                 case "cobweb":
                     cobweb.setValue(!cobweb.getValue());
-                    ChatLogger.print(String.format("BlockBBFixer will %s fix the bounding box of Cobweb.", !cobweb.getValue() ? "now" : "no longer"));
+                    ChatLogger.print(String.format("BlockBBFixer will %s fix the bounding box of Cobweb.", cobweb.getValue() ? "now" : "no longer"));
                     break;
                 default:
                     ChatLogger.print("Invalid action, valid: cactus, cobweb");
