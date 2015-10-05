@@ -98,6 +98,12 @@ public class Waypoints extends Mod implements CommandHandler {
                         double distance = mc.thePlayer.getDistance(waypoint.getX(), waypoint.getY(), waypoint.getZ());
                         if (distance <= 3) {
                             points.remove(waypoint);
+                            try {
+                                waypointFile.save();
+                            } catch (IOException e) {
+                                XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
+                                e.printStackTrace();
+                            }
                             ChatLogger.print(String.format("Waypoint \"%s\" reached!", waypoint.getName()));
                         }
                     }
@@ -114,6 +120,12 @@ public class Waypoints extends Mod implements CommandHandler {
                     EntityLightningBolt lightningBolt = (EntityLightningBolt) event.getEntity();
                     Waypoint point = new Waypoint("Lightning", getCurrentServerIP(), lightningBolt.posX, lightningBolt.posY, lightningBolt.posZ, true);
                     points.add(point);
+                    try {
+                        waypointFile.save();
+                    } catch (IOException e) {
+                        XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
+                        e.printStackTrace();
+                    }
                     ChatLogger.print(String.format("Lightning Waypoint added at %s, %s, %s", point.getX(), point.getY(), point.getZ()));
                 }
             }
@@ -126,6 +138,12 @@ public class Waypoints extends Mod implements CommandHandler {
                     return;
                 Waypoint point = new Waypoint("Death", getCurrentServerIP(), mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true);
                 points.add(point);
+                try {
+                    waypointFile.save();
+                } catch (IOException e) {
+                    XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
+                    e.printStackTrace();
+                }
                 ChatLogger.print(String.format("Death Waypoint added at %s, %s, %s", point.getX(), point.getY(), point.getZ()));
             }
         };

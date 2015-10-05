@@ -31,7 +31,7 @@ public class Jesus extends Mod {
             @Override
             public void onEventCalled(BlockAddBBEvent event) {
                 if (event.getBlock() instanceof BlockLiquid) {
-                    if (mc.thePlayer != null && event.getEntity() != mc.thePlayer && !BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.fallDistance < 3.0F && !mc.thePlayer.isSneaking()) {
+                    if (mc.thePlayer != null && event.getEntity() == mc.thePlayer && !BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.fallDistance < 3.0F && !mc.thePlayer.isSneaking()) {
                         BlockPos pos = event.getPos();
                         event.setAxisAlignedBB(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
                     }

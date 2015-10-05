@@ -51,10 +51,16 @@ public class CommandManager extends ListManager<Command> {
                         String commandName = arguments[1];
                         Command command = XIV.getInstance().getCommandManager().find(commandName);
                         if (command != null) {
-                            ChatLogger.print(String.format("Help for %s.", command.getCmd()));
-                            ChatLogger.print(String.format("Description for %s: %s.", command.getCmd(), command.getDescription() == null ? "No description" : command.getDescription()));
-                            ChatLogger.print(String.format("Aliases for %s: %s.", command.getCmd(), command.getAliases() == null ? "No aliases" : Arrays.asList(command.getAliases())));
-                            ChatLogger.print(String.format("Arguments for %s: %s.", command.getCmd(), command.getArguments() == null ? "No arguments" : Arrays.asList(command.getArguments())));
+                            ChatLogger.print(String.format("Help for %s:", command.getCmd()));
+                            if (command.getDescription() != null) {
+                                ChatLogger.print(String.format("Description for %s: %s", command.getCmd(), command.getDescription()));
+                            }
+                            if (command.getAliases() != null) {
+                                ChatLogger.print(String.format("Aliases for %s: %s", command.getCmd(), Arrays.asList(command.getAliases())));
+                            }
+                            if (command.getArguments() != null) {
+                                ChatLogger.print(String.format("Arguments for %s: %s", command.getCmd(), Arrays.asList(command.getArguments())));
+                            }
                         } else {
                             ChatLogger.print(String.format("Invalid command \"%s\"", commandName));
                         }

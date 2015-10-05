@@ -9,8 +9,10 @@ import pw.latematt.xiv.mod.mods.aura.mode.AuraMode;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.Timer;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 /**
  * @author Matthew
@@ -34,6 +36,14 @@ public class Switch extends AuraMode {
                     entities.add(living);
                 }
             });
+
+            List<EntityLivingBase> sortedEntities = entities.stream().sorted((entity1, entity2) -> {
+                double entity1Distance = mc.thePlayer.getDistanceToEntity(entity1);
+                double entity2Distance = mc.thePlayer.getDistanceToEntity(entity2);
+                return entity1Distance > entity2Distance ? 1 : entity2Distance > entity1Distance ? -1 : 0;
+            }).collect(Collectors.toList());
+            entities.clear();
+            entities.addAll(sortedEntities);
         }
 
         if (!entities.isEmpty()) {
@@ -61,6 +71,10 @@ public class Switch extends AuraMode {
                 mc.thePlayer.rotationPitch = rotations[1];
             }
         }
+    }
+
+    private static float angleDifference(float a, float b) {
+        return ((((a - b) % 360f) + 540f) % 360f) - 180f;
     }
 
     @Override
