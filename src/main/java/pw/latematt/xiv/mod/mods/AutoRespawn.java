@@ -26,6 +26,6 @@ public class AutoRespawn extends Mod implements Listener<PlayerDeathEvent> {
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().add(this);
+        XIV.getInstance().getListenerManager().remove(this);
     }
 }

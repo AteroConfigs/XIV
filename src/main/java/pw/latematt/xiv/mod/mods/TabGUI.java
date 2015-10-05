@@ -13,7 +13,7 @@ import pw.latematt.xiv.value.Value;
  */
 
 public class TabGUI extends Mod implements Listener<IngameHUDRenderEvent> {
-    private GuiTabHandler guiHandler = new GuiTabHandler();
+    private final GuiTabHandler guiHandler = new GuiTabHandler();
     private final Value<Boolean> watermark = (Value<Boolean>) XIV.getInstance().getValueManager().find("hud_watermark");
     private final Value<Boolean> rudysucks = (Value<Boolean>) XIV.getInstance().getValueManager().find("hud_rudysucks");
     private final Value<Boolean> time = (Value<Boolean>) XIV.getInstance().getValueManager().find("hud_time");
@@ -36,8 +36,6 @@ public class TabGUI extends Mod implements Listener<IngameHUDRenderEvent> {
                 tabY += 9;
         }
 
-        if (guiHandler == null)
-            guiHandler = new GuiTabHandler();
         guiHandler.drawGui(2, tabY);
     }
 

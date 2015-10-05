@@ -17,8 +17,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Switch extends AuraMode {
     private final List<EntityLivingBase> entities;
-    public EntityLivingBase entityToAttack;
-    private Timer timer = new Timer();
+    private EntityLivingBase entityToAttack;
+    private final Timer timer = new Timer();
 
     public Switch(KillAura killAura) {
         super("Switch", killAura);
@@ -80,8 +80,8 @@ public class Switch extends AuraMode {
         if (entityToAttack != null) {
             float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
             if (killAura.silent.getValue()) {
-                packet.yaw = rotations[0];
-                packet.pitch = rotations[1];
+                packet.setYaw(rotations[0]);
+                packet.setPitch(rotations[1]);
             }
         }
     }

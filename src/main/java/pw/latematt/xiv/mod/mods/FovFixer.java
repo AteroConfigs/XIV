@@ -39,12 +39,12 @@ public class FovFixer extends Mod implements Listener<FovModifierEvent>, Command
             var1 *= 1.1F;
         }
 
-        IAttributeInstance var2 = mc.thePlayer.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-        float walkSpeed = (float) var2.getAttributeValue();
-        if (walkSpeed > 0.12999481F) {
-            walkSpeed = 0.12999481F;
-        }
         if (!noFov.getValue()) {
+            IAttributeInstance var2 = mc.thePlayer.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
+            float walkSpeed = (float) var2.getAttributeValue();
+            if (walkSpeed > 0.12999481F) {
+                walkSpeed = 0.12999481F;
+            }
             var1 = (var1 * ((walkSpeed / mc.thePlayer.capabilities.getWalkSpeed() + 1.0F) / 2.0F));
         }
 

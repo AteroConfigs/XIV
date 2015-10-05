@@ -22,7 +22,6 @@ import pw.latematt.xiv.management.file.XIVFile;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.value.Value;
 
 import java.io.BufferedReader;
@@ -49,7 +48,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
     private final Value<Boolean> armor = new Value<>("hud_armor", true);
     private final Value<Boolean> rudysucks = new Value<>("hud_rudysucks", false);
     private final XIVFile hudConfigFile;
-    private NahrFont font;
 
     public HUD() {
         super("HUD", ModType.RENDER);
@@ -114,7 +112,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         }
         if (rudysucks.getValue()) {
             int y = 2;
-            if (watermark.getValue() && time.getValue())
+            if (watermark.getValue() || (watermark.getValue() && time.getValue()))
                 y += 8;
             mc.fontRendererObj.drawStringWithShadow("\2471r\2472u\2473d\2474y \2475s\2476u\2477c\2478k\2479s", 2, y, 0xFFFFFFFF);
         }

@@ -1,5 +1,6 @@
 package pw.latematt.xiv.mod.mods;
 
+import com.sun.javafx.geom.Vec3d;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -44,9 +45,10 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
         for (Object o : mc.theWorld.loadedTileEntityList) {
             TileEntity tileEntity = (TileEntity) o;
             float partialTicks = event.getPartialTicks();
-            final double x = tileEntity.getPos().getX() - mc.getRenderManager().renderPosX;
-            final double y = tileEntity.getPos().getY() - mc.getRenderManager().renderPosY;
-            final double z = tileEntity.getPos().getZ() - mc.getRenderManager().renderPosZ;
+            Vec3d vec3d = new Vec3d(tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ());
+            final double x = vec3d.x - mc.getRenderManager().renderPosX;
+            final double y = vec3d.y - mc.getRenderManager().renderPosY;
+            final double z = vec3d.z - mc.getRenderManager().renderPosZ;
 
             if (tileEntity instanceof TileEntityChest && chests.getValue()) {
                 TileEntityChest tileChest = (TileEntityChest) tileEntity;

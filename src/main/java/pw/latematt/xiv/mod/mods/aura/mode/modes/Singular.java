@@ -13,8 +13,8 @@ import pw.latematt.xiv.utils.Timer;
  * @author Matthew
  */
 public class Singular extends AuraMode {
-    public EntityLivingBase entityToAttack;
-    private Timer timer = new Timer();
+    private EntityLivingBase entityToAttack;
+    private final Timer timer = new Timer();
 
     public Singular(KillAura killAura) {
         super("Singular", killAura);
@@ -68,10 +68,8 @@ public class Singular extends AuraMode {
     public void onMotionPacket(C03PacketPlayer packet) {
         if (entityToAttack != null) {
             float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
-            if (killAura.silent.getValue()) {
-                packet.yaw = rotations[0];
-                packet.pitch = rotations[1];
-            }
+            packet.setYaw(rotations[0]);
+            packet.setPitch(rotations[1]);
         }
     }
 

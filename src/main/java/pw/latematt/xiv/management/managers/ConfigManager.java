@@ -1,4 +1,4 @@
-package pw.latematt.xiv.config;
+package pw.latematt.xiv.management.managers;
 
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * @author Matthew
  */
-public final class ConfigManager {
+public class ConfigManager {
     private final File configDir = new File(XIVFile.XIV_DIRECTORY + File.separator + "configs");
 
     public void setup() {

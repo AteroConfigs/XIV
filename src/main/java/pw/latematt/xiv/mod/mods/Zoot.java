@@ -26,7 +26,7 @@ public class Zoot extends Mod implements Listener<MotionUpdateEvent> {
     public void onEventCalled(MotionUpdateEvent event) {
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
             if (mc.thePlayer.isBurning() && !mc.thePlayer.isInsideOfMaterial(Material.fire) && !mc.thePlayer.isInsideOfMaterial(Material.lava)) {
-                for (int x = 0; x < 120; x++) {
+                for (int x = 0; x < 20; x++) {
                     mc.thePlayer.sendQueue.getNetworkManager().sendPacket(new C03PacketPlayer(mc.thePlayer.onGround));
                 }
             }

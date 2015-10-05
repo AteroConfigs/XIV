@@ -24,6 +24,9 @@ import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Matthew
  * @author TehNeon
@@ -50,40 +53,43 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     }
 
     public void onEventCalled(Render3DEvent event) {
-        RenderUtils.beginGl();
-        for (Entity entity : mc.theWorld.loadedEntityList) {
-            if (!isValidEntity(entity))
-                continue;
+        List<EntityPlayer> withoutDuplicates = mc.theWorld.playerEntities.stream().distinct().collect(Collectors.toList());
+        if (!withoutDuplicates.isEmpty()) {
+            RenderUtils.beginGl();
+            for (Entity entity : withoutDuplicates) {
+                if (!isValidEntity(entity))
+                    continue;
 
-            float partialTicks = event.getPartialTicks();
-            double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks - mc.getRenderManager().renderPosX;
-            double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks - mc.getRenderManager().renderPosY;
-            double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks - mc.getRenderManager().renderPosZ;
+                float partialTicks = event.getPartialTicks();
+                double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks - mc.getRenderManager().renderPosX;
+                double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks - mc.getRenderManager().renderPosY;
+                double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks - mc.getRenderManager().renderPosZ;
 
-            if (boxes.getValue()) {
-                GlStateManager.pushMatrix();
-                GlStateManager.translate(x, y, z);
-                GlStateManager.rotate(-entity.rotationYaw, 0.0F, entity.height, 0.0F);
-                GlStateManager.translate(-x, -y, -z);
-                drawBoxes(entity, x, y, z);
-                GlStateManager.popMatrix();
+                if (boxes.getValue()) {
+                    GlStateManager.pushMatrix();
+                    GlStateManager.translate(x, y, z);
+                    GlStateManager.rotate(-entity.rotationYaw, 0.0F, entity.height, 0.0F);
+                    GlStateManager.translate(-x, -y, -z);
+                    drawBoxes(entity, x, y, z);
+                    GlStateManager.popMatrix();
+                }
+
+                if (spines.getValue()) {
+                    GlStateManager.pushMatrix();
+                    drawSpines(entity, x, y, z);
+                    GlStateManager.popMatrix();
+                }
+
+                if (tracerLines.getValue()) {
+                    GlStateManager.pushMatrix();
+                    GlStateManager.loadIdentity();
+                    mc.entityRenderer.orientCamera(partialTicks);
+                    drawTracerLines(entity, x, y, z);
+                    GlStateManager.popMatrix();
+                }
             }
-
-            if (spines.getValue()) {
-                GlStateManager.pushMatrix();
-                drawSpines(entity, x, y, z);
-                GlStateManager.popMatrix();
-            }
-
-            if (tracerLines.getValue()) {
-                GlStateManager.pushMatrix();
-                GlStateManager.loadIdentity();
-                mc.entityRenderer.orientCamera(partialTicks);
-                drawTracerLines(entity, x, y, z);
-                GlStateManager.popMatrix();
-            }
+            RenderUtils.endGl();
         }
-        RenderUtils.endGl();
     }
 
     private boolean isValidEntity(Entity entity) {
@@ -94,6 +100,8 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         if (!entity.isEntityAlive())
             return false;
         if (entity instanceof EntityLivingBase) {
+            if (entity.ticksExisted < 20)
+                return false;
             if (entity instanceof EntityPlayer) {
                 return players.getValue();
             } else if (entity instanceof IAnimals && !(entity instanceof IMob)) {
@@ -116,7 +124,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         }
 
         final float distance = mc.thePlayer.getDistanceToEntity(entity);
-        float[] color;
+        float[] color = new float[]{0.0F, 0.9F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.3F, 0.7F, 1.0F};
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
@@ -125,8 +133,6 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             color = new float[]{1.0F, 0.66F, 0.0F};
         } else if (distance <= 3.9F) {
             color = new float[]{0.9F, 0.0F, 0.0F};
-        } else {
-            color = new float[]{0.0F, 0.9F, 0.0F};
         }
 
         GlStateManager.color(color[0], color[1], color[2], 0.6F);
@@ -135,17 +141,15 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         RenderGlobal.drawOutlinedBoundingBox(box, -1);
     }
 
-    public void drawTracerLines(Entity entity, double x, double y, double z) {
+    private void drawTracerLines(Entity entity, double x, double y, double z) {
         final float distance = mc.thePlayer.getDistanceToEntity(entity);
-        float[] color;
+        float[] color = new float[]{0.0F, 0.90F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.30F, 0.7F, 1.0F};
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
             color = new float[]{1.0F, 0.9F, 0.0F};
         } else if (distance <= 64.0F) {
             color = new float[]{0.9F, distance / 64.0F, 0.0F};
-        } else {
-            color = new float[]{0.0F, 0.90F, 0.0F};
         }
 
         GlStateManager.color(color[0], color[1], color[2], 1.0F);
@@ -159,15 +163,13 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
 
     private void drawSpines(Entity entity, double x, double y, double z) {
         final float distance = mc.thePlayer.getDistanceToEntity(entity);
-        float[] color;
+        float[] color = new float[]{0.0F, 0.90F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.30F, 0.7F, 1.0F};
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
             color = new float[]{1.0F, 0.9F, 0.0F};
         } else if (distance <= 64.0F) {
             color = new float[]{0.9F, distance / 64.0F, 0.0F};
-        } else {
-            color = new float[]{0.0F, 0.90F, 0.0F};
         }
 
         GlStateManager.color(color[0], color[1], color[2], 1.0F);

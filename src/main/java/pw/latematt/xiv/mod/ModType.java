@@ -1,21 +1,9 @@
 package pw.latematt.xiv.mod;
 
 public enum ModType {
-
-    COMBAT("Combat"),
-    MOVEMENT("Movement"),
-    PLAYER("Player"),
-    RENDER("Render"),
-    WORLD("World"),
-    NONE("None");
-
-    private String name;
-
-    ModType(String name) {
-        this.name = name;
-    }
+    COMBAT, MOVEMENT, NONE, PLAYER, RENDER, WORLD;
 
     public String getName() {
-        return name;
+        return name().substring(0, 1) + name().substring(1, name().length()).toLowerCase();
     }
 }

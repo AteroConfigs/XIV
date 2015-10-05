@@ -8,14 +8,14 @@ import net.minecraft.network.play.INetHandlerPlayServer;
 
 public class C03PacketPlayer implements Packet
 {
-    public double x;
-    public double y;
-    public double z;
-    public float yaw;
-    public float pitch;
-    public boolean onGround;
-    public boolean moving;
-    public boolean rotating;
+    protected double x;
+    protected double y;
+    protected double z;
+    protected float yaw;
+    protected float pitch;
+    protected boolean onGround;
+    protected boolean moving;
+    protected boolean rotating;
 
 
     public C03PacketPlayer() {}
@@ -49,49 +49,69 @@ public class C03PacketPlayer implements Packet
         data.writeByte(this.onGround ? 1 : 0);
     }
 
-    public double getPositionX()
-    {
-        return this.x;
+
+    public double getX() {
+        return x;
     }
 
-    public double getPositionY()
-    {
-        return this.y;
+    public void setX(double x) {
+        this.x = x;
     }
 
-    public double getPositionZ()
-    {
-        return this.z;
+    public double getY() {
+        return y;
     }
 
-    public float getYaw()
-    {
-        return this.yaw;
+    public void setY(double y) {
+        this.y = y;
     }
 
-    public float getPitch()
-    {
-        return this.pitch;
+    public double getZ() {
+        return z;
     }
 
-    public boolean func_149465_i()
-    {
-        return this.onGround;
+    public void setZ(double z) {
+        this.z = z;
     }
 
-    public boolean onGround()
-    {
-        return this.moving;
+    public float getYaw() {
+        return yaw;
     }
 
-    public boolean getRotating()
-    {
-        return this.rotating;
+    public void setYaw(float yaw) {
+        this.yaw = yaw;
     }
 
-    public void setMoving(boolean p_149469_1_)
-    {
-        this.moving = p_149469_1_;
+    public float getPitch() {
+        return pitch;
+    }
+
+    public void setPitch(float pitch) {
+        this.pitch = pitch;
+    }
+
+    public boolean isOnGround() {
+        return onGround;
+    }
+
+    public void setOnGround(boolean onGround) {
+        this.onGround = onGround;
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
+
+    public boolean isRotating() {
+        return rotating;
+    }
+
+    public void setRotating(boolean rotating) {
+        this.rotating = rotating;
     }
 
     /**
