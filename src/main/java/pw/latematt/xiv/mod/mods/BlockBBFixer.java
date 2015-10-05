@@ -17,9 +17,10 @@ import pw.latematt.xiv.value.Value;
 /**
  * @author Matthew
  */
-public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>,CommandHandler {
+public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>, CommandHandler {
     private final Value<Boolean> cactus = new Value<>("blockbbfixer_cactus", true);
     private final Value<Boolean> cobweb = new Value<>("blockbbfixer_cobweb", true);
+
     public BlockBBFixer() {
         super("BlockBBFixer", ModType.WORLD);
 

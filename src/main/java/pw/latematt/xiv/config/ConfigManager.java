@@ -5,8 +5,10 @@ import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.management.file.XIVFile;
 import pw.latematt.xiv.utils.ChatLogger;
 
-import java.io.*;
-import java.util.regex.Matcher;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * @author Matthew
@@ -65,7 +67,7 @@ public final class ConfigManager {
         BufferedReader reader = new BufferedReader(new FileReader(config));
         String line;
         while ((line = reader.readLine()) != null) {
-            XIV.getInstance().getCommandManager().parseCommand(line);
+            XIV.getInstance().getCommandManager().parseCommand(XIV.getInstance().getCommandManager().getPrefix() + line);
         }
         reader.close();
     }
