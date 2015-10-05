@@ -11,7 +11,7 @@ public class ChatLogger {
     private static final String PREFIX = "\2473[XIV]:\247r ";
 
     public static void print(String message) {
-        if (Minecraft.getMinecraft().inGameHasFocus) {
+        if (Minecraft.getMinecraft().thePlayer != null) {
             Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(PREFIX + message));
         } else {
             XIV.getInstance().getLogger().info(message);
