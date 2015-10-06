@@ -166,10 +166,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             PotionEffect effect = (PotionEffect) o;
             String name = I18n.format(effect.getEffectName());
 
-            if (XIV.getInstance().getModManager().find("speedmine").isEnabled() && effect.getPotionID() == Potion.digSpeed.getId()) {
-                continue; // So you don't constantly see "Haste (13:37)" in the bottom corner
-            }
-
             if (effect.getAmplifier() == 1) {
                 name = name + " " + I18n.format("enchantment.level.2");
             } else if (effect.getAmplifier() == 2) {
@@ -246,43 +242,83 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
 
             switch (action.toLowerCase()) {
                 case "watermark":
-                    watermark.setValue(!watermark.getValue());
+                    if (arguments.length >= 3) {
+                        watermark.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        watermark.setValue(!watermark.getValue());
+                    }
                     ChatLogger.print(String.format("HUD will %s display the watermark.", (watermark.getValue() ? "now" : "no longer")));
                     break;
                 case "organize":
-                    organize.setValue(!organize.getValue());
+                    if (arguments.length >= 3) {
+                        organize.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        organize.setValue(!organize.getValue());
+                    }
                     ChatLogger.print(String.format("HUD will %s display organize mods in the arraylist.", (organize.getValue() ? "now" : "no longer")));
                     break;
                 case "arraylist":
-                    arraylist.setValue(!arraylist.getValue());
+                    if (arguments.length >= 3) {
+                        arraylist.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        arraylist.setValue(!arraylist.getValue());
+                    }
                     ChatLogger.print(String.format("HUD will %s display the arraylist.", (arraylist.getValue() ? "now" : "no longer")));
                     break;
                 case "coords":
-                    coords.setValue(!coords.getValue());
+                    if (arguments.length >= 3) {
+                        coords.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        coords.setValue(!coords.getValue());
+                    }
                     ChatLogger.print(String.format("HUD will %s display your coords.", (coords.getValue() ? "now" : "no longer")));
                     break;
                 case "fps":
-                    fps.setValue(!fps.getValue());
+                    if (arguments.length >= 3) {
+                        fps.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        fps.setValue(!fps.getValue());
+                    }
                     ChatLogger.print(String.format("HUD will %s display your FPS.", (fps.getValue() ? "now" : "no longer")));
                     break;
                 case "ign":
-                    ign.setValue(!ign.getValue());
+                    if (arguments.length >= 3) {
+                        ign.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        ign.setValue(!ign.getValue());
+                    }
                     ChatLogger.print(String.format("HUD will %s display your in-game name.", (ign.getValue() ? "now" : "no longer")));
                     break;
                 case "time":
-                    time.setValue(!time.getValue());
+                    if (arguments.length >= 3) {
+                        time.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        time.setValue(!time.getValue());
+                    }
                     ChatLogger.print(String.format("HUD will %s display the current time.", (time.getValue() ? "now" : "no longer")));
                     break;
                 case "potions":
-                    potions.setValue(!potions.getValue());
+                    if (arguments.length >= 3) {
+                        potions.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        potions.setValue(!potions.getValue());
+                    }
                     ChatLogger.print(String.format("HUD will %s display potion status.", (potions.getValue() ? "now" : "no longer")));
                     break;
                 case "armor":
-                    armor.setValue(!armor.getValue());
+                    if (arguments.length >= 3) {
+                        armor.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        armor.setValue(!armor.getValue());
+                    }
                     ChatLogger.print(String.format("HUD will %s display armor status.", (armor.getValue() ? "now" : "no longer")));
                     break;
                 case "rudysucks":
-                    rudysucks.setValue(!rudysucks.getValue());
+                    if (arguments.length >= 3) {
+                        rudysucks.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        rudysucks.setValue(!rudysucks.getValue());
+                    }
                     ChatLogger.print(String.format("HUD will %s display \"rudy sucks\".", (rudysucks.getValue() ? "now" : "no longer")));
                     break;
                 default:

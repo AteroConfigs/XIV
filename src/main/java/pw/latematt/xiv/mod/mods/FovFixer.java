@@ -75,7 +75,11 @@ public class FovFixer extends Mod implements Listener<FovModifierEvent>, Command
             String action = arguments[1];
             switch (action.toLowerCase()) {
                 case "nofov":
-                    noFov.setValue(!noFov.getValue());
+                    if (arguments.length >= 3) {
+                        noFov.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        noFov.setValue(!noFov.getValue());
+                    }
                     ChatLogger.print(String.format("FovFiver will %s show %s sprinting FOV.", !noFov.getValue() ? "now" : "no longer", !noFov.getValue() ? "all" : "any"));
                     break;
                 default:

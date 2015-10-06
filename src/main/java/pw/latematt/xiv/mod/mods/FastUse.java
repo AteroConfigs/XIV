@@ -14,17 +14,20 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.value.SliderValue;
 import pw.latematt.xiv.value.Value;
+
+import java.text.DecimalFormat;
 
 /**
  * @author Matthew
  */
-public class FastUse extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
+public class FastUse extends Mod implements Listener<MotionUpdateEvent>,CommandHandler {
+    private final SliderValue<Integer> ticksToWait = new SliderValue<>("fastuse_ticks_to_wait", 16, 0, 31, new DecimalFormat("0"));
     private final Value<Boolean> bow = new Value<>("fastuse_bow", false);
     private final Value<Boolean> food = new Value<>("fastuse_food", true);
     private final Value<Boolean> milk = new Value<>("fastuse_milk", true);
     private final Value<Boolean> potions = new Value<>("fastuse_potions", true);
-    private final Value<Integer> ticksToWait = new Value<>("fastuse_ticks_to_wait", 16);
 
     public FastUse() {
         super("FastUse", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFEF60A9);
@@ -41,9 +44,8 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-            if (isUsable(mc.thePlayer.getCurrentEquippedItem())
-                    && mc.thePlayer.getItemInUseDuration() > ticksToWait.getValue()) {
-                for (int x = 0; x < (32 - ticksToWait.getValue()); x++) {
+            if (isUsable(mc.thePlayer.getCurrentEquippedItem()) && mc.thePlayer.getItemInUseDuration() >= ticksToWait.getValue()) {
+                for (int x = 0; x <= (32 - ticksToWait.getValue()); x++) {
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
                 }
                 mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
@@ -75,19 +77,35 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
             String action = arguments[1];
             switch (action.toLowerCase()) {
                 case "bow":
-                    bow.setValue(!bow.getValue());
+                    if (arguments.length >= 3) {
+                        bow.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        bow.setValue(!bow.getValue());
+                    }
                     ChatLogger.print(String.format("FastUse will %s use bow quickly.", (bow.getValue() ? "now" : "no longer")));
                     break;
                 case "food":
-                    food.setValue(!food.getValue());
+                    if (arguments.length >= 3) {
+                        food.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        food.setValue(!food.getValue());
+                    }
                     ChatLogger.print(String.format("FastUse will %s use food quickly.", (food.getValue() ? "now" : "no longer")));
                     break;
                 case "milk":
-                    milk.setValue(!milk.getValue());
+                    if (arguments.length >= 3) {
+                        milk.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        milk.setValue(!milk.getValue());
+                    }
                     ChatLogger.print(String.format("FastUse will %s use milk quickly.", (milk.getValue() ? "now" : "no longer")));
                     break;
                 case "potions":
-                    potions.setValue(!potions.getValue());
+                    if (arguments.length >= 3) {
+                        potions.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        potions.setValue(!potions.getValue());
+                    }
                     ChatLogger.print(String.format("FastUse will %s use potions quickly.", (potions.getValue() ? "now" : "no longer")));
                     break;
                 case "tickstowait":
@@ -96,6 +114,11 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
                         String newTicksString = arguments[2];
                         try {
                             int newTicks = Integer.parseInt(newTicksString);
+                            if (newTicks > 31) {
+                                newTicks = 31;
+                            } else if (newTicks < 0) {
+                                newTicks = 0;
+                            }
                             ticksToWait.setValue(newTicks);
                             ChatLogger.print(String.format("FastUse Ticks to Wait set to %s", ticksToWait.getValue()));
                         } catch (NumberFormatException e) {

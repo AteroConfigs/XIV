@@ -182,43 +182,75 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             switch (action.toLowerCase()) {
                 case "players":
                 case "plyrs":
-                    players.setValue(!players.getValue());
+                    if (arguments.length >= 3) {
+                        players.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        players.setValue(!players.getValue());
+                    }
                     ChatLogger.print(String.format("ESP will %s display players.", (players.getValue() ? "now" : "no longer")));
                     break;
                 case "mobs":
-                    mobs.setValue(!mobs.getValue());
+                    if (arguments.length >= 3) {
+                        mobs.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        mobs.setValue(!mobs.getValue());
+                    }
                     ChatLogger.print(String.format("ESP will %s display mobs.", (mobs.getValue() ? "now" : "no longer")));
                     break;
                 case "animals":
-                    animals.setValue(!animals.getValue());
+                    if (arguments.length >= 3) {
+                        animals.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        animals.setValue(!animals.getValue());
+                    }
                     ChatLogger.print(String.format("ESP will %s display animals.", (animals.getValue() ? "now" : "no longer")));
                     break;
                 case "items":
-                    items.setValue(!items.getValue());
+                    if (arguments.length >= 3) {
+                        items.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        items.setValue(!items.getValue());
+                    }
                     ChatLogger.print(String.format("ESP will %s display items.", (items.getValue() ? "now" : "no longer")));
                     break;
                 case "enderpearls":
                 case "eps":
-                    enderpearls.setValue(!enderpearls.getValue());
+                    if (arguments.length >= 3) {
+                        enderpearls.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        enderpearls.setValue(!enderpearls.getValue());
+                    }
                     ChatLogger.print(String.format("ESP will %s display enderpearls.", (enderpearls.getValue() ? "now" : "no longer")));
                     break;
                 case "boxes":
                 case "box":
-                    boxes.setValue(!boxes.getValue());
+                    if (arguments.length >= 3) {
+                        boxes.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        boxes.setValue(!boxes.getValue());
+                    }
                     ChatLogger.print(String.format("ESP will %s display boxes.", (boxes.getValue() ? "now" : "no longer")));
                     break;
                 case "tracerlines":
                 case "tracers":
-                    tracerLines.setValue(!tracerLines.getValue());
+                    if (arguments.length >= 3) {
+                        tracerLines.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        tracerLines.setValue(!tracerLines.getValue());
+                    }
                     ChatLogger.print(String.format("ESP will %s display tracer lines.", (tracerLines.getValue() ? "now" : "no longer")));
                     break;
                 case "spine":
                 case "spines":
-                    spines.setValue(!spines.getValue());
+                    if (arguments.length >= 3) {
+                        spines.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        spines.setValue(!spines.getValue());
+                    }
                     ChatLogger.print(String.format("ESP will %s display player spines.", (spines.getValue() ? "now" : "no longer")));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: players, mobs, animals, items, enderpearls, boxes, tracerlines, linewidth, spines");
+                    ChatLogger.print("Invalid action, valid: players, mobs, animals, items, enderpearls, boxes, tracerlines, spines");
                     break;
             }
         } else {

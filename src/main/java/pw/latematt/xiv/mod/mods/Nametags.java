@@ -84,11 +84,19 @@ public class Nametags extends Mod implements CommandHandler {
             String action = arguments[1];
             switch (action.toLowerCase()) {
                 case "health":
-                    health.setValue(!health.getValue());
+                    if (arguments.length >= 3) {
+                        health.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        health.setValue(!health.getValue());
+                    }
                     ChatLogger.print(String.format("Nametags will %s show health.", health.getValue() ? "now" : "no longer"));
                     break;
                 case "armor":
-                    armor.setValue(!armor.getValue());
+                    if (arguments.length >= 3) {
+                        armor.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        armor.setValue(!armor.getValue());
+                    }
                     ChatLogger.print(String.format("Nametags will %s show armor.", armor.getValue() ? "now" : "no longer"));
                     break;
                 default:

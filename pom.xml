@@ -4,7 +4,7 @@
 
     <groupId>pw.latematt.xiv</groupId>
     <artifactId>XIV</artifactId>
-    <version>1.0-DEVELOPMENT</version>
+    <version>1.0-STABLE</version>
     <packaging>jar</packaging>
 
     <name>XIV</name>

@@ -24,11 +24,11 @@ public class ModManager extends ListManager<Mod> {
     @Override
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
-        contents.add(new BlockBBFixer());
         contents.add(new AntiDrown());
-        //contents.add(new AutoHead());
+//        contents.add(new AutoHead());
         contents.add(new AutoRespawn());
         contents.add(new AutoTool());
+        contents.add(new BlockBBFixer());
         contents.add(new Criticals());
         contents.add(new ESP());
         contents.add(new FastUse());
@@ -37,15 +37,17 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Freecam());
         contents.add(new Fullbright());
         contents.add(new HUD());
-        //contents.add(new Instinct());
+//        contents.add(new Instinct());
         contents.add(new InventoryWalk());
         contents.add(new Jesus());
         contents.add(new KillAura());
+        contents.add(new NameComplete());
         contents.add(new Nametags());
         contents.add(new NoFall());
         contents.add(new NoRotationSet());
         contents.add(new NoSlowdown());
         contents.add(new Regen());
+        contents.add(new Sneak());
         contents.add(new Speed());
         contents.add(new Speedmine());
         contents.add(new Sprint());
@@ -66,7 +68,7 @@ public class ModManager extends ListManager<Mod> {
                 .aliases("modules", "hacks", "cheats", "lm")
                 .handler(message -> {
                     List<Mod> moduleList = XIV.getInstance().getModManager().getContents();
-                    StringBuilder mods = new StringBuilder("Modules (" + moduleList.size() + "): ");
+                    StringBuilder mods = new StringBuilder("Mods (" + moduleList.size() + "): ");
                     for (Mod mod : moduleList) {
                         mods.append(mod.isEnabled() ? "\247a" : "\247c").append(mod.getName()).append("\247r, ");
                     }

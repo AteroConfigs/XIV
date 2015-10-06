@@ -48,11 +48,19 @@ public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>, Comm
             String action = arguments[1];
             switch (action.toLowerCase()) {
                 case "cactus":
-                    cactus.setValue(!cactus.getValue());
+                    if (arguments.length >= 3) {
+                        cactus.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        cactus.setValue(!cactus.getValue());
+                    }
                     ChatLogger.print(String.format("BlockBBFixer will %s fix the bounding box of Cacti.", cactus.getValue() ? "now" : "no longer"));
                     break;
                 case "cobweb":
-                    cobweb.setValue(!cobweb.getValue());
+                    if (arguments.length >= 3) {
+                        cobweb.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        cobweb.setValue(!cobweb.getValue());
+                    }
                     ChatLogger.print(String.format("BlockBBFixer will %s fix the bounding box of Cobweb.", cobweb.getValue() ? "now" : "no longer"));
                     break;
                 default:

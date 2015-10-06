@@ -37,7 +37,12 @@ public class GuiPlayerTabOverlay extends Gui
         this.field_175251_g = p_i45529_2_;
     }
 
-    public String func_175243_a(NetworkPlayerInfo p_175243_1_)
+    public List getPlayerList() {
+        NetHandlerPlayClient var4 = field_175250_f.getNetHandler();
+        return field_175252_a.sortedCopy(var4.func_175106_d());
+    }
+
+    public String getPlayerName(NetworkPlayerInfo p_175243_1_)
     {
         return p_175243_1_.func_178854_k() != null ? p_175243_1_.func_178854_k().getFormattedText() : ScorePlayerTeam.formatPlayerName(p_175243_1_.func_178850_i(), p_175243_1_.func_178845_a().getName());
     }
@@ -64,7 +69,7 @@ public class GuiPlayerTabOverlay extends Gui
         while (var8.hasNext())
         {
             NetworkPlayerInfo var9 = (NetworkPlayerInfo)var8.next();
-            var10 = this.field_175250_f.fontRendererObj.getStringWidth(this.func_175243_a(var9));
+            var10 = this.field_175250_f.fontRendererObj.getStringWidth(this.getPlayerName(var9));
             var6 = Math.max(var6, var10);
 
             if (p_175249_3_ != null && p_175249_3_.func_178766_e() != IScoreObjectiveCriteria.EnumRenderType.HEARTS)
@@ -164,7 +169,7 @@ public class GuiPlayerTabOverlay extends Gui
             if (var30 < var5.size())
             {
                 NetworkPlayerInfo var24 = (NetworkPlayerInfo)var5.get(var30);
-                String var25 = this.func_175243_a(var24);
+                String var25 = this.getPlayerName(var24);
 
                 if (var11)
                 {
