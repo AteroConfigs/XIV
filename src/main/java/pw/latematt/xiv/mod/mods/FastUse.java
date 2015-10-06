@@ -14,7 +14,10 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.value.SliderValue;
 import pw.latematt.xiv.value.Value;
+
+import java.text.DecimalFormat;
 
 /**
  * @author Matthew
@@ -24,7 +27,7 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
     private final Value<Boolean> food = new Value<>("fastuse_food", true);
     private final Value<Boolean> milk = new Value<>("fastuse_milk", true);
     private final Value<Boolean> potions = new Value<>("fastuse_potions", true);
-    private final Value<Integer> ticksToWait = new Value<>("fastuse_ticks_to_wait", 16);
+    private final SliderValue<Integer> ticksToWait = new SliderValue<>("fastuse_ticks_to_wait", 16, 0, 31, new DecimalFormat("0"));
 
     public FastUse() {
         super("FastUse", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFEF60A9);
