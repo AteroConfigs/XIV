@@ -166,10 +166,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             PotionEffect effect = (PotionEffect) o;
             String name = I18n.format(effect.getEffectName());
 
-            if (XIV.getInstance().getModManager().find("speedmine").isEnabled() && effect.getPotionID() == Potion.digSpeed.getId()) {
-                continue; // So you don't constantly see "Haste (13:37)" in the bottom corner
-            }
-
             if (effect.getAmplifier() == 1) {
                 name = name + " " + I18n.format("enchantment.level.2");
             } else if (effect.getAmplifier() == 2) {
