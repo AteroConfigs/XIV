@@ -172,6 +172,30 @@ public class CommandManager extends ListManager<Command> {
                         ChatLogger.print("Invalid arguments, valid: echo <message>");
                     }
                 }).build();
+        Command.newCommand()
+                .cmd("clearchat")
+                .aliases("cc")
+                .description("Clear your chat.")
+                .arguments("<action>")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if (arguments.length >= 2) {
+                        String action = arguments[1];
+                        switch (action) {
+                            case "full":
+                                Minecraft.getMinecraft().ingameGUI.getChatGUI().clearChatMessages();
+                                break;
+                            case "client":
+                                ChatLogger.print("Todo!");
+                                break;
+                            default:
+                                ChatLogger.print("Invalid action, valid: full, client");
+                                break;
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: clearchat <action>");
+                    }
+                }).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {
             public void onEventCalled(SendPacketEvent event) {
