@@ -148,6 +148,30 @@ public class CommandManager extends ListManager<Command> {
                         ChatLogger.print("Invalid arguments, valid: render <action>");
                     }
                 }).build();
+        Command.newCommand()
+                .cmd("say")
+                .description("Makes you send a chat message.")
+                .arguments("<message>")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if(arguments.length > 1) {
+                        Minecraft.getMinecraft().thePlayer.sendChatMessage(message.substring(arguments[0].length() + 1, message.length()));
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: say <message>");
+                    }
+                }).build();
+        Command.newCommand()
+                .cmd("echo")
+                .description("Makes a client message appear.")
+                .arguments("<message>")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if(arguments.length > 1) {
+                        ChatLogger.print(message.substring(arguments[0].length() + 1, message.length()));
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: echo <message>");
+                    }
+                }).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {
             public void onEventCalled(SendPacketEvent event) {
