@@ -22,7 +22,7 @@ import java.text.DecimalFormat;
 /**
  * @author Matthew
  */
-public class FastUse extends Mod implements Listener<MotionUpdateEvent>,CommandHandler {
+public class FastUse extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private final SliderValue<Integer> ticksToWait = new SliderValue<>("fastuse_ticks_to_wait", 16, 0, 31, new DecimalFormat("0"));
     private final Value<Boolean> bow = new Value<>("fastuse_bow", false);
     private final Value<Boolean> food = new Value<>("fastuse_food", true);

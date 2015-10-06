@@ -148,6 +148,54 @@ public class CommandManager extends ListManager<Command> {
                         ChatLogger.print("Invalid arguments, valid: render <action>");
                     }
                 }).build();
+        Command.newCommand()
+                .cmd("say")
+                .description("Makes you send a chat message.")
+                .arguments("<message>")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if (arguments.length > 1) {
+                        Minecraft.getMinecraft().thePlayer.sendChatMessage(message.substring(arguments[0].length() + 1, message.length()));
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: say <message>");
+                    }
+                }).build();
+        Command.newCommand()
+                .cmd("echo")
+                .description("Makes a client message appear.")
+                .arguments("<message>")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if (arguments.length > 1) {
+                        ChatLogger.print(message.substring(arguments[0].length() + 1, message.length()));
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: echo <message>");
+                    }
+                }).build();
+        Command.newCommand()
+                .cmd("clearchat")
+                .aliases("cc")
+                .description("Clear your chat.")
+                .arguments("<action>")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if (arguments.length >= 2) {
+                        String action = arguments[1];
+                        switch (action) {
+                            case "full":
+                                Minecraft.getMinecraft().ingameGUI.getChatGUI().clearChatMessages();
+                                break;
+                            case "client":
+                                ChatLogger.print("Todo!");
+                                break;
+                            default:
+                                ChatLogger.print("Invalid action, valid: full, client");
+                                break;
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: clearchat <action>");
+                    }
+                }).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {
             public void onEventCalled(SendPacketEvent event) {

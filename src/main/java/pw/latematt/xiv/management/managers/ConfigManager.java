@@ -67,7 +67,9 @@ public class ConfigManager {
         BufferedReader reader = new BufferedReader(new FileReader(config));
         String line;
         while ((line = reader.readLine()) != null) {
-            XIV.getInstance().getCommandManager().parseCommand(XIV.getInstance().getCommandManager().getPrefix() + line);
+            if (line.length() > 0) {
+                XIV.getInstance().getCommandManager().parseCommand(XIV.getInstance().getCommandManager().getPrefix() + line);
+            }
         }
         reader.close();
     }

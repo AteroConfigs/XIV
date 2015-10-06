@@ -24,7 +24,7 @@ import pw.latematt.xiv.value.Value;
 /**
  * @author Matthew
  */
-public class StorageESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
+public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandHandler {
     public final Value<Boolean> chests = new Value<>("storage_esp_chests", true);
     public final Value<Boolean> enderChests = new Value<>("storage_esp_ender_chests", false);
     public final Value<Boolean> furnaces = new Value<>("storage_esp_furnaces", true);
