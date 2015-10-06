@@ -17,6 +17,7 @@ import java.util.regex.Matcher;
 public class NameComplete extends Mod implements Listener<SendPacketEvent> {
     public NameComplete() {
         super("NameComplete", ModType.PLAYER);
+        setEnabled(true);
     }
 
     @Override

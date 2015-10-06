@@ -44,7 +44,7 @@ public class Sneak extends Mod implements Listener<MotionUpdateEvent> {
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
-        if (!mc.thePlayer.isSneaking()) {
+        if (mc.thePlayer != null && !mc.thePlayer.isSneaking()) {
             mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
         }
     }

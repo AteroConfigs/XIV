@@ -224,8 +224,8 @@ public class Waypoints extends Mod implements CommandHandler {
 
         float var13 = (float) dist / 5 <= 2 ? 2.0F : (float) dist / 5;
         float var14 = 0.016666668F * var13;
-        if (var14 > 0.4F) {
-            var14 = 0.4F;
+        if (var14 > 0.28065565F) {
+            var14 = 0.28065565F;
         }
         GlStateManager.pushMatrix();
         RenderHelper.enableStandardItemLighting();
@@ -279,7 +279,7 @@ public class Waypoints extends Mod implements CommandHandler {
                 case "add":
                 case "a":
                     if (arguments.length >= 6) {
-                        if (isInteger(arguments[2]) && isInteger(arguments[3]) && isInteger(arguments[4])) {
+                        try {
                             int x = Integer.parseInt(arguments[2]);
                             int y = Integer.parseInt(arguments[3]);
                             int z = Integer.parseInt(arguments[4]);
@@ -293,7 +293,7 @@ public class Waypoints extends Mod implements CommandHandler {
                                 e.printStackTrace();
                             }
                             ChatLogger.print(String.format("Waypoint \"%s\" added at %s, %s, %s", waypoint.getName(), waypoint.getX(), waypoint.getY(), waypoint.getZ()));
-                        } else {
+                        } catch (NumberFormatException e) {
                             ChatLogger.print("Invalid integer, valid arguments: waypoints add <x> <y> <z> <name>");
                         }
                     } else {
@@ -375,15 +375,6 @@ public class Waypoints extends Mod implements CommandHandler {
         } else {
             ChatLogger.print("Invalid arguments, valid: waypoints <action>");
         }
-    }
-
-    private boolean isInteger(String text) {
-        try {
-            Integer.parseInt(text);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-        return true;
     }
 
     public List<Waypoint> getPoints() {
