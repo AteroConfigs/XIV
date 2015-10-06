@@ -206,44 +206,80 @@ public class KillAura extends Mod implements CommandHandler {
                     break;
                 case "players":
                 case "plyrs":
-                    players.setValue(!players.getValue());
+                    if (arguments.length >= 3) {
+                        players.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        players.setValue(!players.getValue());
+                    }
                     ChatLogger.print(String.format("Kill Aura will %s attack players.", (players.getValue() ? "now" : "no longer")));
                     break;
                 case "mobs":
-                    mobs.setValue(!mobs.getValue());
+                    if (arguments.length >= 3) {
+                        mobs.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        mobs.setValue(!mobs.getValue());
+                    }
                     ChatLogger.print(String.format("Kill Aura will %s attack mobs.", (mobs.getValue() ? "now" : "no longer")));
                     break;
                 case "animals":
-                    animals.setValue(!animals.getValue());
+                    if (arguments.length >= 3) {
+                        animals.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        animals.setValue(!animals.getValue());
+                    }
                     ChatLogger.print(String.format("Kill Aura will %s attack animals.", (animals.getValue() ? "now" : "no longer")));
                     break;
                 case "invisible":
                 case "invis":
-                    invisible.setValue(!invisible.getValue());
+                    if (arguments.length >= 3) {
+                        invisible.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        invisible.setValue(!invisible.getValue());
+                    }
                     ChatLogger.print(String.format("Kill Aura will %s attack invisible entities.", (invisible.getValue() ? "now" : "no longer")));
                     break;
                 case "toggledeath":
                 case "tdeath":
-                    toggleDeath.setValue(!toggleDeath.getValue());
+                    if (arguments.length >= 3) {
+                        toggleDeath.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        toggleDeath.setValue(!toggleDeath.getValue());
+                    }
                     ChatLogger.print(String.format("Kill Aura will %s toggle on death.", (toggleDeath.getValue() ? "now" : "no longer")));
                     break;
                 case "team":
-                    team.setValue(!team.getValue());
+                    if (arguments.length >= 3) {
+                        team.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        team.setValue(!team.getValue());
+                    }
                     ChatLogger.print(String.format("Kill Aura will %s attack your team.", (team.getValue() ? "now" : "no longer")));
                     break;
                 case "silent":
                 case "sil":
-                    silent.setValue(!silent.getValue());
+                    if (arguments.length >= 3) {
+                        silent.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        silent.setValue(!silent.getValue());
+                    }
                     ChatLogger.print(String.format("Kill Aura will %s silently aim.", (silent.getValue() ? "now" : "no longer")));
                     break;
                 case "autosword":
                 case "as":
-                    autoSword.setValue(!autoSword.getValue());
+                    if (arguments.length >= 3) {
+                        autoSword.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        autoSword.setValue(!autoSword.getValue());
+                    }
                     ChatLogger.print(String.format("Kill Aura will %s automatically switch to your sword.", (autoSword.getValue() ? "now" : "no longer")));
                     break;
                 case "autoblock":
                 case "ab":
-                    autoBlock.setValue(!autoBlock.getValue());
+                    if (arguments.length >= 3) {
+                        autoBlock.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        autoBlock.setValue(!autoBlock.getValue());
+                    }
                     ChatLogger.print(String.format("Kill Aura will %s automatically block for you.", (autoBlock.getValue() ? "now" : "no longer")));
                     break;
                 case "mode":

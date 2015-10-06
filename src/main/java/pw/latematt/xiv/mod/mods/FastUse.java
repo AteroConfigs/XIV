@@ -75,19 +75,35 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
             String action = arguments[1];
             switch (action.toLowerCase()) {
                 case "bow":
-                    bow.setValue(!bow.getValue());
+                    if (arguments.length >= 3) {
+                        bow.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        bow.setValue(!bow.getValue());
+                    }
                     ChatLogger.print(String.format("FastUse will %s use bow quickly.", (bow.getValue() ? "now" : "no longer")));
                     break;
                 case "food":
-                    food.setValue(!food.getValue());
+                    if (arguments.length >= 3) {
+                        food.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        food.setValue(!food.getValue());
+                    }
                     ChatLogger.print(String.format("FastUse will %s use food quickly.", (food.getValue() ? "now" : "no longer")));
                     break;
                 case "milk":
-                    milk.setValue(!milk.getValue());
+                    if (arguments.length >= 3) {
+                        milk.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        milk.setValue(!milk.getValue());
+                    }
                     ChatLogger.print(String.format("FastUse will %s use milk quickly.", (milk.getValue() ? "now" : "no longer")));
                     break;
                 case "potions":
-                    potions.setValue(!potions.getValue());
+                    if (arguments.length >= 3) {
+                        potions.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        potions.setValue(!potions.getValue());
+                    }
                     ChatLogger.print(String.format("FastUse will %s use potions quickly.", (potions.getValue() ? "now" : "no longer")));
                     break;
                 case "tickstowait":

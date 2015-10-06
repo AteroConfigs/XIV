@@ -136,7 +136,7 @@ public class Waypoints extends Mod implements CommandHandler {
             public void onEventCalled(PlayerDeathEvent event) {
                 if (!deathPoints.getValue())
                     return;
-                Waypoint point = new Waypoint("Death", getCurrentServerIP(), mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true);
+                Waypoint point = new Waypoint("Death", getCurrentServerIP(), mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false);
                 points.add(point);
                 try {
                     waypointFile.save();
@@ -165,6 +165,13 @@ public class Waypoints extends Mod implements CommandHandler {
                 Files.write(gson.toJson(points).getBytes("UTF-8"), file);
             }
         };
+        try {
+            waypointFile.load();
+        } catch (IOException e) {
+            XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not load, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
+            e.printStackTrace();
+        }
+
         Command.newCommand()
                 .cmd("waypoints")
                 .description("Base command for Waypoints mod.")
@@ -172,12 +179,6 @@ public class Waypoints extends Mod implements CommandHandler {
                 .aliases("points", "wp")
                 .handler(this)
                 .build();
-        try {
-            waypointFile.load();
-        } catch (IOException e) {
-            XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not load, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
-            e.printStackTrace();
-        }
     }
 
     private void drawBoxes(Waypoint waypoint) {
@@ -327,20 +328,48 @@ public class Waypoints extends Mod implements CommandHandler {
                     break;
                 case "tracerlines":
                 case "tracers":
-                    tracerLines.setValue(!tracerLines.getValue());
+                    if (arguments.length >= 3) {
+                        tracerLines.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        tracerLines.setValue(!tracerLines.getValue());
+                    }
                     ChatLogger.print(String.format("Waypoints will %s draw tracer lines.", tracerLines.getValue() ? "now" : "no longer"));
                     break;
                 case "boxes":
-                    boxes.setValue(!boxes.getValue());
+                    if (arguments.length >= 3) {
+                        boxes.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        boxes.setValue(!boxes.getValue());
+                    }
                     ChatLogger.print(String.format("Waypoints will %s draw boxes.", boxes.getValue() ? "now" : "no longer"));
                     break;
                 case "nametags":
                 case "tags":
-                    nametags.setValue(!nametags.getValue());
+                    if (arguments.length >= 3) {
+                        nametags.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        nametags.setValue(!nametags.getValue());
+                    }
                     ChatLogger.print(String.format("Waypoints will %s draw nametags.", nametags.getValue() ? "now" : "no longer"));
                     break;
+                case "lightning":
+                    if (arguments.length >= 3) {
+                        lightningPoints.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        lightningPoints.setValue(!lightningPoints.getValue());
+                    }
+                    ChatLogger.print(String.format("Waypoints will %s set waypoints at lightning strikes.", lightningPoints.getValue() ? "now" : "no longer"));
+                    break;
+                case "death":
+                    if (arguments.length >= 3) {
+                        deathPoints.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        deathPoints.setValue(!deathPoints.getValue());
+                    }
+                    ChatLogger.print(String.format("Waypoints will %s set waypoints at death.", deathPoints.getValue() ? "now" : "no longer"));
+                    break;
                 default:
-                    ChatLogger.print("Invalid action, valid: add, del, tracerlines, boxes, nametags");
+                    ChatLogger.print("Invalid action, valid: add, del, tracerlines, boxes, nametags, lightning, death");
                     break;
             }
         } else {

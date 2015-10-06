@@ -11,19 +11,22 @@ import net.minecraft.tileentity.*;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.command.Command;
+import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
 /**
  * @author Matthew
  */
-public class StorageESP extends Mod implements Listener<Render3DEvent> {
+public class StorageESP extends Mod implements Listener<Render3DEvent>,CommandHandler {
     public final Value<Boolean> chests = new Value<>("storage_esp_chests", true);
-    public final Value<Boolean> enderchests = new Value<>("storage_esp_ender_chests", false);
+    public final Value<Boolean> enderChests = new Value<>("storage_esp_ender_chests", false);
     public final Value<Boolean> furnaces = new Value<>("storage_esp_furnaces", true);
     public final Value<Boolean> brewingStands = new Value<>("storage_esp_brewing_stands", false);
     public final Value<Boolean> hoppers = new Value<>("storage_esp_hoppers", false);
@@ -37,6 +40,14 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
 
     public StorageESP() {
         super("StorageESP", ModType.RENDER);
+
+        Command.newCommand()
+                .cmd("storageesp")
+                .description("Base command for Storage ESP mod.")
+                .arguments("<action>")
+                .aliases("storage", "sesp")
+                .handler(this)
+                .build();
     }
 
     @Override
@@ -81,7 +92,7 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
                         draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
                     }
                 }
-            } else if (tileEntity instanceof TileEntityEnderChest && enderchests.getValue()) {
+            } else if (tileEntity instanceof TileEntityEnderChest && enderChests.getValue()) {
                 TileEntityEnderChest tileEnderChest = (TileEntityEnderChest) tileEntity;
                 draw(tileEnderChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
             } else if (tileEntity instanceof TileEntityFurnace && furnaces.getValue()) {
@@ -203,6 +214,117 @@ public class StorageESP extends Mod implements Listener<Render3DEvent> {
         var2.draw();
 
         GlStateManager.popMatrix();
+    }
+
+    @Override
+    public void onCommandRan(String message) {
+        String[] arguments = message.split(" ");
+        if (arguments.length >= 2) {
+            String action = arguments[1];
+            switch (action.toLowerCase()) {
+                case "chests":
+                    if (arguments.length >= 3) {
+                        chests.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        chests.setValue(!chests.getValue());
+                    }
+                    ChatLogger.print(String.format("StorageESP will %s show Chests.", chests.getValue() ? "now" : "no longer"));
+                    break;
+                case "enderchests":
+                    if (arguments.length >= 3) {
+                        enderChests.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        enderChests.setValue(!enderChests.getValue());
+                    }
+                    ChatLogger.print(String.format("StorageESP will %s show Ender Chests.", enderChests.getValue() ? "now" : "no longer"));
+                    break;
+                case "furnaces":
+                    if (arguments.length >= 3) {
+                        furnaces.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        furnaces.setValue(!furnaces.getValue());
+                    }
+                    ChatLogger.print(String.format("StorageESP will %s show Furnaces.", furnaces.getValue() ? "now" : "no longer"));
+                    break;
+                case "brewingstands":
+                    if (arguments.length >= 3) {
+                        brewingStands.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        brewingStands.setValue(!brewingStands.getValue());
+                    }
+                    ChatLogger.print(String.format("StorageESP will %s show Brewing Stands.", brewingStands.getValue() ? "now" : "no longer"));
+                    break;
+                case "hoppers":
+                    if (arguments.length >= 3) {
+                        hoppers.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        hoppers.setValue(!hoppers.getValue());
+                    }
+                    ChatLogger.print(String.format("StorageESP will %s show Hoppers.", hoppers.getValue() ? "now" : "no longer"));
+                    break;
+                case "droppers":
+                    if (arguments.length >= 3) {
+                        droppers.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        droppers.setValue(!droppers.getValue());
+                    }
+                    ChatLogger.print(String.format("StorageESP will %s show Droppers.", droppers.getValue() ? "now" : "no longer"));
+                    break;
+                case "dispensers":
+                    if (arguments.length >= 3) {
+                        dispensers.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        dispensers.setValue(!dispensers.getValue());
+                    }
+                    ChatLogger.print(String.format("StorageESP will %s show Dispensers.", dispensers.getValue() ? "now" : "no longer"));
+                    break;
+                case "commandblocks":
+                    if (arguments.length >= 3) {
+                        commandBlocks.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        commandBlocks.setValue(!commandBlocks.getValue());
+                    }
+                    ChatLogger.print(String.format("StorageESP will %s show Command Blocks.", commandBlocks.getValue() ? "now" : "no longer"));
+                    break;
+                case "mobspawners":
+                    if (arguments.length >= 3) {
+                        mobSpawners.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        mobSpawners.setValue(!mobSpawners.getValue());
+                    }
+                    ChatLogger.print(String.format("StorageESP will %s show Mob Spawners.", mobSpawners.getValue() ? "now" : "no longer"));
+                    break;
+                case "enchantmenttables":
+                    if (arguments.length >= 3) {
+                        enchantmentTables.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        enchantmentTables.setValue(!enchantmentTables.getValue());
+                    }
+                    ChatLogger.print(String.format("StorageESP will %s show Enchantment Tables.", enchantmentTables.getValue() ? "now" : "no longer"));
+                    break;
+                case "boxes":
+                    if (arguments.length >= 3) {
+                        boxes.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        boxes.setValue(!boxes.getValue());
+                    }
+                    ChatLogger.print(String.format("StorageESP will %s render boxes.", boxes.getValue() ? "now" : "no longer"));
+                    break;
+                case "tracerLines":
+                    if (arguments.length >= 3) {
+                        tracerLines.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        tracerLines.setValue(!tracerLines.getValue());
+                    }
+                    ChatLogger.print(String.format("StorageESP will %s render tracerLines.", tracerLines.getValue() ? "now" : "no longer"));
+                    break;
+                default:
+                    ChatLogger.print("Invalid action, valid: chests, enderchests, furnaces, brewingstands, hoppers, droppers, dispensers, commandblocks, mobspawners, enchantmenttables, boxes, tracers");
+                    break;
+            }
+        } else {
+            ChatLogger.print("Invalid arguments, valid: storageesp <action>");
+        }
     }
 
     @Override
