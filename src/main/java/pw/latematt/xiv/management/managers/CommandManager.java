@@ -154,7 +154,7 @@ public class CommandManager extends ListManager<Command> {
                 .arguments("<message>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
-                    if(arguments.length > 1) {
+                    if (arguments.length > 1) {
                         Minecraft.getMinecraft().thePlayer.sendChatMessage(message.substring(arguments[0].length() + 1, message.length()));
                     } else {
                         ChatLogger.print("Invalid arguments, valid: say <message>");
@@ -166,7 +166,7 @@ public class CommandManager extends ListManager<Command> {
                 .arguments("<message>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
-                    if(arguments.length > 1) {
+                    if (arguments.length > 1) {
                         ChatLogger.print(message.substring(arguments[0].length() + 1, message.length()));
                     } else {
                         ChatLogger.print("Invalid arguments, valid: echo <message>");
