@@ -13,10 +13,10 @@ import java.util.ArrayList;
 /**
  * @author Matthew
  */
-public class FastUsePanel extends Panel {
-    public FastUsePanel(float x, float y, float width, float height) {
-        super("FastUse", new ArrayList<>(), x, y, width, height);
+public class TriggerbotPanel extends Panel {
+    public TriggerbotPanel(float x, float y, float width, float height) {
+        super("Triggerbot", new ArrayList<>(), x, y, width, height);
 
-        addValueElements("fastuse_");
+        addValueElements("triggerbot_");
     }
 }

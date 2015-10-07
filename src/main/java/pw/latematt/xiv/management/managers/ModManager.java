@@ -53,6 +53,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Sprint());
         contents.add(new Step());
         contents.add(new StorageESP());
+        contents.add(new Triggerbot());
         contents.add(new Velocity());
         contents.add(new Waypoints());
         contents.add(new Zoot());
