@@ -55,6 +55,7 @@ public class Waypoints extends Mod implements CommandHandler {
         render3DListener = new Listener<Render3DEvent>() {
             @Override
             public void onEventCalled(Render3DEvent event) {
+                RenderUtils.beginGl();
                 for (Waypoint waypoint : points) {
                     String server;
                     if (mc.getCurrentServerData() == null) {
@@ -65,24 +66,27 @@ public class Waypoints extends Mod implements CommandHandler {
                     if (!waypoint.getServer().equals(server))
                         continue;
 
-                    RenderUtils.beginGl();
                     if (boxes.getValue()) {
+                        GlStateManager.pushMatrix();
+                        GlStateManager.func_179090_x();
                         drawBoxes(waypoint);
+                        GlStateManager.popMatrix();
                     }
 
                     if (tracerLines.getValue()) {
                         GlStateManager.pushMatrix();
                         GlStateManager.loadIdentity();
                         mc.entityRenderer.orientCamera(event.getPartialTicks());
+                        GlStateManager.func_179090_x();
                         drawTracerLines(waypoint);
                         GlStateManager.popMatrix();
                     }
-                    RenderUtils.endGl();
 
                     if (nametags.getValue()) {
                         drawNametags(waypoint);
                     }
                 }
+                RenderUtils.endGl();
             }
         };
 
@@ -228,7 +232,6 @@ public class Waypoints extends Mod implements CommandHandler {
             var14 = 0.28065565F;
         }
         GlStateManager.pushMatrix();
-        RenderHelper.enableStandardItemLighting();
         GlStateManager.translate(x, y + 1.5F, z);
         GL11.glNormal3f(0.0F, 1.0F, 0.0F);
         if (mc.gameSettings.thirdPersonView == 2) {
@@ -239,11 +242,6 @@ public class Waypoints extends Mod implements CommandHandler {
             GlStateManager.rotate(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
         }
         GlStateManager.scale(-var14, -var14, var14);
-        GlStateManager.disableLighting();
-        GlStateManager.depthMask(false);
-        GlStateManager.disableDepth();
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldRenderer = tessellator.getWorldRenderer();
         GlStateManager.func_179090_x();
@@ -257,12 +255,6 @@ public class Waypoints extends Mod implements CommandHandler {
         tessellator.draw();
         GlStateManager.func_179098_w();
         mc.fontRendererObj.drawStringWithShadow(text, -var18, 0, 0xFFFFFFFF);
-        GlStateManager.enableDepth();
-        GlStateManager.depthMask(true);
-        GlStateManager.enableLighting();
-        GlStateManager.disableBlend();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
     }
 
