@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.stats.IStatType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StringUtils;
 import org.lwjgl.opengl.GL11;
@@ -23,8 +24,10 @@ import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +39,7 @@ public class Nametags extends Mod implements CommandHandler {
     private final Listener render3DListener;
     private Value<Boolean> health = new Value<>("nametags_health", true);
     private Value<Boolean> armor = new Value<>("nametags_armor", false);
+    private DecimalFormat decimalFormat = new DecimalFormat("#.#");
 
     public Nametags() {
         super("Nametags", ModType.RENDER);
@@ -52,6 +56,7 @@ public class Nametags extends Mod implements CommandHandler {
         render3DListener = new Listener<Render3DEvent>() {
             @Override
             public void onEventCalled(Render3DEvent event) {
+                RenderUtils.beginGl();
                 for (EntityPlayer player : mc.theWorld.playerEntities) {
                     if (!isValidEntity(player))
                         continue;
@@ -63,6 +68,7 @@ public class Nametags extends Mod implements CommandHandler {
 
                     drawNametags(player, x, y, z);
                 }
+                RenderUtils.endGl();
             }
         };
         setEnabled(true);
@@ -74,37 +80,6 @@ public class Nametags extends Mod implements CommandHandler {
                 .aliases("tags", "nt")
                 .handler(this)
                 .build();
-    }
-
-    @Override
-    public void onCommandRan(String message) {
-        String[] arguments = message.split(" ");
-        if (arguments.length >= 2) {
-            String action = arguments[1];
-            switch (action.toLowerCase()) {
-                case "health":
-                    if (arguments.length >= 3) {
-                        health.setValue(Boolean.parseBoolean(arguments[2]));
-                    } else {
-                        health.setValue(!health.getValue());
-                    }
-                    ChatLogger.print(String.format("Nametags will %s show health.", health.getValue() ? "now" : "no longer"));
-                    break;
-                case "armor":
-                    if (arguments.length >= 3) {
-                        armor.setValue(Boolean.parseBoolean(arguments[2]));
-                    } else {
-                        armor.setValue(!armor.getValue());
-                    }
-                    ChatLogger.print(String.format("Nametags will %s show armor.", armor.getValue() ? "now" : "no longer"));
-                    break;
-                default:
-                    ChatLogger.print("Invalid action, valid: health, armor");
-                    break;
-            }
-        } else {
-            ChatLogger.print("Invalid arguments, valid: nametags <action>");
-        }
     }
 
     private boolean isValidEntity(Entity entity) {
@@ -141,14 +116,13 @@ public class Nametags extends Mod implements CommandHandler {
         }
 
         if (this.health.getValue()) {
-            entityName = String.format("%s \247%s%s", entityName, healthColor, MathHelper.floor_double(health));
+            entityName = String.format("%s \247%s%s", entityName, healthColor, decimalFormat.format(health));
         }
 
         float distance = mc.thePlayer.getDistanceToEntity(entity);
         float var13 = distance / 5 <= 2 ? 2.0F : distance / 5;
         float var14 = 0.016666668F * var13;
         GlStateManager.pushMatrix();
-        RenderHelper.enableStandardItemLighting();
         GlStateManager.translate(x + 0.0F, y + entity.height + 0.5F, z);
         GL11.glNormal3f(0.0F, 1.0F, 0.0F);
         if (mc.gameSettings.thirdPersonView == 2) {
@@ -159,11 +133,6 @@ public class Nametags extends Mod implements CommandHandler {
             GlStateManager.rotate(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
         }
         GlStateManager.scale(-var14, -var14, var14);
-        GlStateManager.disableLighting();
-        GlStateManager.depthMask(false);
-        GlStateManager.disableDepth();
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldRenderer = tessellator.getWorldRenderer();
         int var17 = 0;
@@ -189,22 +158,22 @@ public class Nametags extends Mod implements CommandHandler {
         mc.fontRendererObj.drawStringWithShadow(entityName, -var18, var17, getNametagColor(entity));
         if (armor.getValue() && entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
-            final List<ItemStack> items = new ArrayList<>();
+            List<ItemStack> items = new ArrayList<>();
             if (player.getCurrentEquippedItem() != null) {
                 items.add(player.getCurrentEquippedItem());
             }
 
             for (int index = 3; index >= 0; index--) {
-                final ItemStack stack = player.inventory.armorInventory[index];
+                ItemStack stack = player.inventory.armorInventory[index];
                 if (stack != null) {
                     items.add(stack);
                 }
             }
 
-            final int offset = var18 - (items.size() - 1) * 9 - 9;
+            int offset = var18 - (items.size() - 1) * 9 - 9;
             int xPos = 0;
-            for (final ItemStack stack : items) {
-                final NBTTagList enchants = stack.getEnchantmentTagList();
+            for (ItemStack stack : items) {
+                NBTTagList enchants = stack.getEnchantmentTagList();
                 GlStateManager.pushMatrix();
                 RenderHelper.enableStandardItemLighting();
                 mc.getRenderItem().zLevel = -150.0F;
@@ -238,8 +207,8 @@ public class Nametags extends Mod implements CommandHandler {
 
                             if (enc != null) {
                                 String encName = enc.getTranslatedName(level).substring(0, 1).toLowerCase();
-                                if (level > 10) {
-                                    encName = encName + "10+";
+                                if (level > 99) {
+                                    encName = encName + "99+";
                                 } else {
                                     encName = encName + level;
                                 }
@@ -254,12 +223,6 @@ public class Nametags extends Mod implements CommandHandler {
                 xPos += 18;
             }
         }
-        GlStateManager.enableDepth();
-        GlStateManager.depthMask(true);
-        GlStateManager.enableLighting();
-        GlStateManager.disableBlend();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
     }
 
@@ -273,6 +236,37 @@ public class Nametags extends Mod implements CommandHandler {
             color = 0xFFFF0000;
         }
         return color;
+    }
+
+    @Override
+    public void onCommandRan(String message) {
+        String[] arguments = message.split(" ");
+        if (arguments.length >= 2) {
+            String action = arguments[1];
+            switch (action.toLowerCase()) {
+                case "health":
+                    if (arguments.length >= 3) {
+                        health.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        health.setValue(!health.getValue());
+                    }
+                    ChatLogger.print(String.format("Nametags will %s show health.", health.getValue() ? "now" : "no longer"));
+                    break;
+                case "armor":
+                    if (arguments.length >= 3) {
+                        armor.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        armor.setValue(!armor.getValue());
+                    }
+                    ChatLogger.print(String.format("Nametags will %s show armor.", armor.getValue() ? "now" : "no longer"));
+                    break;
+                default:
+                    ChatLogger.print("Invalid action, valid: health, armor");
+                    break;
+            }
+        } else {
+            ChatLogger.print("Invalid arguments, valid: nametags <action>");
+        }
     }
 
     @Override

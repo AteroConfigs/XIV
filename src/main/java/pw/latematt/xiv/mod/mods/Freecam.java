@@ -17,8 +17,8 @@ import java.util.Objects;
 
 /**
  * @author Jack
+ * @author Matthew
  */
-
 public class Freecam extends Mod {
     private Timer timer = new Timer();
     private double x, y, z;
@@ -26,6 +26,7 @@ public class Freecam extends Mod {
     private final Listener packetListener;
     private final Listener motionListener;
     private final Listener moveListener;
+    private EntityOtherPlayerMP entity;
 
     public Freecam() {
         super("Freecam", ModType.RENDER, Keyboard.KEY_V);
@@ -101,11 +102,9 @@ public class Freecam extends Mod {
             this.z = mc.thePlayer.posZ;
             this.yaw = mc.thePlayer.rotationYaw;
             this.pitch = mc.thePlayer.rotationPitch;
-            final EntityOtherPlayerMP entity = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
-            entity.setPositionAndRotation(this.x, this.y, this.z, this.yaw, this.pitch);
-            entity.inventory = mc.thePlayer.inventory;
-            entity.inventoryContainer = mc.thePlayer.inventoryContainer;
-            entity.rotationYawHead = mc.thePlayer.rotationYawHead;
+            entity = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
+            entity.copyLocationAndAnglesFrom(mc.thePlayer);
+            entity.clonePlayer(mc.thePlayer, true);
             mc.theWorld.addEntityToWorld(-1, entity);
             mc.renderGlobal.loadRenderers();
         }
@@ -119,8 +118,9 @@ public class Freecam extends Mod {
 
         if (Objects.nonNull(mc.thePlayer)) {
             mc.thePlayer.noClip = false;
+            mc.thePlayer.copyLocationAndAnglesFrom(entity);
             mc.theWorld.removeEntityFromWorld(-1);
-            mc.thePlayer.setPositionAndRotation(this.x, this.y, this.z, this.yaw, this.pitch);
+            entity = null;
             mc.renderGlobal.loadRenderers();
         }
     }
