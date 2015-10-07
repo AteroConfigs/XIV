@@ -22,6 +22,7 @@ import java.util.Objects;
  */
 public class CommandManager extends ListManager<Command> {
     private String prefix = ".";
+    private final Minecraft mc = Minecraft.getMinecraft();
 
     public CommandManager() {
         super(new ArrayList<>());
@@ -83,13 +84,9 @@ public class CommandManager extends ListManager<Command> {
                     if (arguments.length >= 2) {
                         String blockChangeString = arguments[1];
                         try {
-                            double newHeight = Double.parseDouble(blockChangeString);
-
-                            Minecraft.getMinecraft().thePlayer.func_174826_a(Minecraft.getMinecraft().thePlayer.getEntityBoundingBox().offset(0, newHeight, 0));
-
-                            // Minecraft.getMinecraft().thePlayer.posY += newHeight;
-
-                            ChatLogger.print(String.format("You've teleported %s block%s", newHeight, (newHeight > 1 || newHeight < -1) ? "s" : ""));
+                            double newBlockChange = Double.parseDouble(blockChangeString);
+                            mc.thePlayer.func_174826_a(mc.thePlayer.getEntityBoundingBox().offset(0, newBlockChange, 0));
+                            ChatLogger.print(String.format("You've teleported %s %s block%s", newBlockChange < 0 ? "down" : "up", newBlockChange, (newBlockChange > 1 || newBlockChange < -1) ? "s" : ""));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", blockChangeString));
                         }
@@ -103,8 +100,8 @@ public class CommandManager extends ListManager<Command> {
                 .aliases("dmg")
                 .handler(message -> {
                     for (int i = 0; i < 81; i++) {
-                        Minecraft.getMinecraft().getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY + 0.05D, Minecraft.getMinecraft().thePlayer.posZ, false));
-                        Minecraft.getMinecraft().getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ, false));
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.05D, mc.thePlayer.posZ, false));
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
                     }
                 }).build();
         Command.newCommand()
@@ -131,13 +128,21 @@ public class CommandManager extends ListManager<Command> {
                             case "antialiasing":
                             case "aa":
                                 Value<Boolean> antiAliasing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_anti_aliasing");
-                                antiAliasing.setValue(!antiAliasing.getValue());
+                                if (arguments.length >= 3) {
+                                    antiAliasing.setValue(Boolean.parseBoolean(arguments[2]));
+                                } else {
+                                    antiAliasing.setValue(!antiAliasing.getValue());
+                                }
                                 ChatLogger.print(String.format("Render mods will %s use antialiasing.", antiAliasing.getValue() ? "now" : "no longer"));
                                 break;
                             case "worldbobbing":
                             case "wb":
                                 Value<Boolean> worldBobbing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_world_bobbing");
-                                worldBobbing.setValue(!worldBobbing.getValue());
+                                if (arguments.length >= 3) {
+                                    worldBobbing.setValue(Boolean.parseBoolean(arguments[2]));
+                                } else {
+                                    worldBobbing.setValue(!worldBobbing.getValue());
+                                }
                                 ChatLogger.print(String.format("Render mods will %s render world bobbing.", worldBobbing.getValue() ? "now" : "no longer"));
                                 break;
                             default:
@@ -155,7 +160,7 @@ public class CommandManager extends ListManager<Command> {
                 .handler(message -> {
                     String[] arguments = message.split(" ");
                     if (arguments.length > 1) {
-                        Minecraft.getMinecraft().thePlayer.sendChatMessage(message.substring(arguments[0].length() + 1, message.length()));
+                        mc.thePlayer.sendChatMessage(message.substring(arguments[0].length() + 1, message.length()));
                     } else {
                         ChatLogger.print("Invalid arguments, valid: say <message>");
                     }
@@ -178,23 +183,7 @@ public class CommandManager extends ListManager<Command> {
                 .description("Clear your chat.")
                 .arguments("<action>")
                 .handler(message -> {
-                    String[] arguments = message.split(" ");
-                    if (arguments.length >= 2) {
-                        String action = arguments[1];
-                        switch (action) {
-                            case "full":
-                                Minecraft.getMinecraft().ingameGUI.getChatGUI().clearChatMessages();
-                                break;
-                            case "client":
-                                ChatLogger.print("Todo!");
-                                break;
-                            default:
-                                ChatLogger.print("Invalid action, valid: full, client");
-                                break;
-                        }
-                    } else {
-                        ChatLogger.print("Invalid arguments, valid: clearchat <action>");
-                    }
+                    mc.ingameGUI.getChatGUI().clearChatMessages();
                 }).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {
@@ -243,7 +232,7 @@ public class CommandManager extends ListManager<Command> {
 
     public Command find(Class clazz) {
         for (Command cmd : getContents()) {
-            if (cmd.getClass().equals(clazz)) {
+            if (cmd.getHandler().getClass().equals(clazz)) {
                 return cmd;
             }
         }
@@ -253,9 +242,7 @@ public class CommandManager extends ListManager<Command> {
 
     public Command find(String name) {
         for (Command cmd : getContents()) {
-            if (cmd
-                    .getCmd()
-                    .equals(name)) {
+            if (cmd.getCmd().equals(name)) {
                 return cmd;
             }
         }
