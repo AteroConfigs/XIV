@@ -59,10 +59,13 @@ public class ValueSlider extends Element {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (isOverElement(mouseX, mouseY) && mouseButton == 0) {
-            mc.getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(new ResourceLocation("gui.button.press"), 1.0F));
-//            ModuleValue<Float> val = toFloat(value);
-
+        if (isOverElement(mouseX, mouseY)) {
+            if (mouseButton == 0)
+                mc.getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(new ResourceLocation("gui.button.press"), 1.0F));
+            if (mouseButton == 1) {
+                mc.getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(new ResourceLocation("gui.button.press"), 0.7F));
+                value.setValue(value.getDefaultValue());
+            }
         }
     }
 
