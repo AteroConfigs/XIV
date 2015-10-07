@@ -41,7 +41,6 @@ public class SliderValue<T> extends Value<T> {
 
     public SliderValue<T> setSliderX(float sliderX) {
         this.sliderX = sliderX;
-
         return this;
     }
 }

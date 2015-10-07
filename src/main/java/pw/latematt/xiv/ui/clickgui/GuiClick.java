@@ -45,7 +45,6 @@ public class GuiClick extends GuiScreen {
         panels.add(new TriggerbotPanel(312, 19, 100, 14));
 
 
-
         if (guiConfig == null) {
             guiConfig = new XIVFile("gui", "json") {
                 @Override
