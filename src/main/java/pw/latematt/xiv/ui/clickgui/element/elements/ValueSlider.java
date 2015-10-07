@@ -11,12 +11,12 @@ import pw.latematt.xiv.value.SliderValue;
 /**
  * @author Rederpz
  */
-public class ValueSlider extends Element {
+public class ValueSlider<T> extends Element {
     private static Minecraft mc = Minecraft.getMinecraft();
-    private final SliderValue<Boolean> value;
+    private final SliderValue<T> value;
     private final String valuePrettyName;
 
-    public ValueSlider(SliderValue<Boolean> value, String valuePrettyName, float x, float y, float width, float height) {
+    public ValueSlider(SliderValue<T> value, String valuePrettyName, float x, float y, float width, float height) {
         super(x, y, width, height);
 
         this.value = value;
@@ -69,7 +69,7 @@ public class ValueSlider extends Element {
         }
     }
 
-    public SliderValue<Boolean> getValue() {
+    public SliderValue<T> getValue() {
         return value;
     }
 
