@@ -67,7 +67,7 @@ public class ConfigManager {
         BufferedReader reader = new BufferedReader(new FileReader(config));
         String line;
         while ((line = reader.readLine()) != null) {
-            if (line.length() > 0) {
+            if (line.length() > 0 && !line.startsWith("#")) {
                 XIV.getInstance().getCommandManager().parseCommand(XIV.getInstance().getCommandManager().getPrefix() + line);
             }
         }
