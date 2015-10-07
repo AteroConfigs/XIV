@@ -128,10 +128,10 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             drawArmor(scaledResolution);
         }
 
-        /* NahrFont example/testing */
-//        if (font == null) // it will always be at this point, this must happen since the currnet thread won't have opengl context if done in the constructor.
-//            font = new NahrFont("Verdana", 18);
-//        font.drawString("\247gTesting Custom Colors", 2, 12, 0xFFFFFFFF, 0xFF000000);
+        /* NahrFont example/testing
+        if (font == null) // it will always be at this point, this must happen since the currnet thread won't have opengl context if done in the constructor.
+            font = new NahrFont("Verdana", 18);
+        font.drawString("\247gTesting Custom Colors", 2, 12, 0xFFFFFFFF, 0xFF000000);*/
 
         GlStateManager.disableBlend();
     }

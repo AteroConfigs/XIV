@@ -11,8 +11,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.stats.IStatType;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.StringUtils;
 import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;

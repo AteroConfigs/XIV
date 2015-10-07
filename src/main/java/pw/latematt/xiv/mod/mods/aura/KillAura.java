@@ -22,10 +22,7 @@ import pw.latematt.xiv.mod.mods.aura.mode.modes.Singular;
 import pw.latematt.xiv.mod.mods.aura.mode.modes.Switch;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
-import pw.latematt.xiv.value.SliderValue;
 import pw.latematt.xiv.value.Value;
-
-import java.text.DecimalFormat;
 
 /**
  * @author Matthew
@@ -34,13 +31,13 @@ public class KillAura extends Mod implements CommandHandler {
     private final Listener motionUpdateListener;
     private final Listener sendPacketListener;
     private final Listener playerDeathListener;
-    public final SliderValue<Long> delay = new SliderValue<>("killaura_delay", 125L, 0L, 1000L, new DecimalFormat("0"));
-    public final SliderValue<Double> range = new SliderValue<>("killaura_range", 3.9D, 1D, 6D, new DecimalFormat("0.0"));
+    public final Value<Long> delay = new Value<>("killaura_delay", 125L);
+    public final Value<Double> range = new Value<>("killaura_range", 3.9D);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
     private final Value<Boolean> mobs = new Value<>("killaura_mobs", false);
     private final Value<Boolean> animals = new Value<>("killaura_animals", false);
     private final Value<Boolean> invisible = new Value<>("killaura_invisible", false);
-    private final Value<Boolean> team = new Value<>("killaura_team", false);
+    private final Value<Boolean> team = new Value<>("killaura_team", true);
     public final Value<Boolean> silent = new Value<>("killaura_silent", true);
     public final Value<Boolean> autoSword = new Value<>("killaura_auto_sword", true);
     private final Value<Boolean> toggleDeath = new Value<>("killaura_toggle_death", false);
