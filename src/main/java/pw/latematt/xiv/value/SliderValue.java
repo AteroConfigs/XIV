@@ -6,16 +6,21 @@ import java.text.DecimalFormat;
  * @author Matthew
  */
 public class SliderValue<T> extends Value<T> {
-    private T min, max;
+    private T start, min, max;
     private DecimalFormat format;
     private float sliderX;
 
     public SliderValue(String name, T value, T min, T max, DecimalFormat format) {
         super(name, value);
 
+        this.start = value;
         this.min = min;
         this.max = max;
         this.format = format;
+    }
+
+    public T getDefaultValue() {
+        return start;
     }
 
     public T getMin() {

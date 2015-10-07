@@ -37,11 +37,14 @@ public class GuiClick extends GuiScreen {
         themes.add(new NorthStarTheme(this));
 
         panels.add(new ThemePanel(4, 4, 100, 14));
+        panels.add(new WaypointsPanel(4, 19, 100, 14));
         panels.add(new AuraPanel(106, 4, 100, 14));
+        panels.add(new FastUsePanel(106, 19, 100, 14));
         panels.add(new ESPPanel(208, 4, 100, 14));
         panels.add(new StorageESPPanel(312, 4, 100, 14));
-        panels.add(new WaypointsPanel(4, 19, 100, 14));
-        panels.add(new FastUsePanel(106, 19, 100, 14));
+        panels.add(new TriggerbotPanel(312, 19, 100, 14));
+
+
 
         if (guiConfig == null) {
             guiConfig = new XIVFile("gui", "json") {
