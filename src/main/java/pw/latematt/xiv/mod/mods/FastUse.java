@@ -14,10 +14,7 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.value.SliderValue;
 import pw.latematt.xiv.value.Value;
-
-import java.text.DecimalFormat;
 
 /**
  * @author Matthew

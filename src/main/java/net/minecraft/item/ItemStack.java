@@ -312,7 +312,7 @@ public final class ItemStack
         {
             if (amount > 0)
             {
-                int var3 = EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, this);
+                int var3 = EnchantmentHelper.getEnchantmentLevel(Enchantment.UNBREAKING.effectId, this);
                 int var4 = 0;
 
                 for (int var5 = 0; var3 > 0 && var5 < amount; ++var5)

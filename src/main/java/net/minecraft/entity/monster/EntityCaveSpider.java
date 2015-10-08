@@ -45,7 +45,7 @@ public class EntityCaveSpider extends EntitySpider
 
                 if (var2 > 0)
                 {
-                    ((EntityLivingBase)p_70652_1_).addPotionEffect(new PotionEffect(Potion.poison.id, var2 * 20, 0));
+                    ((EntityLivingBase)p_70652_1_).addPotionEffect(new PotionEffect(Potion.POISON.id, var2 * 20, 0));
                 }
             }
 

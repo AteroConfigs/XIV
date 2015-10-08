@@ -147,7 +147,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             for (int index = 3; index >= 0; index--) {
                 final ItemStack stack = mc.thePlayer.inventory.armorInventory[index];
                 if (stack != null) {
-                    int height = scaledResolution.getScaledHeight() - (mc.thePlayer.isInsideOfMaterial(Material.water) ? mc.thePlayer.getActivePotionEffect(Potion.absorption) != null ? 75 : 65 : 55);
+                    int height = scaledResolution.getScaledHeight() - (mc.thePlayer.isInsideOfMaterial(Material.water) ? mc.thePlayer.getActivePotionEffect(Potion.ABSORPTION) != null ? 75 : 65 : 55);
                     mc.getRenderItem().renderItemAndEffectIntoGUI(stack, scaledResolution.getScaledWidth() / 2 + x, height);
                     mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, scaledResolution.getScaledWidth() / 2 + x, height);
                     x += 18;

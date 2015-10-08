@@ -101,7 +101,7 @@ public class EnchantmentDamage extends Enchantment
             if (this.damageType == 2 && var4.getCreatureAttribute() == EnumCreatureAttribute.ARTHROPOD)
             {
                 int var5 = 20 + p_151368_1_.getRNG().nextInt(10 * p_151368_3_);
-                var4.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, var5, 3));
+                var4.addPotionEffect(new PotionEffect(Potion.SLOWNESS.id, var5, 3));
             }
         }
     }

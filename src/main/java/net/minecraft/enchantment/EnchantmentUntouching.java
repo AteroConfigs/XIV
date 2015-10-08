@@ -43,7 +43,7 @@ public class EnchantmentUntouching extends Enchantment
      */
     public boolean canApplyTogether(Enchantment p_77326_1_)
     {
-        return super.canApplyTogether(p_77326_1_) && p_77326_1_.effectId != fortune.effectId;
+        return super.canApplyTogether(p_77326_1_) && p_77326_1_.effectId != FORTUNE.effectId;
     }
 
     public boolean canApply(ItemStack p_92089_1_)

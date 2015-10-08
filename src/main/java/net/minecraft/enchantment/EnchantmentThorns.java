@@ -50,7 +50,7 @@ public class EnchantmentThorns extends Enchantment
     public void func_151367_b(EntityLivingBase p_151367_1_, Entity p_151367_2_, int p_151367_3_)
     {
         Random var4 = p_151367_1_.getRNG();
-        ItemStack var5 = EnchantmentHelper.func_92099_a(Enchantment.thorns, p_151367_1_);
+        ItemStack var5 = EnchantmentHelper.func_92099_a(Enchantment.THORNS, p_151367_1_);
 
         if (func_92094_a(p_151367_3_, var4))
         {

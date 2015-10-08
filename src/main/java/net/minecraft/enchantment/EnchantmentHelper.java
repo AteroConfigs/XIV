@@ -277,22 +277,22 @@ public class EnchantmentHelper
      */
     public static int getRespiration(EntityLivingBase p_77501_0_)
     {
-        return getEnchantmentLevel(Enchantment.field_180313_o.effectId, p_77501_0_.getHeldItem());
+        return getEnchantmentLevel(Enchantment.KNOCKBACK.effectId, p_77501_0_.getHeldItem());
     }
 
     public static int getFireAspectModifier(EntityLivingBase p_90036_0_)
     {
-        return getEnchantmentLevel(Enchantment.fireAspect.effectId, p_90036_0_.getHeldItem());
+        return getEnchantmentLevel(Enchantment.FIRE_ASPECT.effectId, p_90036_0_.getHeldItem());
     }
 
     public static int func_180319_a(Entity p_180319_0_)
     {
-        return getMaxEnchantmentLevel(Enchantment.field_180317_h.effectId, p_180319_0_.getInventory());
+        return getMaxEnchantmentLevel(Enchantment.RESPIRATION.effectId, p_180319_0_.getInventory());
     }
 
     public static int func_180318_b(Entity p_180318_0_)
     {
-        return getMaxEnchantmentLevel(Enchantment.field_180316_k.effectId, p_180318_0_.getInventory());
+        return getMaxEnchantmentLevel(Enchantment.DEPTH_STRIDER.effectId, p_180318_0_.getInventory());
     }
 
     /**
@@ -300,7 +300,7 @@ public class EnchantmentHelper
      */
     public static int getEfficiencyModifier(EntityLivingBase p_77509_0_)
     {
-        return getEnchantmentLevel(Enchantment.efficiency.effectId, p_77509_0_.getHeldItem());
+        return getEnchantmentLevel(Enchantment.EFFICIENCY.effectId, p_77509_0_.getHeldItem());
     }
 
     /**
@@ -308,7 +308,7 @@ public class EnchantmentHelper
      */
     public static boolean getSilkTouchModifier(EntityLivingBase p_77502_0_)
     {
-        return getEnchantmentLevel(Enchantment.silkTouch.effectId, p_77502_0_.getHeldItem()) > 0;
+        return getEnchantmentLevel(Enchantment.SILK_TOUCH.effectId, p_77502_0_.getHeldItem()) > 0;
     }
 
     /**
@@ -316,17 +316,17 @@ public class EnchantmentHelper
      */
     public static int getFortuneModifier(EntityLivingBase p_77517_0_)
     {
-        return getEnchantmentLevel(Enchantment.fortune.effectId, p_77517_0_.getHeldItem());
+        return getEnchantmentLevel(Enchantment.FORTUNE.effectId, p_77517_0_.getHeldItem());
     }
 
     public static int func_151386_g(EntityLivingBase p_151386_0_)
     {
-        return getEnchantmentLevel(Enchantment.luckOfTheSea.effectId, p_151386_0_.getHeldItem());
+        return getEnchantmentLevel(Enchantment.LUCK_OF_THE_SEA.effectId, p_151386_0_.getHeldItem());
     }
 
     public static int func_151387_h(EntityLivingBase p_151387_0_)
     {
-        return getEnchantmentLevel(Enchantment.lure.effectId, p_151387_0_.getHeldItem());
+        return getEnchantmentLevel(Enchantment.LURE.effectId, p_151387_0_.getHeldItem());
     }
 
     /**
@@ -334,7 +334,7 @@ public class EnchantmentHelper
      */
     public static int getLootingModifier(EntityLivingBase p_77519_0_)
     {
-        return getEnchantmentLevel(Enchantment.looting.effectId, p_77519_0_.getHeldItem());
+        return getEnchantmentLevel(Enchantment.LOOTING.effectId, p_77519_0_.getHeldItem());
     }
 
     /**
@@ -342,7 +342,7 @@ public class EnchantmentHelper
      */
     public static boolean getAquaAffinityModifier(EntityLivingBase p_77510_0_)
     {
-        return getMaxEnchantmentLevel(Enchantment.aquaAffinity.effectId, p_77510_0_.getInventory()) > 0;
+        return getMaxEnchantmentLevel(Enchantment.AQUA_AFFINITY.effectId, p_77510_0_.getInventory()) > 0;
     }
 
     public static ItemStack func_92099_a(Enchantment p_92099_0_, EntityLivingBase p_92099_1_)

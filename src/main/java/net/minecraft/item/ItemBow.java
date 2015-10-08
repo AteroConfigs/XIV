@@ -28,7 +28,7 @@ public class ItemBow extends Item
      */
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft)
     {
-        boolean var5 = playerIn.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
+        boolean var5 = playerIn.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.INFINITY.effectId, stack) > 0;
 
         if (var5 || playerIn.inventory.hasItem(Items.arrow))
         {
@@ -53,21 +53,21 @@ public class ItemBow extends Item
                 var8.setIsCritical(true);
             }
 
-            int var9 = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
+            int var9 = EnchantmentHelper.getEnchantmentLevel(Enchantment.POWER.effectId, stack);
 
             if (var9 > 0)
             {
                 var8.setDamage(var8.getDamage() + (double)var9 * 0.5D + 0.5D);
             }
 
-            int var10 = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
+            int var10 = EnchantmentHelper.getEnchantmentLevel(Enchantment.PUNCH.effectId, stack);
 
             if (var10 > 0)
             {
                 var8.setKnockbackStrength(var10);
             }
 
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0)
+            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.FLAME.effectId, stack) > 0)
             {
                 var8.setFire(100);
             }

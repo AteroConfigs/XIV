@@ -53,6 +53,6 @@ public class EnchantmentLootBonus extends Enchantment
      */
     public boolean canApplyTogether(Enchantment p_77326_1_)
     {
-        return super.canApplyTogether(p_77326_1_) && p_77326_1_.effectId != silkTouch.effectId;
+        return super.canApplyTogether(p_77326_1_) && p_77326_1_.effectId != SILK_TOUCH.effectId;
     }
 }

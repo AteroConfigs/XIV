@@ -1331,9 +1331,9 @@ public class EntityHorse extends EntityAnimal implements IInvBasic
             {
                 this.motionY = this.getHorseJumpStrength() * (double)this.jumpPower;
 
-                if (this.isPotionActive(Potion.jump))
+                if (this.isPotionActive(Potion.JUMP_BOOST))
                 {
-                    this.motionY += (double)((float)(this.getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F);
+                    this.motionY += (double)((float)(this.getActivePotionEffect(Potion.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
                 }
 
                 this.setHorseJumping(true);

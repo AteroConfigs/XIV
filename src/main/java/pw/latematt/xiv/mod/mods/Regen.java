@@ -28,7 +28,7 @@ public class Regen extends Mod implements Listener<MotionUpdateEvent> {
     public void onEventCalled(MotionUpdateEvent event) {
         long time = 100L;
 
-        if (mc.thePlayer.getActivePotionEffect(Potion.regeneration) != null) {
+        if (mc.thePlayer.getActivePotionEffect(Potion.REGENERATION) != null) {
             if (!set) {
                 set = true;
                 timer.reset();

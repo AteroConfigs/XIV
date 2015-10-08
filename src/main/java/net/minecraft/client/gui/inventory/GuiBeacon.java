@@ -322,7 +322,7 @@ public class GuiBeacon extends GuiContainer
         {
             String var3 = I18n.format(Potion.potionTypes[this.field_146149_p].getName(), new Object[0]);
 
-            if (this.field_146148_q >= 3 && this.field_146149_p != Potion.regeneration.id)
+            if (this.field_146148_q >= 3 && this.field_146149_p != Potion.REGENERATION.id)
             {
                 var3 = var3 + " II";
             }
