@@ -136,7 +136,7 @@ public class GuiIngame extends Gui
 
         float var7;
 
-        if (!this.mc.thePlayer.isPotionActive(Potion.confusion))
+        if (!this.mc.thePlayer.isPotionActive(Potion.NAUSEA))
         {
             var7 = this.mc.thePlayer.prevTimeInPortal + (this.mc.thePlayer.timeInPortal - this.mc.thePlayer.prevTimeInPortal) * p_175180_1_;
 
@@ -657,7 +657,7 @@ public class GuiIngame extends Gui
             int var20 = var2.getTotalArmorValue();
             int var21 = -1;
 
-            if (var2.isPotionActive(Potion.regeneration))
+            if (var2.isPotionActive(Potion.REGENERATION))
             {
                 var21 = this.updateCounter % MathHelper.ceiling_float_int(var14 + 5.0F);
             }
@@ -698,11 +698,11 @@ public class GuiIngame extends Gui
             {
                 var23 = 16;
 
-                if (var2.isPotionActive(Potion.poison))
+                if (var2.isPotionActive(Potion.POISON))
                 {
                     var23 += 36;
                 }
-                else if (var2.isPotionActive(Potion.wither))
+                else if (var2.isPotionActive(Potion.WITHER))
                 {
                     var23 += 72;
                 }
@@ -790,7 +790,7 @@ public class GuiIngame extends Gui
                     var25 = 16;
                     byte var35 = 0;
 
-                    if (var2.isPotionActive(Potion.hunger))
+                    if (var2.isPotionActive(Potion.HUNGER))
                     {
                         var25 += 36;
                         var35 = 13;

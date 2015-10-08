@@ -222,7 +222,7 @@ public class EntityVillager extends EntityAgeable implements INpc, IMerchant
                     }
                 }
 
-                this.addPotionEffect(new PotionEffect(Potion.regeneration.id, 200, 0));
+                this.addPotionEffect(new PotionEffect(Potion.REGENERATION.id, 200, 0));
             }
         }
 

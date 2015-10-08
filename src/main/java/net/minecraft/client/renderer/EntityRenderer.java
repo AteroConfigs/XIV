@@ -857,7 +857,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
         {
             byte var5 = 20;
 
-            if (this.mc.thePlayer.isPotionActive(Potion.confusion))
+            if (this.mc.thePlayer.isPotionActive(Potion.NAUSEA))
             {
                 var5 = 7;
             }
@@ -1000,7 +1000,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
             if (var2 != null)
             {
-                if (CustomColorizer.updateLightmap(var2, this.torchFlickerX, this.lightmapColors, this.mc.thePlayer.isPotionActive(Potion.nightVision)))
+                if (CustomColorizer.updateLightmap(var2, this.torchFlickerX, this.lightmapColors, this.mc.thePlayer.isPotionActive(Potion.NIGHT_VISION)))
                 {
                     this.lightmapTexture.updateDynamicTexture();
                     this.lightmapUpdateNeeded = false;
@@ -1048,7 +1048,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
                     float var17;
 
-                    if (this.mc.thePlayer.isPotionActive(Potion.nightVision))
+                    if (this.mc.thePlayer.isPotionActive(Potion.NIGHT_VISION))
                     {
                         var16 = this.func_180438_a(this.mc.thePlayer, partialTicks);
                         var17 = 1.0F / var13;
@@ -1143,7 +1143,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
     private float func_180438_a(EntityLivingBase p_180438_1_, float partialTicks)
     {
-        int var3 = p_180438_1_.getActivePotionEffect(Potion.nightVision).getDuration();
+        int var3 = p_180438_1_.getActivePotionEffect(Potion.NIGHT_VISION).getDuration();
         return var3 > 200 ? 1.0F : 0.7F + MathHelper.sin(((float)var3 - partialTicks) * (float)Math.PI * 0.2F) * 0.3F;
     }
 
@@ -2058,7 +2058,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
         {
             var13 = (float)EnchantmentHelper.func_180319_a(var3) * 0.2F;
 
-            if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.waterBreathing))
+            if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.WATER_BREATHING))
             {
                 var13 = var13 * 0.3F + 0.6F;
             }
@@ -2089,9 +2089,9 @@ public class EntityRenderer implements IResourceManagerReloadListener
         double fogYFactor1 = var2.provider.getVoidFogYFactor();
         double var23 = (var3.lastTickPosY + (var3.posY - var3.lastTickPosY) * (double)partialTicks) * fogYFactor1;
 
-        if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.blindness))
+        if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.BLINDNESS))
         {
-            int var24 = ((EntityLivingBase)var3).getActivePotionEffect(Potion.blindness).getDuration();
+            int var24 = ((EntityLivingBase)var3).getActivePotionEffect(Potion.BLINDNESS).getDuration();
 
             if (var24 < 20)
             {
@@ -2128,7 +2128,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
         float var17;
 
-        if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.nightVision))
+        if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.NIGHT_VISION))
         {
             var241 = this.func_180438_a((EntityLivingBase)var3, partialTicks);
             var17 = 1.0F / this.field_175080_Q;
@@ -2200,10 +2200,10 @@ public class EntityRenderer implements IResourceManagerReloadListener
         {
             float var6;
 
-            if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.blindness))
+            if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.BLINDNESS))
             {
                 var6 = 5.0F;
-                int var71 = ((EntityLivingBase)var3).getActivePotionEffect(Potion.blindness).getDuration();
+                int var71 = ((EntityLivingBase)var3).getActivePotionEffect(Potion.BLINDNESS).getDuration();
 
                 if (var71 < 20)
                 {
@@ -2237,7 +2237,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
             {
                 GlStateManager.setFog(2048);
 
-                if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.waterBreathing))
+                if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.WATER_BREATHING))
                 {
                     GlStateManager.setFogDensity(0.01F);
                 }

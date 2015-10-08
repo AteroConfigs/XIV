@@ -149,11 +149,11 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob
             {
                 short var5 = -1;
 
-                if (this.rand.nextFloat() < 0.15F && this.isInsideOfMaterial(Material.water) && !this.isPotionActive(Potion.waterBreathing))
+                if (this.rand.nextFloat() < 0.15F && this.isInsideOfMaterial(Material.water) && !this.isPotionActive(Potion.WATER_BREATHING))
                 {
                     var5 = 8237;
                 }
-                else if (this.rand.nextFloat() < 0.15F && this.isBurning() && !this.isPotionActive(Potion.fireResistance))
+                else if (this.rand.nextFloat() < 0.15F && this.isBurning() && !this.isPotionActive(Potion.FIRE_RESISTANCE))
                 {
                     var5 = 16307;
                 }
@@ -161,11 +161,11 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob
                 {
                     var5 = 16341;
                 }
-                else if (this.rand.nextFloat() < 0.25F && this.getAttackTarget() != null && !this.isPotionActive(Potion.moveSpeed) && this.getAttackTarget().getDistanceSqToEntity(this) > 121.0D)
+                else if (this.rand.nextFloat() < 0.25F && this.getAttackTarget() != null && !this.isPotionActive(Potion.SPEED) && this.getAttackTarget().getDistanceSqToEntity(this) > 121.0D)
                 {
                     var5 = 16274;
                 }
-                else if (this.rand.nextFloat() < 0.25F && this.getAttackTarget() != null && !this.isPotionActive(Potion.moveSpeed) && this.getAttackTarget().getDistanceSqToEntity(this) > 121.0D)
+                else if (this.rand.nextFloat() < 0.25F && this.getAttackTarget() != null && !this.isPotionActive(Potion.SPEED) && this.getAttackTarget().getDistanceSqToEntity(this) > 121.0D)
                 {
                     var5 = 16274;
                 }
@@ -264,15 +264,15 @@ public class EntityWitch extends EntityMob implements IRangedAttackMob
             double var10 = p_82196_1_.posZ + p_82196_1_.motionZ - this.posZ;
             float var12 = MathHelper.sqrt_double(var6 * var6 + var10 * var10);
 
-            if (var12 >= 8.0F && !p_82196_1_.isPotionActive(Potion.moveSlowdown))
+            if (var12 >= 8.0F && !p_82196_1_.isPotionActive(Potion.SLOWNESS))
             {
                 var3.setPotionDamage(32698);
             }
-            else if (p_82196_1_.getHealth() >= 8.0F && !p_82196_1_.isPotionActive(Potion.poison))
+            else if (p_82196_1_.getHealth() >= 8.0F && !p_82196_1_.isPotionActive(Potion.POISON))
             {
                 var3.setPotionDamage(32660);
             }
-            else if (var12 <= 3.0F && !p_82196_1_.isPotionActive(Potion.weakness) && this.rand.nextFloat() < 0.25F)
+            else if (var12 <= 3.0F && !p_82196_1_.isPotionActive(Potion.WEAKNESS) && this.rand.nextFloat() < 0.25F)
             {
                 var3.setPotionDamage(32696);
             }

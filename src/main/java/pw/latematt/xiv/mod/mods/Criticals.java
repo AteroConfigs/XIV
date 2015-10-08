@@ -46,7 +46,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent> {
                 || mc.thePlayer.isInsideOfMaterial(Material.lava)
                 || mc.thePlayer.isOnLadder()
                 || mc.thePlayer.getActivePotionEffects().contains(
-                Potion.blindness) || mc.thePlayer.ridingEntity != null;
+                Potion.BLINDNESS) || mc.thePlayer.ridingEntity != null;
     }
 
     @Override

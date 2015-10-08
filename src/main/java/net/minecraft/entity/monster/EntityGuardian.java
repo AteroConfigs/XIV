@@ -427,7 +427,7 @@ public class EntityGuardian extends EntityMob
 
             if ((this.ticksExisted + this.getEntityId()) % 1200 == 0)
             {
-                Potion var5 = Potion.digSlowdown;
+                Potion var5 = Potion.MINING_FATIGUE;
                 List var6 = this.worldObj.func_175661_b(EntityPlayerMP.class, new Predicate()
                 {
 

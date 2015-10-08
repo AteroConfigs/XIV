@@ -18,69 +18,69 @@ public abstract class Enchantment
     private static final Enchantment[] field_180311_a = new Enchantment[256];
     public static final Enchantment[] enchantmentsList;
     private static final Map field_180307_E = Maps.newHashMap();
-    public static final Enchantment field_180310_c = new EnchantmentProtection(0, new ResourceLocation("protection"), 10, 0);
+    public static final Enchantment PROTECTION = new EnchantmentProtection(0, new ResourceLocation("protection"), 10, 0);
 
     /** Protection against fire */
-    public static final Enchantment fireProtection = new EnchantmentProtection(1, new ResourceLocation("fire_protection"), 5, 1);
-    public static final Enchantment field_180309_e = new EnchantmentProtection(2, new ResourceLocation("feather_falling"), 5, 2);
+    public static final Enchantment FIRE_PROTECTION = new EnchantmentProtection(1, new ResourceLocation("fire_protection"), 5, 1);
+    public static final Enchantment FEATHER_FALLING = new EnchantmentProtection(2, new ResourceLocation("feather_falling"), 5, 2);
 
     /** Protection against explosions */
-    public static final Enchantment blastProtection = new EnchantmentProtection(3, new ResourceLocation("blast_protection"), 2, 3);
-    public static final Enchantment field_180308_g = new EnchantmentProtection(4, new ResourceLocation("projectile_protection"), 5, 4);
-    public static final Enchantment field_180317_h = new EnchantmentOxygen(5, new ResourceLocation("respiration"), 2);
+    public static final Enchantment BLAST_PROTECTION = new EnchantmentProtection(3, new ResourceLocation("blast_protection"), 2, 3);
+    public static final Enchantment PROJECTILE_PROTECTION = new EnchantmentProtection(4, new ResourceLocation("projectile_protection"), 5, 4);
+    public static final Enchantment RESPIRATION = new EnchantmentOxygen(5, new ResourceLocation("respiration"), 2);
 
     /** Increases underwater mining rate */
-    public static final Enchantment aquaAffinity = new EnchantmentWaterWorker(6, new ResourceLocation("aqua_affinity"), 2);
-    public static final Enchantment thorns = new EnchantmentThorns(7, new ResourceLocation("thorns"), 1);
-    public static final Enchantment field_180316_k = new EnchantmentWaterWalker(8, new ResourceLocation("depth_strider"), 2);
-    public static final Enchantment field_180314_l = new EnchantmentDamage(16, new ResourceLocation("sharpness"), 10, 0);
-    public static final Enchantment field_180315_m = new EnchantmentDamage(17, new ResourceLocation("smite"), 5, 1);
-    public static final Enchantment field_180312_n = new EnchantmentDamage(18, new ResourceLocation("bane_of_arthropods"), 5, 2);
-    public static final Enchantment field_180313_o = new EnchantmentKnockback(19, new ResourceLocation("knockback"), 5);
+    public static final Enchantment AQUA_AFFINITY = new EnchantmentWaterWorker(6, new ResourceLocation("aqua_affinity"), 2);
+    public static final Enchantment THORNS = new EnchantmentThorns(7, new ResourceLocation("thorns"), 1);
+    public static final Enchantment DEPTH_STRIDER = new EnchantmentWaterWalker(8, new ResourceLocation("depth_strider"), 2);
+    public static final Enchantment SHARPNESS = new EnchantmentDamage(16, new ResourceLocation("sharpness"), 10, 0);
+    public static final Enchantment SMITE = new EnchantmentDamage(17, new ResourceLocation("smite"), 5, 1);
+    public static final Enchantment BANE_OF_ARTHROPODS = new EnchantmentDamage(18, new ResourceLocation("bane_of_arthropods"), 5, 2);
+    public static final Enchantment KNOCKBACK = new EnchantmentKnockback(19, new ResourceLocation("knockback"), 5);
 
     /** Lights mobs on fire */
-    public static final Enchantment fireAspect = new EnchantmentFireAspect(20, new ResourceLocation("fire_aspect"), 2);
+    public static final Enchantment FIRE_ASPECT = new EnchantmentFireAspect(20, new ResourceLocation("fire_aspect"), 2);
 
     /** Mobs have a chance to drop more loot */
-    public static final Enchantment looting = new EnchantmentLootBonus(21, new ResourceLocation("looting"), 2, EnumEnchantmentType.WEAPON);
+    public static final Enchantment LOOTING = new EnchantmentLootBonus(21, new ResourceLocation("looting"), 2, EnumEnchantmentType.WEAPON);
 
     /** Faster resource gathering while in use */
-    public static final Enchantment efficiency = new EnchantmentDigging(32, new ResourceLocation("efficiency"), 10);
+    public static final Enchantment EFFICIENCY = new EnchantmentDigging(32, new ResourceLocation("efficiency"), 10);
 
     /**
      * Blocks mined will drop themselves, even if it should drop something else (e.g. stone will drop stone, not
      * cobblestone)
      */
-    public static final Enchantment silkTouch = new EnchantmentUntouching(33, new ResourceLocation("silk_touch"), 1);
+    public static final Enchantment SILK_TOUCH = new EnchantmentUntouching(33, new ResourceLocation("silk_touch"), 1);
 
     /**
      * Sometimes, the tool's durability will not be spent when the tool is used
      */
-    public static final Enchantment unbreaking = new EnchantmentDurability(34, new ResourceLocation("unbreaking"), 5);
+    public static final Enchantment UNBREAKING = new EnchantmentDurability(34, new ResourceLocation("unbreaking"), 5);
 
     /** Can multiply the drop rate of items from blocks */
-    public static final Enchantment fortune = new EnchantmentLootBonus(35, new ResourceLocation("fortune"), 2, EnumEnchantmentType.DIGGER);
+    public static final Enchantment FORTUNE = new EnchantmentLootBonus(35, new ResourceLocation("fortune"), 2, EnumEnchantmentType.DIGGER);
 
     /** Power enchantment for bows, add's extra damage to arrows. */
-    public static final Enchantment power = new EnchantmentArrowDamage(48, new ResourceLocation("power"), 10);
+    public static final Enchantment POWER = new EnchantmentArrowDamage(48, new ResourceLocation("power"), 10);
 
     /**
      * Knockback enchantments for bows, the arrows will knockback the target when hit.
      */
-    public static final Enchantment punch = new EnchantmentArrowKnockback(49, new ResourceLocation("punch"), 2);
+    public static final Enchantment PUNCH = new EnchantmentArrowKnockback(49, new ResourceLocation("punch"), 2);
 
     /**
      * Flame enchantment for bows. Arrows fired by the bow will be on fire. Any target hit will also set on fire.
      */
-    public static final Enchantment flame = new EnchantmentArrowFire(50, new ResourceLocation("flame"), 2);
+    public static final Enchantment FLAME = new EnchantmentArrowFire(50, new ResourceLocation("flame"), 2);
 
     /**
      * Infinity enchantment for bows. The bow will not consume arrows anymore, but will still required at least one
      * arrow on inventory use the bow.
      */
-    public static final Enchantment infinity = new EnchantmentArrowInfinite(51, new ResourceLocation("infinity"), 1);
-    public static final Enchantment luckOfTheSea = new EnchantmentLootBonus(61, new ResourceLocation("luck_of_the_sea"), 2, EnumEnchantmentType.FISHING_ROD);
-    public static final Enchantment lure = new EnchantmentFishingSpeed(62, new ResourceLocation("lure"), 2, EnumEnchantmentType.FISHING_ROD);
+    public static final Enchantment INFINITY = new EnchantmentArrowInfinite(51, new ResourceLocation("infinity"), 1);
+    public static final Enchantment LUCK_OF_THE_SEA = new EnchantmentLootBonus(61, new ResourceLocation("luck_of_the_sea"), 2, EnumEnchantmentType.FISHING_ROD);
+    public static final Enchantment LURE = new EnchantmentFishingSpeed(62, new ResourceLocation("lure"), 2, EnumEnchantmentType.FISHING_ROD);
     public final int effectId;
     private final int weight;
 

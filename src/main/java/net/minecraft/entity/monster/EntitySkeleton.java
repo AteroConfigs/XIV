@@ -125,7 +125,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
         {
             if (this.getSkeletonType() == 1 && p_70652_1_ instanceof EntityLivingBase)
             {
-                ((EntityLivingBase)p_70652_1_).addPotionEffect(new PotionEffect(Potion.wither.id, 200));
+                ((EntityLivingBase)p_70652_1_).addPotionEffect(new PotionEffect(Potion.WITHER.id, 200));
             }
 
             return true;
@@ -346,8 +346,8 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
     public void attackEntityWithRangedAttack(EntityLivingBase p_82196_1_, float p_82196_2_)
     {
         EntityArrow var3 = new EntityArrow(this.worldObj, this, p_82196_1_, 1.6F, (float)(14 - this.worldObj.getDifficulty().getDifficultyId() * 4));
-        int var4 = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, this.getHeldItem());
-        int var5 = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, this.getHeldItem());
+        int var4 = EnchantmentHelper.getEnchantmentLevel(Enchantment.POWER.effectId, this.getHeldItem());
+        int var5 = EnchantmentHelper.getEnchantmentLevel(Enchantment.PUNCH.effectId, this.getHeldItem());
         var3.setDamage((double)(p_82196_2_ * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.worldObj.getDifficulty().getDifficultyId() * 0.11F));
 
         if (var4 > 0)
@@ -360,7 +360,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
             var3.setKnockbackStrength(var5);
         }
 
-        if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, this.getHeldItem()) > 0 || this.getSkeletonType() == 1)
+        if (EnchantmentHelper.getEnchantmentLevel(Enchantment.FLAME.effectId, this.getHeldItem()) > 0 || this.getSkeletonType() == 1)
         {
             var3.setFire(100);
         }

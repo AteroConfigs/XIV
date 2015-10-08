@@ -108,7 +108,7 @@ public class EntityWitherSkull extends EntityFireball
 
                     if (var2 > 0)
                     {
-                        ((EntityLivingBase)p_70227_1_.entityHit).addPotionEffect(new PotionEffect(Potion.wither.id, 20 * var2, 1));
+                        ((EntityLivingBase)p_70227_1_.entityHit).addPotionEffect(new PotionEffect(Potion.WITHER.id, 20 * var2, 1));
                     }
                 }
             }

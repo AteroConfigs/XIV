@@ -921,16 +921,16 @@ public abstract class EntityPlayer extends EntityLivingBase
             }
         }
 
-        if (this.isPotionActive(Potion.digSpeed))
+        if (this.isPotionActive(Potion.HASTE))
         {
-            var2 *= 1.0F + (float)(this.getActivePotionEffect(Potion.digSpeed).getAmplifier() + 1) * 0.2F;
+            var2 *= 1.0F + (float)(this.getActivePotionEffect(Potion.HASTE).getAmplifier() + 1) * 0.2F;
         }
 
-        if (this.isPotionActive(Potion.digSlowdown))
+        if (this.isPotionActive(Potion.MINING_FATIGUE))
         {
             float var5 = 1.0F;
 
-            switch (this.getActivePotionEffect(Potion.digSlowdown).getAmplifier())
+            switch (this.getActivePotionEffect(Potion.MINING_FATIGUE).getAmplifier())
             {
                 case 0:
                     var5 = 0.3F;
@@ -1329,7 +1329,7 @@ public abstract class EntityPlayer extends EntityLivingBase
 
                 if (var2 > 0.0F || var4 > 0.0F)
                 {
-                    boolean var5 = this.fallDistance > 0.0F && !this.onGround && !this.isOnLadder() && !this.isInWater() && !this.isPotionActive(Potion.blindness) && this.ridingEntity == null && targetEntity instanceof EntityLivingBase;
+                    boolean var5 = this.fallDistance > 0.0F && !this.onGround && !this.isOnLadder() && !this.isInWater() && !this.isPotionActive(Potion.BLINDNESS) && this.ridingEntity == null && targetEntity instanceof EntityLivingBase;
 
                     if (var5 && var2 > 0.0F)
                     {

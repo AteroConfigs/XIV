@@ -34,16 +34,16 @@ public class ItemAppleGold extends ItemFood
     {
         if (!worldIn.isRemote)
         {
-            p_77849_3_.addPotionEffect(new PotionEffect(Potion.absorption.id, 2400, 0));
+            p_77849_3_.addPotionEffect(new PotionEffect(Potion.ABSORPTION.id, 2400, 0));
         }
 
         if (p_77849_1_.getMetadata() > 0)
         {
             if (!worldIn.isRemote)
             {
-                p_77849_3_.addPotionEffect(new PotionEffect(Potion.regeneration.id, 600, 4));
-                p_77849_3_.addPotionEffect(new PotionEffect(Potion.resistance.id, 6000, 0));
-                p_77849_3_.addPotionEffect(new PotionEffect(Potion.fireResistance.id, 6000, 0));
+                p_77849_3_.addPotionEffect(new PotionEffect(Potion.REGENERATION.id, 600, 4));
+                p_77849_3_.addPotionEffect(new PotionEffect(Potion.RESISTANCE.id, 6000, 0));
+                p_77849_3_.addPotionEffect(new PotionEffect(Potion.FIRE_RESISTANCE.id, 6000, 0));
             }
         }
         else

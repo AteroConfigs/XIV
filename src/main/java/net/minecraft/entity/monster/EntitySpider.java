@@ -148,7 +148,7 @@ public class EntitySpider extends EntityMob
 
     public boolean isPotionApplicable(PotionEffect p_70687_1_)
     {
-        return p_70687_1_.getPotionID() == Potion.poison.id ? false : super.isPotionApplicable(p_70687_1_);
+        return p_70687_1_.getPotionID() == Potion.POISON.id ? false : super.isPotionApplicable(p_70687_1_);
     }
 
     /**
@@ -278,19 +278,19 @@ public class EntitySpider extends EntityMob
 
             if (var2 <= 1)
             {
-                this.field_111105_a = Potion.moveSpeed.id;
+                this.field_111105_a = Potion.SPEED.id;
             }
             else if (var2 <= 2)
             {
-                this.field_111105_a = Potion.damageBoost.id;
+                this.field_111105_a = Potion.STRENGTH.id;
             }
             else if (var2 <= 3)
             {
-                this.field_111105_a = Potion.regeneration.id;
+                this.field_111105_a = Potion.REGENERATION.id;
             }
             else if (var2 <= 4)
             {
-                this.field_111105_a = Potion.invisibility.id;
+                this.field_111105_a = Potion.INVISIBILITY.id;
             }
         }
     }

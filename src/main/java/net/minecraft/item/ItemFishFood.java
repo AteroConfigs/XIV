@@ -45,9 +45,9 @@ public class ItemFishFood extends ItemFood
 
         if (var4 == ItemFishFood.FishType.PUFFERFISH)
         {
-            p_77849_3_.addPotionEffect(new PotionEffect(Potion.poison.id, 1200, 3));
-            p_77849_3_.addPotionEffect(new PotionEffect(Potion.hunger.id, 300, 2));
-            p_77849_3_.addPotionEffect(new PotionEffect(Potion.confusion.id, 300, 1));
+            p_77849_3_.addPotionEffect(new PotionEffect(Potion.POISON.id, 1200, 3));
+            p_77849_3_.addPotionEffect(new PotionEffect(Potion.HUNGER.id, 300, 2));
+            p_77849_3_.addPotionEffect(new PotionEffect(Potion.NAUSEA.id, 300, 1));
         }
 
         super.onFoodEaten(p_77849_1_, worldIn, p_77849_3_);

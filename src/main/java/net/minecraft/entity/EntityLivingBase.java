@@ -289,7 +289,7 @@ public abstract class EntityLivingBase extends Entity
 
         if (this.isEntityAlive() && this.isInsideOfMaterial(Material.water))
         {
-            if (!this.canBreatheUnderwater() && !this.isPotionActive(Potion.waterBreathing.id) && !var7)
+            if (!this.canBreatheUnderwater() && !this.isPotionActive(Potion.WATER_BREATHING.id) && !var7)
             {
                 this.setAir(this.decreaseAirSupply(this.getAir()));
 
@@ -685,7 +685,7 @@ public abstract class EntityLivingBase extends Entity
             int var1 = PotionHelper.calcPotionLiquidColor(this.activePotionsMap.values());
             this.dataWatcher.updateObject(8, Byte.valueOf((byte)(PotionHelper.func_82817_b(this.activePotionsMap.values()) ? 1 : 0)));
             this.dataWatcher.updateObject(7, Integer.valueOf(var1));
-            this.setInvisible(this.isPotionActive(Potion.invisibility.id));
+            this.setInvisible(this.isPotionActive(Potion.INVISIBILITY.id));
         }
     }
 
@@ -761,7 +761,7 @@ public abstract class EntityLivingBase extends Entity
         {
             int var2 = p_70687_1_.getPotionID();
 
-            if (var2 == Potion.regeneration.id || var2 == Potion.poison.id)
+            if (var2 == Potion.REGENERATION.id || var2 == Potion.POISON.id)
             {
                 return false;
             }
@@ -874,7 +874,7 @@ public abstract class EntityLivingBase extends Entity
             {
                 return false;
             }
-            else if (source.isFireDamage() && this.isPotionActive(Potion.fireResistance))
+            else if (source.isFireDamage() && this.isPotionActive(Potion.FIRE_RESISTANCE))
             {
                 return false;
             }
@@ -1135,7 +1135,7 @@ public abstract class EntityLivingBase extends Entity
     public void fall(float distance, float damageMultiplier)
     {
         super.fall(distance, damageMultiplier);
-        PotionEffect var3 = this.getActivePotionEffect(Potion.jump);
+        PotionEffect var3 = this.getActivePotionEffect(Potion.JUMP_BOOST);
         float var4 = var3 != null ? (float)(var3.getAmplifier() + 1) : 0.0F;
         int var5 = MathHelper.ceiling_float_int((distance - 3.0F - var4) * damageMultiplier);
 
@@ -1226,9 +1226,9 @@ public abstract class EntityLivingBase extends Entity
             int var4;
             float var5;
 
-            if (this.isPotionActive(Potion.resistance) && p_70672_1_ != DamageSource.outOfWorld)
+            if (this.isPotionActive(Potion.RESISTANCE) && p_70672_1_ != DamageSource.outOfWorld)
             {
-                var3 = (this.getActivePotionEffect(Potion.resistance).getAmplifier() + 1) * 5;
+                var3 = (this.getActivePotionEffect(Potion.RESISTANCE).getAmplifier() + 1) * 5;
                 var4 = 25 - var3;
                 var5 = p_70672_2_ * (float)var4;
                 p_70672_2_ = var5 / 25.0F;
@@ -1320,7 +1320,7 @@ public abstract class EntityLivingBase extends Entity
      */
     private int getArmSwingAnimationEnd()
     {
-        return this.isPotionActive(Potion.digSpeed) ? 6 - (1 + this.getActivePotionEffect(Potion.digSpeed).getAmplifier()) * 1 : (this.isPotionActive(Potion.digSlowdown) ? 6 + (1 + this.getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 : 6);
+        return this.isPotionActive(Potion.HASTE) ? 6 - (1 + this.getActivePotionEffect(Potion.HASTE).getAmplifier()) * 1 : (this.isPotionActive(Potion.MINING_FATIGUE) ? 6 + (1 + this.getActivePotionEffect(Potion.MINING_FATIGUE).getAmplifier()) * 2 : 6);
     }
 
     /**
@@ -1557,9 +1557,9 @@ public abstract class EntityLivingBase extends Entity
     {
         this.motionY = (double)this.func_175134_bD();
 
-        if (this.isPotionActive(Potion.jump))
+        if (this.isPotionActive(Potion.JUMP_BOOST))
         {
-            this.motionY += (double)((float)(this.getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F);
+            this.motionY += (double)((float)(this.getActivePotionEffect(Potion.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
         }
 
         if (this.isSprinting())
