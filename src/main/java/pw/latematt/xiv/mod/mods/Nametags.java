@@ -34,9 +34,9 @@ import java.util.List;
 public class Nametags extends Mod implements CommandHandler {
     private final Listener nametagRenderListener;
     private final Listener render3DListener;
-    private Value<Boolean> health = new Value<>("nametags_health", true);
-    private Value<Boolean> armor = new Value<>("nametags_armor", false);
-    private DecimalFormat decimalFormat = new DecimalFormat("#.#");
+    private final Value<Boolean> health = new Value<>("nametags_health", true);
+    private final Value<Boolean> armor = new Value<>("nametags_armor", false);
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.#");
 
     public Nametags() {
         super("Nametags", ModType.RENDER);
@@ -177,7 +177,7 @@ public class Nametags extends Mod implements CommandHandler {
                 GlStateManager.func_179090_x();
                 RenderUtils.endGl();
 
-                RenderUtils.beginGl();
+                GlStateManager.pushMatrix();
                 GlStateManager.scale(0.50F, 0.50F, 0.50F);
                 GlStateManager.func_179098_w();
                 NBTTagList enchants = stack.getEnchantmentTagList();
@@ -204,6 +204,7 @@ public class Nametags extends Mod implements CommandHandler {
                                         }
                                         mc.fontRendererObj.drawStringWithShadow(encName, (-var18 + offset + xPos) * 2, (var17 - 20 + encY) * 2, 0xFFAAAAAA);
                                         encY += 5;
+                                        break;
                                     }
                                 }
                             }
@@ -211,7 +212,7 @@ public class Nametags extends Mod implements CommandHandler {
                     }
                 }
                 GlStateManager.func_179090_x();
-                RenderUtils.endGl();
+                GlStateManager.popMatrix();
                 xPos += 18;
             }
         }

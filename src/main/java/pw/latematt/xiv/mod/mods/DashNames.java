@@ -14,9 +14,9 @@ import java.util.regex.Matcher;
 /**
  * @author Matthew
  */
-public class NameComplete extends Mod implements Listener<SendPacketEvent> {
-    public NameComplete() {
-        super("NameComplete", ModType.PLAYER);
+public class DashNames extends Mod implements Listener<SendPacketEvent> {
+    public DashNames() {
+        super("DashNames", ModType.PLAYER);
         setEnabled(true);
     }
 

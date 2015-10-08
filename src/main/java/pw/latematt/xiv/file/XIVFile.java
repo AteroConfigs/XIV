@@ -1,4 +1,4 @@
-package pw.latematt.xiv.management.file;
+package pw.latematt.xiv.file;
 
 import pw.latematt.xiv.XIV;
 
@@ -27,6 +27,8 @@ public abstract class XIVFile {
             XIV.getInstance().getLogger().warn("File \"" + name + "." + extension + "\" could not be created, a stacktrace was printed.");
             e.printStackTrace();
         }
+
+        XIV.getInstance().getFileManager().getContents().add(this);
     }
 
     public String getName() {

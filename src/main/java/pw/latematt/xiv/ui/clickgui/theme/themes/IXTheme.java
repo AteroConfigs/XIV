@@ -8,6 +8,7 @@ import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.utils.RenderUtils;
 
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * @author Matthew
@@ -20,14 +21,16 @@ public class IXTheme extends ClickTheme {
 
     public IXTheme(GuiClick gui) {
         super("IX", 96, 12, gui);
-        this.titleFont = new NahrFont(new Font("Verdana", Font.BOLD, 20), 20);
-        this.modFont = new NahrFont("Tahoma", 17);
-
         this.gui = gui;
     }
 
     @Override
     public void renderPanel(Panel panel) {
+        if (Objects.isNull(titleFont) || Objects.isNull(modFont)) {
+            this.titleFont = new NahrFont(new Font("Verdana", Font.BOLD, 20), 20);
+            this.modFont = new NahrFont("Tahoma", 17);
+        }
+
         RenderUtils.drawBorderedRect(panel.getX(), panel.getY() + 1, panel.getX() + panel.getWidth(), panel.getY() + (panel.isOpen() ? panel.getHeight() : panel.getOpenHeight()), 0xBB515151, 0xBB232323);
         titleFont.drawString(panel.getName(), panel.getX() + 3, panel.getY() - 2, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
 
@@ -38,6 +41,11 @@ public class IXTheme extends ClickTheme {
 
     @Override
     public void renderButton(String name, boolean enabled, float x, float y, float width, float height, boolean overElement, Element element) {
+        if (Objects.isNull(titleFont) || Objects.isNull(modFont)) {
+            this.titleFont = new NahrFont(new Font("Verdana", Font.BOLD, 20), 20);
+            this.modFont = new NahrFont("Tahoma", 17);
+        }
+
         element.setWidth(this.getElementWidth());
         element.setHeight(this.getElementHeight());
 
@@ -49,6 +57,11 @@ public class IXTheme extends ClickTheme {
 
     @Override
     public void renderSlider(String name, float value, float x, float y, float width, float height, float sliderX, boolean overElement, Element element) {
+        if (Objects.isNull(titleFont) || Objects.isNull(modFont)) {
+            this.titleFont = new NahrFont(new Font("Verdana", Font.BOLD, 20), 20);
+            this.modFont = new NahrFont("Tahoma", 17);
+        }
+
         element.setWidth(96);
         element.setHeight(this.getElementHeight());
 

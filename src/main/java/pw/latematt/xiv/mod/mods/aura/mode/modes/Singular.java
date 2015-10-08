@@ -1,5 +1,6 @@
 package pw.latematt.xiv.mod.mods.aura.mode.modes;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
@@ -8,6 +9,8 @@ import pw.latematt.xiv.mod.mods.aura.KillAura;
 import pw.latematt.xiv.mod.mods.aura.mode.AuraMode;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.Timer;
+
+import java.util.Optional;
 
 /**
  * @author Matthew
@@ -23,15 +26,17 @@ public class Singular extends AuraMode {
     @Override
     public void onPreMotionUpdate(MotionUpdateEvent event) {
         if (entityToAttack == null) {
-            final double[] maxDistance = {killAura.range.getValue()};
-            mc.theWorld.loadedEntityList.stream().filter(entity -> entity instanceof EntityLivingBase).forEach(entity -> {
-                EntityLivingBase living = (EntityLivingBase) entity;
-                double distance = mc.thePlayer.getDistanceToEntity(living);
-                if (distance < maxDistance[0] && killAura.isValidEntity(living)) {
-                    maxDistance[0] = distance;
-                    entityToAttack = living;
-                }
-            });
+            Optional<Entity> firstValidEntity = mc.theWorld.loadedEntityList.stream()
+                    .filter(entity -> entity instanceof EntityLivingBase)
+                    .filter(entity -> killAura.isValidEntity((EntityLivingBase) entity))
+                    .sorted((entity1, entity2) -> {
+                        double entity1Distance = mc.thePlayer.getDistanceToEntity(entity1);
+                        double entity2Distance = mc.thePlayer.getDistanceToEntity(entity2);
+                        return entity1Distance > entity2Distance ? 1 : entity2Distance > entity1Distance ? -1 : 0;
+                    }).findFirst();
+            if (firstValidEntity.isPresent()) {
+                entityToAttack = (EntityLivingBase) firstValidEntity.get();
+            }
         }
 
         if (killAura.isValidEntity(entityToAttack)) {

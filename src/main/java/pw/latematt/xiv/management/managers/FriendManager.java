@@ -1,11 +1,19 @@
 package pw.latematt.xiv.management.managers;
 
+import com.google.common.io.Files;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.minecraft.util.StringUtils;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.management.MapManager;
+import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.utils.ChatLogger;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 
@@ -20,6 +28,27 @@ public class FriendManager extends MapManager<String, String> {
     @Override
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
+
+        new XIVFile("friends", "json") {
+            @Override
+            public void load() throws IOException {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                HashMap<String, String> friends = gson.fromJson(reader, new TypeToken<HashMap<String, String>>() {
+                }.getType());
+                for (String mcname : friends.keySet()) {
+                    String alias = friends.get(mcname);
+                    XIV.getInstance().getFriendManager().add(mcname, alias);
+                }
+            }
+
+            @Override
+            public void save() throws IOException {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                Files.write(gson.toJson(XIV.getInstance().getFriendManager().getContents()).getBytes("UTF-8"), file);
+            }
+        };
+
         Command.newCommand()
                 .cmd("friend")
                 .description("Manages a player's friend status so the client doesn't target him.")

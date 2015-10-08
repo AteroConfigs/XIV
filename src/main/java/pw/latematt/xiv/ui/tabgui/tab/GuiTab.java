@@ -45,8 +45,9 @@ public class GuiTab {
         int maxWidth = 0;
         for (GuiItem mod : this.mods) {
             if (mc.fontRendererObj.getStringWidth(mod.getName()) > maxWidth) {
-                maxWidth = mc.fontRendererObj.getStringWidth(mod.getName()) + 4;
+                maxWidth = 2 + mc.fontRendererObj.getStringWidth(mod.getName()) + 2;
             }
+//            System.out.println(mod.getName() + " ee " + (2 + mc.fontRendererObj.getStringWidth(mod.getName() + "r") + 2));
         }
 
         this.menuWidth = maxWidth;

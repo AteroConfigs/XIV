@@ -9,6 +9,7 @@ import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.utils.RenderUtils;
 
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * @author Matthew
@@ -16,19 +17,20 @@ import java.awt.*;
 public class DarculaTheme extends ClickTheme {
     protected NahrFont titleFont;
     protected NahrFont modFont;
-
     protected GuiClick gui;
 
     public DarculaTheme(GuiClick gui) {
         super("Darcula", 12, 12, gui);
-        this.titleFont = new NahrFont(new Font("Tahoma", Font.BOLD, 22), 22);
-        this.modFont = new NahrFont("Tahoma", 17);
-
         this.gui = gui;
     }
 
     @Override
     public void renderPanel(Panel panel) {
+        if (Objects.isNull(titleFont) || Objects.isNull(modFont)) {
+            this.titleFont = new NahrFont(new Font("Tahoma", Font.BOLD, 22), 22);
+            this.modFont = new NahrFont("Tahoma", 17);
+        }
+
         RenderUtils.drawBorderedRect(panel.getX(), panel.getY() + 1, panel.getX() + panel.getWidth(), panel.getY() + panel.getOpenHeight(), 0x801E1E1E, 0xFF3E434C);
         titleFont.drawString(panel.getName(), panel.getX() + 2, panel.getY() - 2, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
 //        int startColor = panel.isOpen() ? 0xFF344A64 : 0xFF515658;
@@ -42,6 +44,11 @@ public class DarculaTheme extends ClickTheme {
 
     @Override
     public void renderButton(String name, boolean enabled, float x, float y, float width, float height, boolean overElement, Element element) {
+        if (Objects.isNull(titleFont) || Objects.isNull(modFont)) {
+            this.titleFont = new NahrFont(new Font("Tahoma", Font.BOLD, 22), 22);
+            this.modFont = new NahrFont("Tahoma", 17);
+        }
+
         element.setWidth(this.getElementWidth());
         element.setHeight(this.getElementHeight());
 
@@ -55,6 +62,11 @@ public class DarculaTheme extends ClickTheme {
 
     @Override
     public void renderSlider(String name, float value, float x, float y, float width, float height, float sliderX, boolean overElement, Element element) {
+        if (Objects.isNull(titleFont) || Objects.isNull(modFont)) {
+            this.titleFont = new NahrFont(new Font("Tahoma", Font.BOLD, 22), 22);
+            this.modFont = new NahrFont("Tahoma", 17);
+        }
+
         element.setWidth(96);
         element.setHeight(this.getElementHeight());
 

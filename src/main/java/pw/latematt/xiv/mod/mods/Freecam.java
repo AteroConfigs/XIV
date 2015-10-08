@@ -116,7 +116,7 @@ public class Freecam extends Mod {
         XIV.getInstance().getListenerManager().remove(this.motionListener);
         XIV.getInstance().getListenerManager().remove(this.moveListener);
 
-        if (Objects.nonNull(mc.thePlayer)) {
+        if (Objects.nonNull(mc.thePlayer) && Objects.nonNull(entity)) {
             mc.thePlayer.noClip = false;
             mc.thePlayer.copyLocationAndAnglesFrom(entity);
             mc.theWorld.removeEntityFromWorld(-1);
