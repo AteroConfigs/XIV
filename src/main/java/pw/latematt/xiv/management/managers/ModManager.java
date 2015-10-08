@@ -56,6 +56,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new NoRotationSet());
         contents.add(new NoSlowdown());
         contents.add(new Regen());
+        contents.add(new SmoothAimbot());
         contents.add(new Sneak());
         contents.add(new Speed());
         contents.add(new Speedmine());

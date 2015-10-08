@@ -1,6 +1,7 @@
 package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.block.BlockCactus;
+import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockWeb;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
@@ -20,6 +21,7 @@ import pw.latematt.xiv.value.Value;
 public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>, CommandHandler {
     private final Value<Boolean> cactus = new Value<>("blockbbfixer_cactus", true);
     private final Value<Boolean> cobweb = new Value<>("blockbbfixer_cobweb", true);
+    private final Value<Boolean> fire = new Value<>("blockbbfixer_fire", true);
 
     public BlockBBFixer() {
         super("BlockBBFixer", ModType.WORLD);
@@ -35,7 +37,7 @@ public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>, Comm
 
     @Override
     public void onEventCalled(BlockAddBBEvent event) {
-        if (event.getBlock() instanceof BlockCactus && cactus.getValue() || event.getBlock() instanceof BlockWeb && cobweb.getValue()) {
+        if (event.getBlock() instanceof BlockCactus && cactus.getValue() || event.getBlock() instanceof BlockWeb && cobweb.getValue() || event.getBlock() instanceof BlockFire && fire.getValue()) {
             BlockPos pos = event.getPos();
             event.setAxisAlignedBB(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
         }
@@ -61,10 +63,19 @@ public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>, Comm
                     } else {
                         cobweb.setValue(!cobweb.getValue());
                     }
-                    ChatLogger.print(String.format("BlockBBFixer will %s fix the bounding box of Cobweb.", cobweb.getValue() ? "now" : "no longer"));
+                    ChatLogger.print(String.format("BlockBBFixer will %s fix the bounding box of Cobwebs.", cobweb.getValue() ? "now" : "no longer"));
                     break;
+                case "fire": {
+                    if (arguments.length >= 3) {
+                        fire.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        fire.setValue(!fire.getValue());
+                    }
+                    ChatLogger.print(String.format("BlockBBFixer will %s fix the bounding box of Fire.", fire.getValue() ? "now" : "no longer"));
+                    break;
+                }
                 default:
-                    ChatLogger.print("Invalid action, valid: cactus, cobweb");
+                    ChatLogger.print("Invalid action, valid: cactus, cobweb, fire");
                     break;
             }
         } else {
