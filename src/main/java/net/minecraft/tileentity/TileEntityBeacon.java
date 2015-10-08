@@ -31,7 +31,7 @@ import net.minecraft.util.BlockPos;
 public class TileEntityBeacon extends TileEntityLockable implements IUpdatePlayerListBox, IInventory
 {
     /** List of effects that Beacon can apply */
-    public static final Potion[][] effectsList = new Potion[][] {{Potion.moveSpeed, Potion.digSpeed}, {Potion.resistance, Potion.jump}, {Potion.damageBoost}, {Potion.regeneration}};
+    public static final Potion[][] effectsList = new Potion[][] {{Potion.SPEED, Potion.HASTE}, {Potion.RESISTANCE, Potion.JUMP_BOOST}, {Potion.STRENGTH}, {Potion.REGENERATION}};
     private final List field_174909_f = Lists.newArrayList();
     private long field_146016_i;
     private float field_146014_j;

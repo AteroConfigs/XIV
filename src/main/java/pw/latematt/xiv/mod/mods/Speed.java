@@ -63,7 +63,7 @@ public class Speed extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                             final PotionEffect effect = (PotionEffect) o;
                             Potion potion = Potion.potionTypes[effect.getPotionID()];
 
-                            if (potion.getId() == Potion.moveSpeed.getId()) {
+                            if (potion.getId() == Potion.SPEED.getId()) {
                                 if (effect.getAmplifier() == 0) {
                                     speed = 4.7D;
                                 } else if (effect.getAmplifier() == 1) {

@@ -25,22 +25,22 @@ public class Zoot extends Mod implements Listener<MotionUpdateEvent> {
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-            if (mc.thePlayer.isBurning() && !mc.thePlayer.isInsideOfMaterial(Material.fire) && !mc.thePlayer.isInsideOfMaterial(Material.lava)) {
+            if (mc.thePlayer.isBurning() && !mc.thePlayer.isInsideOfMaterial(Material.fire) && !mc.thePlayer.isInsideOfMaterial(Material.lava) && mc.thePlayer.getActivePotionEffect(Potion.FIRE_RESISTANCE) == null) {
                 for (int x = 0; x < 20; x++) {
                     mc.thePlayer.sendQueue.getNetworkManager().sendPacket(new C03PacketPlayer(mc.thePlayer.onGround));
                 }
             }
 
-            if (mc.thePlayer.isPotionActive(Potion.blindness.getId())) {
-                mc.thePlayer.removePotionEffect(Potion.blindness.getId());
+            if (mc.thePlayer.isPotionActive(Potion.BLINDNESS.getId())) {
+                mc.thePlayer.removePotionEffect(Potion.BLINDNESS.getId());
             }
 
-            if (mc.thePlayer.isPotionActive(Potion.confusion.getId())) {
-                mc.thePlayer.removePotionEffect(Potion.confusion.getId());
+            if (mc.thePlayer.isPotionActive(Potion.NAUSEA.getId())) {
+                mc.thePlayer.removePotionEffect(Potion.NAUSEA.getId());
             }
 
-            if (mc.thePlayer.isPotionActive(Potion.digSlowdown.getId())) {
-                mc.thePlayer.removePotionEffect(Potion.digSlowdown.getId());
+            if (mc.thePlayer.isPotionActive(Potion.MINING_FATIGUE.getId())) {
+                mc.thePlayer.removePotionEffect(Potion.MINING_FATIGUE.getId());
             }
 
             final Potion[] potionTypes;

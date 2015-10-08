@@ -11,12 +11,12 @@ import pw.latematt.xiv.value.SliderValue;
 /**
  * @author Rederpz
  */
-public class ValueSlider<T> extends Element {
+public class ValueSlider extends Element {
     private static Minecraft mc = Minecraft.getMinecraft();
-    private final SliderValue<T> value;
+    private final SliderValue<Boolean> value;
     private final String valuePrettyName;
 
-    public ValueSlider(SliderValue<T> value, String valuePrettyName, float x, float y, float width, float height) {
+    public ValueSlider(SliderValue<Boolean> value, String valuePrettyName, float x, float y, float width, float height) {
         super(x, y, width, height);
 
         this.value = value;
@@ -59,17 +59,14 @@ public class ValueSlider<T> extends Element {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (isOverElement(mouseX, mouseY)) {
-            if (mouseButton == 0)
-                mc.getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(new ResourceLocation("gui.button.press"), 1.0F));
-            if (mouseButton == 1) {
-                mc.getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(new ResourceLocation("gui.button.press"), 0.7F));
-                value.setValue(value.getDefaultValue());
-            }
+        if (isOverElement(mouseX, mouseY) && mouseButton == 0) {
+            mc.getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(new ResourceLocation("gui.button.press"), 1.0F));
+//            ModuleValue<Float> val = toFloat(value);
+
         }
     }
 
-    public SliderValue<T> getValue() {
+    public SliderValue<Boolean> getValue() {
         return value;
     }
 

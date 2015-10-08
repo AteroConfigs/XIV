@@ -22,26 +22,21 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.Timer;
-import pw.latematt.xiv.value.SliderValue;
 import pw.latematt.xiv.value.Value;
 
-import java.text.DecimalFormat;
 import java.util.Random;
 
 /**
  * @author TehNeon
  */
 public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
-
-    public final SliderValue<Long> delay = new SliderValue<>("triggerbot_delay", 125L, 0L, 1000L, new DecimalFormat("0"));
+    public final Value<Long> delay = new Value<>("triggerbot_delay", 125L);
     public final Value<Boolean> weaponOnly = new Value<>("triggerbot_weapon_only", true);
-
     private final Value<Boolean> players = new Value<>("triggerbot_players", true);
     private final Value<Boolean> mobs = new Value<>("triggerbot_mobs", false);
     private final Value<Boolean> animals = new Value<>("triggerbot_animals", false);
     private final Value<Boolean> invisible = new Value<>("triggerbot_invisible", false);
-    private final Value<Boolean> team = new Value<>("triggerbot_team", false);
-
+    private final Value<Boolean> team = new Value<>("triggerbot_team", true);
     private final Timer timer = new Timer();
     private final Random random = new Random();
 
@@ -58,25 +53,23 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
     }
 
     public void onEventCalled(MotionUpdateEvent event) {
-        MovingObjectPosition mop = Minecraft.getMinecraft().objectMouseOver;
+        MovingObjectPosition mop = mc.objectMouseOver;
         if (mop == null)
             return;
         Entity entity = mop.entityHit;
         if (entity instanceof EntityLivingBase) {
             EntityLivingBase ent = (EntityLivingBase) entity;
 
-            if (timer.hasReached(delay.getValue())) {
+            long skip = getRandom(0, 10);
+            if (timer.hasReached(delay.getValue() + skip)) {
                 if (!shouldAttack(ent))
                     return;
 
-                if(!properWeapon(Minecraft.getMinecraft().thePlayer.getHeldItem()))
+                if (!properWeapon(mc.thePlayer.getHeldItem()))
                     return;
 
-                int skip = getRandom(0, 10);
-                if (skip != 3 || skip != 9) {
-                    Minecraft.getMinecraft().thePlayer.swingItem();
-                    Minecraft.getMinecraft().playerController.attackEntity(Minecraft.getMinecraft().thePlayer, ent);
-                }
+                mc.thePlayer.swingItem();
+                mc.playerController.attackEntity(Minecraft.getMinecraft().thePlayer, ent);
 
                 timer.reset();
             }
@@ -221,5 +214,4 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
     public int getRandom(int floor, int cap) {
         return floor + random.nextInt(cap - floor + 1);
     }
-
 }

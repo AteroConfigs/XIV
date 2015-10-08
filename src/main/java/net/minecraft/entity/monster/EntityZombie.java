@@ -593,7 +593,7 @@ public class EntityZombie extends EntityMob
     {
         ItemStack var2 = p_70085_1_.getCurrentEquippedItem();
 
-        if (var2 != null && var2.getItem() == Items.golden_apple && var2.getMetadata() == 0 && this.isVillager() && this.isPotionActive(Potion.weakness))
+        if (var2 != null && var2.getItem() == Items.golden_apple && var2.getMetadata() == 0 && this.isVillager() && this.isPotionActive(Potion.WEAKNESS))
         {
             if (!p_70085_1_.capabilities.isCreativeMode)
             {
@@ -626,8 +626,8 @@ public class EntityZombie extends EntityMob
     {
         this.conversionTime = p_82228_1_;
         this.getDataWatcher().updateObject(14, Byte.valueOf((byte)1));
-        this.removePotionEffect(Potion.weakness.id);
-        this.addPotionEffect(new PotionEffect(Potion.damageBoost.id, p_82228_1_, Math.min(this.worldObj.getDifficulty().getDifficultyId() - 1, 0)));
+        this.removePotionEffect(Potion.WEAKNESS.id);
+        this.addPotionEffect(new PotionEffect(Potion.STRENGTH.id, p_82228_1_, Math.min(this.worldObj.getDifficulty().getDifficultyId() - 1, 0)));
         this.worldObj.setEntityState(this, (byte)16);
     }
 
@@ -679,7 +679,7 @@ public class EntityZombie extends EntityMob
 
         this.worldObj.removeEntity(this);
         this.worldObj.spawnEntityInWorld(var1);
-        var1.addPotionEffect(new PotionEffect(Potion.confusion.id, 200, 0));
+        var1.addPotionEffect(new PotionEffect(Potion.NAUSEA.id, 200, 0));
         this.worldObj.playAuxSFXAtEntity((EntityPlayer)null, 1017, new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ), 0);
     }
 

@@ -113,7 +113,7 @@ public class EnchantmentProtection extends Enchantment
      */
     public static int getFireTimeForEntity(Entity p_92093_0_, int p_92093_1_)
     {
-        int var2 = EnchantmentHelper.getMaxEnchantmentLevel(Enchantment.fireProtection.effectId, p_92093_0_.getInventory());
+        int var2 = EnchantmentHelper.getMaxEnchantmentLevel(Enchantment.FIRE_PROTECTION.effectId, p_92093_0_.getInventory());
 
         if (var2 > 0)
         {
@@ -125,7 +125,7 @@ public class EnchantmentProtection extends Enchantment
 
     public static double func_92092_a(Entity p_92092_0_, double p_92092_1_)
     {
-        int var3 = EnchantmentHelper.getMaxEnchantmentLevel(Enchantment.blastProtection.effectId, p_92092_0_.getInventory());
+        int var3 = EnchantmentHelper.getMaxEnchantmentLevel(Enchantment.BLAST_PROTECTION.effectId, p_92092_0_.getInventory());
 
         if (var3 > 0)
         {

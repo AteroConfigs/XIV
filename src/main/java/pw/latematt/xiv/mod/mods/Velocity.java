@@ -19,6 +19,7 @@ import pw.latematt.xiv.value.Value;
  */
 public class Velocity extends Mod implements CommandHandler {
     private final Value<Float> reducedVelocity = new Value<>("velocity_reduction", 0.0F);
+    private final Value<Boolean> liquid = new Value<>("velocity_water", true);
     private final Listener readPacketListener;
     private final Listener liquidVelocityListener;
 
@@ -57,12 +58,15 @@ public class Velocity extends Mod implements CommandHandler {
         liquidVelocityListener = new Listener<LiquidVelocityEvent>() {
             @Override
             public void onEventCalled(LiquidVelocityEvent event) {
-                Vec3 velocity = event.getVelocity();
-                double velX = velocity.xCoord * reducedVelocity.getValue() / 8000;
-                double velY = velocity.yCoord * reducedVelocity.getValue() / 8000;
-                double velZ = velocity.zCoord * reducedVelocity.getValue() / 8000;
+                if (liquid.getValue()) {
+                    Vec3 velocity = event.getVelocity();
 
-                event.setVelocity(new Vec3(velX, velY, velZ));
+                    double velX = velocity.xCoord * reducedVelocity.getValue() / 8000;
+                    double velY = velocity.yCoord * reducedVelocity.getValue() / 8000;
+                    double velZ = velocity.zCoord * reducedVelocity.getValue() / 8000;
+
+                    event.setVelocity(new Vec3(velX, velY, velZ));
+                }
             }
         };
     }
