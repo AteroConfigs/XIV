@@ -3,7 +3,7 @@ package pw.latematt.xiv.ui.clickgui.element.elements;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
-import pw.latematt.xiv.ui.clickgui.GuiClick;
+import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.value.Value;
 
@@ -21,7 +21,7 @@ public class ValueButton extends Element {
 
     @Override
     public void drawElement(int mouseX, int mouseY) {
-        GuiClick.getTheme().renderButton(getValuePrettyName(), getValue().getValue(), getX(), getY(), getWidth(), getHeight(), isOverElement(mouseX, mouseY), this);
+        XIV.getInstance().getGuiClick().getTheme().renderButton(getValuePrettyName(), getValue().getValue(), getX(), getY(), getWidth(), getHeight(), isOverElement(mouseX, mouseY), this);
     }
 
     @Override

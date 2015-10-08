@@ -32,7 +32,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Listener sendPacketListener;
     private final Listener playerDeathListener;
     public final Value<Long> delay = new Value<>("killaura_delay", 125L);
-    public final Value<Double> range = new Value<>("killaura_range", 3.9D);
+    public final Value<Double> range = new Value<>("killaura_range", 3.8D);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
     private final Value<Boolean> mobs = new Value<>("killaura_mobs", false);
     private final Value<Boolean> animals = new Value<>("killaura_animals", false);

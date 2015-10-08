@@ -20,6 +20,7 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
 
     public GuiAltManager(GuiScreen parent) {
         this.parent = parent;
+
         XIV.getInstance().getFileManager().loadFile("alts");
     }
 

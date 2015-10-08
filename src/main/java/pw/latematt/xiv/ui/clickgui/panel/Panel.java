@@ -1,29 +1,21 @@
 package pw.latematt.xiv.ui.clickgui.panel;
 
-import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.mod.mods.ClickGUI;
-import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.element.elements.ValueButton;
-import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.value.Value;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Panel {
-
-    private static Minecraft mc = Minecraft.getMinecraft();
-
     private final String name;
     private float x, y, width, height, openheight;
     private boolean dragging, open;
     private float dragX, dragY;
     private ArrayList<Element> elements;
-
-    private NahrFont font;
 
     public Panel(String name, ArrayList<Element> elements, float x, float y, float width, float height) {
         this.x = x;
@@ -32,8 +24,6 @@ public class Panel {
         this.openheight = this.height = height;
         this.name = name;
         this.elements = elements;
-
-        this.font = new NahrFont("Verdana", 18);
     }
 
     public float getX() {
@@ -114,7 +104,7 @@ public class Panel {
             }
         }
 
-        GuiClick.getTheme().renderPanel(this);
+        XIV.getInstance().getGuiClick().getTheme().renderPanel(this);
 
         if (isOpen()) {
             float y = getOpenHeight();
@@ -147,24 +137,21 @@ public class Panel {
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (isOverPanel(mouseX, mouseY)) {
-            try {
-                GuiClick.guiConfig.save();
-            } catch (IOException e) {
-                XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", GuiClick.guiConfig.getName(), GuiClick.guiConfig.getExtension()));
-                e.printStackTrace();
-            }
+            XIV.getInstance().getFileManager().saveFile("gui");
             if (mouseButton == 0) {
                 dragX = (getX() - mouseX);
                 dragY = (getY() - mouseY);
 
                 dragging = true;
                 ClickGUI clickGUI = (ClickGUI) XIV.getInstance().getModManager().find(ClickGUI.class);
-                for (Panel panel : clickGUI.screen.panels) {
-                    if (panel.equals(this)) continue;
-                    panel.dragging = false;
+                if (Objects.nonNull(clickGUI)) {
+                    for (Panel panel : XIV.getInstance().getGuiClick().getPanels()) {
+                        if (panel.equals(this)) continue;
+                        panel.dragging = false;
+                    }
+                    XIV.getInstance().getGuiClick().getPanels().remove(this);
+                    XIV.getInstance().getGuiClick().getPanels().add(this);
                 }
-                clickGUI.screen.panels.remove(this);
-                clickGUI.screen.panels.add(this);
             } else if (mouseButton == 1) {
                 open = !open;
             }
@@ -201,10 +188,11 @@ public class Panel {
             } else {
                 prettyName = actualNameSplit[0].substring(0, 1).toUpperCase() + actualNameSplit[0].substring(1, actualNameSplit[0].length());
             }
+
             if (value.getValue() instanceof Boolean) {
-                getElements().add(new ValueButton(value, prettyName, x + 2, elementY + 2, GuiClick.getTheme().getElementWidth(), GuiClick.getTheme().getElementHeight()));
+                getElements().add(new ValueButton(value, prettyName, x + 2, elementY + 2, XIV.getInstance().getGuiClick().getTheme().getElementWidth(), XIV.getInstance().getGuiClick().getTheme().getElementHeight()));
             }
-            elementY += GuiClick.getTheme().getElementHeight() + 1;
+            elementY += XIV.getInstance().getGuiClick().getTheme().getElementHeight() + 1;
         }
     }
 }

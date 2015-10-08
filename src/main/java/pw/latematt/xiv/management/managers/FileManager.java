@@ -2,10 +2,7 @@ package pw.latematt.xiv.management.managers;
 
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.management.ListManager;
-import pw.latematt.xiv.management.file.XIVFile;
-import pw.latematt.xiv.management.file.files.AltConfig;
-import pw.latematt.xiv.management.file.files.FriendConfig;
-import pw.latematt.xiv.management.file.files.ModConfig;
+import pw.latematt.xiv.file.XIVFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,10 +24,6 @@ public class FileManager extends ListManager<XIVFile> {
             XIV.getInstance().getLogger().info("Failed to create XIV directory.");
         }
 
-        contents.add(new AltConfig());
-        contents.add(new ModConfig());
-        contents.add(new FriendConfig());
-
         /* save files on shutdown */
         Runtime.getRuntime().addShutdownHook(new Thread("XIV Shutdown Thread") {
             public void run() {
@@ -38,9 +31,6 @@ public class FileManager extends ListManager<XIVFile> {
             }
         });
 
-        /* load/save files on startup */
-        loadAllFiles();
-        saveAllFiles();
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
     }
 

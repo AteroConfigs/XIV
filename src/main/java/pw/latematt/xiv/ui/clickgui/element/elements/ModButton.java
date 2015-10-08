@@ -3,8 +3,8 @@ package pw.latematt.xiv.ui.clickgui.element.elements;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
+import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.mod.Mod;
-import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 
 public class ModButton extends Element {
@@ -19,7 +19,7 @@ public class ModButton extends Element {
 
     @Override
     public void drawElement(int mouseX, int mouseY) {
-        GuiClick.getTheme().renderButton(mod.getName(), mod.isEnabled(), getX(), getY(), getWidth(), getHeight(), isOverElement(mouseX, mouseY), this);
+        XIV.getInstance().getGuiClick().getTheme().renderButton(mod.getName(), mod.isEnabled(), getX(), getY(), getWidth(), getHeight(), isOverElement(mouseX, mouseY), this);
     }
 
     @Override
