@@ -209,8 +209,8 @@ public class Waypoints extends Mod implements CommandHandler {
 
         float var13 = (float) dist / 5 <= 2 ? 2.0F : (float) dist / 5;
         float var14 = 0.016666668F * var13;
-        if (var14 > 0.28065565F) {
-            var14 = 0.28065565F;
+        if (var14 > 0.3F) {
+            var14 = 0.3F;
         }
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y + 1.5F, z);
