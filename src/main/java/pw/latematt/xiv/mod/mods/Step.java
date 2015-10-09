@@ -37,7 +37,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
                     if (editPackets) {
-                        player.setY(player.getY() + 0.0646D);
+                        player.setY(player.getY() + 0.368128821253776550292969F);
                         editPackets = false;
                     }
                 }

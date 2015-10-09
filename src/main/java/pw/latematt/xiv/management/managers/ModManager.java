@@ -132,7 +132,6 @@ public class ModManager extends ListManager<Mod> {
                             } else {
                                 mod.toggle();
                             }
-                            XIV.getInstance().getFileManager().saveFile("modconfig");
                             ChatLogger.print(String.format("%s has been toggled %s.", mod.getName(), mod.isEnabled() ? "on" : "off"));
                         } else {
                             ChatLogger.print(String.format("Invalid module \"%s\"", modName));
@@ -155,7 +154,6 @@ public class ModManager extends ListManager<Mod> {
 
                         if (mod != null) {
                             mod.setVisible(!mod.isVisible());
-                            XIV.getInstance().getFileManager().saveFile("modconfig");
                             ChatLogger.print(String.format("%s will %s be shown in the arraylist.", mod.getName(), mod.isVisible() ? "now" : "no longer"));
                         } else {
                             ChatLogger.print(String.format("Invalid module \"%s\"", modName));
@@ -179,7 +177,6 @@ public class ModManager extends ListManager<Mod> {
                             String newBindName = arguments[2].toUpperCase();
                             int newBind = Keyboard.getKeyIndex(newBindName);
                             mod.setKeybind(newBind);
-                            XIV.getInstance().getFileManager().saveFile("modconfig");
                             ChatLogger.print(String.format("%s is now bound to %s", mod.getName(), Keyboard.getKeyName(newBind)));
                         } else {
                             ChatLogger.print(String.format("Invalid module \"%s\"", modName));
