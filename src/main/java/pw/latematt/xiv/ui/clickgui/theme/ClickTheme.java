@@ -18,7 +18,7 @@ public abstract class ClickTheme {
         this.elementWidth = elementWidth;
         this.elementHeight = elementHeight;
 
-        for (Panel panel : gui.panels) {
+        for (Panel panel : gui.getPanels()) {
             for (Element element : panel.getElements()) {
                 element.setWidth(this.getElementWidth());
                 element.setHeight(this.getElementHeight());

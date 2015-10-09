@@ -24,6 +24,7 @@ import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.Timer;
 import pw.latematt.xiv.value.Value;
 
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -53,30 +54,31 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
     }
 
     public void onEventCalled(MotionUpdateEvent event) {
-        MovingObjectPosition mop = mc.objectMouseOver;
-        if (mop == null)
-            return;
-        Entity entity = mop.entityHit;
-        if (entity instanceof EntityLivingBase) {
-            EntityLivingBase ent = (EntityLivingBase) entity;
+        if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.POST)) {
+            MovingObjectPosition objectMouseOver = mc.objectMouseOver;
+            if (objectMouseOver == null)
+                return;
+            Entity entity = objectMouseOver.entityHit;
+            if (entity instanceof EntityLivingBase) {
+                EntityLivingBase living = (EntityLivingBase) entity;
+                long skip = getRandom(0, 75);
+                if (timer.hasReached(delay.getValue() + skip)) {
+                    if (!isValidEntity(living))
+                        return;
 
-            long skip = getRandom(0, 10);
-            if (timer.hasReached(delay.getValue() + skip)) {
-                if (!shouldAttack(ent))
-                    return;
+                    if (!properWeapon(mc.thePlayer.getHeldItem()))
+                        return;
 
-                if (!properWeapon(mc.thePlayer.getHeldItem()))
-                    return;
+                    mc.thePlayer.swingItem();
+                    mc.playerController.attackEntity(Minecraft.getMinecraft().thePlayer, living);
 
-                mc.thePlayer.swingItem();
-                mc.playerController.attackEntity(Minecraft.getMinecraft().thePlayer, ent);
-
-                timer.reset();
+                    timer.reset();
+                }
             }
         }
     }
 
-    public boolean shouldAttack(EntityLivingBase entity) {
+    public boolean isValidEntity(EntityLivingBase entity) {
         if (entity == null)
             return false;
         if (entity == mc.thePlayer)
@@ -212,6 +214,6 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
     }
 
     public int getRandom(int floor, int cap) {
-        return floor + random.nextInt(cap - floor + 1);
+        return floor + random.nextInt(cap);
     }
 }

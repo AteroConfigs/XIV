@@ -9,9 +9,10 @@ import pw.latematt.xiv.mod.mods.aura.mode.AuraMode;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.Timer;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 /**
  * @author Matthew
@@ -29,20 +30,16 @@ public class Switch extends AuraMode {
     @Override
     public void onPreMotionUpdate(MotionUpdateEvent event) {
         if (entities.isEmpty()) {
-            mc.theWorld.loadedEntityList.stream().filter(entity -> entity instanceof EntityLivingBase).forEach(entity -> {
-                EntityLivingBase living = (EntityLivingBase) entity;
-                if (killAura.isValidEntity(living)) {
-                    entities.add(living);
-                }
-            });
-
-            List<EntityLivingBase> sortedEntities = entities.stream().sorted((entity1, entity2) -> {
-                double entity1Distance = mc.thePlayer.getDistanceToEntity(entity1);
-                double entity2Distance = mc.thePlayer.getDistanceToEntity(entity2);
-                return entity1Distance > entity2Distance ? 1 : entity2Distance > entity1Distance ? -1 : 0;
-            }).collect(Collectors.toList());
-            entities.clear();
-            entities.addAll(sortedEntities);
+            mc.theWorld.loadedEntityList.stream()
+                    .filter(entity -> entity instanceof EntityLivingBase)
+                    .filter(entity -> killAura.isValidEntity((EntityLivingBase) entity))
+                    .sorted((entity1, entity2) -> {
+                        double entity1YawDistance = EntityUtils.getYawChange((EntityLivingBase) entity1);
+                        double entity2YawDistance = EntityUtils.getYawChange((EntityLivingBase) entity2);
+                        System.out.println(entity1.getDisplayName().getFormattedText() + " " + entity1YawDistance);
+                        System.out.println(entity2.getDisplayName().getFormattedText() + " " + entity2YawDistance);
+                        return entity1YawDistance > entity2YawDistance  ? -1 : entity2YawDistance > entity1YawDistance ? 1 : 0;
+                    }).forEach(entity -> entities.add((EntityLivingBase) entity));
         }
 
         if (!entities.isEmpty()) {
@@ -55,7 +52,7 @@ public class Switch extends AuraMode {
         }
 
         if (killAura.isValidEntity(entityToAttack)) {
-            if (killAura.autoBlock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
+            if (killAura.autoBlock.getValue() && Objects.nonNull(mc.thePlayer.getCurrentEquippedItem()) && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
                 ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
                 sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
                 mc.playerController.updateController();
@@ -69,11 +66,9 @@ public class Switch extends AuraMode {
                 mc.thePlayer.rotationYaw = rotations[0];
                 mc.thePlayer.rotationPitch = rotations[1];
             }
+        } else {
+            entities.remove(entityToAttack);
         }
-    }
-
-    private static float angleDifference(float a, float b) {
-        return ((((a - b) % 360f) + 540f) % 360f) - 180f;
     }
 
     @Override

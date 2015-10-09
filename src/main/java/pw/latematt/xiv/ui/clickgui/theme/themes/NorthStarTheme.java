@@ -7,6 +7,8 @@ import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.utils.RenderUtils;
 
+import java.util.Objects;
+
 /**
  * @author Matthew
  */
@@ -17,14 +19,15 @@ public class NorthStarTheme extends ClickTheme {
 
     public NorthStarTheme(GuiClick gui) {
         super("NorthStar", 96, 12, gui);
-
-        this.font = new NahrFont("Arial", 18);
-
         this.gui = gui;
     }
 
     @Override
     public void renderPanel(Panel panel) {
+        if (Objects.isNull(font)) {
+            font = new NahrFont("Arial", 18);
+        }
+
         RenderUtils.drawBorderedRect(panel.getX(), panel.getY() + 1, panel.getX() + panel.getWidth(), panel.getY() + (panel.isOpen() ? panel.getHeight() : panel.getOpenHeight()), 0xBB515151, 0xFF000000);
         font.drawString(panel.getName(), panel.getX() + 3, panel.getY() + 1, NahrFont.FontType.SHADOW_THIN, 0xFFFFFFFF);
 
@@ -33,6 +36,10 @@ public class NorthStarTheme extends ClickTheme {
 
     @Override
     public void renderButton(String name, boolean enabled, float x, float y, float width, float height, boolean overElement, Element element) {
+        if (Objects.isNull(font)) {
+            font = new NahrFont("Arial", 18);
+        }
+
         element.setWidth(this.getElementWidth());
         element.setHeight(this.getElementHeight());
 
@@ -43,6 +50,10 @@ public class NorthStarTheme extends ClickTheme {
 
     @Override
     public void renderSlider(String name, float value, float x, float y, float width, float height, float sliderX, boolean overElement, Element element) {
+        if (Objects.isNull(font)) {
+            font = new NahrFont("Arial", 18);
+        }
+
         element.setWidth(96);
         element.setHeight(this.getElementHeight());
 

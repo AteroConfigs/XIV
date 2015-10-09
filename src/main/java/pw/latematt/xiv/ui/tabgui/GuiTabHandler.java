@@ -125,6 +125,7 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
                     this.selectedItem = 0;
                 } else {
                     ((this.tabs.get(this.selectedTab)).getMods().get(this.selectedItem)).getMod().toggle();
+
                 }
                 break;
             case Keyboard.KEY_RETURN:

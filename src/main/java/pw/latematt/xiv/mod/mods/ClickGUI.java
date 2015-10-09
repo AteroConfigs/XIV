@@ -9,8 +9,6 @@ import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 
 public class ClickGUI extends Mod implements Listener<GuiScreenEvent> {
-    public GuiClick screen;
-
     public ClickGUI() {
         super("ClickGUI", ModType.NONE, Keyboard.KEY_RSHIFT);
     }
@@ -29,12 +27,8 @@ public class ClickGUI extends Mod implements Listener<GuiScreenEvent> {
             return;
         }
 
-        if (screen == null) {
-            screen = new GuiClick();
-        }
-
         XIV.getInstance().getListenerManager().add(this);
-        this.mc.displayGuiScreen(screen);
+        this.mc.displayGuiScreen(XIV.getInstance().getGuiClick());
     }
 
     @Override

@@ -6,6 +6,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 
@@ -26,6 +27,33 @@ public class EntityUtils {
         final float yaw = (float) (Math.atan2(var6, var4) * 180.0D / Math.PI) - 90.0F;
         final float pitch = (float) -(Math.atan2(var8, var14) * 180.0D / Math.PI);
         return new float[]{yaw, pitch};
+    }
+
+    public static float getPitchChange(final EntityLivingBase entity){
+        final double deltaX = entity.posX - mc.thePlayer.posX;
+        final double deltaZ = entity.posZ - mc.thePlayer.posZ;
+        final double deltaY = entity.posY - 2.2D + entity.getEyeHeight() - mc.thePlayer.posY;
+        final double distanceXZ = MathHelper.sqrt_double(deltaX * deltaX + deltaZ * deltaZ);
+        final double pitchToEntity = -Math.toDegrees(Math.atan(deltaY / distanceXZ));
+        return -MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationPitch - (float)pitchToEntity);
+    }
+
+    public static float getYawChange(final EntityLivingBase entity){
+        final double deltaX = entity.posX - mc.thePlayer.posX;
+        final double deltaZ = entity.posZ - mc.thePlayer.posZ;
+        double yawToEntity;
+
+        if ((deltaZ < 0.0D) && (deltaX < 0.0D)){
+            yawToEntity = 90.0D + Math.toDegrees(Math.atan(deltaZ / deltaX));
+        } else {
+            if ((deltaZ < 0.0D) && (deltaX > 0.0D)){
+                yawToEntity = -90.0D + Math.toDegrees(Math.atan(deltaZ / deltaX));
+            } else {
+                yawToEntity = Math.toDegrees(-Math.atan(deltaX / deltaZ));
+            }
+        }
+
+        return MathHelper.wrapAngleTo180_float(-(mc.thePlayer.rotationYaw - (float)yawToEntity));
     }
 
     public static int getBestWeapon(EntityLivingBase target) {

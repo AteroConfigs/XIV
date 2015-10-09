@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.client.gui.GuiScreen;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.management.file.XIVFile;
+import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.panel.panels.*;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
@@ -19,17 +19,35 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class GuiClick extends GuiScreen {
-    public final List<Panel> panels;
-    public static List<ClickTheme> themes;
-    private static ClickTheme theme;
-    public static XIVFile guiConfig;
-    public static XIVFile themeConfig;
+    private List<Panel> panels;
+    private List<ClickTheme> themes;
+    private ClickTheme theme;
+    private XIVFile guiConfig;
+    private XIVFile themeConfig;
 
-    public GuiClick() {
+    public ClickTheme getTheme() {
+        return theme;
+    }
+
+    public void setTheme(ClickTheme theme) {
+        this.theme = theme;
+    }
+
+    public List<ClickTheme> getThemes() {
+        return themes;
+    }
+
+    public List<Panel> getPanels() {
+        return panels;
+    }
+
+    @Override
+    public void initGui() {
         panels = new CopyOnWriteArrayList<>();
         themes = new ArrayList<>();
         themes.add(theme = new DarculaTheme(this));
@@ -41,9 +59,8 @@ public class GuiClick extends GuiScreen {
         panels.add(new AuraPanel(106, 4, 100, 14));
         panels.add(new FastUsePanel(106, 19, 100, 14));
         panels.add(new ESPPanel(208, 4, 100, 14));
-        panels.add(new StorageESPPanel(312, 4, 100, 14));
-        panels.add(new TriggerbotPanel(312, 19, 100, 14));
-
+        panels.add(new StorageESPPanel(310, 4, 100, 14));
+        panels.add(new TriggerbotPanel(310, 19, 100, 14));
 
         if (guiConfig == null) {
             guiConfig = new XIVFile("gui", "json") {
@@ -70,12 +87,6 @@ public class GuiClick extends GuiScreen {
                 }
             };
         }
-        try {
-            guiConfig.load();
-        } catch (IOException e) {
-            XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not load, a stack trace has been printed.", guiConfig.getName(), guiConfig.getExtension()));
-            e.printStackTrace();
-        }
 
         if (themeConfig == null) {
             themeConfig = new XIVFile("guiTheme", "cfg") {
@@ -85,34 +96,22 @@ public class GuiClick extends GuiScreen {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         final String finalizedLine = line;
-                        GuiClick.themes.stream().filter(theme -> finalizedLine.equals(theme.getName())).forEach(GuiClick::setTheme);
+                        Optional<ClickTheme> newTheme = themes.stream().filter(theme -> finalizedLine.equals(theme.getName())).findFirst();
+                        if (newTheme.isPresent()) {
+                            theme = newTheme.get();
+                        }
                     }
                 }
 
                 @Override
                 public void save() throws IOException {
-                    Files.write(GuiClick.getTheme().getName().getBytes("UTF-8"), file);
+                    Files.write(theme.getName().getBytes("UTF-8"), file);
                 }
             };
         }
-        try {
-            themeConfig.load();
-        } catch (IOException e) {
-            XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not load, a stack trace has been printed.", themeConfig.getName(), themeConfig.getExtension()));
-            e.printStackTrace();
-        }
-    }
 
-    public static ClickTheme getTheme() {
-        return theme;
-    }
-
-    public static void setTheme(ClickTheme theme) {
-        GuiClick.theme = theme;
-    }
-
-    public static List<ClickTheme> getThemes() {
-        return themes;
+        XIV.getInstance().getFileManager().loadFile("gui");
+        XIV.getInstance().getFileManager().loadFile("guiTheme");
     }
 
     @Override

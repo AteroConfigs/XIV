@@ -19,7 +19,7 @@ import pw.latematt.xiv.event.events.AddWeatherEvent;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.PlayerDeathEvent;
 import pw.latematt.xiv.event.events.Render3DEvent;
-import pw.latematt.xiv.management.file.XIVFile;
+import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.waypoints.base.Waypoint;
@@ -45,7 +45,6 @@ public class Waypoints extends Mod implements CommandHandler {
     private final Value<Boolean> boxes = new Value<>("waypoints_boxes", true);
     private final Value<Boolean> tracerLines = new Value<>("waypoints_tracer_lines", true);
     private final Value<Boolean> nametags = new Value<>("waypoints_nametags", true);
-    private final XIVFile waypointFile;
     private final Listener render3DListener;
     private final Listener motionUpdateListener;
     private final Listener addWeatherListener;
@@ -105,12 +104,7 @@ public class Waypoints extends Mod implements CommandHandler {
                         double distance = mc.thePlayer.getDistance(waypoint.getX(), waypoint.getY(), waypoint.getZ());
                         if (distance <= 3) {
                             points.remove(waypoint);
-                            try {
-                                waypointFile.save();
-                            } catch (IOException e) {
-                                XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
-                                e.printStackTrace();
-                            }
+                            XIV.getInstance().getFileManager().saveFile("waypoints");
                             ChatLogger.print(String.format("Waypoint \"%s\" reached!", waypoint.getName()));
                         }
                     }
@@ -127,12 +121,7 @@ public class Waypoints extends Mod implements CommandHandler {
                     EntityLightningBolt lightningBolt = (EntityLightningBolt) event.getEntity();
                     Waypoint point = new Waypoint("Lightning", getCurrentServerIP(), lightningBolt.posX, lightningBolt.posY, lightningBolt.posZ, true);
                     points.add(point);
-                    try {
-                        waypointFile.save();
-                    } catch (IOException e) {
-                        XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
-                        e.printStackTrace();
-                    }
+                    XIV.getInstance().getFileManager().saveFile("waypoints");
                     ChatLogger.print(String.format("Lightning Waypoint added at %s, %s, %s", point.getX(), point.getY(), point.getZ()));
                 }
             }
@@ -145,18 +134,13 @@ public class Waypoints extends Mod implements CommandHandler {
                     return;
                 Waypoint point = new Waypoint("Death", getCurrentServerIP(), mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false);
                 points.add(point);
-                try {
-                    waypointFile.save();
-                } catch (IOException e) {
-                    XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
-                    e.printStackTrace();
-                }
+                XIV.getInstance().getFileManager().saveFile("waypoints");
                 ChatLogger.print(String.format("Death Waypoint added at %s, %s, %s", point.getX(), point.getY(), point.getZ()));
             }
         };
 
         setEnabled(true);
-        waypointFile = new XIVFile("waypoints", "json") {
+        new XIVFile("waypoints", "json") {
             @Override
             public void load() throws IOException {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -172,12 +156,6 @@ public class Waypoints extends Mod implements CommandHandler {
                 Files.write(gson.toJson(points).getBytes("UTF-8"), file);
             }
         };
-        try {
-            waypointFile.load();
-        } catch (IOException e) {
-            XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not load, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
-            e.printStackTrace();
-        }
 
         Command.newCommand()
                 .cmd("waypoints")
@@ -281,12 +259,7 @@ public class Waypoints extends Mod implements CommandHandler {
                             String name = message.substring((String.format("%s %s %s %s %s ", arguments[0], arguments[1], arguments[2], arguments[3], arguments[4])).length());
                             Waypoint waypoint = new Waypoint(name, getCurrentServerIP(), x, y, z, true);
                             points.add(waypoint);
-                            try {
-                                waypointFile.save();
-                            } catch (IOException e) {
-                                XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
-                                e.printStackTrace();
-                            }
+                            XIV.getInstance().getFileManager().saveFile("waypoints");
                             ChatLogger.print(String.format("Waypoint \"%s\" added at %s, %s, %s", waypoint.getName(), waypoint.getX(), waypoint.getY(), waypoint.getZ()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print("Invalid integer, valid arguments: waypoints add <x> <y> <z> <name>");
@@ -303,12 +276,7 @@ public class Waypoints extends Mod implements CommandHandler {
                         for (final Waypoint waypoint : points) {
                             if (waypoint.getName().toLowerCase().startsWith(name.toLowerCase())) {
                                 points.remove(waypoint);
-                                try {
-                                    waypointFile.save();
-                                } catch (IOException e) {
-                                    XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", waypointFile.getName(), waypointFile.getExtension()));
-                                    e.printStackTrace();
-                                }
+                                XIV.getInstance().getFileManager().saveFile("waypoints");
                                 ChatLogger.print(String.format("Waypoint \"%s\" deleted.", waypoint.getName()));
                                 found = true;
                             }

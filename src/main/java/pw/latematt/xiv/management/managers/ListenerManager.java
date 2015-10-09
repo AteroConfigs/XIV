@@ -5,6 +5,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Event;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.KeyPressEvent;
+import pw.latematt.xiv.macro.Macro;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.Mod;
 
@@ -31,9 +32,15 @@ public class ListenerManager extends ListManager<Listener> {
 
                     if (mod.getKeybind() == event.getKeyCode()) {
                         mod.toggle();
-                        XIV.getInstance().getFileManager().saveFile("modconfig");
                     }
                 }
+            }
+        });
+
+        add(new Listener<KeyPressEvent>() {
+            @Override
+            public void onEventCalled(KeyPressEvent event) {
+                XIV.getInstance().getMacroManager().getContents().stream().filter(macro -> event.getKeyCode() == macro.getKeybind()).forEach(macro -> XIV.getInstance().getCommandManager().parseCommand(macro.getCommand()));
             }
         });
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");

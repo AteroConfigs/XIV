@@ -1,6 +1,7 @@
 package pw.latematt.xiv.mod;
 
 import net.minecraft.client.Minecraft;
+import pw.latematt.xiv.XIV;
 
 /**
  * @author Matthew
@@ -52,6 +53,7 @@ public abstract class Mod {
 
     public void setKeybind(int keybind) {
         this.keybind = keybind;
+        XIV.getInstance().getFileManager().saveFile("modconfig");
     }
 
     public int getColor() {
@@ -60,6 +62,7 @@ public abstract class Mod {
 
     public void setColor(int color) {
         this.color = color;
+        XIV.getInstance().getFileManager().saveFile("modconfig");
     }
 
     public boolean isEnabled() {
@@ -78,6 +81,8 @@ public abstract class Mod {
         } else {
             onDisabled();
         }
+
+        XIV.getInstance().getFileManager().saveFile("modconfig");
     }
 
     public boolean isVisible() {
@@ -86,6 +91,7 @@ public abstract class Mod {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+        XIV.getInstance().getFileManager().saveFile("modconfig");
     }
 
     public void toggle() {
@@ -96,6 +102,8 @@ public abstract class Mod {
         } else {
             onDisabled();
         }
+
+        XIV.getInstance().getFileManager().saveFile("modconfig");
     }
 
     public abstract void onEnabled();

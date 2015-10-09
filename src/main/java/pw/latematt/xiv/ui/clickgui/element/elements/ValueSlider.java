@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
-import pw.latematt.xiv.ui.clickgui.GuiClick;
+import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.value.SliderValue;
 
@@ -27,7 +27,7 @@ public class ValueSlider extends Element {
 
     @Override
     public void drawElement(int mouseX, int mouseY) {
-        GuiClick.getTheme().renderSlider(getValuePrettyName(), toFloat(getValue()).getValue(), getX(), getY(), getWidth(), getHeight(), getValue().getSliderX(), isOverElement(mouseX, mouseY), this);
+        XIV.getInstance().getGuiClick().getTheme().renderSlider(getValuePrettyName(), toFloat(getValue()).getValue(), getX(), getY(), getWidth(), getHeight(), getValue().getSliderX(), isOverElement(mouseX, mouseY), this);
 
         SliderValue<Float> val = toFloat(value);
 

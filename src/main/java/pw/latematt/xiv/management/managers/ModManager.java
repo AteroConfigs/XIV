@@ -1,16 +1,25 @@
 package pw.latematt.xiv.management.managers;
 
+import com.google.common.io.Files;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.management.ListManager;
+import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.mods.*;
 import pw.latematt.xiv.mod.mods.aura.KillAura;
 import pw.latematt.xiv.mod.mods.waypoints.Waypoints;
 import pw.latematt.xiv.utils.ChatLogger;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -41,12 +50,13 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new InventoryWalk());
         contents.add(new Jesus());
         contents.add(new KillAura());
-        contents.add(new NameComplete());
+        contents.add(new DashNames());
         contents.add(new Nametags());
         contents.add(new NoFall());
         contents.add(new NoRotationSet());
         contents.add(new NoSlowdown());
         contents.add(new Regen());
+        contents.add(new SmoothAimbot());
         contents.add(new Sneak());
         contents.add(new Speed());
         contents.add(new Speedmine());
@@ -62,6 +72,35 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new TabGUI());
         /* then load clickgui after tabgui */
         contents.add(new ClickGUI());
+
+        new XIVFile("modconfig", "json") {
+            @Override
+            public void load() throws IOException {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                HashMap<String, ModOptions> modOptions = gson.fromJson(reader, new TypeToken<HashMap<String, ModOptions>>() {
+                }.getType());
+                for (Mod mod : XIV.getInstance().getModManager().getContents()) {
+                    modOptions.keySet().stream().filter(modName -> mod.getName().equals(modName)).forEach(modName -> {
+                        ModOptions options = modOptions.get(modName);
+                        mod.setKeybind(Keyboard.getKeyIndex(options.getKeybind()));
+                        mod.setColor(options.getColor());
+                        mod.setEnabled(options.isEnabled());
+                        mod.setVisible(options.isVisible());
+                    });
+                }
+            }
+
+            @Override
+            public void save() throws IOException {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                HashMap<String, ModOptions> modOptions = new HashMap<>();
+                for (Mod mod : XIV.getInstance().getModManager().getContents()) {
+                    modOptions.put(mod.getName(), new ModOptions(Keyboard.getKeyName(mod.getKeybind()), mod.getColor(), mod.isEnabled(), mod.isVisible()));
+                }
+                Files.write(gson.toJson(modOptions).getBytes("UTF-8"), file);
+            }
+        };
 
         Command.newCommand()
                 .cmd("mods")
@@ -88,8 +127,11 @@ public class ModManager extends ListManager<Mod> {
                         Mod mod = XIV.getInstance().getModManager().find(modName);
 
                         if (mod != null) {
-                            mod.toggle();
-                            XIV.getInstance().getFileManager().saveFile("modconfig");
+                            if (arguments.length >= 3) {
+                                mod.setEnabled(Boolean.parseBoolean(arguments[2]));
+                            } else {
+                                mod.toggle();
+                            }
                             ChatLogger.print(String.format("%s has been toggled %s.", mod.getName(), mod.isEnabled() ? "on" : "off"));
                         } else {
                             ChatLogger.print(String.format("Invalid module \"%s\"", modName));
@@ -112,7 +154,6 @@ public class ModManager extends ListManager<Mod> {
 
                         if (mod != null) {
                             mod.setVisible(!mod.isVisible());
-                            XIV.getInstance().getFileManager().saveFile("modconfig");
                             ChatLogger.print(String.format("%s will %s be shown in the arraylist.", mod.getName(), mod.isVisible() ? "now" : "no longer"));
                         } else {
                             ChatLogger.print(String.format("Invalid module \"%s\"", modName));
@@ -136,7 +177,6 @@ public class ModManager extends ListManager<Mod> {
                             String newBindName = arguments[2].toUpperCase();
                             int newBind = Keyboard.getKeyIndex(newBindName);
                             mod.setKeybind(newBind);
-                            XIV.getInstance().getFileManager().saveFile("modconfig");
                             ChatLogger.print(String.format("%s is now bound to %s", mod.getName(), Keyboard.getKeyName(newBind)));
                         } else {
                             ChatLogger.print(String.format("Invalid module \"%s\"", modName));
@@ -166,5 +206,34 @@ public class ModManager extends ListManager<Mod> {
             }
         }
         return null;
+    }
+
+    private class ModOptions {
+        private final String keybind;
+        private final int color;
+        private final boolean visible, enabled;
+
+        public ModOptions(String keybind, int color, boolean enabled, boolean visible) {
+            this.keybind = keybind;
+            this.color = color;
+            this.enabled = enabled;
+            this.visible = visible;
+        }
+
+        public String getKeybind() {
+            return keybind;
+        }
+
+        public int getColor() {
+            return color;
+        }
+
+        public boolean isVisible() {
+            return visible;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
     }
 }

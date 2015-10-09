@@ -18,7 +18,7 @@ import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.IngameHUDRenderEvent;
-import pw.latematt.xiv.management.file.XIVFile;
+import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
@@ -28,7 +28,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -47,7 +50,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
     private final Value<Boolean> potions = new Value<>("hud_potions", true);
     private final Value<Boolean> armor = new Value<>("hud_armor", true);
     private final Value<Boolean> rudysucks = new Value<>("hud_rudysucks", false);
-    private final XIVFile hudConfigFile;
 
     public HUD() {
         super("HUD", ModType.RENDER);
@@ -60,7 +62,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                 .handler(this)
                 .build();
 
-        hudConfigFile = new XIVFile("hudconfig", "json") {
+        new XIVFile("hudconfig", "json") {
             @Override
             @SuppressWarnings("unchecked")
             public void load() throws IOException {
@@ -69,9 +71,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                 List<Value> values = gson.fromJson(reader, new TypeToken<List<Value>>() {
                 }.getType());
                 for (Value value : values) {
-                    XIV.getInstance().getValueManager().getContents().stream().filter(value1 -> value.getName().equals(value1.getName())).forEach(value1 -> {
-                        value1.setValue(value.getValue());
-                    });
+                    XIV.getInstance().getValueManager().getContents().stream().filter(value1 -> value.getName().equals(value1.getName())).forEach(value1 -> value1.setValue(value.getValue()));
                 }
             }
 
@@ -82,13 +82,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                 Files.write(gson.toJson(values).getBytes("UTF-8"), file);
             }
         };
-
-        try {
-            hudConfigFile.load();
-        } catch (IOException e) {
-            XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not load, a stack trace has been printed.", hudConfigFile.getName(), hudConfigFile.getExtension()));
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -186,26 +179,9 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         int x = scaledResolution.getScaledWidth() - 2;
         int y = 2;
 
-        List<Mod> mods = new ArrayList<>();
-
-        for (Mod mod : XIV.getInstance().getModManager().getContents()) {
-            if (!mod.isVisible() || !mod.isEnabled())
-                continue;
-            mods.add(mod);
-        }
-
+        List<Mod> mods = XIV.getInstance().getModManager().getContents().stream().filter(mod -> mod.isVisible() && mod.isEnabled()).collect(Collectors.toList());
         if (organize.getValue()) {
-            Comparator<Mod> stringComparator = (mod1, mod2) -> {
-                if (mc.fontRendererObj.getStringWidth(mod1.getTag()) > mc.fontRendererObj
-                        .getStringWidth(mod2.getTag()))
-                    return -1;
-                if (mc.fontRendererObj.getStringWidth(mod2.getTag()) > mc.fontRendererObj
-                        .getStringWidth(mod1.getTag()))
-                    return 1;
-                return 0;
-            };
-
-            Collections.sort(mods, stringComparator);
+            Collections.sort(mods, (mod1, mod2) -> mc.fontRendererObj.getStringWidth(mod1.getTag()) > mc.fontRendererObj.getStringWidth(mod2.getTag()) ? -1 : mc.fontRendererObj.getStringWidth(mod2.getTag()) > mc.fontRendererObj.getStringWidth(mod1.getTag()) ? 1 : 0);
         }
 
         for (Mod mod : mods) {
@@ -328,12 +304,8 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         } else {
             ChatLogger.print("Invalid arguments, valid: hud <action>");
         }
-        try {
-            hudConfigFile.save();
-        } catch (IOException e) {
-            XIV.getInstance().getLogger().warn(String.format("File \"%s.%s\" could not save, a stack trace has been printed.", hudConfigFile.getName(), hudConfigFile.getExtension()));
-            e.printStackTrace();
-        }
+
+        XIV.getInstance().getFileManager().saveFile("hudconfig");
     }
 
     @Override
