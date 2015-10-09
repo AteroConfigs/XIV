@@ -77,6 +77,16 @@ public class Velocity extends Mod implements CommandHandler {
         if (arguments.length >= 2) {
             String action = arguments[1];
             switch (action.toLowerCase()) {
+                case "liquid":
+                case "water":
+                case "lava":
+                    if (arguments.length >= 3) {
+                        liquid.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        liquid.setValue(!liquid.getValue());
+                    }
+                    ChatLogger.print(String.format("Velocity will %s work in velocity.", liquid.getValue() ? "now" : "no longer"));
+                    break;
                 case "percent":
                 case "perc":
                     if (arguments.length >= 3) {
@@ -99,7 +109,7 @@ public class Velocity extends Mod implements CommandHandler {
                     }
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: percent");
+                    ChatLogger.print("Invalid action, valid: percent, liquid");
                     break;
             }
         } else {
