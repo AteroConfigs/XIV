@@ -22,6 +22,7 @@ public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>, Comm
     private final Value<Boolean> cactus = new Value<>("blockbbfixer_cactus", true);
     private final Value<Boolean> cobweb = new Value<>("blockbbfixer_cobweb", true);
     private final Value<Boolean> fire = new Value<>("blockbbfixer_fire", true);
+    private boolean nextTick;
 
     public BlockBBFixer() {
         super("BlockBBFixer", ModType.WORLD);
@@ -39,7 +40,7 @@ public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>, Comm
     public void onEventCalled(BlockAddBBEvent event) {
         if (event.getBlock() instanceof BlockCactus && cactus.getValue() || event.getBlock() instanceof BlockWeb && cobweb.getValue() || event.getBlock() instanceof BlockFire && fire.getValue()) {
             BlockPos pos = event.getPos();
-            event.setAxisAlignedBB(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
+            event.setAxisAlignedBB(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1.0D, pos.getY() + 1.0D, pos.getZ() + 1.0D));
         }
     }
 

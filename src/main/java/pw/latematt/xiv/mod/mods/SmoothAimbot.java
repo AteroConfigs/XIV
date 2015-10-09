@@ -19,7 +19,7 @@ import java.util.Objects;
  * @author Jack
  */
 
-public final class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
+public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private final Value<Float> fov = new Value<>("smoothaimbot_fov", 80F);
     private final Value<Double> range = new Value<>("smoothaimbot_range", 3.8D);
 
@@ -38,8 +38,8 @@ public final class SmoothAimbot extends Mod implements Listener<MotionUpdateEven
     public void onEventCalled(MotionUpdateEvent event) {
         final EntityPlayer target = this.getClosestPlayerToCursor(this.fov.getValue());
         if (Objects.nonNull(target)) {
-            mc.thePlayer.rotationPitch = mc.thePlayer.rotationPitch + (EntityUtils.getPitchChangeToPlayer(target) / 3.5F);
-            mc.thePlayer.rotationYaw = mc.thePlayer.rotationYaw + (EntityUtils.getYawChangeToPlayer(target) / 3.5F);
+            mc.thePlayer.rotationPitch = mc.thePlayer.rotationPitch + (EntityUtils.getPitchChange(target) / 3.5F);
+            mc.thePlayer.rotationYaw = mc.thePlayer.rotationYaw + (EntityUtils.getYawChange(target) / 3.5F);
         }
     }
 
@@ -50,8 +50,8 @@ public final class SmoothAimbot extends Mod implements Listener<MotionUpdateEven
             final EntityPlayer player = (EntityPlayer)o;
 
             if (this.isValidEntity(player)) {
-                final float yaw = EntityUtils.getYawChangeToPlayer(player);
-                final float pitch = EntityUtils.getPitchChangeToPlayer(player);
+                final float yaw = EntityUtils.getYawChange(player);
+                final float pitch = EntityUtils.getPitchChange(player);
 
                 if (yaw > angle || pitch > angle) {
                     continue;

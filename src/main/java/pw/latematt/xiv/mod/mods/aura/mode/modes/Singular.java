@@ -32,7 +32,7 @@ public class Singular extends AuraMode {
                     .sorted((entity1, entity2) -> {
                         double entity1Distance = mc.thePlayer.getDistanceToEntity(entity1);
                         double entity2Distance = mc.thePlayer.getDistanceToEntity(entity2);
-                        return entity1Distance > entity2Distance ? 1 : entity2Distance > entity1Distance ? -1 : 0;
+                        return entity1Distance > entity2Distance  ? 1 : entity2Distance > entity1Distance ? -1 : 0;
                     }).findFirst();
             if (firstValidEntity.isPresent()) {
                 entityToAttack = (EntityLivingBase) firstValidEntity.get();

@@ -125,13 +125,12 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
                     this.selectedItem = 0;
                 } else {
                     ((this.tabs.get(this.selectedTab)).getMods().get(this.selectedItem)).getMod().toggle();
-                    XIV.getInstance().getFileManager().saveFile("modconfig");
+
                 }
                 break;
             case Keyboard.KEY_RETURN:
                 if (!this.mainMenu) {
                     ((this.tabs.get(this.selectedTab)).getMods().get(this.selectedItem)).getMod().toggle();
-                    XIV.getInstance().getFileManager().saveFile("modconfig");
                 }
                 break;
         }

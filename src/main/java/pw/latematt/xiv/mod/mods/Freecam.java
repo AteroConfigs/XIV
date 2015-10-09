@@ -79,7 +79,7 @@ public class Freecam extends Mod {
                 }
 
                 if (event.getPacket() instanceof C03PacketPlayer) {
-                    final C03PacketPlayer packetPlayer = (C03PacketPlayer) event.getPacket();
+                    C03PacketPlayer packetPlayer = (C03PacketPlayer) event.getPacket();
                     packetPlayer.setX(x);
                     packetPlayer.setY(y);
                     packetPlayer.setZ(z);
@@ -104,6 +104,7 @@ public class Freecam extends Mod {
             this.pitch = mc.thePlayer.rotationPitch;
             entity = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
             entity.copyLocationAndAnglesFrom(mc.thePlayer);
+            entity.rotationYawHead = mc.thePlayer.rotationYawHead;
             entity.clonePlayer(mc.thePlayer, true);
             mc.theWorld.addEntityToWorld(-1, entity);
             mc.renderGlobal.loadRenderers();
@@ -122,6 +123,10 @@ public class Freecam extends Mod {
             mc.theWorld.removeEntityFromWorld(-1);
             entity = null;
             mc.renderGlobal.loadRenderers();
+
+            if (!mc.thePlayer.isSneaking()) {
+                mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
+            }
         }
     }
 }

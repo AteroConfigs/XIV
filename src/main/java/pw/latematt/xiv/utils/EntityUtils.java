@@ -29,7 +29,7 @@ public class EntityUtils {
         return new float[]{yaw, pitch};
     }
 
-    public static float getPitchChangeToPlayer(final EntityPlayer entity){
+    public static float getPitchChange(final EntityLivingBase entity){
         final double deltaX = entity.posX - mc.thePlayer.posX;
         final double deltaZ = entity.posZ - mc.thePlayer.posZ;
         final double deltaY = entity.posY - 2.2D + entity.getEyeHeight() - mc.thePlayer.posY;
@@ -38,7 +38,7 @@ public class EntityUtils {
         return -MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationPitch - (float)pitchToEntity);
     }
 
-    public static float getYawChangeToPlayer(final EntityPlayer entity){
+    public static float getYawChange(final EntityLivingBase entity){
         final double deltaX = entity.posX - mc.thePlayer.posX;
         final double deltaZ = entity.posZ - mc.thePlayer.posZ;
         double yawToEntity;

@@ -1,6 +1,7 @@
 package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.enchantment.Enchantment;
@@ -21,7 +22,6 @@ import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
 import java.text.DecimalFormat;
@@ -117,7 +117,8 @@ public class Nametags extends Mod implements CommandHandler {
         float distance = mc.thePlayer.getDistanceToEntity(entity);
         float var13 = distance / 5 <= 2 ? 2.0F : distance / 5;
         float var14 = 0.016666668F * var13;
-        RenderUtils.beginGl();
+        GlStateManager.pushMatrix();
+        RenderHelper.enableStandardItemLighting();
         GlStateManager.translate(x + 0.0F, y + entity.height + 0.5F, z);
         GL11.glNormal3f(0.0F, 1.0F, 0.0F);
         if (mc.gameSettings.thirdPersonView == 2) {
@@ -128,6 +129,11 @@ public class Nametags extends Mod implements CommandHandler {
             GlStateManager.rotate(mc.getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
         }
         GlStateManager.scale(-var14, -var14, var14);
+        GlStateManager.disableLighting();
+        GlStateManager.depthMask(false);
+        GlStateManager.disableDepth();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldRenderer = tessellator.getWorldRenderer();
         int var17 = 0;
@@ -140,6 +146,7 @@ public class Nametags extends Mod implements CommandHandler {
             var17 = -8;
         }
 
+        GlStateManager.func_179090_x();
         worldRenderer.startDrawingQuads();
         int var18 = mc.fontRendererObj.getStringWidth(entityName) / 2;
         worldRenderer.func_178960_a(0.0F, 0.0F, 0.0F, 0.25F);
@@ -147,40 +154,46 @@ public class Nametags extends Mod implements CommandHandler {
         worldRenderer.addVertex(-var18 - 2, 9 + var17, 0.0D);
         worldRenderer.addVertex(var18 + 2, 9 + var17, 0.0D);
         worldRenderer.addVertex(var18 + 2, -2 + var17, 0.0D);
-        GlStateManager.func_179090_x();
         tessellator.draw();
         GlStateManager.func_179098_w();
         mc.fontRendererObj.drawStringWithShadow(entityName, -var18, var17, getNametagColor(entity));
         if (armor.getValue() && entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
-            List<ItemStack> items = new ArrayList<>();
+            final List<ItemStack> items = new ArrayList<>();
             if (player.getCurrentEquippedItem() != null) {
                 items.add(player.getCurrentEquippedItem());
             }
 
             for (int index = 3; index >= 0; index--) {
-                ItemStack stack = player.inventory.armorInventory[index];
+                final ItemStack stack = player.inventory.armorInventory[index];
                 if (stack != null) {
                     items.add(stack);
                 }
             }
 
-            int offset = var18 - (items.size() - 1) * 9 - 9;
+            final int offset = var18 - (items.size() - 1) * 9 - 9;
             int xPos = 0;
-            for (ItemStack stack : items) {
-                RenderUtils.beginGl();
-                GlStateManager.func_179098_w();
+            for (final ItemStack stack : items) {
+                final NBTTagList enchants = stack.getEnchantmentTagList();
+                GlStateManager.pushMatrix();
+                RenderHelper.enableStandardItemLighting();
                 mc.getRenderItem().zLevel = -150.0F;
                 mc.getRenderItem().renderItemAboveHead(stack, -var18 + offset + xPos, var17 - 20);
                 mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, -var18 + offset + xPos, var17 - 20);
                 mc.getRenderItem().zLevel = 0.0F;
-                GlStateManager.func_179090_x();
-                RenderUtils.endGl();
+                GlStateManager.disableCull();
+                GlStateManager.enableAlpha();
+                GlStateManager.disableBlend();
+                GlStateManager.disableLighting();
+                RenderHelper.disableStandardItemLighting();
+                GlStateManager.enableDepth();
+                GlStateManager.popMatrix();
 
                 GlStateManager.pushMatrix();
+                GlStateManager.disableLighting();
+                GlStateManager.depthMask(false);
+                GlStateManager.disableDepth();
                 GlStateManager.scale(0.50F, 0.50F, 0.50F);
-                GlStateManager.func_179098_w();
-                NBTTagList enchants = stack.getEnchantmentTagList();
                 if (stack.getItem() == Items.golden_apple && stack.hasEffect()) {
                     mc.fontRendererObj.drawStringWithShadow("god", (-var18 + offset + xPos) * 2, (var17 - 20) * 2, 0xFFFF0000);
                 } else if (enchants != null) {
@@ -211,12 +224,18 @@ public class Nametags extends Mod implements CommandHandler {
                         }
                     }
                 }
-                GlStateManager.func_179090_x();
+                GlStateManager.enableLighting();
                 GlStateManager.popMatrix();
                 xPos += 18;
             }
         }
-        RenderUtils.endGl();
+        GlStateManager.enableDepth();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableLighting();
+        GlStateManager.disableBlend();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.popMatrix();
     }
 
     public int getNametagColor(EntityLivingBase entity) {
