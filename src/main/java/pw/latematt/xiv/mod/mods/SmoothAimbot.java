@@ -21,7 +21,9 @@ import java.util.Objects;
 
 public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private final Value<Float> fov = new Value<>("smoothaimbot_fov", 80F);
+    private final Value<Float> speed = new Value<>("smoothaimbot_speed", 8F);
     private final Value<Double> range = new Value<>("smoothaimbot_range", 3.8D);
+    private final Value<Boolean> pitch = new Value<>("smoothaimbot_pitch", true);
 
     public SmoothAimbot() {
         super("SmoothAimbot", ModType.COMBAT, Keyboard.KEY_NONE);
@@ -38,8 +40,9 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
     public void onEventCalled(MotionUpdateEvent event) {
         final EntityPlayer target = this.getClosestPlayerToCursor(this.fov.getValue());
         if (Objects.nonNull(target)) {
-            mc.thePlayer.rotationPitch = mc.thePlayer.rotationPitch + (EntityUtils.getPitchChange(target) / 3.5F);
-            mc.thePlayer.rotationYaw = mc.thePlayer.rotationYaw + (EntityUtils.getYawChange(target) / 3.5F);
+            if (pitch.getValue())
+                mc.thePlayer.rotationPitch = mc.thePlayer.rotationPitch + (EntityUtils.getPitchChange(target) / speed.getValue());
+            mc.thePlayer.rotationYaw = mc.thePlayer.rotationYaw + (EntityUtils.getYawChange(target) / speed.getValue());
         }
     }
 
@@ -47,7 +50,7 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
         float distance = angle;
         EntityPlayer tempPlayer = null;
         for (final Object o : mc.theWorld.playerEntities) {
-            final EntityPlayer player = (EntityPlayer)o;
+            final EntityPlayer player = (EntityPlayer) o;
 
             if (this.isValidEntity(player)) {
                 final float yaw = EntityUtils.getYawChange(player);
@@ -90,6 +93,21 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
                     }
                     break;
 
+                case "speed":
+                    if (arguments.length >= 3) {
+                        String newSpeedString = arguments[2];
+                        try {
+                            float newSpeed = Float.parseFloat(newSpeedString);
+                            speed.setValue(newSpeed);
+                            ChatLogger.print(String.format("SmoothAimbot Speed set to %s", newSpeed));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newSpeedString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: smoothaimbot speed <number>");
+                    }
+                    break;
+
                 case "range":
                 case "r":
                     if (arguments.length >= 3) {
@@ -106,8 +124,17 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
                     }
                     break;
 
+                case "pitch":
+                    if (arguments.length >= 3) {
+                        pitch.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        pitch.setValue(!pitch.getValue());
+                    }
+                    ChatLogger.print(String.format("SmoothAimbot will %s aim in pitch.", (pitch.getValue() ? "now" : "no longer")));
+                    break;
+
                 default:
-                    ChatLogger.print("Invalid action, valid: fov, range");
+                    ChatLogger.print("Invalid action, valid: fov, speed, range, pitch");
                     break;
             }
         } else {
@@ -121,7 +148,7 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
     }
 
     @Override
-    public void onEnabled(){
+    public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
     }
 

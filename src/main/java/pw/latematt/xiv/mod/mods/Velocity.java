@@ -19,6 +19,7 @@ import pw.latematt.xiv.value.Value;
  */
 public class Velocity extends Mod implements CommandHandler {
     private final Value<Float> reducedVelocity = new Value<>("velocity_reduction", 0.0F);
+    private final Value<Boolean> liquid = new Value<>("velocity_water", true);
     private final Listener readPacketListener;
     private final Listener liquidVelocityListener;
 
@@ -57,12 +58,15 @@ public class Velocity extends Mod implements CommandHandler {
         liquidVelocityListener = new Listener<LiquidVelocityEvent>() {
             @Override
             public void onEventCalled(LiquidVelocityEvent event) {
-                Vec3 velocity = event.getVelocity();
-                double velX = velocity.xCoord * reducedVelocity.getValue() / 8000;
-                double velY = velocity.yCoord * reducedVelocity.getValue() / 8000;
-                double velZ = velocity.zCoord * reducedVelocity.getValue() / 8000;
+                if (liquid.getValue()) {
+                    Vec3 velocity = event.getVelocity();
 
-                event.setVelocity(new Vec3(velX, velY, velZ));
+                    double velX = velocity.xCoord * reducedVelocity.getValue() / 8000;
+                    double velY = velocity.yCoord * reducedVelocity.getValue() / 8000;
+                    double velZ = velocity.zCoord * reducedVelocity.getValue() / 8000;
+
+                    event.setVelocity(new Vec3(velX, velY, velZ));
+                }
             }
         };
     }
@@ -73,6 +77,16 @@ public class Velocity extends Mod implements CommandHandler {
         if (arguments.length >= 2) {
             String action = arguments[1];
             switch (action.toLowerCase()) {
+                case "liquid":
+                case "water":
+                case "lava":
+                    if (arguments.length >= 3) {
+                        liquid.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        liquid.setValue(!liquid.getValue());
+                    }
+                    ChatLogger.print(String.format("Velocity will %s work in velocity.", liquid.getValue() ? "now" : "no longer"));
+                    break;
                 case "percent":
                 case "perc":
                     if (arguments.length >= 3) {
@@ -95,7 +109,7 @@ public class Velocity extends Mod implements CommandHandler {
                     }
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: percent");
+                    ChatLogger.print("Invalid action, valid: percent, liquid");
                     break;
             }
         } else {
