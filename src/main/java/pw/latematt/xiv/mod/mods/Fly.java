@@ -8,6 +8,8 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.EntityUtils;
 
+import java.util.Objects;
+
 /**
  * @author TehNeon
  */
@@ -45,7 +47,10 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>/*, CommandHa
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
-        EntityUtils.damagePlayer();
+
+        if (Objects.nonNull(mc.thePlayer)) {
+            EntityUtils.damagePlayer();
+        }
     }
 
     @Override
