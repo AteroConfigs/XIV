@@ -7,6 +7,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.SoulSandSlowdownEvent;
 
 public class BlockSoulSand extends Block
 {
@@ -29,6 +31,13 @@ public class BlockSoulSand extends Block
      */
     public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
     {
+        final SoulSandSlowdownEvent event = new SoulSandSlowdownEvent();
+        XIV.getInstance().getListenerManager().call(event);
+
+        if (event.isCancelled()) {
+            return;
+        }
+
         entityIn.motionX *= 0.4D;
         entityIn.motionZ *= 0.4D;
     }

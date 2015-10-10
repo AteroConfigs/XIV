@@ -9,6 +9,7 @@ import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
+import pw.latematt.xiv.event.events.SoulSandSlowdownEvent;
 import pw.latematt.xiv.event.events.UsingItemSlowdownEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
@@ -19,6 +20,7 @@ import pw.latematt.xiv.mod.mods.aura.KillAura;
  */
 public class NoSlowdown extends Mod {
     private final Listener itemSlowdownListener;
+    private final Listener soulSandSlowdownListener;
     private final Listener motionUpdateListener;
 
     public NoSlowdown() {
@@ -26,6 +28,13 @@ public class NoSlowdown extends Mod {
         itemSlowdownListener = new Listener<UsingItemSlowdownEvent>() {
             @Override
             public void onEventCalled(UsingItemSlowdownEvent event) {
+                event.setCancelled(true);
+            }
+        };
+
+        this.soulSandSlowdownListener = new Listener<SoulSandSlowdownEvent>() {
+            @Override
+            public void onEventCalled(SoulSandSlowdownEvent event) {
                 event.setCancelled(true);
             }
         };
@@ -65,12 +74,14 @@ public class NoSlowdown extends Mod {
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(itemSlowdownListener);
         XIV.getInstance().getListenerManager().add(motionUpdateListener);
+        XIV.getInstance().getListenerManager().add(soulSandSlowdownListener);
     }
 
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(itemSlowdownListener);
         XIV.getInstance().getListenerManager().remove(motionUpdateListener);
+        XIV.getInstance().getListenerManager().remove(soulSandSlowdownListener);
         if (mc.thePlayer != null) {
             mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
         }

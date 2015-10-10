@@ -35,6 +35,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Listener sendPacketListener;
     private final Listener playerDeathListener;
     public final Value<Long> armorBreakerDelay = new Value<>("killaura_armor_breaker_delay", 150L);
+    private final Value<Integer> armorBreakerPacketsAmount = new Value<>("killaura_armor_breaker_packets_armount", 50);
     public final Value<Long> delay = new Value<>("killaura_delay", 125L);
     public final Value<Double> range = new Value<>("killaura_range", 3.8D);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
@@ -47,6 +48,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> toggleDeath = new Value<>("killaura_toggle_death", false);
     public final Value<Boolean> autoBlock = new Value<>("killaura_auto_block", false);
     public final Value<Boolean> armorBreaker = new Value<>("killaura_armor_breaker", false);
+    private final Value<Boolean> armorBreakerPackets = new Value<>("killaura_armor_breaker_packets", true);
     private final Value<AuraMode> mode = new Value<>("killaura_mode", new Singular(this));
     private int itemSwitchTicks = 0;
 
@@ -122,6 +124,12 @@ public class KillAura extends Mod implements CommandHandler {
         mc.thePlayer.setSprinting(wasSprinting);
 
         if (this.armorBreaker.getValue()) {
+            if (this.armorBreakerPackets.getValue()) {
+                for (int i = 0; i < this.armorBreakerPacketsAmount.getValue(); i++) {
+                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
+                }
+            }
+
             switch (++this.itemSwitchTicks) {
                 case 3: {
                     if (!mc.thePlayer.inventoryContainer.getSlot(27).getHasStack()) {
@@ -222,6 +230,22 @@ public class KillAura extends Mod implements CommandHandler {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));
                         }
                     } else {
+                        ChatLogger.print("Invalid arguments, valid: killaura armorbreakerdelay <number>");
+                    }
+                    break;
+                case "armorbreakerpacketsamount":
+                case "abpacketsamount":
+                case "abpa":
+                    if (arguments.length >= 3) {
+                        String newAmountString = arguments[2];
+                        try {
+                            int newAmount = Integer.parseInt(newAmountString);
+                            armorBreakerPacketsAmount.setValue(newAmount);
+                            ChatLogger.print(String.format("Armor Breaker Packets Amount set to %s", armorBreakerPacketsAmount.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newAmountString));
+                        }
+                    } else {
                         ChatLogger.print("Invalid arguments, valid: killaura armorBreakerDelay <number>");
                     }
                     break;
@@ -297,6 +321,15 @@ public class KillAura extends Mod implements CommandHandler {
                     }
                     ChatLogger.print(String.format("Kill Aura will %s break armor.", (armorBreaker.getValue() ? "now" : "no longer")));
                     break;
+                case "armorbreakerpacketsmode":
+                case "abpm":
+                    if (arguments.length >= 3) {
+                        armorBreakerPackets.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        armorBreakerPackets.setValue(!armorBreakerPackets.getValue());
+                    }
+                    ChatLogger.print(String.format("Kill Aura will %s use packets when breaking armor.", (armorBreakerPackets.getValue() ? "now" : "no longer")));
+                    break;
                 case "toggledeath":
                 case "tdeath":
                     if (arguments.length >= 3) {
@@ -363,7 +396,7 @@ public class KillAura extends Mod implements CommandHandler {
                     }
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, aps, range, players, mobs, animals, invisible, team, silent, autosword, armorbreaker, autoblock, mode");
+                    ChatLogger.print("Invalid action, valid: delay, aps, range, armorbreakerpacketsamount, armorbreakerpacketsmode, players, mobs, animals, invisible, team, silent, autosword, armorbreaker, autoblock, mode");
                     break;
             }
         } else {
