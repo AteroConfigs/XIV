@@ -18,6 +18,7 @@ import pw.latematt.xiv.value.Value;
 public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
 
     private final Value<Boolean> doDamage = new Value<>("fly_damage", true);
+    private final Value<Double> verticalSpeed = new Value<>("fly_vertical", 0.5);
 
     public Fly() {
         super("Fly", ModType.PLAYER, Keyboard.KEY_M, 0xFF4B97F6);
@@ -34,11 +35,11 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
         double motionY = 0;
 
         if (mc.gameSettings.keyBindJump.getIsKeyPressed()) {
-            motionY = 0.5;
+            motionY = verticalSpeed.getValue();
         }
 
         if (mc.gameSettings.keyBindSneak.getIsKeyPressed()) {
-            motionY = -0.5;
+            motionY = -verticalSpeed.getValue();
         }
 
         mc.thePlayer.motionY = motionY;
@@ -50,6 +51,20 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
         if (arguments.length >= 2) {
             String action = arguments[1];
             switch (action.toLowerCase()) {
+                case "vertical":
+                    if (arguments.length >= 3) {
+                        String newVerticalString = arguments[2];
+                        try {
+                            double newVertical = Double.parseDouble(newVerticalString);
+                            verticalSpeed.setValue(newVertical);
+                            ChatLogger.print(String.format("Fly vertical speed set to %s", verticalSpeed.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newVerticalString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: fly vertical <number>");
+                    }
+                    break;
                 case "damage":
                     if (arguments.length >= 3) {
                         doDamage.setValue(Boolean.parseBoolean(arguments[2]));
