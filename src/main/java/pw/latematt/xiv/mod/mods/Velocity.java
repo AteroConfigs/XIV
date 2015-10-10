@@ -59,13 +59,7 @@ public class Velocity extends Mod implements CommandHandler {
             @Override
             public void onEventCalled(LiquidVelocityEvent event) {
                 if (liquid.getValue()) {
-                    Vec3 velocity = event.getVelocity();
-
-                    double velX = velocity.xCoord * reducedVelocity.getValue() / 8000;
-                    double velY = velocity.yCoord * reducedVelocity.getValue() / 8000;
-                    double velZ = velocity.zCoord * reducedVelocity.getValue() / 8000;
-
-                    event.setVelocity(new Vec3(velX, velY, velZ));
+                    event.setVelocity(new Vec3(0, 0, 0));
                 }
             }
         };
