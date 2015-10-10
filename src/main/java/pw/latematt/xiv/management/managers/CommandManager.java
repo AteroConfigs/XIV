@@ -10,6 +10,7 @@ import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
 
 import java.util.ArrayList;
@@ -99,10 +100,7 @@ public class CommandManager extends ListManager<Command> {
                 .description("Force damage.")
                 .aliases("dmg")
                 .handler(message -> {
-                    for (int i = 0; i < 81; i++) {
-                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.05D, mc.thePlayer.posZ, false));
-                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                    }
+                    EntityUtils.damagePlayer();
                 }).build();
         Command.newCommand()
                 .cmd("render")

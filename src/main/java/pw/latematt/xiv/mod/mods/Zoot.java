@@ -6,10 +6,14 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.command.Command;
+import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.value.Value;
 
 import java.util.Objects;
 
@@ -17,30 +21,43 @@ import java.util.Objects;
  * @author Jack
  */
 
-public class Zoot extends Mod implements Listener<MotionUpdateEvent> {
+public class Zoot extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
+    private final Value<Boolean> fire = new Value<>("zoot_fire", true);
+    private final Value<Boolean> potions = new Value<>("zoot_potions", true);
+
     public Zoot() {
         super("Zoot", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFD298ED);
+
+        Command.newCommand()
+                .cmd("zoot")
+                .description("Base command for the Zoot mod.")
+                .arguments("<action>")
+                .handler(this).build();
     }
 
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-            if (mc.thePlayer.isBurning() && !mc.thePlayer.isInsideOfMaterial(Material.fire) && !mc.thePlayer.isInsideOfMaterial(Material.lava) && mc.thePlayer.getActivePotionEffect(Potion.FIRE_RESISTANCE) == null) {
+            if (this.fire.getValue() && mc.thePlayer.isBurning() && !mc.thePlayer.isInsideOfMaterial(Material.fire) && !mc.thePlayer.isInsideOfMaterial(Material.lava)) {
                 for (int x = 0; x < 20; x++) {
                     mc.thePlayer.sendQueue.getNetworkManager().sendPacket(new C03PacketPlayer(mc.thePlayer.onGround));
                 }
             }
 
-            if (mc.thePlayer.isPotionActive(Potion.BLINDNESS.getId())) {
-                mc.thePlayer.removePotionEffect(Potion.BLINDNESS.getId());
+            if (!this.potions.getValue()) {
+                return;
             }
 
-            if (mc.thePlayer.isPotionActive(Potion.NAUSEA.getId())) {
-                mc.thePlayer.removePotionEffect(Potion.NAUSEA.getId());
+            if (mc.thePlayer.isPotionActive(Potion.blindness.getId())) {
+                mc.thePlayer.removePotionEffect(Potion.blindness.getId());
             }
 
-            if (mc.thePlayer.isPotionActive(Potion.MINING_FATIGUE.getId())) {
-                mc.thePlayer.removePotionEffect(Potion.MINING_FATIGUE.getId());
+            if (mc.thePlayer.isPotionActive(Potion.confusion.getId())) {
+                mc.thePlayer.removePotionEffect(Potion.confusion.getId());
+            }
+
+            if (mc.thePlayer.isPotionActive(Potion.digSlowdown.getId())) {
+                mc.thePlayer.removePotionEffect(Potion.digSlowdown.getId());
             }
 
             final Potion[] potionTypes;
@@ -53,6 +70,43 @@ public class Zoot extends Mod implements Listener<MotionUpdateEvent> {
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public void onCommandRan(String message) {
+        final String[] arguments = message.split(" ");
+        if (arguments.length >= 2) {
+            switch (arguments[1]) {
+                case "fire":
+                case "antifire":
+                case "f":
+                case "af":
+                    if (arguments.length >= 3) {
+                        fire.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        fire.setValue(!fire.getValue());
+                    }
+                    ChatLogger.print(String.format("Zoot will %s remove fire.", (fire.getValue() ? "now" : "no longer")));
+                    break;
+
+                case "potions":
+                case "antipotion":
+                case "p":
+                    if (arguments.length >= 3) {
+                        potions.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        potions.setValue(!potions.getValue());
+                    }
+                    ChatLogger.print(String.format("Zoot will %s remove potions.", (potions.getValue() ? "now" : "no longer")));
+                    break;
+
+                default:
+                    ChatLogger.print("Invalid action, valid: fire, potions");
+                    break;
+            }
+        } else {
+            ChatLogger.print("Invalid arguments, valid: step <action>");
         }
     }
 
