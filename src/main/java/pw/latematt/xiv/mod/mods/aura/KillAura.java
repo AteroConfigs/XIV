@@ -217,7 +217,7 @@ public class KillAura extends Mod implements CommandHandler {
                         try {
                             long newDelay = Long.parseLong(newDelayString);
                             armorBreakerDelay.setValue(newDelay);
-                            ChatLogger.print(String.format("Kill Aura Delay set to %s", armorBreakerDelay.getValue()));
+                            ChatLogger.print(String.format("Armor Breaker Delay set to %s", armorBreakerDelay.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));
                         }
