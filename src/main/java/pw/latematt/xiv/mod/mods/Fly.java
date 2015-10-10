@@ -85,7 +85,8 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
-        EntityUtils.damagePlayer();
+        if (doDamage.getValue())
+            EntityUtils.damagePlayer();
     }
 
     @Override
