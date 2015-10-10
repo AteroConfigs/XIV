@@ -225,7 +225,6 @@ public class KillAura extends Mod implements CommandHandler {
                         ChatLogger.print("Invalid arguments, valid: killaura armorBreakerDelay <number>");
                     }
                     break;
-                    break;
                 case "aps":
                     if (arguments.length >= 3) {
                         String newApsString = arguments[2];
