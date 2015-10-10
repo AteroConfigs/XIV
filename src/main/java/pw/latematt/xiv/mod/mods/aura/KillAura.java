@@ -34,7 +34,6 @@ public class KillAura extends Mod implements CommandHandler {
     private final Listener motionUpdateListener;
     private final Listener sendPacketListener;
     private final Listener playerDeathListener;
-    public final Value<Boolean> armorBreaker = new Value<>("killaura_armor_breaker", false);
     public final Value<Long> armorBreakerDelay = new Value<>("killaura_armor_breaker_delay", 150L);
     public final Value<Long> delay = new Value<>("killaura_delay", 125L);
     public final Value<Double> range = new Value<>("killaura_range", 3.8D);
@@ -47,6 +46,7 @@ public class KillAura extends Mod implements CommandHandler {
     public final Value<Boolean> autoSword = new Value<>("killaura_auto_sword", true);
     private final Value<Boolean> toggleDeath = new Value<>("killaura_toggle_death", false);
     public final Value<Boolean> autoBlock = new Value<>("killaura_auto_block", false);
+    public final Value<Boolean> armorBreaker = new Value<>("killaura_armor_breaker", false);
     private final Value<AuraMode> mode = new Value<>("killaura_mode", new Singular(this));
     private int itemSwitchTicks = 0;
 
