@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 
+import java.util.Objects;
+
 /**
  * @author Matthew
  */
@@ -86,5 +88,25 @@ public class BlockUtils {
             }
         }
         return onLiquid;
+    }
+
+    public static boolean isOnLadder(Entity entity) {
+        if (entity == null)
+            return false;
+        boolean onLadder = false;
+        final int y = (int) entity.getEntityBoundingBox().offset(0.0D, 1.0D, 0.0D).minY;
+        for (int x = MathHelper.floor_double(entity.getEntityBoundingBox().minX);
+             x < MathHelper.floor_double(entity.getEntityBoundingBox().maxX) + 1; x++) {
+            for (int z = MathHelper.floor_double(entity.getEntityBoundingBox().minZ);
+                 z < MathHelper.floor_double(entity.getEntityBoundingBox().maxZ) + 1; z++) {
+                final Block block =mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
+                if (Objects.nonNull(block) && !(block instanceof BlockAir)) {
+                    if (!(block instanceof BlockLadder || block instanceof BlockVine))
+                        return false;
+                    onLadder = true;
+                }
+            }
+        }
+        return onLadder || mc.thePlayer.isOnLadder();
     }
 }
