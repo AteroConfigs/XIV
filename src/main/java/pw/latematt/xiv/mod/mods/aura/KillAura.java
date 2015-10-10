@@ -5,6 +5,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import org.lwjgl.input.Keyboard;
@@ -24,6 +25,8 @@ import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
 
+import java.util.Objects;
+
 /**
  * @author Matthew
  */
@@ -31,6 +34,8 @@ public class KillAura extends Mod implements CommandHandler {
     private final Listener motionUpdateListener;
     private final Listener sendPacketListener;
     private final Listener playerDeathListener;
+    public final Value<Boolean> armorBreaker = new Value<>("killaura_armor_breaker", false);
+    public final Value<Long> armorBreakerDelay = new Value<>("killaura_armor_breaker_delay", 150L);
     public final Value<Long> delay = new Value<>("killaura_delay", 125L);
     public final Value<Double> range = new Value<>("killaura_range", 3.8D);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
@@ -43,6 +48,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> toggleDeath = new Value<>("killaura_toggle_death", false);
     public final Value<Boolean> autoBlock = new Value<>("killaura_auto_block", false);
     private final Value<AuraMode> mode = new Value<>("killaura_mode", new Singular(this));
+    private int itemSwitchTicks = 0;
 
     public KillAura() {
         super("Kill Aura", ModType.COMBAT, Keyboard.KEY_R, 0xFFC6172B);
@@ -114,6 +120,37 @@ public class KillAura extends Mod implements CommandHandler {
             mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SPRINTING));
         }
         mc.thePlayer.setSprinting(wasSprinting);
+
+        if (this.armorBreaker.getValue()) {
+            switch (++this.itemSwitchTicks) {
+                case 3: {
+                    if (!mc.thePlayer.inventoryContainer.getSlot(27).getHasStack()) {
+                        break;
+                    }
+
+                    final ItemStack item = mc.thePlayer.inventoryContainer.getSlot(27).getStack();
+
+                    if (Objects.nonNull(item)) {
+                        mc.playerController.windowClick(0, 27, 0, 2, mc.thePlayer);
+                        break;
+                    }
+
+                    break;
+                }
+
+                case 4: {
+                    if (mc.thePlayer.inventoryContainer.getSlot(27).getHasStack()) {
+                        final ItemStack item = mc.thePlayer.inventoryContainer.getSlot(27).getStack();
+                        if (Objects.nonNull(item)) {
+                            mc.playerController.windowClick(0, 27, 0, 2, mc.thePlayer);
+                        }
+                    }
+
+                    this.itemSwitchTicks = 0;
+                    break;
+                }
+            }
+        }
     }
 
     public boolean isValidEntity(EntityLivingBase entity) {
@@ -171,6 +208,23 @@ public class KillAura extends Mod implements CommandHandler {
                     } else {
                         ChatLogger.print("Invalid arguments, valid: killaura delay <number>");
                     }
+                    break;
+                case "armorbreakerdelay":
+                case "abdelay":
+                case "abd":
+                    if (arguments.length >= 3) {
+                        String newDelayString = arguments[2];
+                        try {
+                            long newDelay = Long.parseLong(newDelayString);
+                            armorBreakerDelay.setValue(newDelay);
+                            ChatLogger.print(String.format("Kill Aura Delay set to %s", armorBreakerDelay.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: killaura armorBreakerDelay <number>");
+                    }
+                    break;
                     break;
                 case "aps":
                     if (arguments.length >= 3) {
@@ -234,6 +288,15 @@ public class KillAura extends Mod implements CommandHandler {
                         invisible.setValue(!invisible.getValue());
                     }
                     ChatLogger.print(String.format("Kill Aura will %s attack invisible entities.", (invisible.getValue() ? "now" : "no longer")));
+                    break;
+                case "armorbreaker":
+                case "dura":
+                    if (arguments.length >= 3) {
+                        armorBreaker.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        armorBreaker.setValue(!armorBreaker.getValue());
+                    }
+                    ChatLogger.print(String.format("Kill Aura will %s break armor.", (armorBreaker.getValue() ? "now" : "no longer")));
                     break;
                 case "toggledeath":
                 case "tdeath":
@@ -301,7 +364,7 @@ public class KillAura extends Mod implements CommandHandler {
                     }
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, aps, range, players, mobs, animals, invisible, team, silent, autosword, autoblock, mode");
+                    ChatLogger.print("Invalid action, valid: delay, aps, range, players, mobs, animals, invisible, team, silent, autosword, armorbreaker, autoblock, mode");
                     break;
             }
         } else {
@@ -330,5 +393,6 @@ public class KillAura extends Mod implements CommandHandler {
         XIV.getInstance().getListenerManager().remove(sendPacketListener);
         XIV.getInstance().getListenerManager().remove(playerDeathListener);
         mode.getValue().onDisabled();
+        this.itemSwitchTicks = 0;
     }
 }

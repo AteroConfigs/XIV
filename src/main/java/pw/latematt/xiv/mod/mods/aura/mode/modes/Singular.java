@@ -62,7 +62,7 @@ public class Singular extends AuraMode {
     @Override
     public void onPostMotionUpdate(MotionUpdateEvent event) {
         if (entityToAttack != null) {
-            if (timer.hasReached(killAura.delay.getValue())) {
+            if (killAura.armorBreaker.getValue() ? timer.hasReached(killAura.armorBreakerDelay.getValue()) : timer.hasReached(killAura.delay.getValue())) {
                 killAura.attack(entityToAttack);
                 timer.reset();
             }

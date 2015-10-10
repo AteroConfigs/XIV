@@ -48,16 +48,16 @@ public class Zoot extends Mod implements Listener<MotionUpdateEvent>, CommandHan
                 return;
             }
 
-            if (mc.thePlayer.isPotionActive(Potion.blindness.getId())) {
-                mc.thePlayer.removePotionEffect(Potion.blindness.getId());
+            if (mc.thePlayer.isPotionActive(Potion.BLINDNESS.getId())) {
+                mc.thePlayer.removePotionEffect(Potion.BLINDNESS.getId());
             }
 
-            if (mc.thePlayer.isPotionActive(Potion.confusion.getId())) {
-                mc.thePlayer.removePotionEffect(Potion.confusion.getId());
+            if (mc.thePlayer.isPotionActive(Potion.NAUSEA.getId())) {
+                mc.thePlayer.removePotionEffect(Potion.NAUSEA.getId());
             }
 
-            if (mc.thePlayer.isPotionActive(Potion.digSlowdown.getId())) {
-                mc.thePlayer.removePotionEffect(Potion.digSlowdown.getId());
+            if (mc.thePlayer.isPotionActive(Potion.MINING_FATIGUE.getId())) {
+                mc.thePlayer.removePotionEffect(Potion.MINING_FATIGUE.getId());
             }
 
             final Potion[] potionTypes;

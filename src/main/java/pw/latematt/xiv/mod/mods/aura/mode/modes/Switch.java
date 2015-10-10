@@ -72,7 +72,7 @@ public class Switch extends AuraMode {
     @Override
     public void onPostMotionUpdate(MotionUpdateEvent event) {
         if (entityToAttack != null) {
-            if (timer.hasReached(killAura.delay.getValue())) {
+            if (killAura.armorBreaker.getValue() ? timer.hasReached(killAura.armorBreakerDelay.getValue()) : timer.hasReached(killAura.delay.getValue())) {
                 killAura.attack(entityToAttack);
                 entities.remove(entityToAttack);
                 entityToAttack = null;
