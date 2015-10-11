@@ -19,6 +19,14 @@ public class RenderUtils {
     private static final Value<Double> NAMETAG_SIZE = new Value<>("render_nametag_size", 1.0D);
     private static final Value<Boolean> TRACER_ENTITY = new Value<>("render_tracer_entity", true);
 
+    public static void init() {
+        ANTIALIASING.getValue();
+        WORLDBOBBING.getValue();
+        NAMETAG_OPACITY.getValue();
+        NAMETAG_SIZE.getValue();
+        TRACER_ENTITY.getValue();
+    }
+
     public static void beginGl() {
         GlStateManager.pushMatrix();
         RenderHelper.enableStandardItemLighting();

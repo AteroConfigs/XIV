@@ -1,6 +1,8 @@
 package pw.latematt.xiv.utils;
 
 import com.google.common.collect.Multimap;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockHopper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -8,6 +10,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.value.Value;
@@ -54,6 +58,27 @@ public class EntityUtils {
         final float yaw = (float) (Math.atan2(var6, var4) * 180.0D / Math.PI) - 90.0F;
         final float pitch = (float) -(Math.atan2(var8, var14) * 180.0D / Math.PI);
         return new float[]{yaw, pitch};
+    }
+
+    public static boolean isInsideBlock() {
+        for(int x = MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().minX); x < MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().maxX) + 1; x++) {
+            for(int y = MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().minY); y < MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().maxY) + 1; y++) {
+                for(int z = MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().minZ); z < MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().maxZ) + 1; z++) {
+                    Block block = mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
+                    if(block != null) {
+                        AxisAlignedBB boundingBox = block.getCollisionBoundingBox(mc.theWorld, new BlockPos(x, y, z), mc.theWorld.getBlockState(new BlockPos(x, y, z)));
+                        if(block instanceof BlockHopper) {
+                            boundingBox = new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1);
+                        }
+
+                        if(boundingBox != null && mc.thePlayer.getEntityBoundingBox().intersectsWith(boundingBox)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public static float getAngle(float[] original, float[] rotations) {
