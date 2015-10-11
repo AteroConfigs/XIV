@@ -13,8 +13,7 @@ import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
 
 /**
- * @author Jack
- * @author Matthew
+ * @author Rederpz
  */
 public class FastPlace extends Mod implements Listener<PlacingBlockEvent>, CommandHandler {
     private final Value<Integer> placeDelay = new Value<>("fastplace_delay", 0);

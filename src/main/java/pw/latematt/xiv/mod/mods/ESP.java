@@ -146,7 +146,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             box = AxisAlignedBB.fromBounds(x - entity.width + 0.2D, y, z - entity.width + 0.2D, x + entity.width - 0.2D, y + entity.height + (entity.isSneaking() ? 0.02D : 0.2D), z + entity.width - 0.2D);
         }
 
-        final float distance = mc.thePlayer.getDistanceToEntity(entity);
+        final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
         float[] color = new float[]{0.0F, 0.9F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.3F, 0.7F, 1.0F};
@@ -165,7 +165,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     }
 
     private void drawTracerLines(Entity entity, double x, double y, double z, double x2, double y2, double z2) {
-        final float distance = mc.thePlayer.getDistanceToEntity(entity);
+        final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
         float[] color = new float[]{0.0F, 0.90F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.30F, 0.7F, 1.0F};
@@ -185,7 +185,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     }
 
     private void drawSpines(Entity entity, double x, double y, double z) {
-        final float distance = mc.thePlayer.getDistanceToEntity(entity);
+        final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
         float[] color = new float[]{0.0F, 0.90F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.30F, 0.7F, 1.0F};
