@@ -34,9 +34,13 @@ public class Jesus extends Mod {
                 if (event.getBlock() instanceof BlockLiquid) {
                     IBlockState state = mc.theWorld.getBlockState(event.getPos());
 
-                    float blockHeight = BlockLiquid.getLiquidHeightPercent(event.getBlock().getMetaFromState(state));
+                    if(state == null) {
+                        float blockHeight = BlockLiquid.getLiquidHeightPercent(event.getBlock().getMetaFromState(state));
 
-                    shouldJump = blockHeight < 0.55F;
+                        shouldJump = blockHeight < 0.55F;
+                    }else{
+                        shouldJump = false;
+                    }
 
                     if (mc.thePlayer != null && shouldJump && event.getEntity() == mc.thePlayer && !BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.fallDistance < 3.0F && !mc.thePlayer.isSneaking()) {
                         BlockPos pos = event.getPos();
