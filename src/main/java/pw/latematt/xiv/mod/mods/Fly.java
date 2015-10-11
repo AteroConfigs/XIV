@@ -12,6 +12,8 @@ import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
 
+import java.util.Objects;
+
 /**
  * @author TehNeon
  */
@@ -85,7 +87,7 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
-        if (doDamage.getValue())
+        if (Objects.nonNull(mc.thePlayer) && doDamage.getValue())
             EntityUtils.damagePlayer();
     }
 
