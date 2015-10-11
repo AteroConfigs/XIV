@@ -20,7 +20,7 @@ public class AntiSuffocate extends Mod implements Listener<MotionUpdateEvent> {
 
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
-        if (BlockUtils.isInsideBlock(EntityUtils.getReference()) && mc.thePlayer.isCollidedVertically && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().motionZ == 0)) {
+        if (!(mc.thePlayer.isUsingItem()) && BlockUtils.isInsideBlock(EntityUtils.getReference()) && mc.thePlayer.isCollidedVertically && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().motionZ == 0)) {
             event.setCancelled(true);
         }
     }

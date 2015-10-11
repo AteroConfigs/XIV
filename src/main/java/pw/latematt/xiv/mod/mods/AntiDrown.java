@@ -20,7 +20,7 @@ public class AntiDrown extends Mod implements Listener<MotionUpdateEvent> {
 
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
-        if (BlockUtils.isInLiquid(EntityUtils.getReference()) && EntityUtils.getReference().isCollidedVertically && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().motionZ == 0)) {
+        if (!(mc.thePlayer.isUsingItem()) && BlockUtils.isInLiquid(EntityUtils.getReference()) && EntityUtils.getReference().isCollidedVertically && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().motionZ == 0)) {
             event.setCancelled(true);
         }
     }
