@@ -66,7 +66,7 @@ public class Speedmine extends Mod implements Listener<BreakingBlockEvent>, Comm
                     if (arguments.length >= 3) {
                         String newMultiplierString = arguments[2];
                         try {
-                            double newMultiplier = Integer.parseInt(newMultiplierString);
+                            double newMultiplier = Double.parseDouble(newMultiplierString);
                             if (newMultiplier > 10.0D) {
                                 newMultiplier = 10.0D;
                             } else if (newMultiplier < 1.0D) {

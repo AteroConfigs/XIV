@@ -53,20 +53,20 @@ public class FastPlace extends Mod implements Listener<PlacingBlockEvent>, Comma
                                 newPlaceDelay = 0;
                             }
                             placeDelay.setValue(newPlaceDelay);
-                            ChatLogger.print(String.format("Speedmine Hit Delay set to %s", placeDelay.getValue()));
+                            ChatLogger.print(String.format("FastPlace Place Delay set to %s", placeDelay.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));
                         }
                     } else {
-                        ChatLogger.print("Invalid arguments, valid: speedmine hitdelay <number>");
+                        ChatLogger.print("Invalid arguments, valid: fastplace delay <number>");
                     }
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: hitdelay, multiplier");
+                    ChatLogger.print("Invalid action, valid: delay");
                     break;
             }
         } else {
-            ChatLogger.print("Invalid arguments, valid: speedmine <action>");
+            ChatLogger.print("Invalid arguments, valid: fastplace <action>");
         }
     }
 
