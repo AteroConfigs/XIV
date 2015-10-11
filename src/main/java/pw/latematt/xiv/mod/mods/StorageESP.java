@@ -18,6 +18,7 @@ import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
@@ -206,10 +207,14 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
         GlStateManager.loadIdentity();
         mc.entityRenderer.orientCamera(partialTicks);
 
+        double x = EntityUtils.isReferenceSet() ? EntityUtils.getReference().lastTickPosX + (EntityUtils.getReference().posX - EntityUtils.getReference().lastTickPosX) * partialTicks - mc.getRenderManager().renderPosX : 0;
+        double y = EntityUtils.isReferenceSet() ? EntityUtils.getReference().lastTickPosY + (EntityUtils.getReference().posY - EntityUtils.getReference().lastTickPosY) * partialTicks - mc.getRenderManager().renderPosY : 0;
+        double z = EntityUtils.isReferenceSet() ? EntityUtils.getReference().lastTickPosZ + (EntityUtils.getReference().posZ - EntityUtils.getReference().lastTickPosZ) * partialTicks - mc.getRenderManager().renderPosZ : 0;
+
         Tessellator var2 = Tessellator.getInstance();
         WorldRenderer var3 = var2.getWorldRenderer();
         var3.startDrawing(2);
-        var3.addVertex(0, mc.thePlayer.getEyeHeight(), 0);
+        var3.addVertex(x, y + mc.thePlayer.getEyeHeight(), z);
         var3.addVertex(maxX - ((maxX - minX) / 2), maxY - ((maxY - minY) / 2), maxZ - ((maxZ - minZ) / 2));
         var2.draw();
 

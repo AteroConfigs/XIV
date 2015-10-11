@@ -21,6 +21,7 @@ import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
@@ -74,10 +75,14 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             }
 
             if (tracerLines.getValue()) {
+                double x2 = EntityUtils.isReferenceSet() ? EntityUtils.getReference().lastTickPosX + (EntityUtils.getReference().posX - EntityUtils.getReference().lastTickPosX) * partialTicks - mc.getRenderManager().renderPosX : 0;
+                double y2 = EntityUtils.isReferenceSet() ? EntityUtils.getReference().lastTickPosY + (EntityUtils.getReference().posY - EntityUtils.getReference().lastTickPosY) * partialTicks - mc.getRenderManager().renderPosY : 0;
+                double z2 = EntityUtils.isReferenceSet() ? EntityUtils.getReference().lastTickPosZ + (EntityUtils.getReference().posZ - EntityUtils.getReference().lastTickPosZ) * partialTicks - mc.getRenderManager().renderPosZ : 0;
+
                 GlStateManager.pushMatrix();
                 GlStateManager.loadIdentity();
                 mc.entityRenderer.orientCamera(partialTicks);
-                drawTracerLines(entity, x, y, z);
+                drawTracerLines(entity, x, y, z, x2, y2, z2);
                 GlStateManager.popMatrix();
             }
         }
@@ -133,7 +138,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         RenderGlobal.drawOutlinedBoundingBox(box, -1);
     }
 
-    private void drawTracerLines(Entity entity, double x, double y, double z) {
+    private void drawTracerLines(Entity entity, double x, double y, double z, double x2, double y2, double z2) {
         final float distance = mc.thePlayer.getDistanceToEntity(entity);
         float[] color = new float[]{0.0F, 0.90F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
@@ -148,7 +153,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         Tessellator var2 = Tessellator.getInstance();
         WorldRenderer var3 = var2.getWorldRenderer();
         var3.startDrawing(2);
-        var3.addVertex(0, mc.thePlayer.getEyeHeight(), 0);
+        var3.addVertex(x2, y2 + mc.thePlayer.getEyeHeight(), z2);
         var3.addVertex(x, y, z);
         var2.draw();
     }

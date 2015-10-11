@@ -263,6 +263,7 @@ public class Speed extends Mod implements CommandHandler {
                     ChatLogger.print(String.format("Speed will %s go fast on ladders.", (fastLadder.getValue() ? "now" : "no longer")));
                     break;
                 default:
+                    ChatLogger.print("Invalid action, valid: mode, fastladder");
                     break;
             }
         } else {

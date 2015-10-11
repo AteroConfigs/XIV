@@ -143,8 +143,60 @@ public class CommandManager extends ListManager<Command> {
                                 }
                                 ChatLogger.print(String.format("Render mods will %s render world bobbing.", worldBobbing.getValue() ? "now" : "no longer"));
                                 break;
+                            case "tracerentity":
+                            case "te":
+                                Value<Boolean> tracerEntity = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_tracer_entity");
+                                if (arguments.length >= 3) {
+                                    tracerEntity.setValue(Boolean.parseBoolean(arguments[2]));
+                                } else {
+                                    tracerEntity.setValue(!tracerEntity.getValue());
+                                }
+                                ChatLogger.print(String.format("Render mods will %s start from tracer entity.", tracerEntity.getValue() ? "no longer" : "now"));
+                                break;
+                            case "nametagopacity":
+                            case "nto":
+                                Value<Double> nametagOpacity = (Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_opacity");
+                                if (arguments.length >= 3) {
+                                    String newNametagOpacityString = arguments[2];
+                                    try {
+                                        double newNametagOpacity = Double.parseDouble(newNametagOpacityString);
+                                        if (newNametagOpacity > 1.0F) {
+                                            newNametagOpacity = 1.0F;
+                                        } else if (newNametagOpacity < 0.1F) {
+                                            newNametagOpacity = 0.1F;
+                                        }
+                                        nametagOpacity.setValue(newNametagOpacity);
+                                        ChatLogger.print(String.format("Render mod nametag opacity set to %s", nametagOpacity.getValue()));
+                                    } catch (NumberFormatException e) {
+                                        ChatLogger.print(String.format("\"%s\" is not a number.", newNametagOpacityString));
+                                    }
+                                } else {
+                                    ChatLogger.print("Invalid arguments, valid: render nametagopacity <number>");
+                                }
+                                break;
+                            case "nametagsize":
+                            case "nts":
+                                Value<Double> nametagSize = (Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_size");
+                                if (arguments.length >= 3) {
+                                    String newNametagSizeString = arguments[2];
+                                    try {
+                                        double newNametagSize = Double.parseDouble(newNametagSizeString);
+                                        if (newNametagSize > 10.0F) {
+                                            newNametagSize = 10.0F;
+                                        } else if (newNametagSize < 0.1F) {
+                                            newNametagSize = 0.1F;
+                                        }
+                                        nametagSize.setValue(newNametagSize);
+                                        ChatLogger.print(String.format("Render mod nametag size set to %s", nametagSize.getValue()));
+                                    } catch (NumberFormatException e) {
+                                        ChatLogger.print(String.format("\"%s\" is not a number.", newNametagSizeString));
+                                    }
+                                } else {
+                                    ChatLogger.print("Invalid arguments, valid: render nametagsize <number>");
+                                }
+                                break;
                             default:
-                                ChatLogger.print("Invalid action, valid: linewidth, antialiasing, worldbobbing");
+                                ChatLogger.print("Invalid action, valid: linewidth, antialiasing, worldbobbing, nametagsize, nametagopacity, tracerentity");
                                 break;
                         }
                     } else {

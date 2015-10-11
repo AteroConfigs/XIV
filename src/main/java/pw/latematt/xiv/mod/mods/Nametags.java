@@ -119,7 +119,7 @@ public class Nametags extends Mod implements CommandHandler {
         }
 
         float distance = mc.thePlayer.getDistanceToEntity(entity);
-        float var13 = distance / 5 <= 2 ? 2.0F : distance / 5;
+        float var13 = (distance / 5 <= 2 ? 2.0F : distance / 5) * ((Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_size")).getValue().floatValue();
         float var14 = 0.016666668F * var13;
         GlStateManager.pushMatrix();
         RenderHelper.enableStandardItemLighting();
@@ -153,7 +153,7 @@ public class Nametags extends Mod implements CommandHandler {
         GlStateManager.func_179090_x();
         worldRenderer.startDrawingQuads();
         int var18 = mc.fontRendererObj.getStringWidth(entityName) / 2;
-        worldRenderer.func_178960_a(0.0F, 0.0F, 0.0F, 0.25F);
+        worldRenderer.func_178960_a(0.0F, 0.0F, 0.0F, ((Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_opacity")).getValue().floatValue());
         worldRenderer.addVertex(-var18 - 2, -2 + var17, 0.0D);
         worldRenderer.addVertex(-var18 - 2, 9 + var17, 0.0D);
         worldRenderer.addVertex(var18 + 2, 9 + var17, 0.0D);
