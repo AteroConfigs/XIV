@@ -43,7 +43,7 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
         }
 
         switch (++this.itemSwitchTicks) {
-            case 3: {
+            case 2: {
                 if (!mc.thePlayer.inventoryContainer.getSlot(27).getHasStack()) {
                     break;
                 }
