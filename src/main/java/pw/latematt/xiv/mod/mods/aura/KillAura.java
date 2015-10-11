@@ -5,7 +5,6 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import org.lwjgl.input.Keyboard;
@@ -19,13 +18,12 @@ import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.aura.mode.AuraMode;
+import pw.latematt.xiv.mod.mods.aura.mode.modes.Multi;
 import pw.latematt.xiv.mod.mods.aura.mode.modes.Singular;
 import pw.latematt.xiv.mod.mods.aura.mode.modes.Switch;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
-
-import java.util.Objects;
 
 /**
  * @author Matthew
@@ -36,6 +34,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Listener playerDeathListener;
     public final Value<Long> delay = new Value<>("killaura_delay", 125L);
     public final Value<Double> range = new Value<>("killaura_range", 3.8D);
+    public final Value<Integer> fov = new Value<>("killaura_fov", 360);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
     private final Value<Boolean> mobs = new Value<>("killaura_mobs", false);
     private final Value<Boolean> animals = new Value<>("killaura_animals", false);
@@ -125,11 +124,13 @@ public class KillAura extends Mod implements CommandHandler {
             return false;
         if (entity == mc.thePlayer)
             return false;
+        if(EntityUtils.getAngle(EntityUtils.getEntityRotations(entity)) > fov.getValue())
+            return false;
         if (!entity.isEntityAlive())
             return false;
         if (entity.ticksExisted < 20)
             return false;
-        if (mc.thePlayer.getDistanceToEntity(entity) > range.getValue())
+        if (EntityUtils.getReference().getDistanceToEntity(entity) > range.getValue())
             return false;
         if (!invisible.getValue() && entity.isInvisibleToPlayer(mc.thePlayer))
             return false;
@@ -188,6 +189,20 @@ public class KillAura extends Mod implements CommandHandler {
                         }
                     } else {
                         ChatLogger.print("Invalid arguments, valid: killaura aps <number>");
+                    }
+                    break;
+                case "fov":
+                    if (arguments.length >= 3) {
+                        String newFOVString = arguments[2];
+                        try {
+                            int newFOV = Integer.parseInt(newFOVString);
+                            fov.setValue(newFOV);
+                            ChatLogger.print(String.format("Kill Aura FOV set to %s", fov.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newFOVString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: killaura fov <number>");
                     }
                     break;
                 case "range":

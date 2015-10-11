@@ -24,7 +24,7 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
     private int itemSwitchTicks = 0;
 
     public ArmorBreaker() {
-        super("ArmourBreaker", ModType.COMBAT, Keyboard.KEY_NONE, 0xFF808080);
+        super("ArmorBreaker", ModType.COMBAT, Keyboard.KEY_NONE, 0xFF808080);
 
         Command.newCommand()
                 .cmd("armorbreakerpackets")
@@ -76,12 +76,16 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
     public void onCommandRan(String message) {
         final String[] arguments = message.split(" ");
         String newPacketsString = arguments[1];
-        try {
-            int newPackets = Integer.parseInt(newPacketsString);
-            packets.setValue(newPackets);
-            ChatLogger.print(String.format("Armor Breaker Packets set to %s", packets.getValue()));
-        } catch (NumberFormatException e) {
-            ChatLogger.print(String.format("\"%s\" is not a number.", newPacketsString));
+        if (arguments.length >= 3) {
+            try {
+                int newPackets = Integer.parseInt(newPacketsString);
+                packets.setValue(newPackets);
+                ChatLogger.print(String.format("Armor Breaker Packets set to %s", packets.getValue()));
+            } catch (NumberFormatException e) {
+                ChatLogger.print(String.format("\"%s\" is not a number.", newPacketsString));
+            }
+        }else{
+            ChatLogger.print("Invalid arguments, valid: armorbreaker packets <number>");
         }
     }
 
