@@ -156,14 +156,16 @@ public class Freecam extends Mod {
     }
 
     public void clonePlayer(EntityOtherPlayerMP entity) {
-        entity.setSneaking(sneaking);
-        entity.swingProgress = mc.thePlayer.swingProgress;
-        entity.swingProgressInt = mc.thePlayer.swingProgressInt;
-        entity.isSwingInProgress = mc.thePlayer.isSwingInProgress;
-        entity.setEating(mc.thePlayer.isEating());
-        entity.setInvisible(mc.thePlayer.isInvisible());
-        entity.setHealth(mc.thePlayer.getHealth());
-        entity.setAbsorptionAmount(mc.thePlayer.getAbsorptionAmount());
-        entity.clonePlayer(mc.thePlayer, true);
+        if(entity != null) {
+            entity.setSneaking(sneaking);
+            entity.swingProgress = mc.thePlayer.swingProgress;
+            entity.swingProgressInt = mc.thePlayer.swingProgressInt;
+            entity.isSwingInProgress = mc.thePlayer.isSwingInProgress;
+            entity.setEating(mc.thePlayer.isEating());
+            entity.setInvisible(mc.thePlayer.isInvisible());
+            entity.setHealth(mc.thePlayer.getHealth());
+            entity.setAbsorptionAmount(mc.thePlayer.getAbsorptionAmount());
+            entity.clonePlayer(mc.thePlayer, true);
+        }
     }
 }
