@@ -28,6 +28,7 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.NametagRenderEvent;
+import pw.latematt.xiv.mod.mods.ESP;
 
 public abstract class RendererLivingEntity extends Render
 {
@@ -171,7 +172,27 @@ public abstract class RendererLivingEntity extends Render
             else
             {
                 var18 = this.func_177090_c(p_76986_1_, p_76986_9_);
-                this.renderModel(p_76986_1_, var17, var16, var14, var12, var20, 0.0625F);
+
+                ESP esp = (ESP) XIV.getInstance().getModManager().find(ESP.class);
+
+                if(esp.isEnabled() && esp.outline.getValue() && esp.isValidEntity(p_76986_1_)) {
+
+                    this.renderModel(p_76986_1_, var17, var16, var14, var12, var20, 0.0625F);
+                    esp.renderOne();
+                    this.renderModel(p_76986_1_, var17, var16, var14, var12, var20, 0.0625F);
+                    esp.renderTwo();
+                    this.renderModel(p_76986_1_, var17, var16, var14, var12, var20, 0.0625F);
+                    esp.renderThree();
+
+                    GL11.glColor4d(1, 1, 0.5, 1);
+
+                    esp.renderFour();
+                    this.renderModel(p_76986_1_, var17, var16, var14, var12, var20, 0.0625F);
+                    esp.renderFive();
+
+                } else {
+                    this.renderModel(p_76986_1_, var17, var16, var14, var12, var20, 0.0625F);
+                }
 
                 if (var18)
                 {
