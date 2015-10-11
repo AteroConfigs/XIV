@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pw.latematt.xiv.macro.Macro;
 import pw.latematt.xiv.management.managers.*;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.utils.RenderUtils;
@@ -95,6 +94,7 @@ public class XIV {
         friendManager.setup();
         altManager.setup();
         configManager.setup();
+        macroManager.setup();
 
         /* load/save files on startup */
         fileManager.loadAllFiles();

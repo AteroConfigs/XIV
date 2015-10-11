@@ -156,7 +156,7 @@ public class Freecam extends Mod {
     }
 
     public void clonePlayer(EntityOtherPlayerMP entity) {
-        if(entity != null) {
+        if (entity != null) {
             entity.setSneaking(sneaking);
             entity.swingProgress = mc.thePlayer.swingProgress;
             entity.swingProgressInt = mc.thePlayer.swingProgressInt;

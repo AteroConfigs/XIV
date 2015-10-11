@@ -4,11 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.mod.mods.ClickGUI;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
-
-import java.util.Objects;
 
 public class ThemeButton extends Element {
     protected static Minecraft mc = Minecraft.getMinecraft();

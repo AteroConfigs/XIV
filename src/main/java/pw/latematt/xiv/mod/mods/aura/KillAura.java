@@ -18,7 +18,6 @@ import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.aura.mode.AuraMode;
-import pw.latematt.xiv.mod.mods.aura.mode.modes.Multi;
 import pw.latematt.xiv.mod.mods.aura.mode.modes.Singular;
 import pw.latematt.xiv.mod.mods.aura.mode.modes.Switch;
 import pw.latematt.xiv.utils.ChatLogger;
@@ -124,7 +123,7 @@ public class KillAura extends Mod implements CommandHandler {
             return false;
         if (entity == mc.thePlayer)
             return false;
-        if(EntityUtils.getAngle(EntityUtils.getEntityRotations(entity)) > fov.getValue())
+        if (EntityUtils.getAngle(EntityUtils.getEntityRotations(entity)) > fov.getValue())
             return false;
         if (!entity.isEntityAlive())
             return false;

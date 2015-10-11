@@ -7,8 +7,8 @@ import com.google.gson.GsonBuilder;
 import net.minecraft.util.StringUtils;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
-import pw.latematt.xiv.management.MapManager;
 import pw.latematt.xiv.file.XIVFile;
+import pw.latematt.xiv.management.MapManager;
 import pw.latematt.xiv.utils.ChatLogger;
 
 import java.io.BufferedReader;

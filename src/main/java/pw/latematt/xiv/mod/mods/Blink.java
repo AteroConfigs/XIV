@@ -70,7 +70,7 @@ public final class Blink extends Mod {
         XIV.getInstance().getListenerManager().add(this.renderListener);
 
         mc.timer.timerSpeed = 1.25F;
-        this.start = new double[] { mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ };
+        this.start = new double[]{mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ};
     }
 
     @Override
