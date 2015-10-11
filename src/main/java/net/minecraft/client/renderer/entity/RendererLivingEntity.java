@@ -92,24 +92,24 @@ public abstract class RendererLivingEntity extends Render
      * (Render<T extends Entity) and this method has signature public void doRender(T entity, double d, double d1,
      * double d2, float f, float f1). But JAD is pre 1.5 so doesn't do that.
      */
-    public void doRender(EntityLivingBase p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
+    public void doRender(EntityLivingBase entity, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
     {
         GlStateManager.pushMatrix();
         GlStateManager.disableCull();
-        this.mainModel.swingProgress = this.getSwingProgress(p_76986_1_, p_76986_9_);
-        this.mainModel.isRiding = p_76986_1_.isRiding();
-        this.mainModel.isChild = p_76986_1_.isChild();
+        this.mainModel.swingProgress = this.getSwingProgress(entity, p_76986_9_);
+        this.mainModel.isRiding = entity.isRiding();
+        this.mainModel.isChild = entity.isChild();
 
         try
         {
-            float var10 = this.interpolateRotation(p_76986_1_.prevRenderYawOffset, p_76986_1_.renderYawOffset, p_76986_9_);
-            float var11 = this.interpolateRotation(p_76986_1_.prevRotationYawHead, p_76986_1_.rotationYawHead, p_76986_9_);
+            float var10 = this.interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, p_76986_9_);
+            float var11 = this.interpolateRotation(entity.prevRotationYawHead, entity.rotationYawHead, p_76986_9_);
             float var12 = var11 - var10;
             float var14;
 
-            if (p_76986_1_.isRiding() && p_76986_1_.ridingEntity instanceof EntityLivingBase)
+            if (entity.isRiding() && entity.ridingEntity instanceof EntityLivingBase)
             {
-                EntityLivingBase var13 = (EntityLivingBase)p_76986_1_.ridingEntity;
+                EntityLivingBase var13 = (EntityLivingBase)entity.ridingEntity;
                 var10 = this.interpolateRotation(var13.prevRenderYawOffset, var13.renderYawOffset, p_76986_9_);
                 var12 = var11 - var10;
                 var14 = MathHelper.wrapAngleTo180_float(var12);
@@ -132,19 +132,19 @@ public abstract class RendererLivingEntity extends Render
                 }
             }
 
-            float var20 = p_76986_1_.prevRotationPitch + (p_76986_1_.rotationPitch - p_76986_1_.prevRotationPitch) * p_76986_9_;
-            this.renderLivingAt(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_);
-            var14 = this.handleRotationFloat(p_76986_1_, p_76986_9_);
-            this.rotateCorpse(p_76986_1_, var14, var10, p_76986_9_);
+            float var20 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * p_76986_9_;
+            this.renderLivingAt(entity, p_76986_2_, p_76986_4_, p_76986_6_);
+            var14 = this.handleRotationFloat(entity, p_76986_9_);
+            this.rotateCorpse(entity, var14, var10, p_76986_9_);
             GlStateManager.enableRescaleNormal();
             GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-            this.preRenderCallback(p_76986_1_, p_76986_9_);
+            this.preRenderCallback(entity, p_76986_9_);
             float var15 = 0.0625F;
             GlStateManager.translate(0.0F, -1.5078125F, 0.0F);
-            float var16 = p_76986_1_.prevLimbSwingAmount + (p_76986_1_.limbSwingAmount - p_76986_1_.prevLimbSwingAmount) * p_76986_9_;
-            float var17 = p_76986_1_.limbSwing - p_76986_1_.limbSwingAmount * (1.0F - p_76986_9_);
+            float var16 = entity.prevLimbSwingAmount + (entity.limbSwingAmount - entity.prevLimbSwingAmount) * p_76986_9_;
+            float var17 = entity.limbSwing - entity.limbSwingAmount * (1.0F - p_76986_9_);
 
-            if (p_76986_1_.isChild())
+            if (entity.isChild())
             {
                 var17 *= 3.0F;
             }
@@ -155,14 +155,14 @@ public abstract class RendererLivingEntity extends Render
             }
 
             GlStateManager.enableAlpha();
-            this.mainModel.setLivingAnimations(p_76986_1_, var17, var16, p_76986_9_);
-            this.mainModel.setRotationAngles(var17, var16, var14, var12, var20, 0.0625F, p_76986_1_);
+            this.mainModel.setLivingAnimations(entity, var17, var16, p_76986_9_);
+            this.mainModel.setRotationAngles(var17, var16, var14, var12, var20, 0.0625F, entity);
             boolean var18;
 
             if (this.field_177098_i)
             {
-                var18 = this.func_177088_c(p_76986_1_);
-                this.renderModel(p_76986_1_, var17, var16, var14, var12, var20, 0.0625F);
+                var18 = this.func_177088_c(entity);
+                this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
 
                 if (var18)
                 {
@@ -171,27 +171,39 @@ public abstract class RendererLivingEntity extends Render
             }
             else
             {
-                var18 = this.func_177090_c(p_76986_1_, p_76986_9_);
+                var18 = this.func_177090_c(entity, p_76986_9_);
 
                 ESP esp = (ESP) XIV.getInstance().getModManager().find(ESP.class);
 
-                if(esp.isEnabled() && esp.outline.getValue() && esp.isValidEntity(p_76986_1_)) {
+                if(esp.isEnabled() && esp.outline.getValue() && esp.isValidEntity(entity)) {
 
-                    this.renderModel(p_76986_1_, var17, var16, var14, var12, var20, 0.0625F);
+                    this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
                     esp.renderOne();
-                    this.renderModel(p_76986_1_, var17, var16, var14, var12, var20, 0.0625F);
+                    this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
                     esp.renderTwo();
-                    this.renderModel(p_76986_1_, var17, var16, var14, var12, var20, 0.0625F);
+                    this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
                     esp.renderThree();
 
-                    GL11.glColor4d(1, 1, 0.5, 1);
+                    final float distance = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(entity);
+                    float[] color = new float[]{0.0F, 0.9F, 0.0F};
+                    if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
+                        color = new float[]{0.3F, 0.7F, 1.0F};
+                    } else if (entity.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer)) {
+                        color = new float[]{1.0F, 0.9F, 0.0F};
+                    } else if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).hurtTime > 0) {
+                        color = new float[]{1.0F, 0.66F, 0.0F};
+                    } else if (distance <= 3.9F) {
+                        color = new float[]{0.9F, 0.0F, 0.0F};
+                    }
+
+                    GlStateManager.color(color[0], color[1], color[2], 1F);
 
                     esp.renderFour();
-                    this.renderModel(p_76986_1_, var17, var16, var14, var12, var20, 0.0625F);
+                    this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
                     esp.renderFive();
 
                 } else {
-                    this.renderModel(p_76986_1_, var17, var16, var14, var12, var20, 0.0625F);
+                    this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
                 }
 
                 if (var18)
@@ -201,9 +213,9 @@ public abstract class RendererLivingEntity extends Render
 
                 GlStateManager.depthMask(true);
 
-                if (!(p_76986_1_ instanceof EntityPlayer) || !((EntityPlayer)p_76986_1_).func_175149_v())
+                if (!(entity instanceof EntityPlayer) || !((EntityPlayer)entity).func_175149_v())
                 {
-                    this.func_177093_a(p_76986_1_, var17, var16, p_76986_9_, var14, var12, var20, 0.0625F);
+                    this.func_177093_a(entity, var17, var16, p_76986_9_, var14, var12, var20, 0.0625F);
                 }
             }
 
@@ -222,7 +234,7 @@ public abstract class RendererLivingEntity extends Render
 
         if (!this.field_177098_i)
         {
-            super.doRender(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
+            super.doRender(entity, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
         }
     }
 
