@@ -23,6 +23,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.NametagRenderEvent;
 import pw.latematt.xiv.event.events.RenderEntityEvent;
 import pw.latematt.xiv.mod.mods.ESP;
+import pw.latematt.xiv.utils.EntityUtils;
 
 import java.nio.FloatBuffer;
 import java.util.Iterator;
@@ -163,7 +164,7 @@ public abstract class RendererLivingEntity extends Render {
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
                     esp.renderThree();
 
-                    final float distance = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(entity);
+                    final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
                     float[] color = new float[]{0.0F, 0.9F, 0.0F};
                     if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
                         color = new float[]{0.3F, 0.7F, 1.0F};
