@@ -16,6 +16,7 @@ import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.Render3DEvent;
+import pw.latematt.xiv.event.events.RenderEntityEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
@@ -35,8 +36,10 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     public final Value<Boolean> enderpearls = new Value<>("esp_enderpearls", false);
     public final Value<Boolean> boxes = new Value<>("esp_boxes", true);
     public final Value<Boolean> outline = new Value<>("esp_outline", false);
+    public final Value<Boolean> wallhack = new Value<>("esp_wallhack", false);
     public final Value<Boolean> spines = new Value<>("esp_spines", false);
     public final Value<Boolean> tracerLines = new Value<>("esp_tracer_lines", false);
+    private final Listener renderEntityListener;
 
     public ESP() {
         super("ESP", ModType.RENDER, Keyboard.KEY_I);
@@ -47,6 +50,24 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 .arguments("<action>")
                 .handler(this)
                 .build();
+
+        renderEntityListener = new Listener<RenderEntityEvent>() {
+            @Override
+            public void onEventCalled(RenderEntityEvent event) {
+                if (!wallhack.getValue() || !isValidEntity(event.getEntity()))
+                    return;
+
+                if (event.getState() == RenderEntityEvent.State.PRE) {
+                    GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
+                    GL11.glPolygonOffset(1.0F, -2000000F);
+                } else if (event.getState() == RenderEntityEvent.State.POST) {
+                    GL11.glPolygonOffset(1.0F, 2000000F);
+                    GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
+                }
+            }
+        };
+
+
     }
 
     public void onEventCalled(Render3DEvent event) {
@@ -91,7 +112,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     public boolean isValidEntity(Entity entity) {
         if (entity == null)
             return false;
-        if (entity == mc.thePlayer)
+        if (entity == mc.thePlayer || entity == EntityUtils.getReference())
             return false;
         if (!entity.isEntityAlive())
             return false;
@@ -119,7 +140,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             box = AxisAlignedBB.fromBounds(x - entity.width + 0.2D, y, z - entity.width + 0.2D, x + entity.width - 0.2D, y + entity.height + (entity.isSneaking() ? 0.02D : 0.2D), z + entity.width - 0.2D);
         }
 
-        final float distance = mc.thePlayer.getDistanceToEntity(entity);
+        final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
         float[] color = new float[]{0.0F, 0.9F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.3F, 0.7F, 1.0F};
@@ -138,7 +159,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     }
 
     private void drawTracerLines(Entity entity, double x, double y, double z, double x2, double y2, double z2) {
-        final float distance = mc.thePlayer.getDistanceToEntity(entity);
+        final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
         float[] color = new float[]{0.0F, 0.90F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.30F, 0.7F, 1.0F};
@@ -158,7 +179,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     }
 
     private void drawSpines(Entity entity, double x, double y, double z) {
-        final float distance = mc.thePlayer.getDistanceToEntity(entity);
+        final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
         float[] color = new float[]{0.0F, 0.90F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.30F, 0.7F, 1.0F};
@@ -175,6 +196,72 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         var3.addVertex(x, y, z);
         var3.addVertex(x, y + entity.getEyeHeight(), z);
         var2.draw();
+    }
+
+    public void renderOne() {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glLineWidth(4f);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+        GL11.glClearStencil(0xF);
+        GL11.glStencilFunc(GL11.GL_NEVER, 1, 0xF);
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
+    }
+
+    public void renderTwo() {
+        GL11.glStencilFunc(GL11.GL_NEVER, 0, 0xF);
+        // TODO: Changeable: line underneath
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
+    }
+
+    public void renderThree() {
+        GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xF);
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
+    }
+
+    public void renderFour(EntityLivingBase entity) {
+        final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
+        float[] color = new float[]{0.0F, 0.9F, 0.0F};
+        if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
+            color = new float[]{0.3F, 0.7F, 1.0F};
+        } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
+            color = new float[]{1.0F, 0.9F, 0.0F};
+        } else if (entity.hurtTime > 0) {
+            color = new float[]{1.0F, 0.66F, 0.0F};
+        } else if (distance <= 3.9F) {
+            color = new float[]{0.9F, 0.0F, 0.0F};
+        }
+        GlStateManager.color(color[0], color[1], color[2], 1F);
+
+        GL11.glDepthMask(false);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_POLYGON_OFFSET_LINE);
+        GL11.glPolygonOffset(1.0F, -2000000F);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+    }
+
+    public void renderFive() {
+        GL11.glPolygonOffset(1.0F, 2000000F);
+        GL11.glDisable(GL11.GL_POLYGON_OFFSET_LINE);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(true);
+        GL11.glDisable(GL11.GL_STENCIL_TEST);
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_DONT_CARE);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glPopAttrib();
     }
 
     @Override
@@ -262,8 +349,18 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                     }
                     ChatLogger.print(String.format("ESP will %s display player spines.", (spines.getValue() ? "now" : "no longer")));
                     break;
+                case "chams":
+                case "wallhack":
+                    if (arguments.length >= 3) {
+                        wallhack.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        wallhack.setValue(!wallhack.getValue());
+                    }
+                    ChatLogger.print(String.format("ESP will %s wallhack.", (wallhack.getValue() ? "now" : "no longer")));
+                    break;
                 default:
-                    ChatLogger.print("Invalid action, valid: players, mobs, animals, items, enderpearls, boxes, tracerlines, spines, outline");
+
+                    ChatLogger.print("Invalid action, valid: players, mobs, animals, items, enderpearls, boxes, tracerlines, spines, outline, wallhack");
                     break;
             }
         } else {
@@ -274,60 +371,12 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
+        XIV.getInstance().getListenerManager().add(renderEntityListener);
     }
 
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
-    }
-
-    public static void renderOne() {
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glLineWidth(4f);
-        GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        GL11.glEnable(GL11.GL_STENCIL_TEST);
-        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-        GL11.glClearStencil(0xF);
-        GL11.glStencilFunc(GL11.GL_NEVER, 1, 0xF);
-        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
-        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
-    }
-
-    public static void renderTwo() {
-        GL11.glStencilFunc(GL11.GL_NEVER, 0, 0xF);
-        // TODO: Changeable: line underneath
-        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
-        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
-    }
-
-    public static void renderThree() {
-        GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xF);
-        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
-    }
-
-    public static void renderFour() {
-        GL11.glEnable(GL11.GL_POLYGON_OFFSET_LINE);
-        GL11.glPolygonOffset(1, -2000000f);
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,
-                240f, 240f);
-    }
-
-    public static void renderFive() {
-        GL11.glPolygonOffset(1, 2000000);
-        GL11.glDisable(10754);
-        GL11.glDisable(2960);
-        GL11.glDisable(2848);
-        GL11.glHint(3154, 4352);
-        GL11.glEnable(3042);
-        GL11.glEnable(2896);
-        GL11.glEnable(3553);
-        GL11.glEnable(3008);
-        GL11.glPopAttrib();
+        XIV.getInstance().getListenerManager().remove(renderEntityListener);
     }
 }

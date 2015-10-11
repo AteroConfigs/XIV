@@ -606,7 +606,7 @@ public class GuiIngame extends Gui
             XIV.getInstance().getListenerManager().call(scoreboard2);
 
             this.func_175179_f().drawString(scoreboard.getString(), var25, var18, 553648127);
-            this.func_175179_f().drawString(scoreboard2.getString(), var19 - this.func_175179_f().getStringWidth(scoreboard.getString()), var18, 553648127);
+            this.func_175179_f().drawString(scoreboard2.getString(), var19 - this.func_175179_f().getStringWidth(scoreboard2.getString()), var18, 553648127);
 
             if (var11 == var21.size())
             {

@@ -1,7 +1,6 @@
 package pw.latematt.xiv.event.events;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import pw.latematt.xiv.event.Event;
 
 /**

@@ -2,8 +2,8 @@ package pw.latematt.xiv.management.managers;
 
 import com.google.common.io.Files;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.file.XIVFile;
+import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.ui.alt.AltAccount;
 
 import java.io.BufferedReader;

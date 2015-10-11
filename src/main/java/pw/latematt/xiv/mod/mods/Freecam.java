@@ -8,6 +8,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.MoveEvent;
+import pw.latematt.xiv.event.events.PushOutOfBlocksEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
@@ -25,6 +26,7 @@ public class Freecam extends Mod {
     private final Listener packetListener;
     private final Listener motionListener;
     private final Listener moveListener;
+    private final Listener pushOutOfBlocksListener;
     private EntityOtherPlayerMP entity;
 
     private boolean sneaking = false;
@@ -95,6 +97,13 @@ public class Freecam extends Mod {
                 }
             }
         };
+
+        this.pushOutOfBlocksListener = new Listener<PushOutOfBlocksEvent>() {
+            @Override
+            public void onEventCalled(PushOutOfBlocksEvent event) {
+                event.setCancelled(true);
+            }
+        };
     }
 
     @Override
@@ -115,6 +124,7 @@ public class Freecam extends Mod {
         XIV.getInstance().getListenerManager().add(this.packetListener);
         XIV.getInstance().getListenerManager().add(this.motionListener);
         XIV.getInstance().getListenerManager().add(this.moveListener);
+        XIV.getInstance().getListenerManager().add(this.pushOutOfBlocksListener);
 
 
         // If you don't want the tracers to go to the freecam body, you can just not do this. Maybe a mode in the future?
@@ -128,6 +138,7 @@ public class Freecam extends Mod {
         XIV.getInstance().getListenerManager().remove(this.packetListener);
         XIV.getInstance().getListenerManager().remove(this.motionListener);
         XIV.getInstance().getListenerManager().remove(this.moveListener);
+        XIV.getInstance().getListenerManager().remove(this.pushOutOfBlocksListener);
 
         if (Objects.nonNull(mc.thePlayer) && Objects.nonNull(entity)) {
             mc.thePlayer.noClip = false;
@@ -145,14 +156,16 @@ public class Freecam extends Mod {
     }
 
     public void clonePlayer(EntityOtherPlayerMP entity) {
-        entity.setSneaking(sneaking);
-        entity.swingProgress = mc.thePlayer.swingProgress;
-        entity.swingProgressInt = mc.thePlayer.swingProgressInt;
-        entity.isSwingInProgress = mc.thePlayer.isSwingInProgress;
-        entity.setEating(mc.thePlayer.isEating());
-        entity.setInvisible(mc.thePlayer.isInvisible());
-        entity.setHealth(mc.thePlayer.getHealth());
-        entity.setAbsorptionAmount(mc.thePlayer.getAbsorptionAmount());
-        entity.clonePlayer(mc.thePlayer, true);
+        if (entity != null) {
+            entity.setSneaking(sneaking);
+            entity.swingProgress = mc.thePlayer.swingProgress;
+            entity.swingProgressInt = mc.thePlayer.swingProgressInt;
+            entity.isSwingInProgress = mc.thePlayer.isSwingInProgress;
+            entity.setEating(mc.thePlayer.isEating());
+            entity.setInvisible(mc.thePlayer.isInvisible());
+            entity.setHealth(mc.thePlayer.getHealth());
+            entity.setAbsorptionAmount(mc.thePlayer.getAbsorptionAmount());
+            entity.clonePlayer(mc.thePlayer, true);
+        }
     }
 }

@@ -192,6 +192,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.GuiScreenEvent;
 import pw.latematt.xiv.event.events.KeyPressEvent;
 import pw.latematt.xiv.event.events.LoadWorldEvent;
+import pw.latematt.xiv.event.events.PlacingBlockEvent;
 
 public class Minecraft implements IThreadListener, IPlayerUsage
 {
@@ -1561,7 +1562,10 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     private void rightClickMouse()
     {
-        this.rightClickDelayTimer = 4;
+        PlacingBlockEvent event = new PlacingBlockEvent(4);
+        XIV.getInstance().getListenerManager().call(event);
+
+        this.rightClickDelayTimer = event.getPlaceDelay();
         boolean var1 = true;
         ItemStack var2 = this.thePlayer.inventory.getCurrentItem();
 

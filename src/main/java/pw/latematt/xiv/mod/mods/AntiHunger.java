@@ -6,22 +6,24 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.utils.BlockUtils;
-import pw.latematt.xiv.utils.EntityUtils;
+
+import java.util.Objects;
 
 /**
  * @author Jack
  */
 
-public class AntiDrown extends Mod implements Listener<MotionUpdateEvent> {
-    public AntiDrown() {
-        super("AntiDrown", ModType.PLAYER, Keyboard.KEY_NONE, 0xFF4682B4);
+public final class AntiHunger extends Mod implements Listener<MotionUpdateEvent> {
+    public AntiHunger() {
+        super("AntiHunger", ModType.PLAYER, Keyboard.KEY_NONE, 65407);
     }
 
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
-        if (!(mc.thePlayer.isUsingItem()) && BlockUtils.isInLiquid(EntityUtils.getReference()) && EntityUtils.getReference().isCollidedVertically && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().motionZ == 0)) {
-            event.setCancelled(true);
+        if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+            if (Objects.equals(event.getY(), mc.thePlayer.lastTickPosY) && !mc.playerController.isHittingBlock) {
+                event.setOnGround(false);
+            }
         }
     }
 

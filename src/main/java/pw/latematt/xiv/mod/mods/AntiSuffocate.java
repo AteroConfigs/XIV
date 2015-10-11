@@ -10,17 +10,17 @@ import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.EntityUtils;
 
 /**
- * @author Jack
+ * @author Rederpz / Jack
  */
 
-public class AntiDrown extends Mod implements Listener<MotionUpdateEvent> {
-    public AntiDrown() {
-        super("AntiDrown", ModType.PLAYER, Keyboard.KEY_NONE, 0xFF4682B4);
+public class AntiSuffocate extends Mod implements Listener<MotionUpdateEvent> {
+    public AntiSuffocate() {
+        super("AntiSuffocate", ModType.PLAYER, Keyboard.KEY_NONE);
     }
 
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
-        if (!(mc.thePlayer.isUsingItem()) && BlockUtils.isInLiquid(EntityUtils.getReference()) && EntityUtils.getReference().isCollidedVertically && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().motionZ == 0)) {
+        if (!(mc.thePlayer.isUsingItem()) && BlockUtils.isInsideBlock(EntityUtils.getReference()) && mc.thePlayer.isCollidedVertically && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().motionZ == 0)) {
             event.setCancelled(true);
         }
     }
