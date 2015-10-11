@@ -27,7 +27,7 @@ public final class Blink extends Mod {
     private double[] start;
 
     public Blink() {
-        super("Blink", ModType.MOVEMENT, Keyboard.KEY_NONE, 11184895); // TODO: Color?
+        super("Blink", ModType.MOVEMENT, Keyboard.KEY_NONE, 11184895);
 
         this.packetListener = new Listener<SendPacketEvent>() {
             @Override
@@ -36,8 +36,8 @@ public final class Blink extends Mod {
                     final boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
                     final boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
                     final boolean moving = movingForward && strafing || movingForward;
+                    event.setCancelled(true);
                     if (moving) {
-                        event.setCancelled(true);
                         packets.add(event.getPacket());
                     }
                 }
