@@ -8,6 +8,7 @@ import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.BlockAddBBEvent;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
+import pw.latematt.xiv.event.events.PushOutOfBlocksEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
@@ -24,6 +25,7 @@ import java.util.Objects;
 public class Phase extends Mod implements Listener<MotionUpdateEvent> {
 
     private final Listener blockAddBBListener;
+    private final Listener pushOutOfBlocksListener;
     private boolean collided = false;
 
     public Phase() {
@@ -39,6 +41,13 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent> {
                 if(mc.thePlayer.getEntityBoundingBox().maxY < event.getPos().getY() && !EntityUtils.isInsideBlock()) {
                     event.setAxisAlignedBB(null);
                 }
+            }
+        };
+
+        this.pushOutOfBlocksListener = new Listener<PushOutOfBlocksEvent>() {
+            @Override
+            public void onEventCalled(PushOutOfBlocksEvent event) {
+                event.setCancelled(true);
             }
         };
     }
@@ -97,12 +106,14 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent> {
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
         XIV.getInstance().getListenerManager().add(blockAddBBListener);
+        XIV.getInstance().getListenerManager().add(pushOutOfBlocksListener);
     }
 
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
         XIV.getInstance().getListenerManager().remove(blockAddBBListener);
+        XIV.getInstance().getListenerManager().remove(pushOutOfBlocksListener);
 
         this.collided = false;
     }

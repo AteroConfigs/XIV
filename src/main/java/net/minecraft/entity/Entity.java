@@ -47,6 +47,7 @@ import net.minecraft.world.WorldServer;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.EntityStepEvent;
 import pw.latematt.xiv.event.events.MoveEvent;
+import pw.latematt.xiv.event.events.PushOutOfBlocksEvent;
 import pw.latematt.xiv.mod.mods.Freecam;
 
 public abstract class Entity implements ICommandSender
@@ -1838,7 +1839,10 @@ public abstract class Entity implements ICommandSender
      */
     public boolean isEntityInsideOpaqueBlock()
     {
-        if (this.noClip || XIV.getInstance().getModManager().find(Freecam.class).isEnabled())
+        PushOutOfBlocksEvent event = new PushOutOfBlocksEvent();
+        XIV.getInstance().getListenerManager().call(event);
+
+        if (this.noClip || event.isCancelled())
         {
             return false;
         }
