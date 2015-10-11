@@ -61,6 +61,7 @@ public class GuiClick extends GuiScreen {
         panels.add(new ESPPanel(208, 4, 100, 14));
         panels.add(new StorageESPPanel(310, 4, 100, 14));
         panels.add(new TriggerbotPanel(310, 19, 100, 14));
+        panels.add(new NameProtectPanel(412, 4, 100, 14));
 
         if (guiConfig == null) {
             guiConfig = new XIVFile("gui", "json") {

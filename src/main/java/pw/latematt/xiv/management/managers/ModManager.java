@@ -34,6 +34,7 @@ public class ModManager extends ListManager<Mod> {
     public void setup() {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         contents.add(new AntiDrown());
+        contents.add(new AntiSuffocate());
         contents.add(new ArmorBreaker());
 //        contents.add(new AutoHead());
         contents.add(new AutoRespawn());
