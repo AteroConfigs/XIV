@@ -30,6 +30,7 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
 
     public NameProtect() {
         super("NameProtect", ModType.RENDER, Keyboard.KEY_NONE);
+        this.setEnabled(true);
 
         Command.newCommand()
                 .cmd("nameprotect")
