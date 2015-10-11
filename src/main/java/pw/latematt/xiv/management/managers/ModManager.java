@@ -38,6 +38,7 @@ public class ModManager extends ListManager<Mod> {
 //        contents.add(new AutoHead());
         contents.add(new AutoRespawn());
         contents.add(new AutoTool());
+        contents.add(new Blink());
         contents.add(new BlockBBFixer());
         contents.add(new Criticals());
         contents.add(new ESP());
