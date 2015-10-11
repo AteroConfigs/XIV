@@ -1,9 +1,6 @@
 package pw.latematt.xiv.mod.mods;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderPearl;
@@ -13,6 +10,7 @@ import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
@@ -36,6 +34,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     public final Value<Boolean> items = new Value<>("esp_items", false);
     public final Value<Boolean> enderpearls = new Value<>("esp_enderpearls", false);
     public final Value<Boolean> boxes = new Value<>("esp_boxes", true);
+    public final Value<Boolean> outline = new Value<>("esp_outline", false);
     public final Value<Boolean> spines = new Value<>("esp_spines", false);
     public final Value<Boolean> tracerLines = new Value<>("esp_tracer_lines", false);
 
@@ -89,7 +88,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         RenderUtils.endGl();
     }
 
-    private boolean isValidEntity(Entity entity) {
+    public boolean isValidEntity(Entity entity) {
         if (entity == null)
             return false;
         if (entity == mc.thePlayer)
@@ -236,6 +235,15 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                     }
                     ChatLogger.print(String.format("ESP will %s display boxes.", (boxes.getValue() ? "now" : "no longer")));
                     break;
+                case "outline":
+                case "outl":
+                    if (arguments.length >= 3) {
+                        outline.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        outline.setValue(!outline.getValue());
+                    }
+                    ChatLogger.print(String.format("ESP will %s display a glow.", (outline.getValue() ? "now" : "no longer")));
+                    break;
                 case "tracerlines":
                 case "tracers":
                     if (arguments.length >= 3) {
@@ -271,5 +279,55 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
+    }
+
+    public static void renderOne() {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glLineWidth(4f);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+        GL11.glClearStencil(0xF);
+        GL11.glStencilFunc(GL11.GL_NEVER, 1, 0xF);
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
+    }
+
+    public static void renderTwo() {
+        GL11.glStencilFunc(GL11.GL_NEVER, 0, 0xF);
+        // TODO: Changeable: line underneath
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
+    }
+
+    public static void renderThree() {
+        GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xF);
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
+    }
+
+    public static void renderFour() {
+        GL11.glEnable(GL11.GL_POLYGON_OFFSET_LINE);
+        GL11.glPolygonOffset(1, -2000000f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,
+                240f, 240f);
+    }
+
+    public static void renderFive() {
+        GL11.glPolygonOffset(1, 2000000);
+        GL11.glDisable(10754);
+        GL11.glDisable(2960);
+        GL11.glDisable(2848);
+        GL11.glHint(3154, 4352);
+        GL11.glEnable(3042);
+        GL11.glEnable(2896);
+        GL11.glEnable(3553);
+        GL11.glEnable(3008);
+        GL11.glPopAttrib();
     }
 }
