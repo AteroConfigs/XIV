@@ -9,7 +9,6 @@ import pw.latematt.xiv.mod.mods.aura.mode.AuraMode;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.Timer;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -36,7 +35,7 @@ public class Switch extends AuraMode {
                     .sorted((entity1, entity2) -> {
                         double entity1YawDistance = EntityUtils.getYawChange((EntityLivingBase) entity1);
                         double entity2YawDistance = EntityUtils.getYawChange((EntityLivingBase) entity2);
-                        return entity1YawDistance > entity2YawDistance  ? -1 : entity2YawDistance > entity1YawDistance ? 1 : 0;
+                        return entity1YawDistance > entity2YawDistance ? -1 : entity2YawDistance > entity1YawDistance ? 1 : 0;
                     }).forEach(entity -> entities.add((EntityLivingBase) entity));
         }
 

@@ -1,16 +1,10 @@
 package pw.latematt.xiv.mod.mods;
 
-import net.minecraft.item.*;
-import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C07PacketPlayerDigging;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.RenderStringEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
@@ -43,13 +37,13 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
 
     @Override
     public void onEventCalled(RenderStringEvent event) {
-        if(Objects.equals(RenderStringEvent.State.CHAT, event.getState()) && chat.getValue()) {
+        if (Objects.equals(RenderStringEvent.State.CHAT, event.getState()) && chat.getValue()) {
             event.setString(XIV.getInstance().getFriendManager().replace(event.getString(), true));
-        }else if(Objects.equals(RenderStringEvent.State.TAB, event.getState()) && tab.getValue()) {
+        } else if (Objects.equals(RenderStringEvent.State.TAB, event.getState()) && tab.getValue()) {
             event.setString(XIV.getInstance().getFriendManager().replace(event.getString(), true));
-        }else if(Objects.equals(RenderStringEvent.State.SCOREBOARD, event.getState()) && scoreboard.getValue()) {
+        } else if (Objects.equals(RenderStringEvent.State.SCOREBOARD, event.getState()) && scoreboard.getValue()) {
             event.setString(XIV.getInstance().getFriendManager().replace(event.getString(), true));
-        }else if(Objects.equals(RenderStringEvent.State.NAMETAG, event.getState()) && nametag.getValue()) {
+        } else if (Objects.equals(RenderStringEvent.State.NAMETAG, event.getState()) && nametag.getValue()) {
             event.setString(XIV.getInstance().getFriendManager().replace(event.getString(), false));
         }
     }

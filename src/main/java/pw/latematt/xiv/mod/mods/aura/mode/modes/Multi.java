@@ -1,7 +1,6 @@
 package pw.latematt.xiv.mod.mods.aura.mode.modes;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
@@ -33,7 +32,7 @@ public class Multi extends AuraMode {
                     .sorted((entity1, entity2) -> {
                         double entity1Distance = mc.thePlayer.getDistanceToEntity(entity1);
                         double entity2Distance = mc.thePlayer.getDistanceToEntity(entity2);
-                        return entity1Distance > entity2Distance  ? 1 : entity2Distance > entity1Distance ? -1 : 0;
+                        return entity1Distance > entity2Distance ? 1 : entity2Distance > entity1Distance ? -1 : 0;
                     }).findFirst();
             if (firstValidEntity.isPresent()) {
                 entityToAttack = (EntityLivingBase) firstValidEntity.get();
@@ -48,12 +47,12 @@ public class Multi extends AuraMode {
             }
 
             int count = 0;
-            for(Object o: mc.theWorld.loadedEntityList) {
-                if(o instanceof EntityLivingBase) {
+            for (Object o : mc.theWorld.loadedEntityList) {
+                if (o instanceof EntityLivingBase) {
                     EntityLivingBase entity = (EntityLivingBase) o;
 
-                    if(killAura.isValidEntity(entity) && entity != entityToAttack) {
-                        if(EntityUtils.getAngle(EntityUtils.getEntityRotations(entity)) <= 10 && count < 5) {
+                    if (killAura.isValidEntity(entity) && entity != entityToAttack) {
+                        if (EntityUtils.getAngle(EntityUtils.getEntityRotations(entity)) <= 10 && count < 5) {
                             mc.playerController.attackEntity(mc.thePlayer, entity);
                             count++;
                         }

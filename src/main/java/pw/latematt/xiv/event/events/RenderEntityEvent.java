@@ -1,9 +1,6 @@
 package pw.latematt.xiv.event.events;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import pw.latematt.xiv.event.Event;
 
 /**

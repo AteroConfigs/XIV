@@ -100,7 +100,7 @@ public class BlockUtils {
              x < MathHelper.floor_double(entity.getEntityBoundingBox().maxX) + 1; x++) {
             for (int z = MathHelper.floor_double(entity.getEntityBoundingBox().minZ);
                  z < MathHelper.floor_double(entity.getEntityBoundingBox().maxZ) + 1; z++) {
-                final Block block =mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
+                final Block block = mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
                 if (Objects.nonNull(block) && !(block instanceof BlockAir)) {
                     if (!(block instanceof BlockLadder || block instanceof BlockVine))
                         return false;
@@ -112,17 +112,17 @@ public class BlockUtils {
     }
 
     public static boolean isInsideBlock(Entity entity) {
-        for(int x = MathHelper.floor_double(entity.getEntityBoundingBox().minX); x < MathHelper.floor_double(entity.getEntityBoundingBox().maxX) + 1; x++) {
-            for(int y = MathHelper.floor_double(entity.getEntityBoundingBox().minY); y < MathHelper.floor_double(entity.getEntityBoundingBox().maxY) + 1; y++) {
-                for(int z = MathHelper.floor_double(entity.getEntityBoundingBox().minZ); z < MathHelper.floor_double(entity.getEntityBoundingBox().maxZ) + 1; z++) {
+        for (int x = MathHelper.floor_double(entity.getEntityBoundingBox().minX); x < MathHelper.floor_double(entity.getEntityBoundingBox().maxX) + 1; x++) {
+            for (int y = MathHelper.floor_double(entity.getEntityBoundingBox().minY); y < MathHelper.floor_double(entity.getEntityBoundingBox().maxY) + 1; y++) {
+                for (int z = MathHelper.floor_double(entity.getEntityBoundingBox().minZ); z < MathHelper.floor_double(entity.getEntityBoundingBox().maxZ) + 1; z++) {
                     Block block = mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
-                    if(block != null) {
+                    if (block != null) {
                         AxisAlignedBB boundingBox = block.getCollisionBoundingBox(mc.theWorld, new BlockPos(x, y, z), mc.theWorld.getBlockState(new BlockPos(x, y, z)));
-                        if(block instanceof BlockHopper) {
+                        if (block instanceof BlockHopper) {
                             boundingBox = new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1);
                         }
 
-                        if(boundingBox != null && entity.getEntityBoundingBox().intersectsWith(boundingBox)) {
+                        if (boundingBox != null && entity.getEntityBoundingBox().intersectsWith(boundingBox)) {
                             return true;
                         }
                     }

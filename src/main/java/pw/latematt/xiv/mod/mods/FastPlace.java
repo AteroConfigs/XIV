@@ -5,7 +5,6 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.BreakingBlockEvent;
 import pw.latematt.xiv.event.events.PlacingBlockEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;

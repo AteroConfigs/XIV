@@ -7,8 +7,10 @@ import com.google.gson.GsonBuilder;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
-import pw.latematt.xiv.management.ListManager;
+import pw.latematt.xiv.event.Listener;
+import pw.latematt.xiv.event.events.KeyPressEvent;
 import pw.latematt.xiv.file.XIVFile;
+import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.mods.*;
 import pw.latematt.xiv.mod.mods.aura.KillAura;
@@ -192,7 +194,12 @@ public class ModManager extends ListManager<Mod> {
                         ChatLogger.print("Invalid arguments, valid: bind <module> <key>");
                     }
                 }).build();
-
+        XIV.getInstance().getListenerManager().add(new Listener<KeyPressEvent>() {
+            @Override
+            public void onEventCalled(KeyPressEvent event) {
+                getContents().stream().filter(mod -> mod.getKeybind() != Keyboard.KEY_NONE).filter(mod -> mod.getKeybind() == event.getKeyCode()).forEach(Mod::toggle);
+            }
+        });
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
     }
 

@@ -27,7 +27,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent> {
             if (!isSafe())
                 fallDist += mc.thePlayer.fallDistance;
 
-            if (fallDist >= 4.0F || isSafe()) {
+            if (fallDist >= 3.0F || isSafe()) {
                 player.setOnGround(true);
                 fallDist = 0.0F;
                 mc.thePlayer.fallDistance = 0.0F;

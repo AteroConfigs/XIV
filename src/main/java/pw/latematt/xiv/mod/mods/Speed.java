@@ -25,11 +25,12 @@ public class Speed extends Mod implements CommandHandler {
     private final Listener motionUpdateListener;
     private final Listener moveListener;
     private int delay;
-    private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.BYPASS);
+    private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.NEW);
     private final Value<Boolean> fastLadder = new Value<>("speed_fast_ladder", true);
 
     public Speed() {
         super("Speed", ModType.MOVEMENT, Keyboard.KEY_F, 0xFFDC5B18);
+        setTag(String.format("%s \2477%s", getName(), currentMode.getValue().name()));
 
         Command.newCommand()
                 .cmd("speed")
@@ -41,8 +42,8 @@ public class Speed extends Mod implements CommandHandler {
         this.moveListener = new Listener<MoveEvent>() {
             @Override
             public void onEventCalled(MoveEvent event) {
-                if (BlockUtils.isOnLadder(mc.thePlayer) && fastLadder.getValue()) {
-                    mc.thePlayer.motionY += 0.1D;
+                if (BlockUtils.isOnLadder(mc.thePlayer) && mc.thePlayer.isCollidedHorizontally && fastLadder.getValue()) {
+                    mc.thePlayer.motionY = 0.1D;
                     event.setMotionY(event.getMotionY() * 2.25D);
                 }
             }
@@ -52,7 +53,7 @@ public class Speed extends Mod implements CommandHandler {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (currentMode.getValue() == Mode.BYPASS) {
+                    if (currentMode.getValue() == Mode.NEW) {
                         /* thanks anodise */
                         Step step = (Step) XIV.getInstance().getModManager().find("step");
                         boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
@@ -117,10 +118,9 @@ public class Speed extends Mod implements CommandHandler {
                             }
                         }
                         delay++;
-                    } else if (currentMode.getValue() == Mode.OLD || currentMode.getValue() == Mode.NORMAL) {
-                        double speed = currentMode.getValue() == Mode.NORMAL ? 1.3D : 3.05D;
+                    } else if (currentMode.getValue() == Mode.OLD) {
+                        double speed = 3.05D;
                         double slow = 1.425D;
-                        double offset = currentMode.getValue() == Mode.NORMAL ? 0.55D : 4.9D;
                         boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
                         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
                         boolean moving = movingForward && strafing || movingForward;
@@ -177,13 +177,8 @@ public class Speed extends Mod implements CommandHandler {
                         }
 
                         if (shouldSpeed) {
-                            if (!mc.thePlayer.isSprinting()) {
-                                offset += 0.8D;
-                            }
-
                             if (mc.thePlayer.moveStrafing != 0.0F) {
                                 speed -= 0.1D;
-                                offset += 0.5D;
                             }
 
                             if (mc.thePlayer.isInWater()) {
@@ -207,9 +202,6 @@ public class Speed extends Mod implements CommandHandler {
                                     break;
                                 case 4:
                                     mc.timer.timerSpeed = 1.0F;
-                                    if (currentMode.getValue() == Mode.NORMAL) {
-                                        mc.thePlayer.setPosition(mc.thePlayer.posX + mc.thePlayer.motionX / offset, mc.thePlayer.posY, mc.thePlayer.posZ + mc.thePlayer.motionZ / offset);
-                                    }
                                     delay = 0;
                                     break;
                             }
@@ -233,12 +225,8 @@ public class Speed extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
-                            case "bypass":
-                                currentMode.setValue(Mode.BYPASS);
-                                ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().name()));
-                                break;
-                            case "normal":
-                                currentMode.setValue(Mode.NORMAL);
+                            case "new":
+                                currentMode.setValue(Mode.NEW);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().name()));
                                 break;
                             case "old":
@@ -246,9 +234,10 @@ public class Speed extends Mod implements CommandHandler {
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().name()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: bypass, normal, old");
+                                ChatLogger.print("Invalid mode, valid: new, old");
                                 break;
                         }
+                        setTag(String.format("%s \2477%s", getName(), currentMode.getValue().name()));
                     } else {
                         ChatLogger.print("Invalid arguments, valid: speed mode <mode>");
                     }
@@ -276,8 +265,10 @@ public class Speed extends Mod implements CommandHandler {
         XIV.getInstance().getListenerManager().add(this.moveListener);
         XIV.getInstance().getListenerManager().add(this.motionUpdateListener);
 
-        Blocks.ice.slipperiness = 0.6F;
-        Blocks.packed_ice.slipperiness = 0.6F;
+        if (currentMode.getValue() == Mode.OLD) {
+            Blocks.ice.slipperiness = 0.6F;
+            Blocks.packed_ice.slipperiness = 0.6F;
+        }
     }
 
     @Override
@@ -287,11 +278,13 @@ public class Speed extends Mod implements CommandHandler {
 
         mc.timer.timerSpeed = 1.0F;
 
-        Blocks.ice.slipperiness = 0.98F;
-        Blocks.packed_ice.slipperiness = 0.98F;
+        if (currentMode.getValue() == Mode.OLD) {
+            Blocks.ice.slipperiness = 0.98F;
+            Blocks.packed_ice.slipperiness = 0.98F;
+        }
     }
 
     public enum Mode {
-        BYPASS, NORMAL, OLD
+        NEW, OLD
     }
 }

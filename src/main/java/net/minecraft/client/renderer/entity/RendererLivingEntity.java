@@ -85,6 +85,8 @@ public abstract class RendererLivingEntity extends Render {
      * double d2, float f, float f1). But JAD is pre 1.5 so doesn't do that.
      */
     public void doRender(EntityLivingBase entity, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_) {
+        RenderEntityEvent pre = new RenderEntityEvent(RenderEntityEvent.State.PRE, entity);
+        XIV.getInstance().getListenerManager().call(pre);
         GlStateManager.pushMatrix();
         GlStateManager.disableCull();
         this.mainModel.swingProgress = this.getSwingProgress(entity, p_76986_9_);
@@ -156,29 +158,13 @@ public abstract class RendererLivingEntity extends Render {
                 ESP esp = (ESP) XIV.getInstance().getModManager().find(ESP.class);
 
                 if (esp != null && esp.isEnabled() && esp.outline.getValue() && esp.isValidEntity(entity)) {
-
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
                     esp.renderOne();
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
                     esp.renderTwo();
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
                     esp.renderThree();
-
-                    final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
-                    float[] color = new float[]{0.0F, 0.9F, 0.0F};
-                    if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
-                        color = new float[]{0.3F, 0.7F, 1.0F};
-                    } else if (entity.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer)) {
-                        color = new float[]{1.0F, 0.9F, 0.0F};
-                    } else if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).hurtTime > 0) {
-                        color = new float[]{1.0F, 0.66F, 0.0F};
-                    } else if (distance <= 3.9F) {
-                        color = new float[]{0.9F, 0.0F, 0.0F};
-                    }
-
-                    GlStateManager.color(color[0], color[1], color[2], 1F);
-
-                    esp.renderFour();
+                    esp.renderFour(entity);
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
                     esp.renderFive();
 
@@ -211,6 +197,8 @@ public abstract class RendererLivingEntity extends Render {
         if (!this.field_177098_i) {
             super.doRender(entity, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
         }
+        RenderEntityEvent post = new RenderEntityEvent(RenderEntityEvent.State.POST, entity);
+        XIV.getInstance().getListenerManager().call(post);
     }
 
     protected boolean func_177088_c(EntityLivingBase p_177088_1_) {
@@ -271,13 +259,7 @@ public abstract class RendererLivingEntity extends Render {
                 GlStateManager.alphaFunc(516, 0.003921569F);
             }
 
-            RenderEntityEvent pre = new RenderEntityEvent(RenderEntityEvent.State.PRE, p_77036_1_);
-            XIV.getInstance().getListenerManager().call(pre);
-
             this.mainModel.render(p_77036_1_, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
-
-            RenderEntityEvent post = new RenderEntityEvent(RenderEntityEvent.State.POST, p_77036_1_);
-            XIV.getInstance().getListenerManager().call(post);
 
             if (var9) {
                 GlStateManager.disableBlend();
