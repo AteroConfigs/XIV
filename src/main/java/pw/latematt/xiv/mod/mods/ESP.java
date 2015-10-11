@@ -359,6 +359,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                     ChatLogger.print(String.format("ESP will %s wallhack.", (wallhack.getValue() ? "now" : "no longer")));
                     break;
                 default:
+
                     ChatLogger.print("Invalid action, valid: players, mobs, animals, items, enderpearls, boxes, tracerlines, spines, outline, wallhack");
                     break;
             }

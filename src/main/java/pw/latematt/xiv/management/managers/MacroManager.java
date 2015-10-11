@@ -12,14 +12,12 @@ import pw.latematt.xiv.event.events.KeyPressEvent;
 import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.macro.Macro;
 import pw.latematt.xiv.management.ListManager;
-import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.utils.ChatLogger;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
