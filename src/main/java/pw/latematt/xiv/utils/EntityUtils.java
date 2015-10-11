@@ -60,27 +60,6 @@ public class EntityUtils {
         return new float[]{yaw, pitch};
     }
 
-    public static boolean isInsideBlock() {
-        for(int x = MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().minX); x < MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().maxX) + 1; x++) {
-            for(int y = MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().minY); y < MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().maxY) + 1; y++) {
-                for(int z = MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().minZ); z < MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().maxZ) + 1; z++) {
-                    Block block = mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
-                    if(block != null) {
-                        AxisAlignedBB boundingBox = block.getCollisionBoundingBox(mc.theWorld, new BlockPos(x, y, z), mc.theWorld.getBlockState(new BlockPos(x, y, z)));
-                        if(block instanceof BlockHopper) {
-                            boundingBox = new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1);
-                        }
-
-                        if(boundingBox != null && mc.thePlayer.getEntityBoundingBox().intersectsWith(boundingBox)) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     public static float getAngle(float[] original, float[] rotations) {
         float curYaw = normalizeAngle(original[0]);
         rotations[0] = normalizeAngle(rotations[0]);

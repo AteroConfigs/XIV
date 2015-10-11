@@ -11,6 +11,7 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.PushOutOfBlocksEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
@@ -34,11 +35,11 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent> {
         blockAddBBListener = new Listener<BlockAddBBEvent>() {
             @Override
             public void onEventCalled(BlockAddBBEvent event) {
-                if(mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && EntityUtils.isInsideBlock()) {
+                if(mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && BlockUtils.isInsideBlock(mc.thePlayer)) {
                     event.setAxisAlignedBB(null);
                 }
 
-                if(mc.thePlayer.getEntityBoundingBox().maxY < event.getPos().getY() && !EntityUtils.isInsideBlock()) {
+                if(mc.thePlayer.getEntityBoundingBox().maxY < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer)) {
                     event.setAxisAlignedBB(null);
                 }
             }
@@ -59,7 +60,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent> {
 
         boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed();
 
-        if(mc.thePlayer.isCollidedHorizontally && !collided && mc.thePlayer.onGround && !EntityUtils.isInsideBlock() && moving) {
+        if(mc.thePlayer.isCollidedHorizontally && !collided && mc.thePlayer.onGround && !BlockUtils.isInsideBlock(mc.thePlayer) && moving) {
             if(mc.thePlayer.isCollidedHorizontally) {
                 collided = true;
             }

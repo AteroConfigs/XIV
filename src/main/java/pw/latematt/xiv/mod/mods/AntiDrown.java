@@ -7,6 +7,7 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
+import pw.latematt.xiv.utils.EntityUtils;
 
 /**
  * @author Jack
@@ -19,7 +20,7 @@ public class AntiDrown extends Mod implements Listener<MotionUpdateEvent> {
 
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
-        if (BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.isCollidedVertically && (mc.thePlayer.motionX == 0 && mc.thePlayer.motionZ == 0)) {
+        if (BlockUtils.isInLiquid(EntityUtils.getReference()) && EntityUtils.getReference().isCollidedVertically && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().motionZ == 0)) {
             event.setCancelled(true);
         }
     }
