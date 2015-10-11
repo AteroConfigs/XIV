@@ -1,6 +1,8 @@
 package pw.latematt.xiv.utils;
 
 import com.google.common.collect.Multimap;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockHopper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -8,7 +10,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.value.Value;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -19,6 +25,31 @@ import java.util.Map;
 public class EntityUtils {
     private static Minecraft mc = Minecraft.getMinecraft();
 
+    /**
+     *  Latematt's not gonna like how I do this, but if he doesn't like it then he can fix it. This is for tracers with freecam/other mods that have external cams.
+     */
+
+    private static boolean set = false;
+    private static Entity reference;
+
+    public static Entity getReference() {
+        return reference == null ? reference = mc.thePlayer : ((set || !((Value<Boolean>) XIV.getInstance().getValueManager().find("render_tracer_entity")).getValue()) ? mc.thePlayer : reference);
+    }
+
+    public static boolean isReferenceSet() {
+        return !set;
+    }
+
+    public static void setReference(Entity ref) {
+        reference = ref;
+
+        if(reference == mc.thePlayer) {
+            set = true;
+        }else{
+            set = false;
+        }
+    }
+
     public static float[] getEntityRotations(Entity target) {
         final double var4 = target.posX - mc.thePlayer.posX;
         final double var6 = target.posZ - mc.thePlayer.posZ;
@@ -27,6 +58,45 @@ public class EntityUtils {
         final float yaw = (float) (Math.atan2(var6, var4) * 180.0D / Math.PI) - 90.0F;
         final float pitch = (float) -(Math.atan2(var8, var14) * 180.0D / Math.PI);
         return new float[]{yaw, pitch};
+    }
+
+    public static boolean isInsideBlock() {
+        for(int x = MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().minX); x < MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().maxX) + 1; x++) {
+            for(int y = MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().minY); y < MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().maxY) + 1; y++) {
+                for(int z = MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().minZ); z < MathHelper.floor_double(mc.thePlayer.getEntityBoundingBox().maxZ) + 1; z++) {
+                    Block block = mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
+                    if(block != null) {
+                        AxisAlignedBB boundingBox = block.getCollisionBoundingBox(mc.theWorld, new BlockPos(x, y, z), mc.theWorld.getBlockState(new BlockPos(x, y, z)));
+                        if(block instanceof BlockHopper) {
+                            boundingBox = new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1);
+                        }
+
+                        if(boundingBox != null && mc.thePlayer.getEntityBoundingBox().intersectsWith(boundingBox)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static float getAngle(float[] original, float[] rotations) {
+        float curYaw = normalizeAngle(original[0]);
+        rotations[0] = normalizeAngle(rotations[0]);
+        float curPitch = normalizeAngle(original[1]);
+        rotations[1] = normalizeAngle(rotations[1]);
+        float fixedYaw = normalizeAngle(curYaw - rotations[0]);
+        float fixedPitch = normalizeAngle(curPitch - rotations[1]);
+        return Math.abs(normalizeAngle(fixedYaw) + Math.abs(fixedPitch));
+    }
+
+    public static float getAngle(float[] rotations) {
+        return getAngle(new float[] { mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch }, rotations);
+    }
+
+    public static float normalizeAngle(float angle) {
+        return MathHelper.wrapAngleTo180_float((angle + 180.0F) % 360.0F - 180.0F);
     }
 
     public static float getPitchChange(final EntityLivingBase entity){

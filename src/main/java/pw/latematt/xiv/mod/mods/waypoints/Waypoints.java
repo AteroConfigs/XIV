@@ -24,6 +24,7 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.waypoints.base.Waypoint;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
@@ -76,11 +77,15 @@ public class Waypoints extends Mod implements CommandHandler {
                     }
 
                     if (tracerLines.getValue()) {
+                        double x = EntityUtils.isReferenceSet() ? EntityUtils.getReference().lastTickPosX + (EntityUtils.getReference().posX - EntityUtils.getReference().lastTickPosX) * event.getPartialTicks() - mc.getRenderManager().renderPosX : 0;
+                        double y = EntityUtils.isReferenceSet() ? EntityUtils.getReference().lastTickPosY + (EntityUtils.getReference().posY - EntityUtils.getReference().lastTickPosY) * event.getPartialTicks() - mc.getRenderManager().renderPosY : 0;
+                        double z = EntityUtils.isReferenceSet() ? EntityUtils.getReference().lastTickPosZ + (EntityUtils.getReference().posZ - EntityUtils.getReference().lastTickPosZ) * event.getPartialTicks() - mc.getRenderManager().renderPosZ : 0;
+
                         GlStateManager.pushMatrix();
                         GlStateManager.loadIdentity();
                         mc.entityRenderer.orientCamera(event.getPartialTicks());
                         GlStateManager.func_179090_x();
-                        drawTracerLines(waypoint);
+                        drawTracerLines(waypoint, x, y, z);
                         GlStateManager.popMatrix();
                     }
 
@@ -178,7 +183,7 @@ public class Waypoints extends Mod implements CommandHandler {
         RenderUtils.drawFilledBox(box);
     }
 
-    private void drawTracerLines(Waypoint waypoint) {
+    private void drawTracerLines(Waypoint waypoint, double x2, double y2, double z2) {
         double x = waypoint.getX() + 0.5F - mc.getRenderManager().renderPosX;
         double y = waypoint.getY() - mc.getRenderManager().renderPosY;
         double z = waypoint.getZ() + 0.5F - mc.getRenderManager().renderPosZ;
@@ -186,7 +191,7 @@ public class Waypoints extends Mod implements CommandHandler {
         Tessellator var2 = Tessellator.getInstance();
         WorldRenderer var3 = var2.getWorldRenderer();
         var3.startDrawing(2);
-        var3.addVertex(0, mc.thePlayer.getEyeHeight(), 0);
+        var3.addVertex(x2, y2 + mc.thePlayer.getEyeHeight(), z2);
         var3.addVertex(x, y, z);
         var2.draw();
     }
@@ -207,7 +212,7 @@ public class Waypoints extends Mod implements CommandHandler {
             y *= d;
         }
 
-        float var13 = (float) dist / 5 <= 2 ? 2.0F : (float) dist / 5;
+        float var13 = ((float) dist / 5 <= 2 ? 2.0F : (float) dist / 5) * ((Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_size")).getValue().floatValue();
         float var14 = 0.016666668F * var13;
         if (var14 > 0.3F) {
             var14 = 0.3F;
@@ -228,7 +233,7 @@ public class Waypoints extends Mod implements CommandHandler {
         GlStateManager.func_179090_x();
         worldRenderer.startDrawingQuads();
         int var18 = mc.fontRendererObj.getStringWidth(text) / 2;
-        worldRenderer.func_178960_a(0.0F, 0.0F, 0.0F, 0.25F);
+        worldRenderer.func_178960_a(0.0F, 0.0F, 0.0F, ((Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_opacity")).getValue().floatValue());
         worldRenderer.addVertex(-var18 - 2, -2, 0.0D);
         worldRenderer.addVertex(-var18 - 2, 9, 0.0D);
         worldRenderer.addVertex(var18 + 2, 9, 0.0D);

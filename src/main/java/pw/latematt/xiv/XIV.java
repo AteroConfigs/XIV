@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import pw.latematt.xiv.macro.Macro;
 import pw.latematt.xiv.management.managers.*;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
+import pw.latematt.xiv.utils.RenderUtils;
 
 /**
  * @author Matthew
@@ -84,6 +85,9 @@ public class XIV {
         /* call setup on all managers */
         /* the order that these are called in is important, do not change! */
         /* setup is not required with all managers */
+
+        RenderUtils.init(); // Prevents crashing with values that aren't initialized.
+
         fileManager.setup();
         commandManager.setup();
         listenerManager.setup();

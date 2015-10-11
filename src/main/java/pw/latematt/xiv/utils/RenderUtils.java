@@ -15,6 +15,17 @@ public class RenderUtils {
     private static final Value<Float> LINE_WIDTH = new Value<>("render_line_width", 1.0F);
     private static final Value<Boolean> ANTIALIASING = new Value<>("render_anti_aliasing", false);
     private static final Value<Boolean> WORLDBOBBING = new Value<>("render_world_bobbing", false);
+    private static final Value<Double> NAMETAG_OPACITY = new Value<>("render_nametag_opacity", 0.25D);
+    private static final Value<Double> NAMETAG_SIZE = new Value<>("render_nametag_size", 1.0D);
+    private static final Value<Boolean> TRACER_ENTITY = new Value<>("render_tracer_entity", true);
+
+    public static void init() {
+        ANTIALIASING.getValue();
+        WORLDBOBBING.getValue();
+        NAMETAG_OPACITY.getValue();
+        NAMETAG_SIZE.getValue();
+        TRACER_ENTITY.getValue();
+    }
 
     public static void beginGl() {
         GlStateManager.pushMatrix();
