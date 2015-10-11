@@ -29,6 +29,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.AttackEntityEvent;
 import pw.latematt.xiv.event.events.BreakingBlockEvent;
 import pw.latematt.xiv.event.events.ClickBlockEvent;
 
@@ -502,6 +503,13 @@ public class PlayerControllerMP
      */
     public void attackEntity(EntityPlayer playerIn, Entity targetEntity)
     {
+        final AttackEntityEvent event = new AttackEntityEvent(targetEntity);
+        XIV.getInstance().getListenerManager().call(event);
+
+        if (event.isCancelled()) {
+            return;
+        }
+
         this.syncCurrentPlayItem();
         this.netClientHandler.addToSendQueue(new C02PacketUseEntity(targetEntity, C02PacketUseEntity.Action.ATTACK));
 
