@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.NametagRenderEvent;
+import pw.latematt.xiv.event.events.RenderEntityEvent;
 import pw.latematt.xiv.mod.mods.ESP;
 
 import java.nio.FloatBuffer;
@@ -269,7 +270,13 @@ public abstract class RendererLivingEntity extends Render {
                 GlStateManager.alphaFunc(516, 0.003921569F);
             }
 
+            RenderEntityEvent pre = new RenderEntityEvent(RenderEntityEvent.State.PRE, p_77036_1_);
+            XIV.getInstance().getListenerManager().call(pre);
+
             this.mainModel.render(p_77036_1_, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
+
+            RenderEntityEvent post = new RenderEntityEvent(RenderEntityEvent.State.POST, p_77036_1_);
+            XIV.getInstance().getListenerManager().call(post);
 
             if (var9) {
                 GlStateManager.disableBlend();
