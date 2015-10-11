@@ -57,6 +57,8 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
         if (event.getEntity() != mc.thePlayer)
             return;
 
+
+
         editPackets = !mc.thePlayer.isCollidedHorizontally && !BlockUtils.isInLiquid(mc.thePlayer);
         event.setCancelled(!editPackets);
     }
