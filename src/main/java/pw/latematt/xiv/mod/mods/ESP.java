@@ -263,7 +263,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                     ChatLogger.print(String.format("ESP will %s display player spines.", (spines.getValue() ? "now" : "no longer")));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: players, mobs, animals, items, enderpearls, boxes, tracerlines, spines");
+                    ChatLogger.print("Invalid action, valid: players, mobs, animals, items, enderpearls, boxes, tracerlines, spines, outline");
                     break;
             }
         } else {
