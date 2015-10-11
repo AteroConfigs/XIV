@@ -74,7 +74,7 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
                     ChatLogger.print(String.format("Fly will %s take damage on enable.", doDamage.getValue() ? "now" : "no longer"));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: damage");
+                    ChatLogger.print("Invalid action, valid: damage, vertical");
                     break;
             }
         } else {
