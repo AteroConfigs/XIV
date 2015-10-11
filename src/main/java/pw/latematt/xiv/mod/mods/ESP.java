@@ -1,6 +1,7 @@
 package pw.latematt.xiv.mod.mods;
 
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderPearl;
@@ -15,13 +16,18 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
+import pw.latematt.xiv.event.events.BlockAddBBEvent;
 import pw.latematt.xiv.event.events.Render3DEvent;
+import pw.latematt.xiv.event.events.RenderEntityEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
+
+import java.util.Objects;
 
 /**
  * @author Matthew
@@ -35,8 +41,11 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     public final Value<Boolean> enderpearls = new Value<>("esp_enderpearls", false);
     public final Value<Boolean> boxes = new Value<>("esp_boxes", true);
     public final Value<Boolean> outline = new Value<>("esp_outline", false);
+    public final Value<Boolean> wallhack = new Value<>("esp_wallhack", true);
     public final Value<Boolean> spines = new Value<>("esp_spines", false);
     public final Value<Boolean> tracerLines = new Value<>("esp_tracer_lines", false);
+
+    private final Listener renderEntityListener;
 
     public ESP() {
         super("ESP", ModType.RENDER, Keyboard.KEY_I);
@@ -47,6 +56,24 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 .arguments("<action>")
                 .handler(this)
                 .build();
+
+        renderEntityListener = new Listener<RenderEntityEvent>() {
+            @Override
+            public void onEventCalled(RenderEntityEvent event) {
+                if(!wallhack.getValue() || !isValidEntity(event.getEntity()))
+                    return;
+
+                if(event.getState() == RenderEntityEvent.State.PRE) {
+                    GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
+                    GL11.glPolygonOffset(1.0F, -10000000.0F);
+                }else{
+                    GL11.glPolygonOffset(1.0F, 1000000.0F);
+                    GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
+                }
+            }
+        };
+
+
     }
 
     public void onEventCalled(Render3DEvent event) {
@@ -119,7 +146,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             box = AxisAlignedBB.fromBounds(x - entity.width + 0.2D, y, z - entity.width + 0.2D, x + entity.width - 0.2D, y + entity.height + (entity.isSneaking() ? 0.02D : 0.2D), z + entity.width - 0.2D);
         }
 
-        final float distance = mc.thePlayer.getDistanceToEntity(entity);
+        final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
         float[] color = new float[]{0.0F, 0.9F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.3F, 0.7F, 1.0F};
@@ -138,7 +165,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     }
 
     private void drawTracerLines(Entity entity, double x, double y, double z, double x2, double y2, double z2) {
-        final float distance = mc.thePlayer.getDistanceToEntity(entity);
+        final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
         float[] color = new float[]{0.0F, 0.90F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.30F, 0.7F, 1.0F};
@@ -158,7 +185,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     }
 
     private void drawSpines(Entity entity, double x, double y, double z) {
-        final float distance = mc.thePlayer.getDistanceToEntity(entity);
+        final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
         float[] color = new float[]{0.0F, 0.90F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.30F, 0.7F, 1.0F};
@@ -262,6 +289,15 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                     }
                     ChatLogger.print(String.format("ESP will %s display player spines.", (spines.getValue() ? "now" : "no longer")));
                     break;
+                case "chams":
+                case "wallhack":
+                    if (arguments.length >= 3) {
+                        wallhack.setValue(Boolean.parseBoolean(arguments[2]));
+                    } else {
+                        wallhack.setValue(!wallhack.getValue());
+                    }
+                    ChatLogger.print(String.format("ESP will %s wallhack.", (wallhack.getValue() ? "now" : "no longer")));
+                    break;
                 default:
                     ChatLogger.print("Invalid action, valid: players, mobs, animals, items, enderpearls, boxes, tracerlines, spines");
                     break;
@@ -274,11 +310,13 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
+        XIV.getInstance().getListenerManager().add(renderEntityListener);
     }
 
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
+        XIV.getInstance().getListenerManager().remove(renderEntityListener);
     }
 
     public static void renderOne() {

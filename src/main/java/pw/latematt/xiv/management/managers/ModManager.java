@@ -44,6 +44,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new BlockBBFixer());
         contents.add(new Criticals());
         contents.add(new ESP());
+        contents.add(new FastPlace());
         contents.add(new FastUse());
         contents.add(new Fly());
         contents.add(new FovFixer());
