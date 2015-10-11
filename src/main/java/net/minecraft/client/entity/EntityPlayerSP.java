@@ -53,8 +53,8 @@ import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
+import pw.latematt.xiv.event.events.PushOutOfBlocksEvent;
 import pw.latematt.xiv.event.events.UsingItemSlowdownEvent;
-import pw.latematt.xiv.mod.mods.Freecam;
 
 public class EntityPlayerSP extends AbstractClientPlayer
 {
@@ -421,7 +421,10 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
     protected boolean pushOutOfBlocks(double x, double y, double z)
     {
-        if (this.noClip || XIV.getInstance().getModManager().find(Freecam.class).isEnabled())
+        PushOutOfBlocksEvent event = new PushOutOfBlocksEvent();
+        XIV.getInstance().getListenerManager().call(event);
+
+        if (this.noClip || event.isCancelled())
         {
             return false;
         }
