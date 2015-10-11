@@ -76,7 +76,7 @@ import net.minecraft.world.LockCode;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.mod.mods.NoSlowdown;
+import pw.latematt.xiv.mod.mods.movement.NoSlowdown;
 
 public abstract class EntityPlayer extends EntityLivingBase
 {

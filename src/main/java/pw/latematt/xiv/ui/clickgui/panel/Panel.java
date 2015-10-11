@@ -2,7 +2,7 @@ package pw.latematt.xiv.ui.clickgui.panel;
 
 import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.mod.mods.ClickGUI;
+import pw.latematt.xiv.mod.mods.none.ClickGUI;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.element.elements.ValueButton;
 import pw.latematt.xiv.value.Value;

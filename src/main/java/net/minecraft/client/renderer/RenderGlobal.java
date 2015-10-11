@@ -103,7 +103,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.mod.mods.Freecam;
+import pw.latematt.xiv.mod.mods.render.Freecam;
 
 public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListener
 {

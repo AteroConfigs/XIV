@@ -48,7 +48,6 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.EntityStepEvent;
 import pw.latematt.xiv.event.events.MoveEvent;
 import pw.latematt.xiv.event.events.PushOutOfBlocksEvent;
-import pw.latematt.xiv.mod.mods.Freecam;
 
 public abstract class Entity implements ICommandSender
 {

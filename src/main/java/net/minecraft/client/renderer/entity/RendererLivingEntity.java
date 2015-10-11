@@ -22,8 +22,7 @@ import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.NametagRenderEvent;
 import pw.latematt.xiv.event.events.RenderEntityEvent;
-import pw.latematt.xiv.mod.mods.ESP;
-import pw.latematt.xiv.utils.EntityUtils;
+import pw.latematt.xiv.mod.mods.render.ESP;
 
 import java.nio.FloatBuffer;
 import java.util.Iterator;
