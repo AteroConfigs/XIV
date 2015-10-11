@@ -52,6 +52,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Jesus());
         contents.add(new KillAura());
         contents.add(new DashNames());
+        contents.add(new NameProtect());
         contents.add(new Nametags());
         contents.add(new NoFall());
         contents.add(new NoRotationSet());

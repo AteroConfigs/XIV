@@ -19,6 +19,7 @@ import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.NametagRenderEvent;
 import pw.latematt.xiv.event.events.Render3DEvent;
+import pw.latematt.xiv.event.events.RenderStringEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
@@ -85,7 +86,10 @@ public class Nametags extends Mod implements CommandHandler {
         String entityName = entity.getDisplayName().getFormattedText();
 
         if (XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
-            entityName = XIV.getInstance().getFriendManager().replace(entityName, false);
+            RenderStringEvent event = new RenderStringEvent(entityName, RenderStringEvent.State.NAMETAG);
+            XIV.getInstance().getListenerManager().call(event);
+
+            entityName = event.getString();
         }
 
         if (getNametagColor(entity) != 0xFFFFFFFF) {

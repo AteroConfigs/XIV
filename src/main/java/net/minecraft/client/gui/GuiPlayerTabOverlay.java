@@ -20,6 +20,7 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.WorldSettings;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.RenderStringEvent;
 
 public class GuiPlayerTabOverlay extends Gui
 {
@@ -146,8 +147,12 @@ public class GuiPlayerTabOverlay extends Gui
             for (var19 = var17.iterator(); var19.hasNext(); var15 += this.field_175250_f.fontRendererObj.FONT_HEIGHT)
             {
                 var20 = (String)var19.next();
-                var21 = this.field_175250_f.fontRendererObj.getStringWidth(var20);
-                this.field_175250_f.fontRendererObj.drawStringWithShadow(var20, (float)(p_175249_1_ / 2 - var21 / 2), (float)var15, -1);
+
+                RenderStringEvent tab = new RenderStringEvent(var20, RenderStringEvent.State.TAB);
+                XIV.getInstance().getListenerManager().call(tab);
+
+                var21 = this.field_175250_f.fontRendererObj.getStringWidth(tab.getString());
+                this.field_175250_f.fontRendererObj.drawStringWithShadow(tab.getString(), (float)(p_175249_1_ / 2 - var21 / 2), (float)var15, -1);
             }
 
             ++var15;
@@ -172,6 +177,11 @@ public class GuiPlayerTabOverlay extends Gui
                 NetworkPlayerInfo var24 = (NetworkPlayerInfo)var5.get(var30);
                 String var25 = this.getPlayerName(var24);
 
+                RenderStringEvent tab = new RenderStringEvent(var25, RenderStringEvent.State.TAB);
+                XIV.getInstance().getListenerManager().call(tab);
+
+                var25 = tab.getString();
+
                 if (var11)
                 {
                     this.field_175250_f.getTextureManager().bindTexture(var24.func_178837_g());
@@ -188,7 +198,6 @@ public class GuiPlayerTabOverlay extends Gui
 
                 if (var24.getGameType() == WorldSettings.GameType.SPECTATOR)
                 {
-                    var25 = EnumChatFormatting.ITALIC + var25;
                     this.field_175250_f.fontRendererObj.drawStringWithShadow(var25, (float)var22, (float)var23, -1862270977);
                 }
                 else
@@ -219,8 +228,12 @@ public class GuiPlayerTabOverlay extends Gui
             for (var19 = var18.iterator(); var19.hasNext(); var15 += this.field_175250_f.fontRendererObj.FONT_HEIGHT)
             {
                 var20 = (String)var19.next();
-                var21 = this.field_175250_f.fontRendererObj.getStringWidth(var20);
-                this.field_175250_f.fontRendererObj.drawStringWithShadow(var20, (float)(p_175249_1_ / 2 - var21 / 2), (float)var15, -1);
+
+                RenderStringEvent tab = new RenderStringEvent(var20, RenderStringEvent.State.TAB);
+                XIV.getInstance().getListenerManager().call(tab);
+
+                var21 = this.field_175250_f.fontRendererObj.getStringWidth(tab.getString());
+                this.field_175250_f.fontRendererObj.drawStringWithShadow(tab.getString(), (float)(p_175249_1_ / 2 - var21 / 2), (float)var15, -1);
             }
         }
     }
@@ -350,7 +363,10 @@ public class GuiPlayerTabOverlay extends Gui
                         var14 = var14 + "hp";
                     }
 
-                    this.field_175250_f.fontRendererObj.drawStringWithShadow(var14, (float)((p_175247_5_ + p_175247_4_) / 2 - this.field_175250_f.fontRendererObj.getStringWidth(var14) / 2), (float)p_175247_2_, var13);
+                    RenderStringEvent tab = new RenderStringEvent(var14, RenderStringEvent.State.TAB);
+                    XIV.getInstance().getListenerManager().call(tab);
+
+                    this.field_175250_f.fontRendererObj.drawStringWithShadow(tab.getString(), (float)((p_175247_5_ + p_175247_4_) / 2 - this.field_175250_f.fontRendererObj.getStringWidth(tab.getString()) / 2), (float)p_175247_2_, var13);
                 }
             }
         }
