@@ -31,7 +31,7 @@ public class Jesus extends Mod {
         blockAddBBListener = new Listener<BlockAddBBEvent>() {
             @Override
             public void onEventCalled(BlockAddBBEvent event) {
-                if (event.getBlock() instanceof BlockLiquid) {
+                if (event.getBlock() instanceof BlockLiquid && event.getBlock() != null) {
                     IBlockState state = mc.theWorld.getBlockState(event.getPos());
 
                     if(state == null) {
