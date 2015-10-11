@@ -27,10 +27,10 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
         super("ArmorBreaker", ModType.COMBAT, Keyboard.KEY_NONE, 0xFF808080);
 
         Command.newCommand()
-                .cmd("armorbreakerpackets")
-                .description("Command to set ArmorBreaker packets.")
+                .cmd("armorbreaker")
+                .description("Base command for ArmorBreaker mod.")
                 .arguments("<number>")
-                .aliases("abp")
+                .aliases("ab")
                 .handler(this).build();
     }
 
@@ -74,23 +74,33 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
 
     @Override
     public void onCommandRan(String message) {
-        final String[] arguments = message.split(" ");
-
-        try {
-            String newPacketsString = arguments[1];
-            if (arguments.length >= 3) {
-                try {
-                    int newPackets = Integer.parseInt(newPacketsString);
-                    packets.setValue(newPackets);
-                    ChatLogger.print(String.format("Armor Breaker Packets set to %s", packets.getValue()));
-                } catch (NumberFormatException e) {
-                    ChatLogger.print(String.format("\"%s\" is not a number.", newPacketsString));
-                }
-            } else {
-                ChatLogger.print("Invalid arguments, valid: armorbreaker packets <number>");
+        String[] arguments = message.split(" ");
+        if (arguments.length >= 2) {
+            String action = arguments[1];
+            switch (action.toLowerCase()) {
+                case "packets":
+                    if (arguments.length >= 3) {
+                        String newPacketsString = arguments[2];
+                        try {
+                            int newPackets = Integer.parseInt(newPacketsString);
+                            if (newPackets < 0) {
+                                newPackets = 0;
+                            }
+                            packets.setValue(newPackets);
+                            ChatLogger.print(String.format("ArmorBreaker Packet Amount set to %s", packets.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newPacketsString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: armorbreaker packets <number>");
+                    }
+                    break;
+                default:
+                    ChatLogger.print("Invalid action, valid: packets");
+                    break;
             }
-        }catch(Exception e) {
-            ChatLogger.print("Invalid arguments, valid: armorbreaker packets <number>");
+        } else {
+            ChatLogger.print("Invalid arguments, valid: armorbreaker <action>");
         }
     }
 
