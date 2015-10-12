@@ -6,7 +6,6 @@ import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
@@ -21,9 +20,9 @@ import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.combat.aura.mode.AuraMode;
 import pw.latematt.xiv.mod.mods.combat.aura.mode.modes.Singular;
 import pw.latematt.xiv.mod.mods.combat.aura.mode.modes.Switch;
+import pw.latematt.xiv.mod.mods.player.AutoHeal;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
-import pw.latematt.xiv.utils.Timer;
 import pw.latematt.xiv.value.Value;
 
 import java.util.Random;
@@ -65,6 +64,8 @@ public class KillAura extends Mod implements CommandHandler {
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
+                if (isHealing())
+                    return;
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
                     mode.getValue().onPreMotionUpdate(event);
                 } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
@@ -78,6 +79,8 @@ public class KillAura extends Mod implements CommandHandler {
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
+                    if (isHealing())
+                        return;
                     mode.getValue().onMotionPacket(player);
                 }
             }
@@ -376,6 +379,11 @@ public class KillAura extends Mod implements CommandHandler {
 
     public Long getDelay() {
         return randomDelay.getValue() == 0 ? delay.getValue() : Long.valueOf(delay.getValue() + random.nextInt(randomDelay.getValue().intValue()));
+    }
+
+    public boolean isHealing() {
+        AutoHeal autoHeal = (AutoHeal) XIV.getInstance().getModManager().find("autoheal");
+        return autoHeal != null && autoHeal.isHealing();
     }
 
     @Override

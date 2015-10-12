@@ -19,7 +19,7 @@ import java.util.Map;
  * @author Matthew
  */
 public class EntityUtils {
-    private static Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
     /**
      * Latematt's not gonna like how I do this, but if he doesn't like it then he can fix it. This is for tracers with freecam/other mods that have external cams.
@@ -30,7 +30,7 @@ public class EntityUtils {
     private static Entity reference;
 
     public static Entity getReference() {
-        return reference == null ? reference = mc.thePlayer : ((set || !((Value<Boolean>) XIV.getInstance().getValueManager().find("render_tracer_entity")).getValue()) ? mc.thePlayer : reference);
+        return reference == null ? reference = MINECRAFT.thePlayer : ((set || !((Value<Boolean>) XIV.getInstance().getValueManager().find("render_tracer_entity")).getValue()) ? MINECRAFT.thePlayer : reference);
     }
 
     public static boolean isReferenceSet() {
@@ -40,13 +40,13 @@ public class EntityUtils {
     public static void setReference(Entity ref) {
         reference = ref;
 
-        set = reference == mc.thePlayer;
+        set = reference == MINECRAFT.thePlayer;
     }
 
     public static float[] getEntityRotations(Entity target) {
-        final double var4 = target.posX - mc.thePlayer.posX;
-        final double var6 = target.posZ - mc.thePlayer.posZ;
-        final double var8 = target.posY + target.getEyeHeight() / 1.3 - (mc.thePlayer.posY + mc.thePlayer.getEyeHeight());
+        final double var4 = target.posX - MINECRAFT.thePlayer.posX;
+        final double var6 = target.posZ - MINECRAFT.thePlayer.posZ;
+        final double var8 = target.posY + target.getEyeHeight() / 1.3 - (MINECRAFT.thePlayer.posY + MINECRAFT.thePlayer.getEyeHeight());
         final double var14 = MathHelper.sqrt_double(var4 * var4 + var6 * var6);
         final float yaw = (float) (Math.atan2(var6, var4) * 180.0D / Math.PI) - 90.0F;
         final float pitch = (float) -(Math.atan2(var8, var14) * 180.0D / Math.PI);
@@ -64,7 +64,7 @@ public class EntityUtils {
     }
 
     public static float getAngle(float[] rotations) {
-        return getAngle(new float[]{mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch}, rotations);
+        return getAngle(new float[]{MINECRAFT.thePlayer.rotationYaw, MINECRAFT.thePlayer.rotationPitch}, rotations);
     }
 
     public static float normalizeAngle(float angle) {
@@ -72,17 +72,17 @@ public class EntityUtils {
     }
 
     public static float getPitchChange(final EntityLivingBase entity) {
-        final double deltaX = entity.posX - mc.thePlayer.posX;
-        final double deltaZ = entity.posZ - mc.thePlayer.posZ;
-        final double deltaY = entity.posY - 2.2D + entity.getEyeHeight() - mc.thePlayer.posY;
+        final double deltaX = entity.posX - MINECRAFT.thePlayer.posX;
+        final double deltaZ = entity.posZ - MINECRAFT.thePlayer.posZ;
+        final double deltaY = entity.posY - 2.2D + entity.getEyeHeight() - MINECRAFT.thePlayer.posY;
         final double distanceXZ = MathHelper.sqrt_double(deltaX * deltaX + deltaZ * deltaZ);
         final double pitchToEntity = -Math.toDegrees(Math.atan(deltaY / distanceXZ));
-        return -MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationPitch - (float) pitchToEntity);
+        return -MathHelper.wrapAngleTo180_float(MINECRAFT.thePlayer.rotationPitch - (float) pitchToEntity);
     }
 
     public static float getYawChange(final EntityLivingBase entity) {
-        final double deltaX = entity.posX - mc.thePlayer.posX;
-        final double deltaZ = entity.posZ - mc.thePlayer.posZ;
+        final double deltaX = entity.posX - MINECRAFT.thePlayer.posX;
+        final double deltaZ = entity.posZ - MINECRAFT.thePlayer.posZ;
         double yawToEntity;
 
         if ((deltaZ < 0.0D) && (deltaX < 0.0D)) {
@@ -95,21 +95,21 @@ public class EntityUtils {
             }
         }
 
-        return MathHelper.wrapAngleTo180_float(-(mc.thePlayer.rotationYaw - (float) yawToEntity));
+        return MathHelper.wrapAngleTo180_float(-(MINECRAFT.thePlayer.rotationYaw - (float) yawToEntity));
     }
 
     public static int getBestWeapon(EntityLivingBase target) {
         // TODO: Issue #7 https://gitlab.com/latematt/XIV/issues/7
 
-        final int originalSlot = mc.thePlayer.inventory.currentItem;
+        final int originalSlot = MINECRAFT.thePlayer.inventory.currentItem;
         int weaponSlot = -1;
         float weaponDamage = 1.0F;
         for (byte slot = 0; slot < 9; slot = (byte) (slot + 1)) {
-            mc.thePlayer.inventory.currentItem = slot;
-            final ItemStack itemStack = mc.thePlayer.getHeldItem();
+            MINECRAFT.thePlayer.inventory.currentItem = slot;
+            final ItemStack itemStack = MINECRAFT.thePlayer.getHeldItem();
             if (itemStack != null) {
                 float damage = getItemDamage(itemStack);
-                damage += EnchantmentHelper.func_152377_a(mc.thePlayer.getHeldItem(),
+                damage += EnchantmentHelper.func_152377_a(MINECRAFT.thePlayer.getHeldItem(),
                         target.getCreatureAttribute());
                 if (damage > weaponDamage) {
                     weaponDamage = damage;
@@ -146,10 +146,10 @@ public class EntityUtils {
     }
 
     public static void damagePlayer() {
-        if (mc != null && mc.thePlayer != null && mc.getNetHandler() != null) {
+        if (MINECRAFT != null && MINECRAFT.thePlayer != null && MINECRAFT.getNetHandler() != null) {
             for (int i = 0; i < 81; i++) {
-                mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.05D, mc.thePlayer.posZ, false));
-                mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+                MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY + 0.05D, MINECRAFT.thePlayer.posZ, false));
+                MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY, MINECRAFT.thePlayer.posZ, false));
             }
         }
     }

@@ -6,6 +6,10 @@ package pw.latematt.xiv.utils;
 public class Timer {
     private long lastMS;
 
+    public Timer() {
+        reset();
+    }
+
     public long getCurrentMS() {
         return System.nanoTime() / 1000000;
     }
