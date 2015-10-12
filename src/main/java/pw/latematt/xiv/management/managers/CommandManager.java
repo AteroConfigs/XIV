@@ -53,10 +53,10 @@ public class CommandManager extends ListManager<Command> {
     public void setup() {
         // setup is not required in command management, commands will add themselves as they are built
         // however, we do add certain commands here
-        XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "..");
+        XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         Command.newCommand()
                 .cmd("help")
-                .description("Provides help with commands")
+                .description("Provides help with commands.")
                 .aliases("cmds", "?")
                 .arguments("[command]")
                 .handler(message -> {
@@ -89,7 +89,7 @@ public class CommandManager extends ListManager<Command> {
                 }).build();
         Command.newCommand()
                 .cmd("vclip")
-                .description("Allows you to teleport up and down")
+                .description("Allows you to teleport up and down.")
                 .aliases("vc", "up", "down")
                 .arguments("<blocks>")
                 .handler(message -> {
@@ -109,14 +109,14 @@ public class CommandManager extends ListManager<Command> {
                 }).build();
         Command.newCommand()
                 .cmd("damage")
-                .description("Force damage")
+                .description("Force damage.")
                 .aliases("dmg")
                 .handler(message -> {
                     EntityUtils.damagePlayer();
                 }).build();
         Command.newCommand()
                 .cmd("render")
-                .description("Manages options for render mods")
+                .description("Manages options for render mods.")
                 .arguments("<action>")
                 .aliases("rnd")
                 .handler(message -> {
@@ -241,7 +241,7 @@ public class CommandManager extends ListManager<Command> {
                 }).build();
         Command.newCommand()
                 .cmd("say")
-                .description("Makes you send a chat message")
+                .description("Makes you send a chat message.")
                 .arguments("<message>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
@@ -253,7 +253,7 @@ public class CommandManager extends ListManager<Command> {
                 }).build();
         Command.newCommand()
                 .cmd("echo")
-                .description("Makes a client message appear")
+                .description("Makes a client message appear.")
                 .arguments("<message>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
@@ -266,7 +266,7 @@ public class CommandManager extends ListManager<Command> {
         Command.newCommand()
                 .cmd("clearchat")
                 .aliases("cc")
-                .description("Clear your chat")
+                .description("Clear your chat.")
                 .arguments("<action>")
                 .handler(message -> {
                     mc.ingameGUI.getChatGUI().clearChatMessages();
@@ -274,15 +274,15 @@ public class CommandManager extends ListManager<Command> {
         Command.newCommand()
                 .cmd("potion")
                 .aliases("pot")
-                .description("Enhance your potions")
+                .description("Enhance your potions.")
                 .arguments("<effect> <level>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
                     if (mc.thePlayer.getHeldItem() == null || mc.thePlayer.getHeldItem().getItem() != Items.potionitem) {
-                        ChatLogger.print("You must be holding a potion to enhance potions");
+                        ChatLogger.print("You must be holding a potion to enhance potions.");
                     } else {
                         if (!mc.thePlayer.capabilities.isCreativeMode) {
-                            ChatLogger.print("You must be in creative mode to enhance potions");
+                            ChatLogger.print("You must be in creative mode to enhance potions.");
                         } else {
                             try {
                                 if (arguments[1].equalsIgnoreCase("clear")) {
@@ -311,7 +311,7 @@ public class CommandManager extends ListManager<Command> {
                                             }
                                         }
 
-                                        ChatLogger.print("Enchanted your current item with every enchantment");
+                                        ChatLogger.print("Enchanted your current item with every enchantment.");
                                     } else {
                                         Potion potion = null;
 
@@ -349,15 +349,15 @@ public class CommandManager extends ListManager<Command> {
         Command.newCommand()
                 .cmd("rename")
                 .aliases("ren")
-                .description("Rename your items")
+                .description("Rename your items.")
                 .arguments("<name>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
                     if (mc.thePlayer.getHeldItem() == null) {
-                        ChatLogger.print("You must be holding an item to rename");
+                        ChatLogger.print("You must be holding an item to rename.");
                     } else {
                         if (!mc.thePlayer.capabilities.isCreativeMode) {
-                            ChatLogger.print("You must be in creative mode to rename");
+                            ChatLogger.print("You must be in creative mode to rename.");
                         } else {
                             if (arguments.length > 1) {
                                 String name = message.substring(arguments[0].length() + 1, message.length()).replaceAll("&", "§");
@@ -368,7 +368,7 @@ public class CommandManager extends ListManager<Command> {
                                     mc.thePlayer.getHeldItem().clearCustomName();
                                 }
 
-                                ChatLogger.print("Renamed current item to: " + mc.thePlayer.getHeldItem().getDisplayName() + "§r");
+                                ChatLogger.print("Renamed current item to: " + mc.thePlayer.getHeldItem().getDisplayName() + "§r.");
                             } else {
                                 ChatLogger.print("Invalid arguments, valid: rename <name>");
                             }
@@ -378,16 +378,16 @@ public class CommandManager extends ListManager<Command> {
         Command.newCommand()
                 .cmd("enchant")
                 .aliases("enc")
-                .description("Enchante your items")
+                .description("Enchante your items.")
                 .arguments("<enchantment> <level>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
 
                     if (mc.thePlayer.getHeldItem() == null) {
-                        ChatLogger.print("You must be holding an item to enchant");
+                        ChatLogger.print("You must be holding an item to enchant.");
                     } else {
                         if (!mc.thePlayer.capabilities.isCreativeMode) {
-                            ChatLogger.print("You must be in creative mode to enchant");
+                            ChatLogger.print("You must be in creative mode to enchant.");
                         } else {
                             try {
                                 try {
@@ -401,7 +401,7 @@ public class CommandManager extends ListManager<Command> {
                                                 mc.thePlayer.getHeldItem().addEnchantment(enchant, level);
                                             }
 
-                                            ChatLogger.print("Enchanted your current item with every enchantment");
+                                            ChatLogger.print("Enchanted your current item with every enchantment.");
                                         } else {
                                             Enchantment enchant = null;
 
@@ -432,31 +432,31 @@ public class CommandManager extends ListManager<Command> {
         Command.newCommand()
                 .cmd("copyip")
                 .aliases("ci")
-                .description("Copy the servers IP")
+                .description("Copy the servers IP.")
                 .handler(message -> {
                     if (mc.isSingleplayer()) {
-                        ChatLogger.print("You're in singleplayer");
+                        ChatLogger.print("You're in singleplayer.");
                     } else {
                         StringSelection contents = new StringSelection(mc.getCurrentServerData().serverIP);
                         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                         clipboard.setContents(contents, null);
 
-                        ChatLogger.print("Copied the servers IP to clipboard");
+                        ChatLogger.print("Copied the servers IP to clipboard.");
                     }
                 }).build();
         Command.newCommand()
                 .cmd("copycoords")
                 .aliases("cc")
-                .description("Copy your current coordinates")
+                .description("Copy your current coordinates.")
                 .handler(message -> {
                     if (mc.isSingleplayer()) {
-                        ChatLogger.print("You're in singleplayer");
+                        ChatLogger.print("You're in singleplayer.");
                     } else {
                         StringSelection contents = new StringSelection((int) mc.thePlayer.posX + " " + (int) mc.thePlayer.posY + " " + (int) mc.thePlayer.posZ);
                         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                         clipboard.setContents(contents, null);
 
-                        ChatLogger.print("Copied your current coordinates to clipboard");
+                        ChatLogger.print("Copied your current coordinates to clipboard.");
                     }
                 }).build();
 
@@ -477,7 +477,7 @@ public class CommandManager extends ListManager<Command> {
                 }
             }
         });
-        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + "");
+        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
     }
 
     public boolean parseCommand(String message) {
