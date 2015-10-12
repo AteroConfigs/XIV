@@ -56,7 +56,11 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
             switch (action.toLowerCase()) {
                 case "tab":
                     if (arguments.length >= 3) {
-                        tab.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            tab.setValue(tab.getDefault());
+                        }else {
+                            tab.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         tab.setValue(!tab.getValue());
                     }
@@ -64,7 +68,11 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
                     break;
                 case "chat":
                     if (arguments.length >= 3) {
-                        chat.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            chat.setValue(chat.getDefault());
+                        }else {
+                            chat.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         chat.setValue(!chat.getValue());
                     }
@@ -72,7 +80,11 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
                     break;
                 case "nametag":
                     if (arguments.length >= 3) {
-                        nametag.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            nametag.setValue(nametag.getDefault());
+                        }else {
+                            nametag.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         nametag.setValue(!nametag.getValue());
                     }
@@ -80,7 +92,11 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
                     break;
                 case "scoreboard":
                     if (arguments.length >= 3) {
-                        scoreboard.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            scoreboard.setValue(scoreboard.getDefault());
+                        }else {
+                            scoreboard.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         scoreboard.setValue(!scoreboard.getValue());
                     }

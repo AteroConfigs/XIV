@@ -82,11 +82,15 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
                     if (arguments.length >= 3) {
                         String newPacketsString = arguments[2];
                         try {
-                            int newPackets = Integer.parseInt(newPacketsString);
-                            if (newPackets < 0) {
-                                newPackets = 0;
+                            if(arguments[2].equalsIgnoreCase("-d")) {
+                                packets.setValue(packets.getDefault());
+                            }else{
+                                int newPackets = Integer.parseInt(newPacketsString);
+                                if (newPackets < 0) {
+                                    newPackets = 0;
+                                }
+                                packets.setValue(newPackets);
                             }
-                            packets.setValue(newPackets);
                             ChatLogger.print(String.format("ArmorBreaker Packet Amount set to %s", packets.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newPacketsString));

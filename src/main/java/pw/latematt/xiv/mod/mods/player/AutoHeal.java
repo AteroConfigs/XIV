@@ -112,12 +112,16 @@ public class AutoHeal extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String newDelayString = arguments[2];
                         try {
-                            long newDelay = Long.parseLong(newDelayString);
-                            if (newDelay < 10) {
-                                newDelay = 10;
-                            }
+                            if(arguments[2].equalsIgnoreCase("-d")) {
+                                delay.setValue(delay.getDefault());
+                            }else {
+                                long newDelay = Long.parseLong(newDelayString);
+                                if (newDelay < 10) {
+                                    newDelay = 10;
+                                }
 
-                            delay.setValue(newDelay);
+                                delay.setValue(newDelay);
+                            }
                             ChatLogger.print(String.format("AutoHeal Delay set to %sms", delay.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));
@@ -130,8 +134,12 @@ public class AutoHeal extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String newHealthString = arguments[2];
                         try {
-                            Float newHealth = Float.parseFloat(newHealthString);
-                            health.setValue(newHealth);
+                            if(arguments[2].equalsIgnoreCase("-d")) {
+                                health.setValue(health.getDefault());
+                            }else{
+                                Float newHealth = Float.parseFloat(newHealthString);
+                                health.setValue(newHealth);
+                            }
                             ChatLogger.print(String.format("Kill Aura Range set to %s", health.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newHealthString));
@@ -158,7 +166,11 @@ public class AutoHeal extends Mod implements CommandHandler {
                     break;
                 case "usepotions":
                     if (arguments.length >= 3) {
-                        potion.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            potion.setValue(potion.getDefault());
+                        }else {
+                            potion.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         potion.setValue(!potion.getValue());
                     }
@@ -166,7 +178,11 @@ public class AutoHeal extends Mod implements CommandHandler {
                     break;
                 case "usesoups":
                     if (arguments.length >= 3) {
-                        soup.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            soup.setValue(soup.getDefault());
+                        }else {
+                            soup.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         soup.setValue(!soup.getValue());
                     }

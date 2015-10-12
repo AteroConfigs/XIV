@@ -44,7 +44,7 @@ public class FastPlace extends Mod implements Listener<PlacingBlockEvent>, Comma
                     if (arguments.length >= 3) {
                         String newDelayString = arguments[2];
                         try {
-                            int newPlaceDelay = Integer.parseInt(newDelayString);
+                            int newPlaceDelay = arguments[2].equalsIgnoreCase("-d") ? placeDelay.getDefault() : Integer.parseInt(newDelayString);
                             if (newPlaceDelay > 4) {
                                 newPlaceDelay = 4;
                             } else if (newPlaceDelay < 0) {

@@ -82,7 +82,7 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
                     if (arguments.length >= 3) {
                         String newFovString = arguments[2];
                         try {
-                            float newFov = Float.parseFloat(newFovString);
+                            float newFov = arguments[2].equalsIgnoreCase("-d") ? fov.getDefault() : Float.parseFloat(newFovString);
                             fov.setValue(newFov);
                             ChatLogger.print(String.format("SmoothAimbot FOV set to %s", newFov));
                         } catch (NumberFormatException e) {
@@ -97,7 +97,7 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
                     if (arguments.length >= 3) {
                         String newSpeedString = arguments[2];
                         try {
-                            float newSpeed = Float.parseFloat(newSpeedString);
+                            float newSpeed = arguments[2].equalsIgnoreCase("-d") ? speed.getDefault() : Float.parseFloat(newSpeedString);
                             speed.setValue(newSpeed);
                             ChatLogger.print(String.format("SmoothAimbot Speed set to %s", newSpeed));
                         } catch (NumberFormatException e) {
@@ -113,7 +113,7 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
                     if (arguments.length >= 3) {
                         String newRangeString = arguments[2];
                         try {
-                            double newRange = Double.parseDouble(newRangeString);
+                            double newRange = arguments[2].equalsIgnoreCase("-d") ? range.getDefault() : Double.parseDouble(newRangeString);
                             range.setValue(newRange);
                             ChatLogger.print(String.format("SmoothAimbot Range set to %s", range.getValue()));
                         } catch (NumberFormatException e) {
@@ -126,7 +126,11 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
 
                 case "pitch":
                     if (arguments.length >= 3) {
-                        pitch.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            pitch.setValue(pitch.getDefault());
+                        }else {
+                            pitch.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         pitch.setValue(!pitch.getValue());
                     }
