@@ -43,7 +43,6 @@ public class SlimeJump extends Mod implements Listener<MotionUpdateEvent>, Comma
         if(BlockUtils.getBlock(mc.thePlayer, -0.5D) instanceof BlockSlime) {
             if(mc.thePlayer.onGround) {
                 if(mc.thePlayer.motionY > 0) {
-                    System.out.println("TEST");
                     mc.thePlayer.motionY += multiplier.getValue();
                 }
             }
