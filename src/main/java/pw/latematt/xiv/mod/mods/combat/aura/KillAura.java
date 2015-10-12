@@ -22,7 +22,10 @@ import pw.latematt.xiv.mod.mods.combat.aura.mode.modes.Singular;
 import pw.latematt.xiv.mod.mods.combat.aura.mode.modes.Switch;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
+import pw.latematt.xiv.utils.Timer;
 import pw.latematt.xiv.value.Value;
+
+import java.util.Random;
 
 /**
  * @author Matthew
@@ -32,6 +35,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Listener sendPacketListener;
     private final Listener playerDeathListener;
     public final Value<Long> delay = new Value<>("killaura_delay", 125L);
+    public final Value<Long> randomDelay = new Value<>("killaura_random_delay", 75L);
     public final Value<Double> range = new Value<>("killaura_range", 3.8D);
     public final Value<Integer> fov = new Value<>("killaura_fov", 360);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
@@ -44,6 +48,8 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> toggleDeath = new Value<>("killaura_toggle_death", false);
     public final Value<Boolean> autoBlock = new Value<>("killaura_auto_block", false);
     private final Value<AuraMode> mode = new Value<>("killaura_mode", new Singular(this));
+    private final Random random = new Random();
+    private Timer randomSwingTimer = new Timer();
 
     public KillAura() {
         super("Kill Aura", ModType.COMBAT, Keyboard.KEY_R, 0xFFC6172B);
@@ -60,6 +66,11 @@ public class KillAura extends Mod implements CommandHandler {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                    if (randomDelay.getValue() > 0 && randomSwingTimer.hasReached(1000 + random.nextInt(randomDelay.getValue().intValue()))) {
+                        mc.thePlayer.swingItem();
+                        randomSwingTimer.reset();
+                    }
+
                     mode.getValue().onPreMotionUpdate(event);
                 } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
                     mode.getValue().onPostMotionUpdate(event);
@@ -174,6 +185,21 @@ public class KillAura extends Mod implements CommandHandler {
                         }
                     } else {
                         ChatLogger.print("Invalid arguments, valid: killaura delay <number>");
+                    }
+                    break;
+                case "randomdelay":
+                case "rd":
+                    if (arguments.length >= 3) {
+                        String newRandomDelayString = arguments[2];
+                        try {
+                            long newRandomDelay = Long.parseLong(newRandomDelayString);
+                            randomDelay.setValue(newRandomDelay);
+                            ChatLogger.print(String.format("Kill Aura Random Delay set to %s", delay.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newRandomDelayString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: killaura randomdelay <number>");
                     }
                     break;
                 case "aps":
@@ -319,7 +345,7 @@ public class KillAura extends Mod implements CommandHandler {
                     }
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, aps, range, players, mobs, animals, invisible, team, silent, autosword, autoblock, mode");
+                    ChatLogger.print("Invalid action, valid: delay, randomdelay, aps, range, players, mobs, animals, invisible, team, silent, autosword, autoblock, mode");
                     break;
             }
         } else {
@@ -333,6 +359,10 @@ public class KillAura extends Mod implements CommandHandler {
 
     public void setMode(AuraMode mode) {
         this.mode.setValue(mode);
+    }
+
+    public Long getDelay() {
+        return delay.getValue() + random.nextInt(randomDelay.getValue().intValue());
     }
 
     @Override
