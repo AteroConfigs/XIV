@@ -1,5 +1,7 @@
 package pw.latematt.xiv.mod.mods.movement;
 
+import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.network.Packet;
@@ -11,10 +13,12 @@ import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.RenderUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Jack
@@ -24,7 +28,7 @@ public final class Blink extends Mod {
     private final Listener<SendPacketEvent> packetListener;
     private final Listener<Render3DEvent> renderListener;
     private final List<Packet> packets = new ArrayList<>();
-    private double[] start;
+    private EntityOtherPlayerMP position;
 
     public Blink() {
         super("Blink", ModType.MOVEMENT, Keyboard.KEY_NONE, 11184895);
@@ -52,10 +56,13 @@ public final class Blink extends Mod {
         this.renderListener = new Listener<Render3DEvent>() {
             @Override
             public void onEventCalled(Render3DEvent event) {
-                RenderUtils.beginGl(); // TODO: Color?
+                double[] start = new double[] { position.posX, position.posY, position.posZ };
+
+                RenderUtils.beginGl();
                 Tessellator var2 = Tessellator.getInstance();
                 WorldRenderer var3 = var2.getWorldRenderer();
                 var3.startDrawing(2);
+                GlStateManager.color(0.3F, 0.7F, 1.0F, 1.0F);
                 var3.addVertex(start[0] - mc.getRenderManager().renderPosX, start[1] - mc.getRenderManager().renderPosY, start[2] - mc.getRenderManager().renderPosZ);
                 var3.addVertex(start[0] - mc.getRenderManager().renderPosX, start[1] + mc.thePlayer.height - mc.getRenderManager().renderPosY, start[2] - mc.getRenderManager().renderPosZ);
                 var2.draw();
@@ -66,11 +73,16 @@ public final class Blink extends Mod {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this.packetListener);
-        XIV.getInstance().getListenerManager().add(this.renderListener);
+        if (Objects.nonNull(mc.thePlayer)) {
+            XIV.getInstance().getListenerManager().add(this.packetListener);
+            XIV.getInstance().getListenerManager().add(this.renderListener);
 
-        mc.timer.timerSpeed = 1.25F;
-        this.start = new double[]{mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ};
+            mc.timer.timerSpeed = 1.25F;
+            this.position = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
+            this.position.copyLocationAndAnglesFrom(mc.thePlayer);
+
+            EntityUtils.setReference(this.position);
+        }
     }
 
     @Override
@@ -78,8 +90,12 @@ public final class Blink extends Mod {
         XIV.getInstance().getListenerManager().remove(this.packetListener);
         XIV.getInstance().getListenerManager().remove(this.renderListener);
 
-        for (final Packet packet : this.packets) {
-            mc.thePlayer.sendQueue.getNetworkManager().sendPacket(packet);
+        if (Objects.nonNull(mc.thePlayer)) {
+            EntityUtils.setReference(mc.thePlayer);
+
+            for (final Packet packet : this.packets) {
+                mc.thePlayer.sendQueue.getNetworkManager().sendPacket(packet);
+            }
         }
 
         mc.timer.timerSpeed = 1.0F;
