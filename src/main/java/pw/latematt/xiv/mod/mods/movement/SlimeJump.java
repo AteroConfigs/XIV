@@ -62,7 +62,7 @@ public class SlimeJump extends Mod implements Listener<MotionUpdateEvent>, Comma
                         try {
                             double newMultiplier = Double.parseDouble(newMultiplierString);
                             multiplier.setValue(newMultiplier);
-                            ChatLogger.print(String.format("Step Height set to %s", multiplier.getValue()));
+                            ChatLogger.print(String.format("SlimeJump multiplier set to %s", multiplier.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newMultiplierString));
                         }

@@ -205,7 +205,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glLineWidth(4f);
+        GL11.glLineWidth(((Value<Float>) XIV.getInstance().getValueManager().find("render_line_width")).getValue() * 2);
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glEnable(GL11.GL_STENCIL_TEST);
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
