@@ -36,8 +36,6 @@ public class AntiTabComplete extends Mod implements Listener<SendPacketEvent> {
                 Random random = new Random();
 
                 packet.setMessage(messages[random.nextInt(messages.length)]);
-
-                System.out.println(packet.getMessage());
             }
         }
     }
