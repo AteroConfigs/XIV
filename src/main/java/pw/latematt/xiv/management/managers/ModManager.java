@@ -17,6 +17,7 @@ import pw.latematt.xiv.mod.mods.combat.Criticals;
 import pw.latematt.xiv.mod.mods.combat.SmoothAimbot;
 import pw.latematt.xiv.mod.mods.combat.Triggerbot;
 import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
+import pw.latematt.xiv.mod.mods.movement.SlimeJump;
 import pw.latematt.xiv.mod.mods.misc.NoRotationSet;
 import pw.latematt.xiv.mod.mods.player.FastUse;
 import pw.latematt.xiv.mod.mods.movement.Phase;
@@ -80,6 +81,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new NoSlowdown());
         contents.add(new Phase());
         contents.add(new Regen());
+        contents.add(new SlimeJump());
         contents.add(new SmoothAimbot());
         contents.add(new Sneak());
         contents.add(new Speed());

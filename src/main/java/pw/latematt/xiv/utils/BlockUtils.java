@@ -131,4 +131,19 @@ public class BlockUtils {
         }
         return false;
     }
+
+    public static Block getBlock(Entity entity, double offset) {
+        if (entity == null)
+            return null;
+
+        final int y = (int) entity.getEntityBoundingBox().offset(0.0D, offset, 0.0D).minY;
+        for (int x = MathHelper.floor_double(entity.getEntityBoundingBox().minX); x < MathHelper.floor_double(entity.getEntityBoundingBox().maxX) + 1; x++) {
+            for (int z = MathHelper.floor_double(entity.getEntityBoundingBox().minZ); z < MathHelper.floor_double(entity.getEntityBoundingBox().maxZ) + 1; z++) {
+                final Block block = mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
+
+                return block;
+            }
+        }
+        return null;
+    }
 }
