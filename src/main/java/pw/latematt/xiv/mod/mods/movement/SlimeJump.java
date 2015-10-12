@@ -60,7 +60,7 @@ public class SlimeJump extends Mod implements Listener<MotionUpdateEvent>, Comma
                     if (arguments.length >= 3) {
                         String newMultiplierString = arguments[2];
                         try {
-                            double newMultiplier = Double.parseDouble(newMultiplierString);
+                            double newMultiplier = arguments[2].equalsIgnoreCase("-d") ? multiplier.getDefault() : Double.parseDouble(newMultiplierString);
                             multiplier.setValue(newMultiplier);
                             ChatLogger.print(String.format("SlimeJump multiplier set to %s", multiplier.getValue()));
                         } catch (NumberFormatException e) {

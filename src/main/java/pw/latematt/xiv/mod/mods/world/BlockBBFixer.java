@@ -52,7 +52,11 @@ public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>, Comm
             switch (action.toLowerCase()) {
                 case "cactus":
                     if (arguments.length >= 3) {
-                        cactus.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            cactus.setValue(cactus.getDefault());
+                        }else {
+                            cactus.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         cactus.setValue(!cactus.getValue());
                     }
@@ -60,7 +64,11 @@ public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>, Comm
                     break;
                 case "cobweb":
                     if (arguments.length >= 3) {
-                        cobweb.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            cobweb.setValue(cobweb.getDefault());
+                        }else {
+                            cobweb.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         cobweb.setValue(!cobweb.getValue());
                     }
@@ -68,7 +76,11 @@ public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>, Comm
                     break;
                 case "fire": {
                     if (arguments.length >= 3) {
-                        fire.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            fire.setValue(fire.getDefault());
+                        }else {
+                            fire.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         fire.setValue(!fire.getValue());
                     }

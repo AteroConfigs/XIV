@@ -219,7 +219,11 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             switch (action.toLowerCase()) {
                 case "watermark":
                     if (arguments.length >= 3) {
-                        watermark.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            watermark.setValue(watermark.getDefault());
+                        }else {
+                            watermark.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         watermark.setValue(!watermark.getValue());
                     }
@@ -227,7 +231,11 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "organize":
                     if (arguments.length >= 3) {
-                        organize.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            organize.setValue(organize.getDefault());
+                        }else {
+                            organize.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         organize.setValue(!organize.getValue());
                     }
@@ -235,7 +243,11 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "arraylist":
                     if (arguments.length >= 3) {
-                        arraylist.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            arraylist.setValue(arraylist.getDefault());
+                        }else {
+                            arraylist.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         arraylist.setValue(!arraylist.getValue());
                     }
@@ -243,7 +255,11 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "coords":
                     if (arguments.length >= 3) {
-                        coords.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            coords.setValue(coords.getDefault());
+                        }else {
+                            coords.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         coords.setValue(!coords.getValue());
                     }
@@ -251,7 +267,11 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "fps":
                     if (arguments.length >= 3) {
-                        fps.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            fps.setValue(fps.getDefault());
+                        }else {
+                            fps.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         fps.setValue(!fps.getValue());
                     }
@@ -259,7 +279,11 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "ign":
                     if (arguments.length >= 3) {
-                        ign.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            ign.setValue(ign.getDefault());
+                        }else {
+                            ign.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         ign.setValue(!ign.getValue());
                     }
@@ -267,7 +291,11 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "time":
                     if (arguments.length >= 3) {
-                        time.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            time.setValue(time.getDefault());
+                        }else {
+                            time.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         time.setValue(!time.getValue());
                     }
@@ -275,7 +303,11 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "potions":
                     if (arguments.length >= 3) {
-                        potions.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            potions.setValue(potions.getDefault());
+                        }else {
+                            potions.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         potions.setValue(!potions.getValue());
                     }
@@ -283,7 +315,11 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "armor":
                     if (arguments.length >= 3) {
-                        armor.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            armor.setValue(armor.getDefault());
+                        }else {
+                            armor.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         armor.setValue(!armor.getValue());
                     }
@@ -291,7 +327,11 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "rudysucks":
                     if (arguments.length >= 3) {
-                        rudysucks.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            rudysucks.setValue(rudysucks.getDefault());
+                        }else {
+                            rudysucks.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         rudysucks.setValue(!rudysucks.getValue());
                     }

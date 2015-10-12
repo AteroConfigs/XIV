@@ -233,6 +233,10 @@ public class Speed extends Mod implements CommandHandler {
                                 currentMode.setValue(Mode.OLD);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().name()));
                                 break;
+                            case "-d":
+                                currentMode.setValue(currentMode.getDefault());
+                                ChatLogger.print(String.format("Speed will %s go fast on ladders.", (fastLadder.getValue() ? "now" : "no longer")));
+                                break;
                             default:
                                 ChatLogger.print("Invalid mode, valid: new, old");
                                 break;
@@ -245,7 +249,11 @@ public class Speed extends Mod implements CommandHandler {
                 case "fastladder":
                 case "fl":
                     if (arguments.length >= 3) {
-                        fastLadder.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            fastLadder.setValue(fastLadder.getDefault());
+                        }else {
+                            fastLadder.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         fastLadder.setValue(!fastLadder.getValue());
                     }

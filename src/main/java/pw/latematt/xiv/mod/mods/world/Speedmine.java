@@ -47,7 +47,7 @@ public class Speedmine extends Mod implements Listener<BreakingBlockEvent>, Comm
                     if (arguments.length >= 3) {
                         String newHitDelayString = arguments[2];
                         try {
-                            int newHitDelay = Integer.parseInt(newHitDelayString);
+                            int newHitDelay = arguments[2].equalsIgnoreCase("-d") ? hitDelay.getDefault() : Integer.parseInt(newHitDelayString);
                             if (newHitDelay > 4) {
                                 newHitDelay = 4;
                             } else if (newHitDelay < 0) {
@@ -66,7 +66,7 @@ public class Speedmine extends Mod implements Listener<BreakingBlockEvent>, Comm
                     if (arguments.length >= 3) {
                         String newMultiplierString = arguments[2];
                         try {
-                            double newMultiplier = Double.parseDouble(newMultiplierString);
+                            double newMultiplier = arguments[2].equalsIgnoreCase("-d") ? multiplier.getDefault() : Double.parseDouble(newMultiplierString);
                             if (newMultiplier > 10.0D) {
                                 newMultiplier = 10.0D;
                             } else if (newMultiplier < 1.0D) {

@@ -57,7 +57,7 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
                     if (arguments.length >= 3) {
                         String newVerticalString = arguments[2];
                         try {
-                            double newVertical = Double.parseDouble(newVerticalString);
+                            double newVertical = arguments[2].equalsIgnoreCase("-d") ? verticalSpeed.getDefault() : Double.parseDouble(newVerticalString);
                             verticalSpeed.setValue(newVertical);
                             ChatLogger.print(String.format("Fly vertical speed set to %s", verticalSpeed.getValue()));
                         } catch (NumberFormatException e) {
@@ -69,7 +69,11 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
                     break;
                 case "damage":
                     if (arguments.length >= 3) {
-                        doDamage.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            doDamage.setValue(doDamage.getDefault());
+                        }else {
+                            doDamage.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         doDamage.setValue(!doDamage.getValue());
                     }

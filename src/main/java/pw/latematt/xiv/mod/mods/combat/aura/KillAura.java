@@ -175,7 +175,7 @@ public class KillAura extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String newDelayString = arguments[2];
                         try {
-                            long newDelay = Long.parseLong(newDelayString);
+                            long newDelay = arguments[2].equalsIgnoreCase("-d") ? delay.getDefault() : Long.parseLong(newDelayString);
                             if (newDelay < 10) {
                                 newDelay = 10;
                             }
@@ -194,7 +194,7 @@ public class KillAura extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String newRandomDelayString = arguments[2];
                         try {
-                            long newRandomDelay = Long.parseLong(newRandomDelayString);
+                            long newRandomDelay = arguments[2].equalsIgnoreCase("-d") ? randomDelay.getDefault() : Long.parseLong(newRandomDelayString);
                             if (newRandomDelay < 0) {
                                 newRandomDelay = 0;
                             }
@@ -212,7 +212,7 @@ public class KillAura extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String newApsString = arguments[2];
                         try {
-                            long newAps = Long.parseLong(newApsString);
+                            long newAps = arguments[2].equalsIgnoreCase("-d") ? delay.getDefault() : Long.parseLong(newApsString);
                             if (newAps < 1) {
                                 newAps = 1;
                             }
@@ -230,7 +230,7 @@ public class KillAura extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String newFOVString = arguments[2];
                         try {
-                            int newFOV = Integer.parseInt(newFOVString);
+                            int newFOV = arguments[2].equalsIgnoreCase("-d") ? fov.getDefault() : Integer.parseInt(newFOVString);
                             if (newFOV < 10) {
                                 newFOV = 10;
                             } else if (newFOV > 360) {
@@ -251,7 +251,7 @@ public class KillAura extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String newRangeString = arguments[2];
                         try {
-                            double newRange = Double.parseDouble(newRangeString);
+                            double newRange = arguments[2].equalsIgnoreCase("-d") ? range.getDefault() : Double.parseDouble(newRangeString);
                             range.setValue(newRange);
                             ChatLogger.print(String.format("Kill Aura Range set to %s", range.getValue()));
                         } catch (NumberFormatException e) {
@@ -264,7 +264,11 @@ public class KillAura extends Mod implements CommandHandler {
                 case "players":
                 case "plyrs":
                     if (arguments.length >= 3) {
-                        players.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            players.setValue(players.getDefault());
+                        }else {
+                            players.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         players.setValue(!players.getValue());
                     }
@@ -272,7 +276,11 @@ public class KillAura extends Mod implements CommandHandler {
                     break;
                 case "mobs":
                     if (arguments.length >= 3) {
-                        mobs.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            mobs.setValue(mobs.getDefault());
+                        }else {
+                            mobs.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         mobs.setValue(!mobs.getValue());
                     }
@@ -280,7 +288,11 @@ public class KillAura extends Mod implements CommandHandler {
                     break;
                 case "animals":
                     if (arguments.length >= 3) {
-                        animals.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            animals.setValue(animals.getDefault());
+                        }else {
+                            animals.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         animals.setValue(!animals.getValue());
                     }
@@ -289,7 +301,11 @@ public class KillAura extends Mod implements CommandHandler {
                 case "invisible":
                 case "invis":
                     if (arguments.length >= 3) {
-                        invisible.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            invisible.setValue(invisible.getDefault());
+                        }else {
+                            invisible.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         invisible.setValue(!invisible.getValue());
                     }
@@ -298,7 +314,11 @@ public class KillAura extends Mod implements CommandHandler {
                 case "toggledeath":
                 case "tdeath":
                     if (arguments.length >= 3) {
-                        toggleDeath.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            toggleDeath.setValue(toggleDeath.getDefault());
+                        }else {
+                            toggleDeath.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         toggleDeath.setValue(!toggleDeath.getValue());
                     }
@@ -306,7 +326,11 @@ public class KillAura extends Mod implements CommandHandler {
                     break;
                 case "team":
                     if (arguments.length >= 3) {
-                        team.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            team.setValue(team.getDefault());
+                        }else {
+                            team.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         team.setValue(!team.getValue());
                     }
@@ -315,7 +339,11 @@ public class KillAura extends Mod implements CommandHandler {
                 case "silent":
                 case "sil":
                     if (arguments.length >= 3) {
-                        silent.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            silent.setValue(silent.getDefault());
+                        }else {
+                            silent.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         silent.setValue(!silent.getValue());
                     }
@@ -324,7 +352,11 @@ public class KillAura extends Mod implements CommandHandler {
                 case "autosword":
                 case "as":
                     if (arguments.length >= 3) {
-                        autoSword.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            autoSword.setValue(autoSword.getDefault());
+                        }else {
+                            autoSword.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         autoSword.setValue(!autoSword.getValue());
                     }
@@ -333,7 +365,11 @@ public class KillAura extends Mod implements CommandHandler {
                 case "autoblock":
                 case "ab":
                     if (arguments.length >= 3) {
-                        autoBlock.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            autoBlock.setValue(autoBlock.getDefault());
+                        }else {
+                            autoBlock.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         autoBlock.setValue(!autoBlock.getValue());
                     }
@@ -349,6 +385,10 @@ public class KillAura extends Mod implements CommandHandler {
                                 break;
                             case "switch":
                                 this.mode.setValue(new Switch(this));
+                                ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
+                                break;
+                            case "-d":
+                                this.mode.setValue(this.mode.getDefault());
                                 ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
                                 break;
                             default:

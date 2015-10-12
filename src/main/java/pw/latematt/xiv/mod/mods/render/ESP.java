@@ -274,7 +274,11 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 case "players":
                 case "plyrs":
                     if (arguments.length >= 3) {
-                        players.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            players.setValue(players.getDefault());
+                        }else {
+                            players.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         players.setValue(!players.getValue());
                     }
@@ -282,7 +286,11 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                     break;
                 case "mobs":
                     if (arguments.length >= 3) {
-                        mobs.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            mobs.setValue(mobs.getDefault());
+                        }else {
+                            mobs.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         mobs.setValue(!mobs.getValue());
                     }
@@ -290,7 +298,11 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                     break;
                 case "animals":
                     if (arguments.length >= 3) {
-                        animals.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            animals.setValue(animals.getDefault());
+                        }else {
+                            animals.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         animals.setValue(!animals.getValue());
                     }
@@ -298,7 +310,11 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                     break;
                 case "items":
                     if (arguments.length >= 3) {
-                        items.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            items.setValue(items.getDefault());
+                        }else {
+                            items.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         items.setValue(!items.getValue());
                     }
@@ -307,7 +323,11 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 case "enderpearls":
                 case "eps":
                     if (arguments.length >= 3) {
-                        enderpearls.setValue(Boolean.parseBoolean(arguments[2]));
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            enderpearls.setValue(enderpearls.getDefault());
+                        }else{
+                            enderpearls.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         enderpearls.setValue(!enderpearls.getValue());
                     }
@@ -316,7 +336,11 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 case "boxes":
                 case "box":
                     if (arguments.length >= 3) {
-                        boxes.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            boxes.setValue(boxes.getDefault());
+                        }else {
+                            boxes.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         boxes.setValue(!boxes.getValue());
                     }
@@ -325,7 +349,11 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 case "outline":
                 case "outl":
                     if (arguments.length >= 3) {
-                        outline.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            outline.setValue(outline.getDefault());
+                        }else {
+                            outline.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         outline.setValue(!outline.getValue());
                     }
@@ -334,7 +362,11 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 case "tracerlines":
                 case "tracers":
                     if (arguments.length >= 3) {
-                        tracerLines.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            tracerLines.setValue(tracerLines.getDefault());
+                        }else {
+                            tracerLines.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         tracerLines.setValue(!tracerLines.getValue());
                     }
@@ -343,7 +375,11 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 case "spine":
                 case "spines":
                     if (arguments.length >= 3) {
-                        spines.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            spines.setValue(spines.getDefault());
+                        }else {
+                            spines.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         spines.setValue(!spines.getValue());
                     }
@@ -352,7 +388,11 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 case "chams":
                 case "wallhack":
                     if (arguments.length >= 3) {
-                        wallhack.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            wallhack.setValue(wallhack.getDefault());
+                        }else {
+                            wallhack.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         wallhack.setValue(!wallhack.getValue());
                     }

@@ -1,7 +1,16 @@
 package pw.latematt.xiv.management.managers;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.command.NumberInvalidException;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemPotion;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.client.C01PacketChatMessage;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.StatCollector;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.event.Listener;
@@ -12,6 +21,10 @@ import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -114,9 +127,13 @@ public class CommandManager extends ListManager<Command> {
                             case "linewidth":
                             case "lw":
                                 if (arguments.length >= 3) {
-                                    Float lineWidth = Float.parseFloat(arguments[2]);
                                     Value<Float> value = (Value<Float>) XIV.getInstance().getValueManager().find("render_line_width");
-                                    value.setValue(lineWidth);
+                                    if(arguments[2].equalsIgnoreCase("-d")) {
+                                        value.setValue(value.getDefault());
+                                    } else {
+                                        Float lineWidth = Float.parseFloat(arguments[2]);
+                                        value.setValue(lineWidth);
+                                    }
                                     ChatLogger.print(String.format("Render Line Width set to: %s", value.getValue()));
                                 } else {
                                     ChatLogger.print("Invalid arguments, valid: linewidth <float>");
@@ -126,7 +143,11 @@ public class CommandManager extends ListManager<Command> {
                             case "aa":
                                 Value<Boolean> antiAliasing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_anti_aliasing");
                                 if (arguments.length >= 3) {
-                                    antiAliasing.setValue(Boolean.parseBoolean(arguments[2]));
+                                    if(arguments[2].equalsIgnoreCase("-d")) {
+                                        antiAliasing.setValue(antiAliasing.getDefault());
+                                    }else{
+                                        antiAliasing.setValue(Boolean.parseBoolean(arguments[2]));
+                                    }
                                 } else {
                                     antiAliasing.setValue(!antiAliasing.getValue());
                                 }
@@ -136,7 +157,11 @@ public class CommandManager extends ListManager<Command> {
                             case "wb":
                                 Value<Boolean> worldBobbing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_world_bobbing");
                                 if (arguments.length >= 3) {
-                                    worldBobbing.setValue(Boolean.parseBoolean(arguments[2]));
+                                    if(arguments[2].equalsIgnoreCase("-d")) {
+                                        worldBobbing.setValue(worldBobbing.getDefault());
+                                    }else {
+                                        worldBobbing.setValue(Boolean.parseBoolean(arguments[2]));
+                                    }
                                 } else {
                                     worldBobbing.setValue(!worldBobbing.getValue());
                                 }
@@ -146,7 +171,11 @@ public class CommandManager extends ListManager<Command> {
                             case "te":
                                 Value<Boolean> tracerEntity = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_tracer_entity");
                                 if (arguments.length >= 3) {
-                                    tracerEntity.setValue(Boolean.parseBoolean(arguments[2]));
+                                    if(arguments[2].equalsIgnoreCase("-d")) {
+                                        tracerEntity.setValue(tracerEntity.getDefault());
+                                    }else {
+                                        tracerEntity.setValue(Boolean.parseBoolean(arguments[2]));
+                                    }
                                 } else {
                                     tracerEntity.setValue(!tracerEntity.getValue());
                                 }
@@ -158,13 +187,17 @@ public class CommandManager extends ListManager<Command> {
                                 if (arguments.length >= 3) {
                                     String newNametagOpacityString = arguments[2];
                                     try {
-                                        double newNametagOpacity = Double.parseDouble(newNametagOpacityString);
-                                        if (newNametagOpacity > 1.0F) {
-                                            newNametagOpacity = 1.0F;
-                                        } else if (newNametagOpacity < 0.1F) {
-                                            newNametagOpacity = 0.1F;
+                                        if(arguments[2].equalsIgnoreCase("-d")) {
+                                            nametagOpacity.setValue(nametagOpacity.getDefault());
+                                        }else {
+                                            double newNametagOpacity = Double.parseDouble(newNametagOpacityString);
+                                            if (newNametagOpacity > 1.0F) {
+                                                newNametagOpacity = 1.0F;
+                                            } else if (newNametagOpacity < 0.1F) {
+                                                newNametagOpacity = 0.1F;
+                                            }
+                                            nametagOpacity.setValue(newNametagOpacity);
                                         }
-                                        nametagOpacity.setValue(newNametagOpacity);
                                         ChatLogger.print(String.format("Render mod nametag opacity set to %s", nametagOpacity.getValue()));
                                     } catch (NumberFormatException e) {
                                         ChatLogger.print(String.format("\"%s\" is not a number.", newNametagOpacityString));
@@ -179,13 +212,17 @@ public class CommandManager extends ListManager<Command> {
                                 if (arguments.length >= 3) {
                                     String newNametagSizeString = arguments[2];
                                     try {
-                                        double newNametagSize = Double.parseDouble(newNametagSizeString);
-                                        if (newNametagSize > 10.0F) {
-                                            newNametagSize = 10.0F;
-                                        } else if (newNametagSize < 0.1F) {
-                                            newNametagSize = 0.1F;
+                                        if(arguments[2].equalsIgnoreCase("-d")) {
+                                            nametagSize.setValue(nametagSize.getDefault());
+                                        }else{
+                                            double newNametagSize = Double.parseDouble(newNametagSizeString);
+                                            if (newNametagSize > 10.0F) {
+                                                newNametagSize = 10.0F;
+                                            } else if (newNametagSize < 0.1F) {
+                                                newNametagSize = 0.1F;
+                                            }
+                                            nametagSize.setValue(newNametagSize);
                                         }
-                                        nametagSize.setValue(newNametagSize);
                                         ChatLogger.print(String.format("Render mod nametag size set to %s", nametagSize.getValue()));
                                     } catch (NumberFormatException e) {
                                         ChatLogger.print(String.format("\"%s\" is not a number.", newNametagSizeString));
@@ -233,6 +270,194 @@ public class CommandManager extends ListManager<Command> {
                 .arguments("<action>")
                 .handler(message -> {
                     mc.ingameGUI.getChatGUI().clearChatMessages();
+                }).build();
+        Command.newCommand()
+                .cmd("potion")
+                .aliases("pot")
+                .description("Enhance your potions.")
+                .arguments("<effect> <level>")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if (mc.thePlayer.getHeldItem() == null || mc.thePlayer.getHeldItem().getItem() != Items.potionitem) {
+                        ChatLogger.print("You must be holding a potion to enhance potions.");
+                    } else {
+                        if (!mc.thePlayer.capabilities.isCreativeMode) {
+                            ChatLogger.print("You must be in creative mode to enhance potions.");
+                        } else {
+                            try {
+                                if (arguments[1].equalsIgnoreCase("clear")) {
+                                    mc.thePlayer.getHeldItem().setTagCompound(new NBTTagCompound());
+                                } else {
+                                    byte level = Byte.parseByte(arguments[2]);
+                                    int duration = Integer.parseInt(arguments[3]);
+
+                                    if (mc.thePlayer.getHeldItem().getTagCompound() == null) {
+                                        mc.thePlayer.getHeldItem().setTagCompound(new NBTTagCompound());
+                                    }
+
+                                    if (!mc.thePlayer.getHeldItem().getTagCompound().hasKey("CustomPotionEffects", 9)) {
+                                        mc.thePlayer.getHeldItem().getTagCompound().setTag("CustomPotionEffects", new NBTTagList());
+                                    }
+
+                                    if (arguments[1].equalsIgnoreCase("*")) {
+                                        for (Potion potion : Potion.potionTypes) {
+                                            if (potion != null) {
+                                                NBTTagList list = mc.thePlayer.getHeldItem().getTagCompound().getTagList("CustomPotionEffects", 10);
+                                                NBTTagCompound tag = new NBTTagCompound();
+                                                tag.setByte("Id", (byte) potion.getId());
+                                                tag.setByte("Amplifier", level);
+                                                tag.setInteger("Duration", duration);
+                                                list.appendTag(tag);
+                                            }
+                                        }
+
+                                        ChatLogger.print("Enchanted your current item with every enchantment.");
+                                    } else {
+                                        Potion potion = null;
+
+                                        for (Potion pot : Potion.potionTypes) {
+                                            if (pot != null) {
+                                                String name = I18n.format(pot.getName(), new Object[0]).replaceAll(" ", "");
+
+                                                System.out.println(name);
+
+                                                if (name.equalsIgnoreCase(arguments[1])) {
+                                                    potion = pot;
+                                                }
+                                            }
+                                        }
+
+                                        if (potion != null) {
+                                            NBTTagList list = mc.thePlayer.getHeldItem().getTagCompound().getTagList("CustomPotionEffects", 10);
+                                            NBTTagCompound tag = new NBTTagCompound();
+                                            tag.setByte("Id", (byte) potion.getId());
+                                            tag.setByte("Amplifier", level);
+                                            tag.setInteger("Duration", duration);
+                                            list.appendTag(tag);
+
+                                            ChatLogger.print(String.format("Enhanced your current potion with %s.", I18n.format(potion.getName())));
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                ChatLogger.print("Invalid arguments, valid: potion <effect> <level> <duration>");
+                            }
+                        }
+                    }
+                }).build();
+        Command.newCommand()
+                .cmd("rename")
+                .aliases("ren")
+                .description("Rename your items.")
+                .arguments("<name>")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if (mc.thePlayer.getHeldItem() == null) {
+                        ChatLogger.print("You must be holding an item to rename.");
+                    } else {
+                        if (!mc.thePlayer.capabilities.isCreativeMode) {
+                            ChatLogger.print("You must be in creative mode to rename.");
+                        } else {
+                            if (arguments.length > 1) {
+                                String name = message.substring(arguments[0].length() + 1, message.length()).replaceAll("&", "§");
+
+                                mc.thePlayer.getHeldItem().setStackDisplayName(name);
+
+                                if (name.equalsIgnoreCase("clear")) {
+                                    mc.thePlayer.getHeldItem().clearCustomName();
+                                }
+
+                                ChatLogger.print("Renamed current item to: " + mc.thePlayer.getHeldItem().getDisplayName() + "§r.");
+                            } else {
+                                ChatLogger.print("Invalid arguments, valid: rename <name>");
+                            }
+                        }
+                    }
+                }).build();
+        Command.newCommand()
+                .cmd("enchant")
+                .aliases("enc")
+                .description("Enchante your items.")
+                .arguments("<enchantment> <level>")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+
+                    if (mc.thePlayer.getHeldItem() == null) {
+                        ChatLogger.print("You must be holding an item to enchant.");
+                    } else {
+                        if (!mc.thePlayer.capabilities.isCreativeMode) {
+                            ChatLogger.print("You must be in creative mode to enchant.");
+                        } else {
+                            try {
+                                try {
+                                    if (arguments[1].equalsIgnoreCase("clear")) {
+                                        mc.thePlayer.getHeldItem().setTagCompound(new NBTTagCompound());
+                                    } else {
+                                        int level = Integer.parseInt(arguments[2]);
+
+                                        if (arguments[1].equalsIgnoreCase("*")) {
+                                            for (Enchantment enchant : Enchantment.enchantmentsList) {
+                                                mc.thePlayer.getHeldItem().addEnchantment(enchant, level);
+                                            }
+
+                                            ChatLogger.print("Enchanted your current item with every enchantment.");
+                                        } else {
+                                            Enchantment enchant = null;
+
+                                            for (Enchantment enc : Enchantment.enchantmentsList) {
+                                                String name = StatCollector.translateToLocal(enc.getName()).replaceAll(" ", "");
+
+                                                if (name.equalsIgnoreCase(arguments[1])) {
+                                                    enchant = enc;
+                                                }
+                                            }
+
+                                            if (enchant != null) {
+                                                mc.thePlayer.getHeldItem().addEnchantment(enchant, level);
+
+                                                ChatLogger.print(String.format("Enchanted your current item with %s.", StatCollector.translateToLocal(enchant.getName())));
+                                            }
+                                        }
+                                    }
+                                } catch (NumberFormatException e) {
+                                    ChatLogger.print(String.format("\"%s\" is not a number.", arguments[2]));
+                                }
+                            } catch (ArrayIndexOutOfBoundsException e) {
+                                ChatLogger.print("Invalid arguments, valid: enchant <enchantment> <level>");
+                            }
+                        }
+                    }
+                }).build();
+        Command.newCommand()
+                .cmd("copyip")
+                .aliases("ci")
+                .description("Copy the servers IP.")
+                .handler(message -> {
+                    if (mc.isSingleplayer()) {
+                        ChatLogger.print("You're in singleplayer.");
+                    } else {
+                        StringSelection contents = new StringSelection(mc.getCurrentServerData().serverIP);
+                        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                        clipboard.setContents(contents, null);
+
+                        ChatLogger.print("Copied the servers IP to clipboard.");
+                    }
+                }).build();
+        Command.newCommand()
+                .cmd("copycoords")
+                .aliases("cc")
+                .description("Copy your current coordinates.")
+                .handler(message -> {
+                    if (mc.isSingleplayer()) {
+                        ChatLogger.print("You're in singleplayer.");
+                    } else {
+                        StringSelection contents = new StringSelection((int) mc.thePlayer.posX + " " + (int) mc.thePlayer.posY + " " + (int) mc.thePlayer.posZ);
+                        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                        clipboard.setContents(contents, null);
+
+                        ChatLogger.print("Copied your current coordinates to clipboard.");
+                    }
                 }).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {

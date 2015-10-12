@@ -75,7 +75,11 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
             switch (action.toLowerCase()) {
                 case "bow":
                     if (arguments.length >= 3) {
-                        bow.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            bow.setValue(bow.getDefault());
+                        }else {
+                            bow.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         bow.setValue(!bow.getValue());
                     }
@@ -83,7 +87,11 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
                     break;
                 case "food":
                     if (arguments.length >= 3) {
-                        food.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            food.setValue(food.getDefault());
+                        }else {
+                            food.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         food.setValue(!food.getValue());
                     }
@@ -91,7 +99,11 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
                     break;
                 case "milk":
                     if (arguments.length >= 3) {
-                        milk.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            milk.setValue(milk.getDefault());
+                        }else {
+                            milk.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         milk.setValue(!milk.getValue());
                     }
@@ -99,7 +111,11 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
                     break;
                 case "potions":
                     if (arguments.length >= 3) {
-                        potions.setValue(Boolean.parseBoolean(arguments[2]));
+                        if(arguments[2].equalsIgnoreCase("-d")) {
+                            milk.setValue(milk.getDefault());
+                        }else {
+                            potions.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
                     } else {
                         potions.setValue(!potions.getValue());
                     }
@@ -110,7 +126,7 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
                     if (arguments.length >= 3) {
                         String newTicksString = arguments[2];
                         try {
-                            int newTicks = Integer.parseInt(newTicksString);
+                            int newTicks = arguments[2].equalsIgnoreCase("-d") ? ticksToWait.getDefault() : Integer.parseInt(newTicksString);
                             if (newTicks > 31) {
                                 newTicks = 31;
                             } else if (newTicks < 0) {

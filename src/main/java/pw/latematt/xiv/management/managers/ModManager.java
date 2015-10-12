@@ -17,6 +17,7 @@ import pw.latematt.xiv.mod.mods.combat.Criticals;
 import pw.latematt.xiv.mod.mods.combat.SmoothAimbot;
 import pw.latematt.xiv.mod.mods.combat.Triggerbot;
 import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
+import pw.latematt.xiv.mod.mods.misc.AntiTabComplete;
 import pw.latematt.xiv.mod.mods.movement.SlimeJump;
 import pw.latematt.xiv.mod.mods.misc.NoRotationSet;
 import pw.latematt.xiv.mod.mods.player.FastUse;
@@ -54,6 +55,7 @@ public class ModManager extends ListManager<Mod> {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         contents.add(new AntiDrown());
         contents.add(new AntiHunger());
+        contents.add(new AntiTabComplete());
         contents.add(new AntiSuffocate());
         contents.add(new ArmorBreaker());
         //contents.add(new AutoHead());

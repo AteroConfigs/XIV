@@ -66,6 +66,10 @@ public class C14PacketTabComplete implements Packet
         return this.message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public BlockPos func_179709_b()
     {
         return this.field_179710_b;

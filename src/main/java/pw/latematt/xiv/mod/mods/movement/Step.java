@@ -74,7 +74,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                     if (arguments.length >= 3) {
                         String newHeightString = arguments[2];
                         try {
-                            float newHeight = Float.parseFloat(newHeightString);
+                            float newHeight = arguments[2].equalsIgnoreCase("-d") ? height.getDefault() : Float.parseFloat(newHeightString);
                             if (newHeight > 10.0F) {
                                 newHeight = 10.0F;
                             } else if (newHeight < 0.5F) {

@@ -57,7 +57,7 @@ public class Fullbright extends Mod implements Listener<LoadWorldEvent>, Command
                     if (arguments.length >= 3) {
                         String newBrightnessString = arguments[2];
                         try {
-                            float newBrightness = Float.parseFloat(newBrightnessString);
+                            float newBrightness = arguments[2].equalsIgnoreCase("-d") ? brightness.getDefault() : Float.parseFloat(newBrightnessString);
                             if (newBrightness > 1.0F) {
                                 newBrightness = 1.0F;
                             } else if (newBrightness < 0.1F) {
