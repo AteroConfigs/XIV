@@ -6,6 +6,7 @@ import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
@@ -35,7 +36,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Listener sendPacketListener;
     private final Listener playerDeathListener;
     public final Value<Long> delay = new Value<>("killaura_delay", 125L);
-    public final Value<Long> randomDelay = new Value<>("killaura_random_delay", 75L);
+    public final Value<Long> randomDelay = new Value<>("killaura_random_delay", 0L);
     public final Value<Double> range = new Value<>("killaura_range", 3.8D);
     public final Value<Integer> fov = new Value<>("killaura_fov", 360);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
@@ -49,7 +50,6 @@ public class KillAura extends Mod implements CommandHandler {
     public final Value<Boolean> autoBlock = new Value<>("killaura_auto_block", false);
     private final Value<AuraMode> mode = new Value<>("killaura_mode", new Singular(this));
     private final Random random = new Random();
-    private Timer randomSwingTimer = new Timer();
 
     public KillAura() {
         super("Kill Aura", ModType.COMBAT, Keyboard.KEY_R, 0xFFC6172B);
@@ -66,11 +66,6 @@ public class KillAura extends Mod implements CommandHandler {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (randomDelay.getValue() > 0 && randomSwingTimer.hasReached(1000 + random.nextInt(randomDelay.getValue().intValue()))) {
-                        mc.thePlayer.swingItem();
-                        randomSwingTimer.reset();
-                    }
-
                     mode.getValue().onPreMotionUpdate(event);
                 } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
                     mode.getValue().onPostMotionUpdate(event);
