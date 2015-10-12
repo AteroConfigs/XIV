@@ -73,11 +73,12 @@ public final class Blink extends Mod {
 
     @Override
     public void onEnabled() {
-        if (Objects.nonNull(mc.thePlayer)) {
-            XIV.getInstance().getListenerManager().add(this.packetListener);
-            XIV.getInstance().getListenerManager().add(this.renderListener);
+        XIV.getInstance().getListenerManager().add(this.packetListener);
+        XIV.getInstance().getListenerManager().add(this.renderListener);
 
-            mc.timer.timerSpeed = 1.25F;
+        mc.timer.timerSpeed = 1.25F;
+
+        if (Objects.nonNull(mc.thePlayer)) {
             this.position = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
             this.position.copyLocationAndAnglesFrom(mc.thePlayer);
 
