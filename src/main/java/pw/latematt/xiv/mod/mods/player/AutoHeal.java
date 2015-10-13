@@ -2,13 +2,12 @@ package pw.latematt.xiv.mod.mods.player;
 
 import net.minecraft.init.Items;
 import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.server.S06PacketUpdateHealth;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.ReadPacketEvent;
+import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
@@ -16,75 +15,74 @@ import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.Timer;
 import pw.latematt.xiv.value.Value;
 
+import java.util.Objects;
+
 import static pw.latematt.xiv.utils.ItemUtils.*;
 
 /**
  * @author Matthew
  */
 public class AutoHeal extends Mod implements CommandHandler {
-    private final Value<Long> delay = new Value<>("autoheal_delay", 125L);
+    private final Value<Long> delay = new Value<>("autoheal_delay", 250L);
     private final Value<Float> health = new Value<>("autoheal_health", 13.0F);
     private final Value<Boolean> soup = new Value<>("autoheal_soup", false);
     private final Value<Boolean> potion = new Value<>("autoheal_potion", true);
     private final Listener sendPacketListener;
-    private final Listener readPacketListener;
+    private final Listener motionUpdateListener;
     private final Timer timer = new Timer();
-    private boolean editPacket;
     private boolean healing;
 
     public AutoHeal() {
         super("AutoHeal", ModType.PLAYER, Keyboard.KEY_NONE, 0xFF85E0E0);
+
+        motionUpdateListener = new Listener<MotionUpdateEvent>() {
+            @Override
+            public void onEventCalled(MotionUpdateEvent event) {
+                if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
+                    if (mc.thePlayer.getHealth() <= health.getValue() && timer.hasReached(delay.getValue())) {
+                        if (soup.getValue()) {
+                            dropFirst(Items.bowl);
+                            if (!hotbarHas(Items.mushroom_stew)) {
+                                getFromInventory(Items.mushroom_stew);
+                            }
+
+                            useFirst(Items.mushroom_stew);
+
+                            if (mc.thePlayer.getHealth() <= health.getValue()) {
+                                healing = true;
+                                event.setYaw(-event.getYaw());
+                                event.setPitch(85);
+                            } else {
+                                timer.reset();
+                            }
+                        } else if (potion.getValue()) {
+                            healing = true;
+                            event.setYaw(-event.getYaw());
+                            event.setPitch(85);
+                        }
+                    }
+                } else if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.POST)) {
+                    if (healing) {
+                        if (!hotbarHasInstantHealth()) {
+                            getInstantHealthFromInventory();
+                        }
+
+                        useFirstInstantHealth();
+                        healing = false;
+                        timer.reset();
+                    }
+                }
+            }
+        };
 
         sendPacketListener = new Listener<SendPacketEvent>() {
             @Override
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    if (editPacket) {
-                        healing = true;
-                        editPacket = false;
-                        if (!hotbarHasInstantHealth()) {
-                            getInstantHealthFromInventory();
-                        }
-
+                    if (healing) {
                         player.setYaw(-player.getYaw());
                         player.setPitch(85);
-                        event.setCancelled(true);
-                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(player.getYaw(), player.getPitch(), player.isOnGround()));
-                        splashFirstInstantHealth();
-                        healing = false;
-                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, mc.thePlayer.onGround));
-                    }
-                }
-            }
-        };
-
-        XIV.getInstance().getListenerManager().add(sendPacketListener);
-
-        readPacketListener = new Listener<ReadPacketEvent>() {
-            @Override
-            public void onEventCalled(ReadPacketEvent event) {
-                if (event.getPacket() instanceof S06PacketUpdateHealth) {
-                    S06PacketUpdateHealth updateHealth = (S06PacketUpdateHealth) event.getPacket();
-                    if (updateHealth.getHealth() <= health.getValue()) {
-                        if (timer.hasReached(delay.getValue())) {
-                            if (soup.getValue()) {
-                                dropFirst(Items.bowl);
-                                if (!hotbarHas(Items.mushroom_stew)) {
-                                    getFromInventory(Items.mushroom_stew);
-                                }
-
-                                eatFirst(Items.mushroom_stew);
-                                if (!potion.getValue()) {
-                                    timer.reset();
-                                }
-                            }
-
-                            if (potion.getValue()) {
-                                editPacket = true;
-                                timer.reset();
-                            }
-                        }
                     }
                 }
             }
@@ -151,15 +149,11 @@ public class AutoHeal extends Mod implements CommandHandler {
                     break;
                 case "potion":
                 case "pot":
-                    editPacket = true;
+                    useFirstInstantHealth();
                     break;
                 case "soup":
                     dropFirst(Items.bowl);
-                    if (!hotbarHas(Items.mushroom_stew)) {
-                        getFromInventory(Items.mushroom_stew);
-                    }
-
-                    eatFirst(Items.mushroom_stew);
+                    useFirst(Items.mushroom_stew);
                     break;
                 case "usepotions":
                     if (arguments.length >= 3) {
@@ -196,11 +190,13 @@ public class AutoHeal extends Mod implements CommandHandler {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(readPacketListener);
+        XIV.getInstance().getListenerManager().add(sendPacketListener);
+        XIV.getInstance().getListenerManager().add(motionUpdateListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(readPacketListener);
+        XIV.getInstance().getListenerManager().remove(sendPacketListener);
+        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
     }
 }
