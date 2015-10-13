@@ -1,4 +1,4 @@
-package pw.latematt.xiv.mod.mods.player;
+package pw.latematt.xiv.mod.mods.movement;
 
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
@@ -18,12 +18,12 @@ import java.util.Objects;
  * @author TehNeon
  */
 public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
-
     private final Value<Boolean> doDamage = new Value<>("fly_damage", true);
+    private final Value<Boolean> slowfall = new Value<>("fly_slowfall", true);
     private final Value<Double> verticalSpeed = new Value<>("fly_vertical", 0.5);
 
     public Fly() {
-        super("Fly", ModType.PLAYER, Keyboard.KEY_M, 0xFF4B97F6);
+        super("Fly", ModType.MOVEMENT, Keyboard.KEY_M, 0xFF4B97F6);
 
         Command.newCommand()
                 .cmd("fly")
@@ -34,7 +34,7 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
     }
 
     public void onEventCalled(MotionUpdateEvent event) {
-        double motionY = 0;
+        double motionY = slowfall.getValue() ? -0.005D : 0;
 
         if (mc.gameSettings.keyBindJump.getIsKeyPressed()) {
             motionY = verticalSpeed.getValue();
@@ -69,9 +69,9 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
                     break;
                 case "damage":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             doDamage.setValue(doDamage.getDefault());
-                        }else {
+                        } else {
                             doDamage.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -79,8 +79,20 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
                     }
                     ChatLogger.print(String.format("Fly will %s take damage on enable.", doDamage.getValue() ? "now" : "no longer"));
                     break;
+                case "slowfall":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            slowfall.setValue(slowfall.getDefault());
+                        } else {
+                            slowfall.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        slowfall.setValue(!slowfall.getValue());
+                    }
+                    ChatLogger.print(String.format("Fly will %s slowly fall.", slowfall.getValue() ? "now" : "no longer"));
+                    break;
                 default:
-                    ChatLogger.print("Invalid action, valid: damage, vertical");
+                    ChatLogger.print("Invalid action, valid: damage, vertical, slowfall");
                     break;
             }
         } else {

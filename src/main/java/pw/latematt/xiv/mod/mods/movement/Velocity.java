@@ -81,9 +81,9 @@ public class Velocity extends Mod implements CommandHandler {
                 case "water":
                 case "lava":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             liquid.setValue(liquid.getDefault());
-                        }else {
+                        } else {
                             liquid.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {

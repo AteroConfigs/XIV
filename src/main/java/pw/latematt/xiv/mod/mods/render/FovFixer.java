@@ -76,9 +76,9 @@ public class FovFixer extends Mod implements Listener<FovModifierEvent>, Command
             switch (action.toLowerCase()) {
                 case "nofov":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             noFov.setValue(noFov.getDefault());
-                        }else {
+                        } else {
                             noFov.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {

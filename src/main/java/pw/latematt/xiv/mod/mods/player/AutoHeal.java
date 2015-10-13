@@ -22,7 +22,7 @@ import static pw.latematt.xiv.utils.ItemUtils.*;
  * @author Matthew
  */
 public class AutoHeal extends Mod implements CommandHandler {
-    private final Value<Long> delay = new Value<>("autoheal_delay", 250L);
+    private final Value<Long> delay = new Value<>("autoheal_delay", 125L);
     private final Value<Float> health = new Value<>("autoheal_health", 13.0F);
     private final Value<Boolean> soup = new Value<>("autoheal_soup", false);
     private final Value<Boolean> potion = new Value<>("autoheal_potion", true);
@@ -41,12 +41,19 @@ public class AutoHeal extends Mod implements CommandHandler {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
                     if (editPacket) {
+                        healing = true;
                         editPacket = false;
+                        if (!hotbarHasInstantHealth()) {
+                            getInstantHealthFromInventory();
+                        }
+
                         player.setYaw(-player.getYaw());
                         player.setPitch(85);
                         event.setCancelled(true);
                         mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(player.getYaw(), player.getPitch(), player.isOnGround()));
                         splashFirstInstantHealth();
+                        healing = false;
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, mc.thePlayer.onGround));
                     }
                 }
             }
@@ -61,7 +68,6 @@ public class AutoHeal extends Mod implements CommandHandler {
                     S06PacketUpdateHealth updateHealth = (S06PacketUpdateHealth) event.getPacket();
                     if (updateHealth.getHealth() <= health.getValue()) {
                         if (timer.hasReached(delay.getValue())) {
-                            healing = true;
                             if (soup.getValue()) {
                                 dropFirst(Items.bowl);
                                 if (!hotbarHas(Items.mushroom_stew)) {
@@ -75,15 +81,10 @@ public class AutoHeal extends Mod implements CommandHandler {
                             }
 
                             if (potion.getValue()) {
-                                if (!hotbarHasInstantHealth()) {
-                                    getInstantHealthFromInventory();
-                                }
-
                                 editPacket = true;
                                 timer.reset();
                             }
                         }
-                        healing = false;
                     }
                 }
             }
@@ -112,9 +113,9 @@ public class AutoHeal extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String newDelayString = arguments[2];
                         try {
-                            if(arguments[2].equalsIgnoreCase("-d")) {
+                            if (arguments[2].equalsIgnoreCase("-d")) {
                                 delay.setValue(delay.getDefault());
-                            }else {
+                            } else {
                                 long newDelay = Long.parseLong(newDelayString);
                                 if (newDelay < 10) {
                                     newDelay = 10;
@@ -134,9 +135,9 @@ public class AutoHeal extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String newHealthString = arguments[2];
                         try {
-                            if(arguments[2].equalsIgnoreCase("-d")) {
+                            if (arguments[2].equalsIgnoreCase("-d")) {
                                 health.setValue(health.getDefault());
-                            }else{
+                            } else {
                                 Float newHealth = Float.parseFloat(newHealthString);
                                 health.setValue(newHealth);
                             }
@@ -150,10 +151,6 @@ public class AutoHeal extends Mod implements CommandHandler {
                     break;
                 case "potion":
                 case "pot":
-                    if (!hotbarHasInstantHealth()) {
-                        getInstantHealthFromInventory();
-                    }
-
                     editPacket = true;
                     break;
                 case "soup":
@@ -166,9 +163,9 @@ public class AutoHeal extends Mod implements CommandHandler {
                     break;
                 case "usepotions":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             potion.setValue(potion.getDefault());
-                        }else {
+                        } else {
                             potion.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -178,9 +175,9 @@ public class AutoHeal extends Mod implements CommandHandler {
                     break;
                 case "usesoups":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             soup.setValue(soup.getDefault());
-                        }else {
+                        } else {
                             soup.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {

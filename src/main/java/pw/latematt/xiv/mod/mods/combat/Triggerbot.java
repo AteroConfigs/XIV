@@ -146,9 +146,9 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
                 case "weapon":
                 case "sword":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             weaponOnly.setValue(weaponOnly.getDefault());
-                        }else {
+                        } else {
                             weaponOnly.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -159,9 +159,9 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
                 case "players":
                 case "plyrs":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             players.setValue(players.getDefault());
-                        }else {
+                        } else {
                             players.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -171,9 +171,9 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
                     break;
                 case "mobs":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             mobs.setValue(mobs.getDefault());
-                        }else {
+                        } else {
                             mobs.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -183,9 +183,9 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
                     break;
                 case "animals":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             animals.setValue(animals.getDefault());
-                        }else {
+                        } else {
                             animals.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -196,9 +196,9 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
                 case "invisible":
                 case "invis":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             invisible.setValue(invisible.getDefault());
-                        }else {
+                        } else {
                             invisible.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -208,9 +208,9 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
                     break;
                 case "team":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             team.setValue(team.getDefault());
-                        }else {
+                        } else {
                             team.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {

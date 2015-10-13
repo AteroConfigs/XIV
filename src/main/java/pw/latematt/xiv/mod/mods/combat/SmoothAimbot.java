@@ -126,9 +126,9 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
 
                 case "pitch":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             pitch.setValue(pitch.getDefault());
-                        }else {
+                        } else {
                             pitch.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {

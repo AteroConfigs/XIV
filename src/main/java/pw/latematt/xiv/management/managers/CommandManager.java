@@ -2,10 +2,8 @@ package pw.latematt.xiv.management.managers;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.command.NumberInvalidException;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemPotion;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.client.C01PacketChatMessage;
@@ -24,7 +22,6 @@ import pw.latematt.xiv.value.Value;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -128,7 +125,7 @@ public class CommandManager extends ListManager<Command> {
                             case "lw":
                                 if (arguments.length >= 3) {
                                     Value<Float> value = (Value<Float>) XIV.getInstance().getValueManager().find("render_line_width");
-                                    if(arguments[2].equalsIgnoreCase("-d")) {
+                                    if (arguments[2].equalsIgnoreCase("-d")) {
                                         value.setValue(value.getDefault());
                                     } else {
                                         Float lineWidth = Float.parseFloat(arguments[2]);
@@ -143,9 +140,9 @@ public class CommandManager extends ListManager<Command> {
                             case "aa":
                                 Value<Boolean> antiAliasing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_anti_aliasing");
                                 if (arguments.length >= 3) {
-                                    if(arguments[2].equalsIgnoreCase("-d")) {
+                                    if (arguments[2].equalsIgnoreCase("-d")) {
                                         antiAliasing.setValue(antiAliasing.getDefault());
-                                    }else{
+                                    } else {
                                         antiAliasing.setValue(Boolean.parseBoolean(arguments[2]));
                                     }
                                 } else {
@@ -157,9 +154,9 @@ public class CommandManager extends ListManager<Command> {
                             case "wb":
                                 Value<Boolean> worldBobbing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_world_bobbing");
                                 if (arguments.length >= 3) {
-                                    if(arguments[2].equalsIgnoreCase("-d")) {
+                                    if (arguments[2].equalsIgnoreCase("-d")) {
                                         worldBobbing.setValue(worldBobbing.getDefault());
-                                    }else {
+                                    } else {
                                         worldBobbing.setValue(Boolean.parseBoolean(arguments[2]));
                                     }
                                 } else {
@@ -171,9 +168,9 @@ public class CommandManager extends ListManager<Command> {
                             case "te":
                                 Value<Boolean> tracerEntity = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_tracer_entity");
                                 if (arguments.length >= 3) {
-                                    if(arguments[2].equalsIgnoreCase("-d")) {
+                                    if (arguments[2].equalsIgnoreCase("-d")) {
                                         tracerEntity.setValue(tracerEntity.getDefault());
-                                    }else {
+                                    } else {
                                         tracerEntity.setValue(Boolean.parseBoolean(arguments[2]));
                                     }
                                 } else {
@@ -187,9 +184,9 @@ public class CommandManager extends ListManager<Command> {
                                 if (arguments.length >= 3) {
                                     String newNametagOpacityString = arguments[2];
                                     try {
-                                        if(arguments[2].equalsIgnoreCase("-d")) {
+                                        if (arguments[2].equalsIgnoreCase("-d")) {
                                             nametagOpacity.setValue(nametagOpacity.getDefault());
-                                        }else {
+                                        } else {
                                             double newNametagOpacity = Double.parseDouble(newNametagOpacityString);
                                             if (newNametagOpacity > 1.0F) {
                                                 newNametagOpacity = 1.0F;
@@ -212,9 +209,9 @@ public class CommandManager extends ListManager<Command> {
                                 if (arguments.length >= 3) {
                                     String newNametagSizeString = arguments[2];
                                     try {
-                                        if(arguments[2].equalsIgnoreCase("-d")) {
+                                        if (arguments[2].equalsIgnoreCase("-d")) {
                                             nametagSize.setValue(nametagSize.getDefault());
-                                        }else{
+                                        } else {
                                             double newNametagSize = Double.parseDouble(newNametagSizeString);
                                             if (newNametagSize > 10.0F) {
                                                 newNametagSize = 10.0F;

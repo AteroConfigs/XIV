@@ -83,9 +83,9 @@ public class Zoot extends Mod implements Listener<MotionUpdateEvent>, CommandHan
                 case "f":
                 case "af":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             fire.setValue(fire.getDefault());
-                        }else {
+                        } else {
                             fire.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -98,9 +98,9 @@ public class Zoot extends Mod implements Listener<MotionUpdateEvent>, CommandHan
                 case "antipotion":
                 case "p":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             fire.setValue(fire.getDefault());
-                        }else {
+                        } else {
                             potions.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {

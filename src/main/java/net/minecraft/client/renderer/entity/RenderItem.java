@@ -1141,38 +1141,10 @@ public class RenderItem implements IResourceManagerReloadListener
             {
                 CrashReport var5 = CrashReport.makeCrashReport(var7, "Rendering item");
                 CrashReportCategory var6 = var5.makeCategory("Item being rendered");
-                var6.addCrashSectionCallable("Item Type", new Callable()
-                {
-                    private static final String __OBFID = "CL_00001004";
-                    public String call()
-                    {
-                        return String.valueOf(stack.getItem());
-                    }
-                });
-                var6.addCrashSectionCallable("Item Aux", new Callable()
-                {
-                    private static final String __OBFID = "CL_00001005";
-                    public String call()
-                    {
-                        return String.valueOf(stack.getMetadata());
-                    }
-                });
-                var6.addCrashSectionCallable("Item NBT", new Callable()
-                {
-                    private static final String __OBFID = "CL_00001006";
-                    public String call()
-                    {
-                        return String.valueOf(stack.getTagCompound());
-                    }
-                });
-                var6.addCrashSectionCallable("Item Foil", new Callable()
-                {
-                    private static final String __OBFID = "CL_00001007";
-                    public String call()
-                    {
-                        return String.valueOf(stack.hasEffect());
-                    }
-                });
+                var6.addCrashSectionCallable("Item Type", () -> String.valueOf(stack.getItem()));
+                var6.addCrashSectionCallable("Item Aux", () -> String.valueOf(stack.getMetadata()));
+                var6.addCrashSectionCallable("Item NBT", () -> String.valueOf(stack.getTagCompound()));
+                var6.addCrashSectionCallable("Item Foil", () -> String.valueOf(stack.hasEffect()));
                 throw new ReportedException(var5);
             }
 

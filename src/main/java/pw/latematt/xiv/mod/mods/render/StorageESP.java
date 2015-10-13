@@ -229,9 +229,9 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
             switch (action.toLowerCase()) {
                 case "chests":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             chests.setValue(chests.getDefault());
-                        }else {
+                        } else {
                             chests.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -241,9 +241,9 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                     break;
                 case "enderchests":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             enderChests.setValue(enderChests.getDefault());
-                        }else {
+                        } else {
                             enderChests.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -253,9 +253,9 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                     break;
                 case "furnaces":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             furnaces.setValue(furnaces.getDefault());
-                        }else {
+                        } else {
                             furnaces.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -265,9 +265,9 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                     break;
                 case "brewingstands":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             brewingStands.setValue(brewingStands.getDefault());
-                        }else {
+                        } else {
                             brewingStands.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -285,9 +285,9 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                     break;
                 case "droppers":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             droppers.setValue(droppers.getDefault());
-                        }else {
+                        } else {
                             droppers.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -297,9 +297,9 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                     break;
                 case "dispensers":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             dispensers.setValue(dispensers.getDefault());
-                        }else {
+                        } else {
                             dispensers.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -309,9 +309,9 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                     break;
                 case "commandblocks":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             commandBlocks.setValue(commandBlocks.getDefault());
-                        }else {
+                        } else {
                             commandBlocks.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -321,9 +321,9 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                     break;
                 case "mobspawners":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             mobSpawners.setValue(mobSpawners.getDefault());
-                        }else {
+                        } else {
                             mobSpawners.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -333,9 +333,9 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                     break;
                 case "enchantmenttables":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             enchantmentTables.setValue(enchantmentTables.getDefault());
-                        }else {
+                        } else {
                             enchantmentTables.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -345,9 +345,9 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                     break;
                 case "boxes":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             boxes.setValue(boxes.getDefault());
-                        }else {
+                        } else {
                             boxes.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -357,9 +357,9 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                     break;
                 case "tracerLines":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             tracerLines.setValue(tracerLines.getDefault());
-                        }else {
+                        } else {
                             tracerLines.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
