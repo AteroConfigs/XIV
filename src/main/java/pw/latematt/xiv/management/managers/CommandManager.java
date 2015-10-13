@@ -391,19 +391,17 @@ public class CommandManager extends ListManager<Command> {
                                     if (arguments[1].equalsIgnoreCase("clear")) {
                                         mc.thePlayer.getHeldItem().setTagCompound(new NBTTagCompound());
                                     } else {
-                                        int level = Integer.parseInt(arguments[2]);
+                                        int level = arguments[2].equalsIgnoreCase("*") ? -92837 : Integer.parseInt(arguments[2]);
 
                                         if(level > 127) {
                                             level = 127;
-                                        }else if(level < -127) {
+                                        }else if(level < -127 && level != 92837) {
                                             level = -127;
                                         }
 
                                         if (arguments[1].equalsIgnoreCase("*")) {
                                             for (Enchantment enchant : Enchantment.enchantmentsList) {
-                                                mc.thePlayer.getHeldItem().addEnchantment(enchant, level);
-
-                                                System.out.println(level);
+                                                mc.thePlayer.getHeldItem().addEnchantment(enchant, level == 92837 ? enchant.getMaxLevel() : level);
                                             }
 
                                             ChatLogger.print("Enchanted your current item with every enchantment.");
@@ -419,9 +417,7 @@ public class CommandManager extends ListManager<Command> {
                                             }
 
                                             if (enchant != null) {
-                                                mc.thePlayer.getHeldItem().addEnchantment(enchant, level);
-
-                                                System.out.println(level);
+                                                mc.thePlayer.getHeldItem().addEnchantment(enchant, level == 92837 ? enchant.getMaxLevel() : level);
 
                                                 ChatLogger.print(String.format("Enchanted your current item with %s.", StatCollector.translateToLocal(enchant.getName())));
                                             }
