@@ -17,7 +17,7 @@ public class ItemUtils {
 
     /* normal stuff */
     public static void getFromInventory(Item item) {
-        for (int index = 9; index < 36; index++) {
+        for (int index = 9; index <= 36; index++) {
             ItemStack stack = MINECRAFT.thePlayer.inventoryContainer.getSlot(index).getStack();
             if (stack == null)
                 continue;
@@ -29,8 +29,8 @@ public class ItemUtils {
     }
 
     public static boolean hotbarHas(Item item) {
-        for (int index = 36; index <= 44; index++) {
-            ItemStack stack = MINECRAFT.thePlayer.inventoryContainer.getSlot(index).getStack();
+        for (int index = 0; index <= 8; index++) {
+            ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
             if (stack == null)
                 continue;
             if (stack.getItem() == item)
@@ -39,14 +39,14 @@ public class ItemUtils {
         return false;
     }
 
-    public static void eatFirst(Item item) {
-        for (int index = 36; index <= 44; index++) {
-            ItemStack stack = MINECRAFT.thePlayer.inventoryContainer.getSlot(index).getStack();
+    public static void useFirst(Item item) {
+        for (int index = 0; index <= 8; index++) {
+            ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
             if (stack == null)
                 continue;
             if (stack.getItem() == item) {
                 int oldItem = MINECRAFT.thePlayer.inventory.currentItem;
-                MINECRAFT.thePlayer.inventory.currentItem = index - 36;
+                MINECRAFT.thePlayer.inventory.currentItem = index;
                 MINECRAFT.playerController.updateController();
                 MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
                 MINECRAFT.thePlayer.inventory.currentItem = oldItem;
@@ -57,12 +57,12 @@ public class ItemUtils {
     }
 
     public static void dropFirst(Item item) {
-        for (int index = 9; index <= 44; index++) {
-            ItemStack stack = MINECRAFT.thePlayer.inventoryContainer.getSlot(index).getStack();
+        for (int index = 0; index <= 8; index++) {
+            ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
             if (stack == null)
                 continue;
             if (stack.getItem() == item) {
-                MINECRAFT.playerController.windowClick(0, index, 1, 4, MINECRAFT.thePlayer);
+                MINECRAFT.playerController.windowClick(0, 36 + index, 1, 4, MINECRAFT.thePlayer);
                 break;
             }
         }
@@ -87,19 +87,8 @@ public class ItemUtils {
         return false;
     }
 
-    public static boolean hotbarHasInstantHealth() {
-        for (int index = 36; index <= 44; index++) {
-            ItemStack stack = MINECRAFT.thePlayer.inventoryContainer.getSlot(index).getStack();
-            if (stack == null)
-                continue;
-            if (isValidHealthPotion(stack))
-                return true;
-        }
-        return false;
-    }
-
     public static void getInstantHealthFromInventory() {
-        for (int index = 9; index < 36; index++) {
+        for (int index = 9; index <= 36; index++) {
             ItemStack stack = MINECRAFT.thePlayer.inventoryContainer.getSlot(index).getStack();
             if (stack == null)
                 continue;
@@ -110,14 +99,25 @@ public class ItemUtils {
         }
     }
 
-    public static void splashFirstInstantHealth() {
-        for (int index = 36; index <= 44; index++) {
-            ItemStack stack = MINECRAFT.thePlayer.inventoryContainer.getSlot(index).getStack();
+    public static boolean hotbarHasInstantHealth() {
+        for (int index = 0; index <= 8; index++) {
+            ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
+            if (stack == null)
+                continue;
+            if (isValidHealthPotion(stack))
+                return true;
+        }
+        return false;
+    }
+
+    public static void useFirstInstantHealth() {
+        for (int index = 0; index <= 8; index++) {
+            ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
             if (stack == null)
                 continue;
             if (isValidHealthPotion(stack)) {
                 int oldItem = MINECRAFT.thePlayer.inventory.currentItem;
-                MINECRAFT.thePlayer.inventory.currentItem = index - 36;
+                MINECRAFT.thePlayer.inventory.currentItem = index;
                 MINECRAFT.playerController.updateController();
                 MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
                 MINECRAFT.thePlayer.inventory.currentItem = oldItem;
