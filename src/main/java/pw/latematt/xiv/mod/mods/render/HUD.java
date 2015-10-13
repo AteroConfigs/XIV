@@ -219,9 +219,9 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             switch (action.toLowerCase()) {
                 case "watermark":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             watermark.setValue(watermark.getDefault());
-                        }else {
+                        } else {
                             watermark.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -231,9 +231,9 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "organize":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             organize.setValue(organize.getDefault());
-                        }else {
+                        } else {
                             organize.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -243,9 +243,9 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "arraylist":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             arraylist.setValue(arraylist.getDefault());
-                        }else {
+                        } else {
                             arraylist.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -255,9 +255,9 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "coords":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             coords.setValue(coords.getDefault());
-                        }else {
+                        } else {
                             coords.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -267,9 +267,9 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "fps":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             fps.setValue(fps.getDefault());
-                        }else {
+                        } else {
                             fps.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -279,9 +279,9 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "ign":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             ign.setValue(ign.getDefault());
-                        }else {
+                        } else {
                             ign.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -291,9 +291,9 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "time":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             time.setValue(time.getDefault());
-                        }else {
+                        } else {
                             time.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -303,9 +303,9 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "potions":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             potions.setValue(potions.getDefault());
-                        }else {
+                        } else {
                             potions.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -315,9 +315,9 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "armor":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             armor.setValue(armor.getDefault());
-                        }else {
+                        } else {
                             armor.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -327,9 +327,9 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     break;
                 case "rudysucks":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             rudysucks.setValue(rudysucks.getDefault());
-                        }else {
+                        } else {
                             rudysucks.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {

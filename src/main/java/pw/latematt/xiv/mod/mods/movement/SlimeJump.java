@@ -1,13 +1,6 @@
 package pw.latematt.xiv.mod.mods.movement;
 
-import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockSlime;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemBucket;
-import net.minecraft.item.ItemFlintAndSteel;
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
-import net.minecraft.util.BlockPos;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -18,7 +11,6 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.utils.Timer;
 import pw.latematt.xiv.value.Value;
 
 /**
@@ -40,9 +32,9 @@ public class SlimeJump extends Mod implements Listener<MotionUpdateEvent>, Comma
     }
 
     public void onEventCalled(MotionUpdateEvent event) {
-        if(BlockUtils.getBlock(mc.thePlayer, -0.5D) instanceof BlockSlime) {
-            if(mc.thePlayer.onGround) {
-                if(mc.thePlayer.motionY > 0) {
+        if (BlockUtils.getBlock(mc.thePlayer, -0.5D) instanceof BlockSlime) {
+            if (mc.thePlayer.onGround) {
+                if (mc.thePlayer.motionY > 0) {
                     mc.thePlayer.motionY += multiplier.getValue();
                 }
             }
@@ -50,7 +42,7 @@ public class SlimeJump extends Mod implements Listener<MotionUpdateEvent>, Comma
     }
 
     @Override
-     public void onCommandRan(String message) {
+    public void onCommandRan(String message) {
         String[] arguments = message.split(" ");
         if (arguments.length >= 2) {
             String action = arguments[1];

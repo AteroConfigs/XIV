@@ -56,7 +56,7 @@ public final class Blink extends Mod {
         this.renderListener = new Listener<Render3DEvent>() {
             @Override
             public void onEventCalled(Render3DEvent event) {
-                double[] start = new double[] { position.posX, position.posY, position.posZ };
+                double[] start = new double[]{position.posX, position.posY, position.posZ};
 
                 RenderUtils.beginGl();
                 Tessellator var2 = Tessellator.getInstance();
@@ -75,8 +75,6 @@ public final class Blink extends Mod {
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this.packetListener);
         XIV.getInstance().getListenerManager().add(this.renderListener);
-
-        mc.timer.timerSpeed = 1.25F;
 
         if (Objects.nonNull(mc.thePlayer)) {
             this.position = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
@@ -99,7 +97,6 @@ public final class Blink extends Mod {
             }
         }
 
-        mc.timer.timerSpeed = 1.0F;
         this.packets.clear();
     }
 }

@@ -75,9 +75,9 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
             switch (action.toLowerCase()) {
                 case "bow":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             bow.setValue(bow.getDefault());
-                        }else {
+                        } else {
                             bow.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -87,9 +87,9 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
                     break;
                 case "food":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             food.setValue(food.getDefault());
-                        }else {
+                        } else {
                             food.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -99,9 +99,9 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
                     break;
                 case "milk":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             milk.setValue(milk.getDefault());
-                        }else {
+                        } else {
                             milk.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
@@ -111,9 +111,9 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
                     break;
                 case "potions":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             milk.setValue(milk.getDefault());
-                        }else {
+                        } else {
                             potions.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {

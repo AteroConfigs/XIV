@@ -82,9 +82,9 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
                     if (arguments.length >= 3) {
                         String newPacketsString = arguments[2];
                         try {
-                            if(arguments[2].equalsIgnoreCase("-d")) {
+                            if (arguments[2].equalsIgnoreCase("-d")) {
                                 packets.setValue(packets.getDefault());
-                            }else{
+                            } else {
                                 int newPackets = Integer.parseInt(newPacketsString);
                                 if (newPackets < 0) {
                                     newPackets = 0;

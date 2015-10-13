@@ -249,9 +249,9 @@ public class Speed extends Mod implements CommandHandler {
                 case "fastladder":
                 case "fl":
                     if (arguments.length >= 3) {
-                        if(arguments[2].equalsIgnoreCase("-d")) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
                             fastLadder.setValue(fastLadder.getDefault());
-                        }else {
+                        } else {
                             fastLadder.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
