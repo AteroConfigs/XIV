@@ -79,8 +79,6 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
             if (button.id == 0) {
                 mc.displayGuiScreen(parent);
             } else if (button.id == 1) {
-                thread = new AuthThread(this.slot.getAlt());
-                thread.start();
                 login(slot.getAlt());
             } else if (button.id == 2) {
                 XIV.getInstance().getAltManager().add(username.getText(), password.getText());
@@ -243,7 +241,7 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
 
     public void login(AltAccount alt) {
         thread = new AuthThread(alt);
-        thread.start();
+        new Thread(thread).start();
     }
 
     @Override
