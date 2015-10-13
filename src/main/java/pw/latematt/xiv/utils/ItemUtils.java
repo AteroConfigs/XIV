@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockPos;
@@ -46,11 +47,9 @@ public class ItemUtils {
                 continue;
             if (stack.getItem() == item) {
                 int oldItem = MINECRAFT.thePlayer.inventory.currentItem;
-                MINECRAFT.thePlayer.inventory.currentItem = index;
-                MINECRAFT.playerController.updateController();
+                MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(index));
                 MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
-                MINECRAFT.thePlayer.inventory.currentItem = oldItem;
-                MINECRAFT.playerController.updateController();
+                MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(oldItem));
                 break;
             }
         }
@@ -117,11 +116,9 @@ public class ItemUtils {
                 continue;
             if (isValidHealthPotion(stack)) {
                 int oldItem = MINECRAFT.thePlayer.inventory.currentItem;
-                MINECRAFT.thePlayer.inventory.currentItem = index;
-                MINECRAFT.playerController.updateController();
+                MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(index));
                 MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
-                MINECRAFT.thePlayer.inventory.currentItem = oldItem;
-                MINECRAFT.playerController.updateController();
+                MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(oldItem));
                 break;
             }
         }

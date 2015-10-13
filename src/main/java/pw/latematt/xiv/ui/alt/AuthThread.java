@@ -11,7 +11,7 @@ import pw.latematt.xiv.XIV;
 import java.lang.reflect.Field;
 import java.net.Proxy;
 
-public class AuthThread extends Thread {
+public class AuthThread implements Runnable {
     private final Minecraft mc = Minecraft.getMinecraft();
     private final AltAccount account;
     private String status;
