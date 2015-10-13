@@ -285,7 +285,7 @@ public class CommandManager extends ListManager<Command> {
                                 if (arguments[1].equalsIgnoreCase("clear")) {
                                     mc.thePlayer.getHeldItem().setTagCompound(new NBTTagCompound());
                                 } else {
-                                    byte level = Byte.parseByte(arguments[2]);
+                                    int level = Integer.parseInt(arguments[2]);
                                     int duration = Integer.parseInt(arguments[3]);
 
                                     if (mc.thePlayer.getHeldItem().getTagCompound() == null) {
@@ -302,7 +302,7 @@ public class CommandManager extends ListManager<Command> {
                                                 NBTTagList list = mc.thePlayer.getHeldItem().getTagCompound().getTagList("CustomPotionEffects", 10);
                                                 NBTTagCompound tag = new NBTTagCompound();
                                                 tag.setByte("Id", (byte) potion.getId());
-                                                tag.setByte("Amplifier", level);
+                                                tag.setByte("Amplifier", (byte) level);
                                                 tag.setInteger("Duration", duration);
                                                 list.appendTag(tag);
                                             }
@@ -328,7 +328,7 @@ public class CommandManager extends ListManager<Command> {
                                             NBTTagList list = mc.thePlayer.getHeldItem().getTagCompound().getTagList("CustomPotionEffects", 10);
                                             NBTTagCompound tag = new NBTTagCompound();
                                             tag.setByte("Id", (byte) potion.getId());
-                                            tag.setByte("Amplifier", level);
+                                            tag.setByte("Amplifier", (byte) level);
                                             tag.setInteger("Duration", duration);
                                             list.appendTag(tag);
 
@@ -393,9 +393,17 @@ public class CommandManager extends ListManager<Command> {
                                     } else {
                                         int level = Integer.parseInt(arguments[2]);
 
+                                        if(level > 127) {
+                                            level = 127;
+                                        }else if(level < -127) {
+                                            level = -127;
+                                        }
+
                                         if (arguments[1].equalsIgnoreCase("*")) {
                                             for (Enchantment enchant : Enchantment.enchantmentsList) {
                                                 mc.thePlayer.getHeldItem().addEnchantment(enchant, level);
+
+                                                System.out.println(level);
                                             }
 
                                             ChatLogger.print("Enchanted your current item with every enchantment.");
@@ -412,6 +420,8 @@ public class CommandManager extends ListManager<Command> {
 
                                             if (enchant != null) {
                                                 mc.thePlayer.getHeldItem().addEnchantment(enchant, level);
+
+                                                System.out.println(level);
 
                                                 ChatLogger.print(String.format("Enchanted your current item with %s.", StatCollector.translateToLocal(enchant.getName())));
                                             }
