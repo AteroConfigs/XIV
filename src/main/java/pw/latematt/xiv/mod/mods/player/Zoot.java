@@ -114,7 +114,7 @@ public class Zoot extends Mod implements Listener<MotionUpdateEvent>, CommandHan
                     break;
             }
         } else {
-            ChatLogger.print("Invalid arguments, valid: step <action>");
+            ChatLogger.print("Invalid arguments, valid: zoot <action>");
         }
     }
 

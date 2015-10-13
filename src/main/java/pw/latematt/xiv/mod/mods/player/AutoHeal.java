@@ -139,7 +139,7 @@ public class AutoHeal extends Mod implements CommandHandler {
                                 Float newHealth = Float.parseFloat(newHealthString);
                                 health.setValue(newHealth);
                             }
-                            ChatLogger.print(String.format("Kill Aura Range set to %s", health.getValue()));
+                            ChatLogger.print(String.format("AutoHeal Health set to %s", health.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newHealthString));
                         }
