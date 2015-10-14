@@ -81,6 +81,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new NoRotationSet());
         contents.add(new NoSlowdown());
         contents.add(new Phase());
+        contents.add(new PotionSaver());
         contents.add(new Regen());
         contents.add(new SlimeJump());
         contents.add(new SmoothAimbot());
