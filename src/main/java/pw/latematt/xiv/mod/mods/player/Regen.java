@@ -8,13 +8,13 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.Timer;
 
 /**
  * @author Rederpz
  */
 public class Regen extends Mod implements Listener<MotionUpdateEvent> {
-    private final Timer timer = new Timer();
     private boolean set = false;
 
     public Regen() {
@@ -26,17 +26,14 @@ public class Regen extends Mod implements Listener<MotionUpdateEvent> {
      * keep in for martin kays?
      */
     public void onEventCalled(MotionUpdateEvent event) {
-        long time = 100L;
-
         if (mc.thePlayer.getActivePotionEffect(Potion.REGENERATION) != null) {
             if (!set) {
                 set = true;
-                timer.reset();
             }
 
-            if (mc.thePlayer.onGround) {
-                if (mc.thePlayer.getHealth() < mc.thePlayer.getMaxHealth() && timer.hasReached(time)) {
-                    for (int i = 0; i < 100; i++) {
+            if (mc.thePlayer.onGround || BlockUtils.isOnLadder(mc.thePlayer) || BlockUtils.isInLiquid(mc.thePlayer) || BlockUtils.isOnLiquid(mc.thePlayer)) {
+                if (mc.thePlayer.getHealth() < mc.thePlayer.getMaxHealth()) {
+                    for (int i = 0; i < mc.thePlayer.getMaxHealth() - mc.thePlayer.getHealth(); i++) {
                         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
                     }
                 }
