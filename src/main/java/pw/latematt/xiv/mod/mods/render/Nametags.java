@@ -163,34 +163,29 @@ public class Nametags extends Mod implements CommandHandler {
         mc.fontRendererObj.drawStringWithShadow(entityName, -var18, var17, getNametagColor(entity));
         if (armor.getValue() && entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
-            final List<ItemStack> items = new ArrayList<>();
+            List<ItemStack> items = new ArrayList<>();
             if (player.getCurrentEquippedItem() != null) {
                 items.add(player.getCurrentEquippedItem());
             }
 
             for (int index = 3; index >= 0; index--) {
-                final ItemStack stack = player.inventory.armorInventory[index];
+                ItemStack stack = player.inventory.armorInventory[index];
                 if (stack != null) {
                     items.add(stack);
                 }
             }
 
-            final int offset = var18 - (items.size() - 1) * 9 - 9;
+            int offset = var18 - (items.size() - 1) * 9 - 9;
             int xPos = 0;
-            for (final ItemStack stack : items) {
-                final NBTTagList enchants = stack.getEnchantmentTagList();
+            for (ItemStack stack : items) {
+                NBTTagList enchants = stack.getEnchantmentTagList();
                 GlStateManager.pushMatrix();
                 RenderHelper.enableStandardItemLighting();
                 mc.getRenderItem().zLevel = -150.0F;
                 mc.getRenderItem().renderItemAboveHead(stack, -var18 + offset + xPos, var17 - 20);
                 mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, -var18 + offset + xPos, var17 - 20);
                 mc.getRenderItem().zLevel = 0.0F;
-                GlStateManager.disableCull();
-                GlStateManager.enableAlpha();
-                GlStateManager.disableBlend();
-                GlStateManager.disableLighting();
                 RenderHelper.disableStandardItemLighting();
-                GlStateManager.enableDepth();
                 GlStateManager.popMatrix();
 
                 GlStateManager.pushMatrix();

@@ -393,9 +393,9 @@ public class CommandManager extends ListManager<Command> {
                                     } else {
                                         int level = arguments[2].equalsIgnoreCase("*") ? -92837 : Integer.parseInt(arguments[2]);
 
-                                        if(level > 127) {
+                                        if (level > 127) {
                                             level = 127;
-                                        }else if(level < -127 && level != 92837) {
+                                        } else if (level < -127 && level != 92837) {
                                             level = -127;
                                         }
 

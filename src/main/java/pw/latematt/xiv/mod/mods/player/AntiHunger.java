@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public final class AntiHunger extends Mod implements Listener<MotionUpdateEvent> {
     public AntiHunger() {
-        super("AntiHunger", ModType.PLAYER, Keyboard.KEY_NONE, 65407);
+        super("AntiHunger", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFBC832F);
     }
 
     @Override

@@ -4,16 +4,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
-import net.minecraft.src.IntegerCache;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -22,20 +18,17 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.RenderUtils;
 
 /**
  * @author Rederpz / EnterX
- *
- * This isn't really a nocheat bypass, and it prob doesn't work on servers at all but ITS HERE M9
- * This mod is also really fucking buggy.
+ *         <p>
+ *         This isn't really a nocheat bypass, and it prob doesn't work on servers at all but ITS HERE M9
+ *         This mod is also really fucking buggy.
  */
 
 public class CreativeWorldEdit extends Mod implements Listener<Render3DEvent>, CommandHandler {
@@ -56,7 +49,7 @@ public class CreativeWorldEdit extends Mod implements Listener<Render3DEvent>, C
 
     @Override
     public void onEventCalled(Render3DEvent event) {
-        if(pos1 != null && pos2 != null) {
+        if (pos1 != null && pos2 != null) {
             RenderUtils.beginGl();
 
             float partialTicks = event.getPartialTicks();
@@ -73,7 +66,7 @@ public class CreativeWorldEdit extends Mod implements Listener<Render3DEvent>, C
     }
 
     public void placeBlocks(String blockid) {
-        if(!isEnabled()) {
+        if (!isEnabled()) {
             ChatLogger.print("Enable the CreateWorldEdit mod to start world editing.");
             return;
         }
@@ -91,27 +84,27 @@ public class CreativeWorldEdit extends Mod implements Listener<Render3DEvent>, C
                     stack = new ItemStack(item, 1, 0);
                     mc.playerController.sendSlotPacket(stack, 36 + mc.thePlayer.inventory.currentItem);
                 }
-            }catch(NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 ChatLogger.print(String.format("\"%s\" is not a number.", blockid));
                 return;
             }
-        }else if(blockid.equals("0") || blockid.equals("air")) {
+        } else if (blockid.equals("0") || blockid.equals("air")) {
             isBreaking = true;
-        }else{
+        } else {
             item = Item.getItemFromBlock(Block.getBlockById((int) (Math.random() * 330)));
 
-            if(item != null) {
+            if (item != null) {
                 stack = new ItemStack(item, 1, 0);
                 mc.playerController.sendSlotPacket(stack, 36 + mc.thePlayer.inventory.currentItem);
             }
         }
 
-        if(pos1 == null || pos2 == null) {
+        if (pos1 == null || pos2 == null) {
             ChatLogger.print("One or more positions is not set.");
             return;
         }
 
-        if(item == null && !isBreaking) {
+        if (item == null && !isBreaking) {
             ChatLogger.print("Invalid item.");
             return;
         }
@@ -179,23 +172,23 @@ public class CreativeWorldEdit extends Mod implements Listener<Render3DEvent>, C
                     if (blockid.equals("random") && !isBreaking) {
                         item = Item.getItemFromBlock(Block.getBlockById((int) (Math.random() * 330)));
 
-                        if(item != null) {
+                        if (item != null) {
                             stack = new ItemStack(item, 1, 0);
                             mc.playerController.sendSlotPacket(stack, 36 + mc.thePlayer.inventory.currentItem);
                         }
                     }
 
-                    if(isBreaking) {
+                    if (isBreaking) {
                         Block block = mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
 
-                        if(!(block instanceof BlockAir)) {
+                        if (!(block instanceof BlockAir)) {
                             mc.getNetHandler().getNetworkManager().sendPacket(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.START_DESTROY_BLOCK, new BlockPos(x, y, z), EnumFacing.DOWN));
                             mc.getNetHandler().getNetworkManager().sendPacket(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, new BlockPos(x, y, z), EnumFacing.DOWN));
                         }
-                    }else{
+                    } else {
                         Block block = mc.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
 
-                        if(block instanceof BlockAir) {
+                        if (block instanceof BlockAir) {
                             mc.getNetHandler().getNetworkManager().sendPacket(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
                             mc.getNetHandler().getNetworkManager().sendPacket(new C08PacketPlayerBlockPlacement(new BlockPos(x, y - 1, z), EnumFacing.UP.getIndex(), mc.thePlayer.getHeldItem(), 0, 0, 0));
                         }
@@ -220,16 +213,16 @@ public class CreativeWorldEdit extends Mod implements Listener<Render3DEvent>, C
                     try {
                         if (arguments[2].equalsIgnoreCase("clear")) {
                             pos1 = null;
-                        }else {
+                        } else {
                             pos1 = new BlockPos(Integer.parseInt(arguments[2]), Integer.parseInt(arguments[3]), Integer.parseInt(arguments[4]));
                         }
-                    }catch(ArrayIndexOutOfBoundsException e) {
+                    } catch (ArrayIndexOutOfBoundsException e) {
                         pos1 = new BlockPos(mc.thePlayer.getPosition());
-                    }catch(NumberFormatException e) {
+                    } catch (NumberFormatException e) {
                         ChatLogger.print("Invalid arguments, valid: creativeworldedit pos1 <x> <y> <z>");
                     }
 
-                    if(pos1 != null) {
+                    if (pos1 != null) {
                         ChatLogger.print("First Position set to: " + pos1);
                     }
                     break;
@@ -237,16 +230,16 @@ public class CreativeWorldEdit extends Mod implements Listener<Render3DEvent>, C
                     try {
                         if (arguments[2].equalsIgnoreCase("clear")) {
                             pos2 = null;
-                        }else {
+                        } else {
                             pos2 = new BlockPos(Integer.parseInt(arguments[2]), Integer.parseInt(arguments[3]), Integer.parseInt(arguments[4]));
                         }
-                    }catch(ArrayIndexOutOfBoundsException e) {
+                    } catch (ArrayIndexOutOfBoundsException e) {
                         pos2 = new BlockPos(mc.thePlayer.getPosition());
-                    }catch(NumberFormatException e) {
+                    } catch (NumberFormatException e) {
                         ChatLogger.print("Invalid arguments, valid: creativeworldedit pos2 <x> <y> <z>");
                     }
 
-                    if(pos2 != null) {
+                    if (pos2 != null) {
                         ChatLogger.print("Second Position set to: " + pos2);
                     }
                     break;
@@ -270,39 +263,39 @@ public class CreativeWorldEdit extends Mod implements Listener<Render3DEvent>, C
         double y2 = yo;
         double z2 = zo;
 
-        if(x1 > x2) {
+        if (x1 > x2) {
             x1 += 1.0D;
         }
 
-        if(x1 == x2) {
+        if (x1 == x2) {
             x1 += 1.0D;
         }
 
-        if(x2 > x1) {
+        if (x2 > x1) {
             x2 += 1.0D;
         }
 
-        if(y1 > y2) {
+        if (y1 > y2) {
             y1 += 1.0D;
         }
 
-        if(y1 == y2) {
+        if (y1 == y2) {
             y1 += 1.0D;
         }
 
-        if(y2 > y1) {
+        if (y2 > y1) {
             y2 += 1.0D;
         }
 
-        if(z1 > z2) {
+        if (z1 > z2) {
             z1 += 1.0D;
         }
 
-        if(z1 == z2) {
+        if (z1 == z2) {
             z1 += 1.0D;
         }
 
-        if(z2 > z1) {
+        if (z2 > z1) {
             z2 += 1.0D;
         }
 
