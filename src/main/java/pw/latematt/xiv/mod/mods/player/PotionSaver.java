@@ -21,12 +21,12 @@ import java.util.Objects;
 public class PotionSaver extends Mod implements Listener<MotionUpdateEvent> {
     private final Listener potionIncrementListener;
     public PotionSaver() {
-        super("PotionSaver", ModType.PLAYER, Keyboard.KEY_NONE, 0xFF006600);
+        super("PotionSaver", ModType.PLAYER, Keyboard.KEY_NONE, 0xFF008800);
 
         potionIncrementListener = new Listener<PotionIncrementEvent>() {
             @Override
             public void onEventCalled(PotionIncrementEvent event) {
-                if (!(mc.thePlayer.isUsingItem()) && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().isCollidedVertically && EntityUtils.getReference().motionZ == 0)) {
+                if (!(mc.thePlayer.isUsingItem()) && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().isCollidedVertically && !mc.gameSettings.keyBindJump.getIsKeyPressed() && EntityUtils.getReference().motionZ == 0)) {
                     event.setCancelled(true);
                 }
             }
@@ -36,7 +36,7 @@ public class PotionSaver extends Mod implements Listener<MotionUpdateEvent> {
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
         if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
-            if (!(mc.thePlayer.isUsingItem()) && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().isCollidedVertically && EntityUtils.getReference().motionZ == 0)) {
+            if (!(mc.thePlayer.isUsingItem()) && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().isCollidedVertically && !mc.gameSettings.keyBindJump.getIsKeyPressed() && EntityUtils.getReference().motionZ == 0)) {
                 event.setCancelled(true);
             }
         }

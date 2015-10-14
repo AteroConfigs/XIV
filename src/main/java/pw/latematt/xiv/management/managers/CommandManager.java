@@ -252,7 +252,7 @@ public class CommandManager extends ListManager<Command> {
                 .handler(message -> {
                     String[] arguments = message.split(" ");
                     if (arguments.length > 1) {
-                        mc.thePlayer.sendChatMessage(message.substring(arguments[0].length() + 1, message.length()));
+                        mc.getNetHandler().getNetworkManager().sendPacket(new C01PacketChatMessage(message.substring(arguments[0].length() + 1, message.length())));
                     } else {
                         ChatLogger.print("Invalid arguments, valid: say <message>");
                     }
@@ -284,29 +284,56 @@ public class CommandManager extends ListManager<Command> {
                 .arguments("<effect> <level>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
-                    if (mc.thePlayer.getHeldItem() == null || mc.thePlayer.getHeldItem().getItem() != Items.potionitem) {
-                        ChatLogger.print("You must be holding a potion to enhance potions.");
-                    } else {
-                        if (!mc.thePlayer.capabilities.isCreativeMode) {
-                            ChatLogger.print("You must be in creative mode to enhance potions.");
+                    if (arguments.length >= 2) {
+                        if (mc.thePlayer.getHeldItem() == null || mc.thePlayer.getHeldItem().getItem() != Items.potionitem) {
+                            ChatLogger.print("You must be holding a potion to enhance potions.");
                         } else {
-                            try {
-                                if (arguments[1].equalsIgnoreCase("clear")) {
-                                    mc.thePlayer.getHeldItem().setTagCompound(new NBTTagCompound());
-                                } else {
-                                    int level = Integer.parseInt(arguments[2]);
-                                    int duration = Integer.parseInt(arguments[3]);
-
-                                    if (mc.thePlayer.getHeldItem().getTagCompound() == null) {
+                            if (!mc.thePlayer.capabilities.isCreativeMode) {
+                                ChatLogger.print("You must be in creative mode to enhance potions.");
+                            } else {
+                                try {
+                                    if (arguments[1].equalsIgnoreCase("clear")) {
                                         mc.thePlayer.getHeldItem().setTagCompound(new NBTTagCompound());
-                                    }
+                                    } else {
+                                        int level = Integer.parseInt(arguments[2]);
+                                        int duration = Integer.parseInt(arguments[3]);
 
-                                    if (!mc.thePlayer.getHeldItem().getTagCompound().hasKey("CustomPotionEffects", 9)) {
-                                        mc.thePlayer.getHeldItem().getTagCompound().setTag("CustomPotionEffects", new NBTTagList());
-                                    }
+                                        if (mc.thePlayer.getHeldItem().getTagCompound() == null) {
+                                            mc.thePlayer.getHeldItem().setTagCompound(new NBTTagCompound());
+                                        }
 
-                                    if (arguments[1].equalsIgnoreCase("*")) {
-                                        for (Potion potion : Potion.potionTypes) {
+                                        if (!mc.thePlayer.getHeldItem().getTagCompound().hasKey("CustomPotionEffects", 9)) {
+                                            mc.thePlayer.getHeldItem().getTagCompound().setTag("CustomPotionEffects", new NBTTagList());
+                                        }
+
+                                        if (arguments[1].equalsIgnoreCase("*")) {
+                                            for (Potion potion : Potion.potionTypes) {
+                                                if (potion != null) {
+                                                    NBTTagList list = mc.thePlayer.getHeldItem().getTagCompound().getTagList("CustomPotionEffects", 10);
+                                                    NBTTagCompound tag = new NBTTagCompound();
+                                                    tag.setByte("Id", (byte) potion.getId());
+                                                    tag.setByte("Amplifier", (byte) level);
+                                                    tag.setInteger("Duration", duration);
+                                                    list.appendTag(tag);
+                                                }
+                                            }
+
+                                            ChatLogger.print("Enchanted your current item with every enchantment.");
+                                        } else {
+                                            Potion potion = null;
+
+                                            for (Potion pot : Potion.potionTypes) {
+                                                if (pot != null) {
+                                                    String name = I18n.format(pot.getName(), new Object[0]).replaceAll(" ", "");
+
+                                                    System.out.println(name);
+
+                                                    if (name.equalsIgnoreCase(arguments[1])) {
+                                                        potion = pot;
+                                                    }
+                                                }
+                                            }
+
                                             if (potion != null) {
                                                 NBTTagList list = mc.thePlayer.getHeldItem().getTagCompound().getTagList("CustomPotionEffects", 10);
                                                 NBTTagCompound tag = new NBTTagCompound();
@@ -314,42 +341,18 @@ public class CommandManager extends ListManager<Command> {
                                                 tag.setByte("Amplifier", (byte) level);
                                                 tag.setInteger("Duration", duration);
                                                 list.appendTag(tag);
+
+                                                ChatLogger.print(String.format("Enhanced your current potion with %s.", I18n.format(potion.getName())));
                                             }
-                                        }
-
-                                        ChatLogger.print("Enchanted your current item with every enchantment.");
-                                    } else {
-                                        Potion potion = null;
-
-                                        for (Potion pot : Potion.potionTypes) {
-                                            if (pot != null) {
-                                                String name = I18n.format(pot.getName(), new Object[0]).replaceAll(" ", "");
-
-                                                System.out.println(name);
-
-                                                if (name.equalsIgnoreCase(arguments[1])) {
-                                                    potion = pot;
-                                                }
-                                            }
-                                        }
-
-                                        if (potion != null) {
-                                            NBTTagList list = mc.thePlayer.getHeldItem().getTagCompound().getTagList("CustomPotionEffects", 10);
-                                            NBTTagCompound tag = new NBTTagCompound();
-                                            tag.setByte("Id", (byte) potion.getId());
-                                            tag.setByte("Amplifier", (byte) level);
-                                            tag.setInteger("Duration", duration);
-                                            list.appendTag(tag);
-
-                                            ChatLogger.print(String.format("Enhanced your current potion with %s.", I18n.format(potion.getName())));
                                         }
                                     }
+                                } catch (Exception e) {
+                                    ChatLogger.print("Invalid arguments, valid: potion <effect> <level> <duration>");
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                ChatLogger.print("Invalid arguments, valid: potion <effect> <level> <duration>");
                             }
                         }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: potion <effect> <level> <duration>");
                     }
                 }).build();
         Command.newCommand()
@@ -388,57 +391,60 @@ public class CommandManager extends ListManager<Command> {
                 .arguments("<enchantment> <level>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
-
-                    if (mc.thePlayer.getHeldItem() == null) {
-                        ChatLogger.print("You must be holding an item to enchant.");
-                    } else {
-                        if (!mc.thePlayer.capabilities.isCreativeMode) {
-                            ChatLogger.print("You must be in creative mode to enchant.");
+                    if (arguments.length >= 2) {
+                        if (mc.thePlayer.getHeldItem() == null) {
+                            ChatLogger.print("You must be holding an item to enchant.");
                         } else {
-                            try {
+                            if (!mc.thePlayer.capabilities.isCreativeMode) {
+                                ChatLogger.print("You must be in creative mode to enchant.");
+                            } else {
                                 try {
-                                    if (arguments[1].equalsIgnoreCase("clear")) {
-                                        mc.thePlayer.getHeldItem().setTagCompound(new NBTTagCompound());
-                                    } else {
-                                        int level = arguments[2].equalsIgnoreCase("*") ? -92837 : Integer.parseInt(arguments[2]);
+                                    try {
+                                        if (arguments[1].equalsIgnoreCase("clear")) {
+                                            mc.thePlayer.getHeldItem().setTagCompound(new NBTTagCompound());
+                                        } else {
+                                            int level = arguments[2].equalsIgnoreCase("*") ? -92837 : Integer.parseInt(arguments[2]);
 
-                                        if (level > 127) {
-                                            level = 127;
-                                        } else if (level < -127 && level != 92837) {
-                                            level = -127;
-                                        }
-
-                                        if (arguments[1].equalsIgnoreCase("*")) {
-                                            for (Enchantment enchant : Enchantment.enchantmentsList) {
-                                                mc.thePlayer.getHeldItem().addEnchantment(enchant, level == 92837 ? enchant.getMaxLevel() : level);
+                                            if (level > 127) {
+                                                level = 127;
+                                            } else if (level < -127 && level != 92837) {
+                                                level = -127;
                                             }
 
-                                            ChatLogger.print("Enchanted your current item with every enchantment.");
-                                        } else {
-                                            Enchantment enchant = null;
+                                            if (arguments[1].equalsIgnoreCase("*")) {
+                                                for (Enchantment enchant : Enchantment.enchantmentsList) {
+                                                    mc.thePlayer.getHeldItem().addEnchantment(enchant, level == 92837 ? enchant.getMaxLevel() : level);
+                                                }
 
-                                            for (Enchantment enc : Enchantment.enchantmentsList) {
-                                                String name = StatCollector.translateToLocal(enc.getName()).replaceAll(" ", "");
+                                                ChatLogger.print("Enchanted your current item with every enchantment.");
+                                            } else {
+                                                Enchantment enchant = null;
 
-                                                if (name.equalsIgnoreCase(arguments[1])) {
-                                                    enchant = enc;
+                                                for (Enchantment enc : Enchantment.enchantmentsList) {
+                                                    String name = StatCollector.translateToLocal(enc.getName()).replaceAll(" ", "");
+
+                                                    if (name.equalsIgnoreCase(arguments[1])) {
+                                                        enchant = enc;
+                                                    }
+                                                }
+
+                                                if (enchant != null) {
+                                                    mc.thePlayer.getHeldItem().addEnchantment(enchant, level == 92837 ? enchant.getMaxLevel() : level);
+
+                                                    ChatLogger.print(String.format("Enchanted your current item with %s.", StatCollector.translateToLocal(enchant.getName())));
                                                 }
                                             }
-
-                                            if (enchant != null) {
-                                                mc.thePlayer.getHeldItem().addEnchantment(enchant, level == 92837 ? enchant.getMaxLevel() : level);
-
-                                                ChatLogger.print(String.format("Enchanted your current item with %s.", StatCollector.translateToLocal(enchant.getName())));
-                                            }
                                         }
+                                    } catch (NumberFormatException e) {
+                                        ChatLogger.print(String.format("\"%s\" is not a number.", arguments[2]));
                                     }
-                                } catch (NumberFormatException e) {
-                                    ChatLogger.print(String.format("\"%s\" is not a number.", arguments[2]));
+                                } catch (ArrayIndexOutOfBoundsException e) {
+                                    ChatLogger.print("Invalid arguments, valid: enchant <enchantment> <level>");
                                 }
-                            } catch (ArrayIndexOutOfBoundsException e) {
-                                ChatLogger.print("Invalid arguments, valid: enchant <enchantment> <level>");
                             }
                         }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: enchant <enchantment> <level>");
                     }
                 }).build();
         Command.newCommand()
@@ -551,6 +557,59 @@ public class CommandManager extends ListManager<Command> {
                         }
                     });
                     thread.start();
+                }).build();
+        Command.newCommand()
+                .cmd("history")
+                .aliases("namehistory", "nh")
+                .description("Get the name history of people.")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+
+                    if (arguments.length >= 2) {
+                        String UUID = "";
+                        try {
+                            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + arguments[1]);
+                            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+                            String line = "";
+                            while ((line = br.readLine()) != null) {
+                                UUID = line.split("\"")[3];
+                            }
+
+                            br.close();
+
+                            url = new URL("https://api.mojang.com/user/profiles/" + UUID + "/names");
+                            br = new BufferedReader(new InputStreamReader(url.openStream()));
+
+                            String originalName = "";
+                            String oldNames = "";
+
+                            line = "";
+                            while((line = br.readLine()) != null) {
+                                originalName = line.split("\"")[3];
+
+                                int count = 5;
+                                for(int i = 0; i < line.split("\"").length; i++) {
+                                    if((i != line.split("\"").length - 1) && (line.split("\"")[(i + 1)].equals(","))) {
+                                        if(oldNames.equals("")) {
+                                            oldNames = line.split("\"")[i];
+                                        }else{
+                                            oldNames = oldNames + ", " + line.split("\"")[i];
+                                        }
+                                    }
+                                }
+
+                                if(oldNames.equals("")) {
+                                    ChatLogger.print(arguments[1] + " hasn't changed their name");
+                                }else{
+                                    ChatLogger.print(arguments[1] + "'s name history: " + originalName + ", " + oldNames + ".");
+                                }
+                            }
+                        } catch (IOException e) {
+                            ChatLogger.print("Unable to retrieve UUID of player.");
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: history <name>");
+                    }
                 }).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {
