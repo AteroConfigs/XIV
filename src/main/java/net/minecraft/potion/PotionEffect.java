@@ -4,6 +4,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.PotionIncrementEvent;
 
 public class PotionEffect
 {
@@ -133,7 +135,12 @@ public class PotionEffect
                 this.performEffect(entityIn);
             }
 
-            this.deincrementDuration();
+            PotionIncrementEvent event = new PotionIncrementEvent();
+            XIV.getInstance().getListenerManager().call(event);
+
+            if(!event.isCancelled()) {
+                this.deincrementDuration();
+            }
         }
 
         return this.duration > 0;

@@ -1,6 +1,8 @@
 package pw.latematt.xiv.management.managers;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
@@ -8,7 +10,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.ScreenShotHelper;
 import net.minecraft.util.StatCollector;
+import org.apache.commons.codec.binary.Base64;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.event.Listener;
@@ -17,11 +21,16 @@ import pw.latematt.xiv.event.events.WorldBobbingEvent;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
+import pw.latematt.xiv.utils.Timer;
 import pw.latematt.xiv.value.Value;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -461,6 +470,87 @@ public class CommandManager extends ListManager<Command> {
 
                         ChatLogger.print("Copied your current coordinates to clipboard.");
                     }
+                }).build();
+        Command.newCommand()
+                .cmd("screenshot")
+                .aliases("scr", "capture", "image", "imgur")
+                .description("Take screenshots of your minecraft.")
+                .handler(message -> {
+                    if (mc.currentScreen instanceof GuiChat && mc.thePlayer != null) {
+                        mc.displayGuiScreen((GuiScreen) null);
+                    }
+
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ScreenShotHelper.saveScreenshot(mc.mcDataDir, mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
+
+                            File screenshots = new File("screenshots");
+
+                            File[] files = screenshots.listFiles(new FileFilter() {
+                                @Override
+                                public boolean accept(File file) {
+                                    return file.isFile();
+                                }
+                            });
+
+                            long timeModified = -9223372036854775808L;
+                            File lastModified = null;
+                            for (File file : files) {
+                                if (file.lastModified() > timeModified) {
+                                    lastModified = file;
+                                    timeModified = file.lastModified();
+                                }
+                            }
+
+                            try {
+                                URL imgurApi = new URL("https://api.imgur.com/3/image");
+                                HttpURLConnection connection = (HttpURLConnection) imgurApi.openConnection();
+                                BufferedImage image = null;
+                                File file = new File(lastModified.getAbsolutePath());
+                                image = ImageIO.read(file);
+                                ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+                                ImageIO.write(image, "png", byteArray);
+                                byte[] byteImage = byteArray.toByteArray();
+                                String dataImage = Base64.encodeBase64String(byteImage);
+                                String data = URLEncoder.encode("image", "UTF-8") + "=" + URLEncoder.encode(dataImage, "UTF-8");
+                                connection.setDoOutput(true);
+                                connection.setDoInput(true);
+                                connection.setRequestMethod("POST");
+                                String secretKey = "8731c677af5b5a3188728f2f958f5bb0087f7128";
+                                String clientKey = "57e0280fe5e3a5e";
+                                connection.setRequestProperty("Authorization", "Client-ID " + clientKey);
+                                connection.setRequestMethod("POST");
+                                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                                connection.connect();
+                                StringBuilder stringBuilder = new StringBuilder();
+                                OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
+                                wr.write(data);
+                                wr.flush();
+
+                                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                                String line;
+                                while ((line = rd.readLine()) != null) {
+                                    stringBuilder.append(line).append(System.lineSeparator());
+                                }
+                                wr.close();
+                                rd.close();
+
+                                Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+                                String url = "http://i.imgur.com/" + stringBuilder.toString().substring(15, 22) + ".png";
+
+                                if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+                                    desktop.browse(new URI(url));
+                                }
+                                ChatLogger.print("Screenshot uploaded to " + url);
+                            } catch (IOException e) {
+                                ChatLogger.print("Unable to upload screenshot.");
+                            } catch (URISyntaxException e) {
+                                ChatLogger.print("Unable to open screenshot.");
+                            }
+                        }
+                    });
+                    thread.start();
                 }).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {

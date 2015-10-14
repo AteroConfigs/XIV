@@ -76,7 +76,7 @@ public class CreativeWorldEdit extends Mod implements Listener<Render3DEvent>, C
 
         boolean isBreaking = false;
 
-        if (!blockid.equals("random") && !blockid.equals("0") || !blockid.equals("air")) {
+        if (!blockid.equals("random") && !blockid.equals("0") && !blockid.equals("air")) {
             try {
                 item = Item.getItemFromBlock(Block.getBlockById(Integer.parseInt(blockid)));
 
