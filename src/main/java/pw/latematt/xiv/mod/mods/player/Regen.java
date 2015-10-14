@@ -9,7 +9,6 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
-import pw.latematt.xiv.utils.Timer;
 
 /**
  * @author Rederpz

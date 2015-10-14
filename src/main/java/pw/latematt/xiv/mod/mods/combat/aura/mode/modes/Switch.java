@@ -35,7 +35,7 @@ public class Switch extends AuraMode {
                     .sorted((entity1, entity2) -> {
                         double entity1YawDistance = EntityUtils.getYawChange((EntityLivingBase) entity1);
                         double entity2YawDistance = EntityUtils.getYawChange((EntityLivingBase) entity2);
-                        return entity1YawDistance > entity2YawDistance ? -1 : entity2YawDistance > entity1YawDistance ? 1 : 0;
+                        return entity1YawDistance > entity2YawDistance ? 1 : entity2YawDistance > entity1YawDistance ? -1 : 0;
                     }).forEach(entity -> entities.add((EntityLivingBase) entity));
         }
 
@@ -55,13 +55,15 @@ public class Switch extends AuraMode {
                 mc.playerController.updateController();
             }
 
-            float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
-            if (killAura.silent.getValue()) {
-                event.setYaw(rotations[0]);
-                event.setPitch(rotations[1]);
-            } else {
-                mc.thePlayer.rotationYaw = rotations[0];
-                mc.thePlayer.rotationPitch = rotations[1];
+            if (!killAura.isHealing()) {
+                float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
+                if (killAura.silent.getValue()) {
+                    event.setYaw(rotations[0]);
+                    event.setPitch(rotations[1]);
+                } else {
+                    mc.thePlayer.rotationYaw = rotations[0];
+                    mc.thePlayer.rotationPitch = rotations[1];
+                }
             }
         } else {
             entities.remove(entityToAttack);
@@ -70,7 +72,7 @@ public class Switch extends AuraMode {
 
     @Override
     public void onPostMotionUpdate(MotionUpdateEvent event) {
-        if (entityToAttack != null) {
+        if (entityToAttack != null && !killAura.isHealing()) {
             if (timer.hasReached(killAura.getDelay())) {
                 killAura.attack(entityToAttack);
                 entities.remove(entityToAttack);
@@ -82,7 +84,7 @@ public class Switch extends AuraMode {
 
     @Override
     public void onMotionPacket(C03PacketPlayer packet) {
-        if (entityToAttack != null) {
+        if (entityToAttack != null && !killAura.isHealing()) {
             float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
             if (killAura.silent.getValue()) {
                 packet.setYaw(rotations[0]);
@@ -93,7 +95,7 @@ public class Switch extends AuraMode {
 
     @Override
     public boolean isAttacking() {
-        return entityToAttack != null;
+        return killAura.isValidEntity(entityToAttack);
     }
 
     @Override
