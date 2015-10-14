@@ -22,7 +22,6 @@ import java.util.Random;
 public class AntiTabComplete extends Mod implements Listener<SendPacketEvent>, CommandHandler {
 
     private final Listener readPacketListener;
-    private boolean looking = false;
 
     public AntiTabComplete() {
         super("AntiTabComplete", ModType.MISCELLANEOUS);
@@ -87,7 +86,6 @@ public class AntiTabComplete extends Mod implements Listener<SendPacketEvent>, C
     @Override
     public void onCommandRan(String message) {
         mc.getNetHandler().addToSendQueue(new C14PacketTabComplete("/"));
-        looking = true;
 
         XIV.getInstance().getListenerManager().add(readPacketListener);
     }

@@ -326,8 +326,6 @@ public class CommandManager extends ListManager<Command> {
                                                 if (pot != null) {
                                                     String name = I18n.format(pot.getName(), new Object[0]).replaceAll(" ", "");
 
-                                                    System.out.println(name);
-
                                                     if (name.equalsIgnoreCase(arguments[1])) {
                                                         potion = pot;
                                                     }
