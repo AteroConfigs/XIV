@@ -46,13 +46,15 @@ public class Singular extends AuraMode {
                 mc.playerController.updateController();
             }
 
-            float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
-            if (killAura.silent.getValue()) {
-                event.setYaw(rotations[0]);
-                event.setPitch(rotations[1]);
-            } else {
-                mc.thePlayer.rotationYaw = rotations[0];
-                mc.thePlayer.rotationPitch = rotations[1];
+            if (!killAura.isHealing()) {
+                float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
+                if (killAura.silent.getValue()) {
+                    event.setYaw(rotations[0]);
+                    event.setPitch(rotations[1]);
+                } else {
+                    mc.thePlayer.rotationYaw = rotations[0];
+                    mc.thePlayer.rotationPitch = rotations[1];
+                }
             }
         } else {
             entityToAttack = null;
@@ -61,7 +63,7 @@ public class Singular extends AuraMode {
 
     @Override
     public void onPostMotionUpdate(MotionUpdateEvent event) {
-        if (entityToAttack != null) {
+        if (entityToAttack != null && !killAura.isHealing()) {
             if (timer.hasReached(killAura.getDelay())) {
                 killAura.attack(entityToAttack);
                 timer.reset();
@@ -71,7 +73,7 @@ public class Singular extends AuraMode {
 
     @Override
     public void onMotionPacket(C03PacketPlayer packet) {
-        if (entityToAttack != null) {
+        if (entityToAttack != null && !killAura.isHealing()) {
             float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
             packet.setYaw(rotations[0]);
             packet.setPitch(rotations[1]);
@@ -80,7 +82,7 @@ public class Singular extends AuraMode {
 
     @Override
     public boolean isAttacking() {
-        return entityToAttack != null;
+        return killAura.isValidEntity(entityToAttack);
     }
 
     @Override
