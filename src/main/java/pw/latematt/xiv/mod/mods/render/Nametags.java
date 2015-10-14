@@ -181,11 +181,14 @@ public class Nametags extends Mod implements CommandHandler {
                 NBTTagList enchants = stack.getEnchantmentTagList();
                 GlStateManager.pushMatrix();
                 RenderHelper.enableStandardItemLighting();
-                mc.getRenderItem().zLevel = -150.0F;
+                mc.getRenderItem().zLevel = -100.0F;
                 mc.getRenderItem().renderItemAboveHead(stack, -var18 + offset + xPos, var17 - 20);
                 mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, -var18 + offset + xPos, var17 - 20);
                 mc.getRenderItem().zLevel = 0.0F;
                 RenderHelper.disableStandardItemLighting();
+                GlStateManager.enableAlpha();
+                GlStateManager.disableBlend();
+                GlStateManager.disableLighting();
                 GlStateManager.popMatrix();
 
                 GlStateManager.pushMatrix();

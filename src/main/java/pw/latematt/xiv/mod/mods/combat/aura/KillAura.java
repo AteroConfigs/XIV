@@ -18,6 +18,7 @@ import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.combat.aura.mode.AuraMode;
+import pw.latematt.xiv.mod.mods.combat.aura.mode.modes.Multi;
 import pw.latematt.xiv.mod.mods.combat.aura.mode.modes.Singular;
 import pw.latematt.xiv.mod.mods.combat.aura.mode.modes.Switch;
 import pw.latematt.xiv.mod.mods.player.AutoHeal;
@@ -34,7 +35,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Listener motionUpdateListener;
     private final Listener sendPacketListener;
     private final Listener playerDeathListener;
-    public final Value<Long> delay = new Value<>("killaura_delay", 125L);
+    public final Value<Long> delay = new Value<>("killaura_delay", 166L);
     public final Value<Long> randomDelay = new Value<>("killaura_random_delay", 0L);
     public final Value<Double> range = new Value<>("killaura_range", 3.8D);
     public final Value<Integer> fov = new Value<>("killaura_fov", 360);
@@ -64,8 +65,6 @@ public class KillAura extends Mod implements CommandHandler {
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                if (isHealing())
-                    return;
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
                     mode.getValue().onPreMotionUpdate(event);
                 } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
@@ -79,8 +78,6 @@ public class KillAura extends Mod implements CommandHandler {
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    if (isHealing())
-                        return;
                     mode.getValue().onMotionPacket(player);
                 }
             }
@@ -387,12 +384,16 @@ public class KillAura extends Mod implements CommandHandler {
                                 this.mode.setValue(new Switch(this));
                                 ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
                                 break;
+                            case "multi":
+                                this.mode.setValue(new Multi(this));
+                                ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
+                                break;
                             case "-d":
                                 this.mode.setValue(this.mode.getDefault());
                                 ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: singular, switch");
+                                ChatLogger.print("Invalid mode, valid: singular, switch, multi");
                                 break;
                         }
                         setTag(String.format("%s \2477%s", getName(), this.mode.getValue().getName()));

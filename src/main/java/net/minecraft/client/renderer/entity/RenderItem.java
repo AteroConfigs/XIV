@@ -1131,8 +1131,6 @@ public class RenderItem implements IResourceManagerReloadListener
     {
         if (stack != null)
         {
-            this.zLevel += 50.0F;
-
             try
             {
                 this.renderItemIntoGUIWithoutGlint(stack, xPosition, yPosition);
@@ -1147,8 +1145,6 @@ public class RenderItem implements IResourceManagerReloadListener
                 var6.addCrashSectionCallable("Item Foil", () -> String.valueOf(stack.hasEffect()));
                 throw new ReportedException(var5);
             }
-
-            this.zLevel -= 50.0F;
         }
     }
 
