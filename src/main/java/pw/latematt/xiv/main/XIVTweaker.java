@@ -14,13 +14,21 @@ public class XIVTweaker implements ITweaker {
     private List<String> arguments;
 
     public void acceptOptions(List<String> args, File gameDir, File assetsDir, String profile) {
-        arguments = new ArrayList<>(args);
-        arguments.add("--gameDir");
-        arguments.add(gameDir.getAbsolutePath());
-        arguments.add("--assetsDir");
-        arguments.add(assetsDir.getAbsolutePath());
-        arguments.add("--version");
-        arguments.add(profile);
+        this.arguments = new ArrayList<>(args);
+        if (!arguments.contains("--gameDir") && gameDir != null) {
+            arguments.add("--gameDir");
+            arguments.add(gameDir.getAbsolutePath());
+        }
+
+        if (!arguments.contains("--assetsDir") && assetsDir != null) {
+            arguments.add("--assetsDir");
+            arguments.add(assetsDir.getAbsolutePath());
+        }
+
+        if (!arguments.contains("--version") && !profile.isEmpty()) {
+            arguments.add("--version");
+            arguments.add(profile);
+        }
     }
 
     public void injectIntoClassLoader(LaunchClassLoader launchClassLoader) {

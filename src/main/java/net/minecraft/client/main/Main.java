@@ -111,7 +111,6 @@ public class Main
         });
         Thread.currentThread().setName("Client thread");
         Minecraft mc = new Minecraft(var42);
-        XIV.getInstance().setup();
         mc.run();
     }
 
