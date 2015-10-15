@@ -388,6 +388,11 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
         ImageIO.setUseCache(false);
         Bootstrap.register();
+        Runtime.getRuntime().addShutdownHook(new Thread("Client Shutdown Thread") {
+            public void run() {
+                Minecraft.stopIntegratedServer();
+            }
+        });
     }
 
     public void run()

@@ -12,14 +12,16 @@ import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.utils.RenderUtils;
 
 public class GuiXIVChat extends GuiNewChat {
-    private final NahrFont font;
+    private NahrFont font;
     public GuiXIVChat(Minecraft mcIn) {
         super(mcIn);
-        font = new NahrFont("Verdana", 18);
     }
 
     @Override
     public void drawChat(int p_146230_1_) {
+        if (font == null) {
+            font = new NahrFont("Verdana", 18);
+        }
         if (this.mc.gameSettings.chatVisibility != EntityPlayer.EnumChatVisibility.HIDDEN) {
             int var2 = this.getLineCount();
             boolean var3 = false;

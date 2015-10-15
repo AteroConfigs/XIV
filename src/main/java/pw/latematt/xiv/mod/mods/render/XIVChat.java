@@ -1,4 +1,4 @@
-package pw.latematt.xiv.mod.mods.none;
+package pw.latematt.xiv.mod.mods.render;
 
 import net.minecraft.client.gui.GuiNewChat;
 import pw.latematt.xiv.mod.Mod;

@@ -23,7 +23,7 @@ import pw.latematt.xiv.mod.mods.misc.NoRotationSet;
 import pw.latematt.xiv.mod.mods.movement.*;
 import pw.latematt.xiv.mod.mods.none.ClickGUI;
 import pw.latematt.xiv.mod.mods.none.TabGUI;
-import pw.latematt.xiv.mod.mods.none.XIVChat;
+import pw.latematt.xiv.mod.mods.render.XIVChat;
 import pw.latematt.xiv.mod.mods.player.*;
 import pw.latematt.xiv.mod.mods.render.*;
 import pw.latematt.xiv.mod.mods.render.waypoints.Waypoints;
@@ -95,7 +95,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Triggerbot());
         contents.add(new Velocity());
         contents.add(new Waypoints());
-        contents.add(new XIVChat());
+//        contents.add(new XIVChat());
         contents.add(new Zoot());
 
         /* always load tabgui after all the mods */

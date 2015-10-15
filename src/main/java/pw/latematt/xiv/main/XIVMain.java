@@ -102,12 +102,6 @@ public class XIVMain {
         Minecraft mc = new Minecraft(gameConfiguration);
         XIV.getInstance().setup();
         mc.run();
-
-        Runtime.getRuntime().addShutdownHook(new Thread("Client Shutdown Thread") {
-            public void run() {
-                Minecraft.stopIntegratedServer();
-            }
-        });
     }
 
     private static boolean func_110121_a(String p_110121_0_) {
