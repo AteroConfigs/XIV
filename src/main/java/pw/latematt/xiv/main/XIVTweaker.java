@@ -13,21 +13,21 @@ import java.util.List;
 public class XIVTweaker implements ITweaker {
     private List<String> arguments;
 
-    public void acceptOptions(List<String> args, File gameDir, File assetsDir, String profile) {
-        this.arguments = new ArrayList<>(args);
-        if (!arguments.contains("--gameDir") && gameDir != null) {
-            arguments.add("--gameDir");
-            arguments.add(gameDir.getAbsolutePath());
+    public void acceptOptions(List<String> arguments, File gameDir, File assetsDir, String profile) {
+        this.arguments = new ArrayList<>(arguments);
+        if (!this.arguments.contains("--gameDir") && gameDir != null) {
+            this.arguments.add("--gameDir");
+            this.arguments.add(gameDir.getAbsolutePath());
         }
 
-        if (!arguments.contains("--assetsDir") && assetsDir != null) {
-            arguments.add("--assetsDir");
-            arguments.add(assetsDir.getAbsolutePath());
+        if (!this.arguments.contains("--assetsDir") && assetsDir != null) {
+            this.arguments.add("--assetsDir");
+            this.arguments.add(assetsDir.getAbsolutePath());
         }
 
-        if (!arguments.contains("--version") && !profile.isEmpty()) {
-            arguments.add("--version");
-            arguments.add(profile);
+        if (!this.arguments.contains("--version") && !profile.isEmpty()) {
+            this.arguments.add("--version");
+            this.arguments.add(profile);
         }
     }
 
