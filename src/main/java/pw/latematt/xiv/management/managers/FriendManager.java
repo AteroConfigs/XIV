@@ -110,7 +110,7 @@ public class FriendManager extends MapManager<String, String> {
         for (String mcname : contents.keySet()) {
             String alias = contents.get(mcname);
             if (colored) {
-                alias = String.format("\2473%s\247r", alias);
+                alias = String.format("\247g%s\247r", alias);
             }
             string = string.replaceAll("(?i)" + Matcher.quoteReplacement(mcname), Matcher.quoteReplacement(alias));
         }
