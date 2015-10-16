@@ -31,6 +31,9 @@ public class DarculaTheme extends ClickTheme {
             this.modFont = new NahrFont("Tahoma", 17);
         }
 
+        panel.setOpenHeight(14);
+        panel.setButtonOffset(1.0F);
+
         RenderUtils.drawBorderedRect(panel.getX(), panel.getY() + 1, panel.getX() + panel.getWidth(), panel.getY() + panel.getOpenHeight(), 0x801E1E1E, 0xFF3E434C);
         titleFont.drawString(panel.getName(), panel.getX() + 2, panel.getY() - 2, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
 //        int startColor = panel.isOpen() ? 0xFF344A64 : 0xFF515658;
@@ -57,7 +60,7 @@ public class DarculaTheme extends ClickTheme {
         int borderColor = overElement && Mouse.isButtonDown(0) ? 0xFF4E78A2 : 0xFF555A61;
 
         RenderUtils.drawBorderedGradientRect(x, y + 1, x + width, y + height - 1, borderColor, startColor, endColor);
-        modFont.drawString(name, x + width + 2, y - 2, NahrFont.FontType.EMBOSS_BOTTOM, 0xFFBBBBBB);
+        modFont.drawString(name, x + width + 2.5F, y - 2, NahrFont.FontType.EMBOSS_BOTTOM, 0xFFBBBBBB);
     }
 
     @Override

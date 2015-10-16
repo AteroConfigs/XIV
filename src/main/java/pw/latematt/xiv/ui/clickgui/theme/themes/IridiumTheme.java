@@ -2,60 +2,64 @@ package pw.latematt.xiv.ui.clickgui.theme.themes;
 
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
-import pw.latematt.xiv.ui.clickgui.element.elements.ThemeButton;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.utils.RenderUtils;
 
+import java.awt.*;
 import java.util.Objects;
 
 /**
  * @author Rederpz
  */
-public class NorthStarTheme extends ClickTheme {
+public class IridiumTheme extends ClickTheme {
     protected NahrFont font;
 
     protected GuiClick gui;
 
-    public NorthStarTheme(GuiClick gui) {
-        super("NorthStar", 96, 12, gui);
+    public IridiumTheme(GuiClick gui) {
+        super("Iridium", 96, 17, gui);
         this.gui = gui;
     }
 
     @Override
     public void renderPanel(Panel panel) {
         if (Objects.isNull(font)) {
-            font = new NahrFont("Arial", 18);
+            this.font = new NahrFont(new Font("Arial", Font.BOLD, 20), 20);
         }
 
-        panel.setOpenHeight(14);
-        panel.setButtonOffset(1.0F);
+        panel.setOpenHeight(17);
+        panel.setButtonOffset(1.5F);
 
-        RenderUtils.drawBorderedRect(panel.getX(), panel.getY() + 2, panel.getX() + panel.getWidth(), panel.getY() + (panel.isOpen() ? panel.getHeight() : panel.getOpenHeight()), 0xBB515151, 0xFF000000);
-        font.drawString(panel.getName(), panel.getX() + 2, panel.getY() + 0.5F, NahrFont.FontType.SHADOW_THIN, 0xFFFFFFFF);
+        RenderUtils.drawBorderedRect(panel.getX(), panel.getY() + 2, panel.getX() + panel.getWidth(), panel.getY() + (panel.isOpen() ? panel.getHeight() : panel.getOpenHeight()), 0.5F, 0xFF676767, 0xDD343434);
+        font.drawString(panel.getName(), panel.getX() + 2, panel.getY() + 1.5F, NahrFont.FontType.SHADOW_THIN, 0xFFFFFFFF);
 
-        RenderUtils.drawRect(panel.getX() + panel.getWidth() - panel.getOpenHeight() + 2.5F, panel.getY() + 3.0F, panel.getX() + panel.getWidth() - 1.0F, panel.getY() + panel.getOpenHeight() - 1.0F, panel.isOpen() ? 0xFF5AACEB : 0xFF313131);
+        if(panel.isOpen()) {
+            RenderUtils.drawRect(panel.getX() + 2, panel.getY() + panel.getOpenHeight() - 1, panel.getX() + panel.getWidth() - 2, panel.getY() + panel.getOpenHeight() - 0.5F, 0xFF676767);
+        }
+
+        RenderUtils.drawBorderedRect(panel.getX() + panel.getWidth() - panel.getOpenHeight() + 3.5F, panel.getY() + 4.0F, panel.getX() + panel.getWidth() - 2.0F, panel.getY() + panel.getOpenHeight() - 2.0F, 0.5F, 0xFF676767, panel.isOpen() ? 0xBB323232 : 0xBB121212);
     }
 
     @Override
     public void renderButton(String name, boolean enabled, float x, float y, float width, float height, boolean overElement, Element element) {
         if (Objects.isNull(font)) {
-            font = new NahrFont("Arial", 18);
+            this.font = new NahrFont(new Font("Arial", Font.BOLD, 20), 20);
         }
 
         element.setWidth(this.getElementWidth());
         element.setHeight(this.getElementHeight());
 
-        RenderUtils.drawBorderedRect(x, y, x + 96, y + height, 0xFF212121, enabled ? 0xFF5AACEB : 0xFF212121);
+        RenderUtils.drawBorderedRect(x, y, x + 96, y + height, 0.25F, enabled ? 0xFF368CF7 : 0xFF676767, enabled ? 0xDD145495 : 0xDD343434);
 
-        font.drawString(name, x + 2, y - 1.5F, NahrFont.FontType.SHADOW_THIN, enabled ? 0xFFFFFFFF : 0xFFFFF0F0);
+        font.drawString(name, x + (width - font.getStringWidth(name)) / 2, y, NahrFont.FontType.SHADOW_THIN, 0xFFFFFFFF);
     }
 
     @Override
     public void renderSlider(String name, float value, float x, float y, float width, float height, float sliderX, boolean overElement, Element element) {
         if (Objects.isNull(font)) {
-            font = new NahrFont("Arial", 18);
+            this.font = new NahrFont(new Font("Arial", Font.BOLD, 20), 20);
         }
 
         element.setWidth(96);
