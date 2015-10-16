@@ -20,7 +20,10 @@ import java.util.Objects;
 public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private final Value<Boolean> doDamage = new Value<>("fly_damage", true);
     private final Value<Boolean> slowfall = new Value<>("fly_slowfall", true);
+    private final Value<Boolean> cap = new Value<>("fly_cap", false);
     private final Value<Double> verticalSpeed = new Value<>("fly_vertical", 0.5);
+
+    private double yCap;
 
     public Fly() {
         super("Fly", ModType.MOVEMENT, Keyboard.KEY_M, 0xFF4B97F6);
@@ -36,12 +39,17 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
     public void onEventCalled(MotionUpdateEvent event) {
         double motionY = slowfall.getValue() ? -0.005D : 0;
 
-        if (mc.gameSettings.keyBindJump.getIsKeyPressed()) {
-            motionY = verticalSpeed.getValue();
+        if(cap.getValue() && mc.thePlayer.getEntityBoundingBox().maxY < yCap || !cap.getValue()) {
+            if (mc.gameSettings.keyBindJump.getIsKeyPressed()) {
+                motionY += verticalSpeed.getValue();
+            }
+            setTag(getName());
+        }else{
+            setTag(String.format("%s \2477%s", getName(), "*"));
         }
 
         if (mc.gameSettings.keyBindSneak.getIsKeyPressed()) {
-            motionY = -verticalSpeed.getValue();
+            motionY -= verticalSpeed.getValue();
         }
 
         mc.thePlayer.motionY = motionY;
@@ -91,8 +99,21 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
                     }
                     ChatLogger.print(String.format("Fly will %s slowly fall.", slowfall.getValue() ? "now" : "no longer"));
                     break;
+                case "limit" :
+                case "cap":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            cap.setValue(cap.getDefault());
+                        } else {
+                            cap.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        cap.setValue(!cap.getValue());
+                    }
+                    ChatLogger.print(String.format("Fly will %s cap at start height.", cap.getValue() ? "now" : "no longer"));
+                    break;
                 default:
-                    ChatLogger.print("Invalid action, valid: damage, vertical, slowfall");
+                    ChatLogger.print("Invalid action, valid: damage, vertical, slowfall, cap");
                     break;
             }
         } else {
@@ -103,8 +124,13 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
-        if (Objects.nonNull(mc.thePlayer) && doDamage.getValue())
-            EntityUtils.damagePlayer();
+        if (Objects.nonNull(mc.thePlayer)) {
+            if(doDamage.getValue()) {
+                EntityUtils.damagePlayer();
+            }
+
+            yCap = mc.thePlayer.getEntityBoundingBox().maxY;
+        }
     }
 
     @Override
