@@ -483,11 +483,11 @@ public class CommandManager extends ListManager<Command> {
                         mc.displayGuiScreen((GuiScreen) null);
                     }
 
+                    ScreenShotHelper.saveScreenshot(mc.mcDataDir, mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
+
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            ScreenShotHelper.saveScreenshot(mc.mcDataDir, mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
-
                             File screenshots = new File("screenshots");
 
                             File[] files = screenshots.listFiles(new FileFilter() {
