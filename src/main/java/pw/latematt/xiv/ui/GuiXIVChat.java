@@ -5,6 +5,7 @@ import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.MathHelper;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.RenderStringEvent;
@@ -13,6 +14,7 @@ import pw.latematt.xiv.utils.RenderUtils;
 
 public class GuiXIVChat extends GuiNewChat {
     private NahrFont font;
+
     public GuiXIVChat(Minecraft mcIn) {
         super(mcIn);
     }
@@ -22,6 +24,7 @@ public class GuiXIVChat extends GuiNewChat {
         if (font == null) {
             font = new NahrFont("Verdana", 18);
         }
+
         if (this.mc.gameSettings.chatVisibility != EntityPlayer.EnumChatVisibility.HIDDEN) {
             int var2 = this.getLineCount();
             boolean var3 = false;
@@ -36,7 +39,15 @@ public class GuiXIVChat extends GuiNewChat {
 
                 float var7 = this.getChatScale();
                 GlStateManager.pushMatrix();
-                GlStateManager.translate(2.0F, 20.0F, 0.0F);
+                float yOffset = 20.0F;
+                if (!mc.thePlayer.capabilities.isCreativeMode) {
+                    yOffset = 6.0F;
+                    if (mc.thePlayer.getTotalArmorValue() > 0)
+                        yOffset -= 10;
+                    if (mc.thePlayer.getActivePotionEffect(Potion.ABSORPTION) != null)
+                        yOffset -= 10;
+                }
+                GlStateManager.translate(2.0F, yOffset, 0.0F);
                 GlStateManager.scale(var7, var7, 1.0F);
                 int var9;
                 int var11;
@@ -62,12 +73,12 @@ public class GuiXIVChat extends GuiNewChat {
                     }
                 } else if (getChatOpen()) {
                     height = -var2 * 9;
-                    RenderUtils.drawBorderedRect(0.0F, height - 6, getChatWidth() + 3.0F, height + 5.5, 0x40000000, 0x60000000);
-                    font.drawString("Chat", 1, height - 8, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
+                    RenderUtils.drawBorderedRect(0.0F, height - 8, getChatWidth() + 3.0F, height + 4.5, 0x60000000, 0x80000000);
+                    font.drawString("Chat", 1, height - 10, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
                 }
 
                 if (height != -1) {
-                    RenderUtils.drawBorderedRect(0.0F, height + 6, getChatWidth() + 3.0F, 8.0F, 0x40000000, 0x60000000);
+                    RenderUtils.drawBorderedRect(0.0F, height + 5, getChatWidth() + 3.0F, 9.0F, 0x60000000, 0x80000000);
                 }
                 GlStateManager.translate(1, 8, 0);
 

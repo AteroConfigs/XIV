@@ -411,6 +411,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
             this.displayCrashReport(this.addGraphicsAndWorldToCrashReport(var2));
             return;
         }
+        XIV.getInstance().setup();
 
         while (true)
         {

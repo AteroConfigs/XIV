@@ -21,7 +21,6 @@ import pw.latematt.xiv.event.events.WorldBobbingEvent;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
-import pw.latematt.xiv.utils.Timer;
 import pw.latematt.xiv.value.Value;
 
 import javax.imageio.ImageIO;
@@ -582,23 +581,23 @@ public class CommandManager extends ListManager<Command> {
                             String oldNames = "";
 
                             line = "";
-                            while((line = br.readLine()) != null) {
+                            while ((line = br.readLine()) != null) {
                                 originalName = line.split("\"")[3];
 
                                 int count = 5;
-                                for(int i = 0; i < line.split("\"").length; i++) {
-                                    if((i != line.split("\"").length - 1) && (line.split("\"")[(i + 1)].equals(","))) {
-                                        if(oldNames.equals("")) {
+                                for (int i = 0; i < line.split("\"").length; i++) {
+                                    if ((i != line.split("\"").length - 1) && (line.split("\"")[(i + 1)].equals(","))) {
+                                        if (oldNames.equals("")) {
                                             oldNames = line.split("\"")[i];
-                                        }else{
+                                        } else {
                                             oldNames = oldNames + ", " + line.split("\"")[i];
                                         }
                                     }
                                 }
 
-                                if(oldNames.equals("")) {
+                                if (oldNames.equals("")) {
                                     ChatLogger.print(arguments[1] + " hasn't changed their name");
-                                }else{
+                                } else {
                                     ChatLogger.print(arguments[1] + "'s name history: " + originalName + ", " + oldNames + ".");
                                 }
                             }

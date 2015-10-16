@@ -100,7 +100,6 @@ public class XIVMain {
         GameConfiguration gameConfiguration = new GameConfiguration(new GameConfiguration.UserInformation(session, userPropertiesMap, proxy), new GameConfiguration.DisplayInformation(widthInt, heightInt, fullscreen, checkGlErrors), new GameConfiguration.FolderInformation(gameDirFile, resourcePackDirFile, assetsDirFile, uuidIndex), new GameConfiguration.GameInformation(demo, versionString), new GameConfiguration.ServerInformation(serverString, portInteger.intValue()));
         Thread.currentThread().setName("Client Thread");
         Minecraft mc = new Minecraft(gameConfiguration);
-        XIV.getInstance().setup();
         mc.run();
     }
 
