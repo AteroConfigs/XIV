@@ -32,6 +32,7 @@ public final class Blink extends Mod {
 
     public Blink() {
         super("Blink", ModType.MOVEMENT, Keyboard.KEY_NONE, 11184895);
+        setTag(String.format("%s \2477%s", getName(), packets.size()));
 
         this.packetListener = new Listener<SendPacketEvent>() {
             @Override
@@ -39,7 +40,8 @@ public final class Blink extends Mod {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     final boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
                     final boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-                    final boolean moving = movingForward && strafing || movingForward;
+                    final boolean moving = movingForward || strafing;
+
                     event.setCancelled(true);
                     if (moving) {
                         packets.add(event.getPacket());
@@ -50,6 +52,8 @@ public final class Blink extends Mod {
                     event.setCancelled(true);
                     packets.add(event.getPacket());
                 }
+
+                setTag(String.format("%s \2477%s", getName(), packets.size()));
             }
         };
 
