@@ -16,17 +16,17 @@ import pw.latematt.xiv.event.events.RenderStringEvent;
 
 public class GuiNewChat extends Gui
 {
-    private static final Logger logger = LogManager.getLogger();
-    private final Minecraft mc;
+    protected static final Logger logger = LogManager.getLogger();
+    protected final Minecraft mc;
 
     /** A list of messages previously sent through the chat GUI */
-    private final List sentMessages = Lists.newArrayList();
+    protected final List sentMessages = Lists.newArrayList();
 
     /** Chat lines to be displayed in the chat box */
-    private final List chatLines = Lists.newArrayList();
-    private final List field_146253_i = Lists.newArrayList();
-    private int scrollPos;
-    private boolean isScrolled;
+    protected final List chatLines = Lists.newArrayList();
+    protected final List field_146253_i = Lists.newArrayList();
+    protected int scrollPos;
+    protected boolean isScrolled;
 
 
     public GuiNewChat(Minecraft mcIn)
@@ -95,7 +95,7 @@ public class GuiNewChat extends Gui
                                 RenderStringEvent event = new RenderStringEvent(var17, RenderStringEvent.State.CHAT);
                                 XIV.getInstance().getListenerManager().call(event);
 
-                                var17 = event.getString();
+                                var17 = event.getString().replaceAll("\247g", "\2473");
                                 GlStateManager.enableBlend();
                                 this.mc.fontRendererObj.drawStringWithShadow(var17, (float)var15, (float)(var16 - 8), 16777215 + (var14 << 24));
                                 GlStateManager.disableAlpha();

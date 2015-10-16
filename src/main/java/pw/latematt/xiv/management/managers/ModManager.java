@@ -51,8 +51,8 @@ public class ModManager extends ListManager<Mod> {
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
         contents.add(new AntiDrown());
         contents.add(new AntiHunger());
-        contents.add(new AntiTabComplete());
         contents.add(new AntiSuffocate());
+        contents.add(new AntiTabComplete());
         contents.add(new ArmorBreaker());
         //contents.add(new AutoHead());
         contents.add(new AutoHeal());
@@ -94,6 +94,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Triggerbot());
         contents.add(new Velocity());
         contents.add(new Waypoints());
+        contents.add(new XIVChat());
         contents.add(new Zoot());
 
         /* always load tabgui after all the mods */

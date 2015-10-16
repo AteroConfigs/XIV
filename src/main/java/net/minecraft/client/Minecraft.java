@@ -388,6 +388,11 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
         ImageIO.setUseCache(false);
         Bootstrap.register();
+        Runtime.getRuntime().addShutdownHook(new Thread("Client Shutdown Thread") {
+            public void run() {
+                Minecraft.stopIntegratedServer();
+            }
+        });
     }
 
     public void run()
@@ -406,6 +411,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
             this.displayCrashReport(this.addGraphicsAndWorldToCrashReport(var2));
             return;
         }
+        XIV.getInstance().setup();
 
         while (true)
         {

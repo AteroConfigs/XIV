@@ -1,15 +1,12 @@
 package pw.latematt.xiv.mod.mods.player;
 
-import net.minecraft.network.play.client.C03PacketPlayer;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.PotionIncrementEvent;
-import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.EntityUtils;
 
 import java.util.Objects;
@@ -20,6 +17,7 @@ import java.util.Objects;
 
 public class PotionSaver extends Mod implements Listener<MotionUpdateEvent> {
     private final Listener potionIncrementListener;
+
     public PotionSaver() {
         super("PotionSaver", ModType.PLAYER, Keyboard.KEY_NONE, 0xFF008800);
 

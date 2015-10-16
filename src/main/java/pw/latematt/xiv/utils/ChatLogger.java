@@ -8,7 +8,7 @@ import pw.latematt.xiv.XIV;
  * @author Matthew
  */
 public class ChatLogger {
-    private static final String PREFIX = "\2473[XIV]:\247r ";
+    private static final String PREFIX = "\247g[XIV]:\247r ";
 
     public static void print(String message) {
         if (Minecraft.getMinecraft().thePlayer != null) {

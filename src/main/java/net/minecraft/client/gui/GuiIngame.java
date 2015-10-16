@@ -57,7 +57,7 @@ public class GuiIngame extends Gui
     private final RenderItem itemRenderer;
 
     /** ChatGUI instance that retains all previous chat data */
-    private final GuiNewChat persistantChatGUI;
+    private GuiNewChat persistantChatGUI;
     private final GuiStreamIndicator streamIndicator;
     private int updateCounter;
 
@@ -1213,5 +1213,9 @@ public class GuiIngame extends Gui
     public GuiPlayerTabOverlay getTabList()
     {
         return this.overlayPlayerList;
+    }
+
+    public void setChatGUI(GuiNewChat persistantChatGUI) {
+        this.persistantChatGUI = persistantChatGUI;
     }
 }

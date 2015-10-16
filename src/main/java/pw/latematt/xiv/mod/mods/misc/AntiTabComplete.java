@@ -1,6 +1,5 @@
 package pw.latematt.xiv.mod.mods.misc;
 
-import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C14PacketTabComplete;
 import net.minecraft.network.play.server.S3APacketTabComplete;
 import pw.latematt.xiv.XIV;
@@ -42,7 +41,7 @@ public class AntiTabComplete extends Mod implements Listener<SendPacketEvent>, C
                     event.setCancelled(true);
 
                     ArrayList<String> plugins = new ArrayList<>();
-                    for(String cmd: packet.func_149630_c()) {
+                    for (String cmd : packet.func_149630_c()) {
                         String[] arguments = cmd.split(":");
                         if (arguments.length > 1 && !plugins.contains(arguments[0].substring(1))) {
                             plugins.add(arguments[0].substring(1));
@@ -50,15 +49,15 @@ public class AntiTabComplete extends Mod implements Listener<SendPacketEvent>, C
                     }
 
                     String foundPlugins = "";
-                    for(String plugin: plugins) {
-                        if(!plugin.equalsIgnoreCase("minecraft") && !plugin.equalsIgnoreCase("bukkit") && !plugin.equalsIgnoreCase("spigot")) {
+                    for (String plugin : plugins) {
+                        if (!plugin.equalsIgnoreCase("minecraft") && !plugin.equalsIgnoreCase("bukkit") && !plugin.equalsIgnoreCase("spigot")) {
                             foundPlugins = foundPlugins + plugin + ", ";
                         }
                     }
 
-                    if(plugins.size() > 0 && !foundPlugins.equals("")) {
+                    if (plugins.size() > 0 && !foundPlugins.equals("")) {
                         ChatLogger.print("Found plugins (" + plugins.size() + "): " + foundPlugins.substring(0, foundPlugins.length() - 2));
-                    }else{
+                    } else {
                         ChatLogger.print("Unable to find plugins, or the server has none.");
                     }
 
