@@ -10,9 +10,7 @@ import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.panel.panels.*;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
-import pw.latematt.xiv.ui.clickgui.theme.themes.DarculaTheme;
-import pw.latematt.xiv.ui.clickgui.theme.themes.IXTheme;
-import pw.latematt.xiv.ui.clickgui.theme.themes.NorthStarTheme;
+import pw.latematt.xiv.ui.clickgui.theme.themes.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -50,9 +48,13 @@ public class GuiClick extends GuiScreen {
     public void initGui() {
         panels = new CopyOnWriteArrayList<>();
         themes = new ArrayList<>();
+        themes.add(new AvidTheme(this));
         themes.add(theme = new DarculaTheme(this));
+        themes.add(new IridiumTheme(this));
         themes.add(new IXTheme(this));
         themes.add(new NorthStarTheme(this));
+        themes.add(new PringlesTheme(this));
+        themes.add(new XenonTheme(this));
 
         panels.add(new ThemePanel(4, 4, 100, 14));
         panels.add(new AuraPanel(106, 4, 100, 14));
@@ -128,12 +130,13 @@ public class GuiClick extends GuiScreen {
         for (Panel panel : panels) {
             panel.mouseClicked(mouseX, mouseY, mouseButton);
         }
+        XIV.getInstance().getFileManager().saveFile("gui");
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        drawDefaultBackground();
+        drawRect(0, 0, width, height, 0x44000000);
 
         for (Panel panel : panels) {
             panel.drawPanel(mouseX, mouseY);
@@ -147,6 +150,15 @@ public class GuiClick extends GuiScreen {
         for (Panel panel : panels) {
             panel.keyPressed(keyCode);
         }
+    }
+
+    @Override
+    public void onGuiClosed() {
+        for (Panel panel : panels) {
+            panel.onGuiClosed();
+        }
+
+        XIV.getInstance().getFileManager().saveFile("gui");
     }
 
     public class PanelConfig {

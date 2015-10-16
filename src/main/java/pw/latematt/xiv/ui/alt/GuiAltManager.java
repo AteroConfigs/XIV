@@ -85,7 +85,7 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
                 username.setText("");
                 password.setText("");
             } else if (button.id == 3) {
-                GuiYesNo gui = new GuiYesNo(this, "Are you sure you want to remove the alt \"" + this.slot.getAlt().getUsername() + "\"", "If no, click no and return back to the alt manager.", 2);
+                GuiYesNo gui = new GuiYesNo(this, "Are you sure you want to remove the alt \"" + this.slot.getAlt().getUsername() + "\"?", "", 2);
                 mc.displayGuiScreen(gui);
             } else if (button.id == 4) {
                 Random random = new Random();

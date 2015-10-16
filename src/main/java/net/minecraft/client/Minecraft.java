@@ -189,10 +189,7 @@ import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.event.events.GuiScreenEvent;
-import pw.latematt.xiv.event.events.KeyPressEvent;
-import pw.latematt.xiv.event.events.LoadWorldEvent;
-import pw.latematt.xiv.event.events.PlacingBlockEvent;
+import pw.latematt.xiv.event.events.*;
 
 public class Minecraft implements IThreadListener, IPlayerUsage
 {
@@ -1018,7 +1015,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
             this.mcSoundHandler.resumeSounds();
             this.setIngameFocus();
         }
-        
+
         GuiScreenEvent event = new GuiScreenEvent(guiScreenIn);
         XIV.getInstance().getListenerManager().call(event);
     }
@@ -2124,18 +2121,29 @@ public class Minecraft implements IThreadListener, IPlayerUsage
             }
             else
             {
+                MouseClickEvent click;
+
                 while (this.gameSettings.keyBindAttack.isPressed())
                 {
+                    click = new MouseClickEvent(0);
+                    XIV.getInstance().getListenerManager().call(click);
+
                     this.clickMouse();
                 }
 
                 while (this.gameSettings.keyBindUseItem.isPressed())
                 {
+                    click = new MouseClickEvent(1);
+                    XIV.getInstance().getListenerManager().call(click);
+
                     this.rightClickMouse();
                 }
 
                 while (this.gameSettings.keyBindPickBlock.isPressed())
                 {
+                    click = new MouseClickEvent(2);
+                    XIV.getInstance().getListenerManager().call(click);
+
                     this.middleClickMouse();
                 }
             }

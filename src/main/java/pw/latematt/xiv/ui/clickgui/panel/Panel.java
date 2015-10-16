@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class Panel {
     private final String name;
-    private float x, y, width, height, openheight;
+    private float x, y, width, height, openheight, buttonoffset = 1;
     private boolean dragging, open;
     private float dragX, dragY;
     private ArrayList<Element> elements;
@@ -64,6 +64,14 @@ public class Panel {
 
     public void setOpenHeight(float openheight) {
         this.openheight = openheight;
+    }
+
+    public float getButtonOffset() {
+        return buttonoffset;
+    }
+
+    public void setButtonOffset(float buttonoffset) {
+        this.buttonoffset = buttonoffset;
     }
 
     public boolean isDragging() {
@@ -118,7 +126,7 @@ public class Panel {
                     this.setWidth(element.getWidth() + 4);
                 }
 
-                y += 13;
+                y += element.getHeight() + buttonoffset;
             }
 
             this.setHeight(y + 3);
@@ -137,7 +145,6 @@ public class Panel {
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (isOverPanel(mouseX, mouseY)) {
-            XIV.getInstance().getFileManager().saveFile("gui");
             if (mouseButton == 0) {
                 dragX = (getX() - mouseX);
                 dragY = (getY() - mouseY);
@@ -170,6 +177,10 @@ public class Panel {
 
     public void onGuiClosed() {
         this.dragging = false;
+
+        for(Element element: elements) {
+            element.onGuiClosed();
+        }
     }
 
     public void addValueElements(String prefix) {
