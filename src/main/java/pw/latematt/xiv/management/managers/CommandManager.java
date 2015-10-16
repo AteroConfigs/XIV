@@ -3,6 +3,7 @@ package pw.latematt.xiv.management.managers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
@@ -12,6 +13,7 @@ import net.minecraft.network.play.client.C01PacketChatMessage;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ScreenShotHelper;
 import net.minecraft.util.StatCollector;
+import net.minecraft.util.StringUtils;
 import org.apache.commons.codec.binary.Base64;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -19,6 +21,7 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
 import pw.latematt.xiv.management.ListManager;
+import pw.latematt.xiv.mod.mods.misc.DashNames;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
@@ -34,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
 
 /**
  * @author Matthew
@@ -630,6 +634,19 @@ public class CommandManager extends ListManager<Command> {
     }
 
     public boolean parseCommand(String message) {
+        if(mc.thePlayer != null) {
+            if (XIV.getInstance().getModManager().find(DashNames.class) != null && XIV.getInstance().getModManager().find(DashNames.class).isEnabled()) {
+                for (Object o : mc.ingameGUI.getTabList().getPlayerList()) {
+                    NetworkPlayerInfo playerInfo = (NetworkPlayerInfo) o;
+                    String mcname = StringUtils.stripControlCodes(mc.ingameGUI.getTabList().getPlayerName(playerInfo));
+                    if (XIV.getInstance().getFriendManager().isFriend(mcname)) {
+                        String alias = XIV.getInstance().getFriendManager().getContents().get(mcname);
+                        message = message.replaceAll("(?i)" + Matcher.quoteReplacement("-" + alias), mcname);
+                    }
+                }
+            }
+        }
+
         String[] spaceSplit = message.split(" ");
         if (spaceSplit[0].startsWith(prefix)) {
             for (Command command : contents) {

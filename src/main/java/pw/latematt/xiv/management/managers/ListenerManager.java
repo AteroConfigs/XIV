@@ -37,17 +37,19 @@ public class ListenerManager extends ListManager<Listener> {
     public void call(Event event) {
         for (Listener listener : contents) {
             /* thanks rudy for this method */
-            Type[] genericInterfaces = listener.getClass().getGenericInterfaces();
-            for (Type genericInterface : genericInterfaces) {
-                if (genericInterface instanceof ParameterizedType) {
-                    Type[] genericTypes = ((ParameterizedType) genericInterface).getActualTypeArguments();
-                    for (Type genericType : genericTypes) {
-                        if (genericType == event.getClass()) {
-                            listener.onEventCalled(event);
+            try {
+                Type[] genericInterfaces = listener.getClass().getGenericInterfaces();
+                for (Type genericInterface : genericInterfaces) {
+                    if (genericInterface instanceof ParameterizedType) {
+                        Type[] genericTypes = ((ParameterizedType) genericInterface).getActualTypeArguments();
+                        for (Type genericType : genericTypes) {
+                            if (genericType == event.getClass()) {
+                                listener.onEventCalled(event);
+                            }
                         }
                     }
                 }
-            }
+            }catch(Exception e) { }
         }
     }
 }

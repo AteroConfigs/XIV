@@ -130,6 +130,7 @@ public class GuiClick extends GuiScreen {
         for (Panel panel : panels) {
             panel.mouseClicked(mouseX, mouseY, mouseButton);
         }
+        XIV.getInstance().getFileManager().saveFile("gui");
     }
 
     @Override
@@ -149,6 +150,15 @@ public class GuiClick extends GuiScreen {
         for (Panel panel : panels) {
             panel.keyPressed(keyCode);
         }
+    }
+
+    @Override
+    public void onGuiClosed() {
+        for (Panel panel : panels) {
+            panel.onGuiClosed();
+        }
+
+        XIV.getInstance().getFileManager().saveFile("gui");
     }
 
     public class PanelConfig {
