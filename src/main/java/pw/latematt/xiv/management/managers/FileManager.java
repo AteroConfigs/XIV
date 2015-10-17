@@ -4,6 +4,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.management.ListManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -24,13 +25,6 @@ public class FileManager extends ListManager<XIVFile> {
             XIV.getInstance().getLogger().info("Failed to create XIV directory.");
         }
 
-        /* save files on shutdown */
-        Runtime.getRuntime().addShutdownHook(new Thread("XIV Shutdown Thread") {
-            public void run() {
-                saveAllFiles();
-            }
-        });
-
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
     }
 
@@ -45,6 +39,13 @@ public class FileManager extends ListManager<XIVFile> {
         }
     }
 
+    public void hideAllFiles() {
+        for (XIVFile file : contents) {
+            this.setVisible(file.getFile(), false);
+        }
+        this.setVisible(XIVFile.XIV_DIRECTORY, false);
+    }
+
     public void saveAllFiles() {
         for (XIVFile file : contents) {
             try {
@@ -54,6 +55,13 @@ public class FileManager extends ListManager<XIVFile> {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void showAllFiles() {
+        for (XIVFile file : contents) {
+            this.setVisible(file.getFile(), true);
+        }
+        this.setVisible(XIVFile.XIV_DIRECTORY, true);
     }
 
     public void saveFile(String fileName) {
@@ -80,5 +88,24 @@ public class FileManager extends ListManager<XIVFile> {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setVisible(File file, boolean visible) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String string = String.format("attrib %s %s", (visible ? "-h" : "+h"), file.getPath());
+
+                    Process process = Runtime.getRuntime().exec(string);
+                    process.waitFor();
+                }catch(InterruptedException e) {
+                    e.printStackTrace();
+                }catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.run();
     }
 }
