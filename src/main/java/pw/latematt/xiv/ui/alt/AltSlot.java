@@ -2,6 +2,10 @@ package pw.latematt.xiv.ui.alt;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import pw.latematt.xiv.utils.RenderUtils;
 
 public class AltSlot extends GuiSlot {
     private GuiAltManager screen;
@@ -60,7 +64,6 @@ public class AltSlot extends GuiSlot {
         AltAccount alt = getAlt(slot);
 
         if (alt != null) {
-
             mc.fontRendererObj.drawStringWithShadow(alt.getUsername(), x + 1, y + 2, 0xFFFFFFFF);
             mc.fontRendererObj.drawStringWithShadow(alt.getPassword().replaceAll("(?s).", "*"), x + 1, y + 12, 0xFF888888);
             mc.fontRendererObj.drawStringWithShadow((alt.getKeyword().isEmpty() ? "No keyword set" : alt.getKeyword()), x + 1, y + 22, 0xFFFFFF00);

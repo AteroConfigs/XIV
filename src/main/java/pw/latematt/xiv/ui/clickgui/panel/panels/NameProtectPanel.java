@@ -8,8 +8,8 @@ import java.util.ArrayList;
  * @author Matthew
  */
 public class NameProtectPanel extends Panel {
-    public NameProtectPanel(float x, float y, float width, float height) {
-        super("NameProtect", new ArrayList<>(), x, y, width, height);
+    public NameProtectPanel(float x, float y) {
+        super("NameProtect", new ArrayList<>(), x, y, 20, 10);
 
         addValueElements("nameprotect_");
     }

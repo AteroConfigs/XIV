@@ -11,8 +11,8 @@ import java.util.ArrayList;
  * @author Matthew
  */
 public class ThemePanel extends Panel {
-    public ThemePanel(float x, float y, float width, float height) {
-        super("Themes", new ArrayList<>(), x, y, width, height);
+    public ThemePanel(float x, float y) {
+        super("Themes", new ArrayList<>(), x, y, 20, 10);
 
         float elementY = 4;
         for (ClickTheme theme : XIV.getInstance().getGuiClick().getThemes()) {

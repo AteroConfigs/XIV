@@ -1,10 +1,12 @@
 package pw.latematt.xiv.mod.mods.player;
 
+import net.minecraft.network.play.client.C03PacketPlayer;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.PotionIncrementEvent;
+import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.EntityUtils;
@@ -15,7 +17,7 @@ import java.util.Objects;
  * @author Rederpz
  */
 
-public class PotionSaver extends Mod implements Listener<MotionUpdateEvent> {
+public class PotionSaver extends Mod implements Listener<SendPacketEvent> {
     private final Listener potionIncrementListener;
 
     public PotionSaver() {
@@ -24,7 +26,7 @@ public class PotionSaver extends Mod implements Listener<MotionUpdateEvent> {
         potionIncrementListener = new Listener<PotionIncrementEvent>() {
             @Override
             public void onEventCalled(PotionIncrementEvent event) {
-                if (!(mc.thePlayer.isUsingItem()) && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().isCollidedVertically && !mc.gameSettings.keyBindJump.getIsKeyPressed() && EntityUtils.getReference().motionZ == 0)) {
+                if (!(mc.thePlayer.isUsingItem()) && !(mc.thePlayer.isSwingInProgress) && (EntityUtils.getReference().motionX == 0 && !(mc.gameSettings.keyBindJump.getIsKeyPressed() && EntityUtils.getReference() == mc.thePlayer || EntityUtils.getReference() != mc.thePlayer) && EntityUtils.getReference().motionZ == 0)) {
                     event.setCancelled(true);
                 }
             }
@@ -32,9 +34,9 @@ public class PotionSaver extends Mod implements Listener<MotionUpdateEvent> {
     }
 
     @Override
-    public void onEventCalled(MotionUpdateEvent event) {
-        if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
-            if (!(mc.thePlayer.isUsingItem()) && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().isCollidedVertically && !mc.gameSettings.keyBindJump.getIsKeyPressed() && EntityUtils.getReference().motionZ == 0)) {
+    public void onEventCalled(SendPacketEvent event) {
+        if (event.getPacket() instanceof C03PacketPlayer) {
+            if (!(mc.thePlayer.isUsingItem()) && !(mc.thePlayer.isSwingInProgress) && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().isCollidedVertically && !(mc.gameSettings.keyBindJump.getIsKeyPressed() && EntityUtils.getReference() == mc.thePlayer || EntityUtils.getReference() != mc.thePlayer) && EntityUtils.getReference().motionZ == 0)) {
                 event.setCancelled(true);
             }
         }

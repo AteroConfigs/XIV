@@ -2,10 +2,15 @@ package pw.latematt.xiv.ui.clickgui.panel;
 
 import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.mod.Mod;
+import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.none.ClickGUI;
 import pw.latematt.xiv.ui.clickgui.element.Element;
+import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
+import pw.latematt.xiv.ui.clickgui.element.elements.PanelButton;
 import pw.latematt.xiv.ui.clickgui.element.elements.ValueButton;
 import pw.latematt.xiv.value.Value;
+import sun.security.pkcs11.Secmod;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -13,17 +18,22 @@ import java.util.Objects;
 public class Panel {
     private final String name;
     private float x, y, width, height, openheight, buttonoffset = 1;
-    private boolean dragging, open;
+    private boolean dragging, open, showing;
     private float dragX, dragY;
     private ArrayList<Element> elements;
 
-    public Panel(String name, ArrayList<Element> elements, float x, float y, float width, float height) {
+    public Panel(String name, ArrayList<Element> elements, float x, float y, float width, float height, boolean showing) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.openheight = this.height = height;
         this.name = name;
         this.elements = elements;
+        this.showing = showing;
+    }
+
+    public Panel(String name, ArrayList<Element> elements, float x, float y, float width, float height) {
+        this(name, elements, x, y, width, height, true);
     }
 
     public float getX() {
@@ -88,6 +98,14 @@ public class Panel {
 
     public void setOpen(boolean open) {
         this.open = open;
+    }
+
+    public boolean isShowing() {
+        return showing;
+    }
+
+    public void setShowing(boolean showing) {
+        this.showing = showing;
     }
 
     public String getName() {
@@ -180,6 +198,25 @@ public class Panel {
 
         for (Element element : elements) {
             element.onGuiClosed();
+        }
+    }
+
+    public void addModuleElements(ModType type) {
+        float elementY = 4;
+        for (Mod mod : XIV.getInstance().getModManager().getContents()) {
+            if (!mod.getModType().equals(type))
+                continue;
+
+            getElements().add(new ModButton(mod, x + 2, elementY + 2, XIV.getInstance().getGuiClick().getTheme().getElementWidth(), XIV.getInstance().getGuiClick().getTheme().getElementHeight()));
+            elementY += XIV.getInstance().getGuiClick().getTheme().getElementHeight() + 1;
+        }
+    }
+
+    public void addPanelElements() {
+        float elementY = 4;
+        for (Panel panel : XIV.getInstance().getGuiClick().getPanels()) {
+            getElements().add(new PanelButton(panel, x + 2, elementY + 2, XIV.getInstance().getGuiClick().getTheme().getElementWidth(), XIV.getInstance().getGuiClick().getTheme().getElementHeight()));
+            elementY += XIV.getInstance().getGuiClick().getTheme().getElementHeight() + 1;
         }
     }
 

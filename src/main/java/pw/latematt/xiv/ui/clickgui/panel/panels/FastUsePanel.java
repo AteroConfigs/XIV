@@ -8,8 +8,8 @@ import java.util.ArrayList;
  * @author Matthew
  */
 public class FastUsePanel extends Panel {
-    public FastUsePanel(float x, float y, float width, float height) {
-        super("FastUse", new ArrayList<>(), x, y, width, height);
+    public FastUsePanel(float x, float y) {
+        super("FastUse", new ArrayList<>(), x, y, 20, 10);
 
         addValueElements("fastuse_");
     }

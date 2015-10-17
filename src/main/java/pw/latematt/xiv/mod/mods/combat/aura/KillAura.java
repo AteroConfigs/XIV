@@ -39,7 +39,7 @@ public class KillAura extends Mod implements CommandHandler {
     public final Value<Long> randomDelay = new Value<>("killaura_random_delay", 0L);
     public final Value<Double> range = new Value<>("killaura_range", 3.8D);
     public final Value<Integer> fov = new Value<>("killaura_fov", 360);
-    private final Value<Boolean> friends = new Value<>("killaura_friends", true);
+    private final Value<Boolean> friends = new Value<>("killaura_ignore_friends", true);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
     private final Value<Boolean> mobs = new Value<>("killaura_mobs", false);
     private final Value<Boolean> animals = new Value<>("killaura_animals", false);
