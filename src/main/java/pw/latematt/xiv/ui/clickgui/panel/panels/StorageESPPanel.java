@@ -8,8 +8,8 @@ import java.util.ArrayList;
  * @author Matthew
  */
 public class StorageESPPanel extends Panel {
-    public StorageESPPanel(float x, float y, float width, float height) {
-        super("StorageESP", new ArrayList<>(), x, y, width, height);
+    public StorageESPPanel(float x, float y) {
+        super("StorageESP", new ArrayList<>(), x, y, 20, 10);
 
         addValueElements("storage_esp_");
     }

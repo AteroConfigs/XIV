@@ -50,6 +50,8 @@ public class MassMessage implements CommandHandler, Listener<MotionUpdateEvent> 
                 ChatLogger.print(String.format("\"%s\" is not a number.", arguments[1]));
             } catch (ArrayIndexOutOfBoundsException e) {
                 ChatLogger.print("Invalid arguments, valid: massmessage <delay> <message>");
+            } catch(StringIndexOutOfBoundsException e) {
+                ChatLogger.print("Invalid arguments, valid: massmessage <delay> <message>");
             }
         } else {
             ChatLogger.print("Invalid arguments, valid: massmessage <delay> <message>");

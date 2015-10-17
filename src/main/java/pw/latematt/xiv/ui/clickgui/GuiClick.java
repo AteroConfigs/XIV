@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import net.minecraft.client.gui.GuiScreen;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.file.XIVFile;
+import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.panel.panels.*;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
@@ -44,6 +45,22 @@ public class GuiClick extends GuiScreen {
         return panels;
     }
 
+    public void addPanel(Panel panel, int x, int y) {
+        for(int i = 0; i < panels.size(); i++) {
+            if (x > 4 + (102 * 3)) {
+                x = 4;
+                y += 15;
+            } else {
+                x += 102;
+            }
+        }
+
+        panel.setX(x);
+        panel.setY(y);
+
+        panels.add(panel);
+    }
+    
     @Override
     public void initGui() {
         panels = new CopyOnWriteArrayList<>();
@@ -56,15 +73,23 @@ public class GuiClick extends GuiScreen {
         themes.add(new PringlesTheme(this));
         themes.add(new XenonTheme(this));
 
-        panels.add(new ThemePanel(4, 4, 20, 10));
-        panels.add(new AuraPanel(106, 4, 20, 10));
-        panels.add(new ESPPanel(208, 4, 20, 10));
-        panels.add(new StorageESPPanel(310, 4, 20, 10));
+        int x = 4;
+        int y = 4;
 
-        panels.add(new WaypointsPanel(4, 19, 20, 10));
-        panels.add(new FastUsePanel(106, 19, 20, 10));
-        panels.add(new NameProtectPanel(208, 19, 20, 10));
-        panels.add(new TriggerbotPanel(310, 19, 20, 10));
+        addPanel(new ThemePanel(x, y), x, y);
+        addPanel(new AuraPanel(x, y), x, y);
+        addPanel(new ESPPanel(x, y), x, y);
+        addPanel(new StorageESPPanel(x, y), x, y);
+        addPanel(new WaypointsPanel(x, y), x, y);
+        addPanel(new FastUsePanel(x, y), x, y);
+        addPanel(new NameProtectPanel(x, y), x, y);
+        addPanel(new TriggerbotPanel(x, y), x, y);
+        
+        for(ModType type: ModType.values()) {
+            addPanel(new ModulePanel(type, x, y), x, y);
+        }
+
+        addPanel(new HUBPanel(x, y), x, y);
 
         if (guiConfig == null) {
             guiConfig = new XIVFile("gui", "json") {
@@ -79,6 +104,7 @@ public class GuiClick extends GuiScreen {
                             panel.setX(panelConfig.getX());
                             panel.setY(panelConfig.getY());
                             panel.setOpen(panelConfig.isOpen());
+                            panel.setShowing(panelConfig.isShowing());
                         });
                     }
                 }
@@ -86,7 +112,7 @@ public class GuiClick extends GuiScreen {
                 @Override
                 public void save() throws IOException {
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    List<PanelConfig> panelConfigs = panels.stream().map(panel -> new PanelConfig(panel.getName(), panel.getX(), panel.getY(), panel.isOpen())).collect(Collectors.toList());
+                    List<PanelConfig> panelConfigs = panels.stream().map(panel -> new PanelConfig(panel.getName(), panel.getX(), panel.getY(), panel.isOpen(), panel.isShowing())).collect(Collectors.toList());
                     Files.write(gson.toJson(panelConfigs).getBytes("UTF-8"), file);
                 }
             };
@@ -128,7 +154,9 @@ public class GuiClick extends GuiScreen {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
         for (Panel panel : panels) {
-            panel.mouseClicked(mouseX, mouseY, mouseButton);
+            if(panel.isShowing()) {
+                panel.mouseClicked(mouseX, mouseY, mouseButton);
+            }
         }
         XIV.getInstance().getFileManager().saveFile("gui");
     }
@@ -139,7 +167,9 @@ public class GuiClick extends GuiScreen {
         drawRect(0, 0, width, height, 0x44000000);
 
         for (Panel panel : panels) {
-            panel.drawPanel(mouseX, mouseY);
+            if(panel.isShowing()) {
+                panel.drawPanel(mouseX, mouseY);
+            }
         }
     }
 
@@ -148,14 +178,18 @@ public class GuiClick extends GuiScreen {
         super.keyTyped(typedChar, keyCode);
 
         for (Panel panel : panels) {
-            panel.keyPressed(keyCode);
+            if(panel.isShowing()) {
+                panel.keyPressed(keyCode);
+            }
         }
     }
 
     @Override
     public void onGuiClosed() {
         for (Panel panel : panels) {
-            panel.onGuiClosed();
+            if(panel.isShowing()) {
+                panel.onGuiClosed();
+            }
         }
 
         XIV.getInstance().getFileManager().saveFile("gui");
@@ -164,13 +198,14 @@ public class GuiClick extends GuiScreen {
     public class PanelConfig {
         public final String name;
         public final float x, y;
-        public final boolean open;
+        public final boolean open, showing;
 
-        public PanelConfig(String name, float x, float y, boolean open) {
+        public PanelConfig(String name, float x, float y, boolean open, boolean showing) {
             this.name = name;
             this.x = x;
             this.y = y;
             this.open = open;
+            this.showing = showing;
         }
 
         public String getName() {
@@ -187,6 +222,10 @@ public class GuiClick extends GuiScreen {
 
         public boolean isOpen() {
             return open;
+        }
+
+        public boolean isShowing() {
+            return showing;
         }
     }
 }

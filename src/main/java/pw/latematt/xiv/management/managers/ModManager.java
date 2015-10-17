@@ -29,6 +29,7 @@ import pw.latematt.xiv.mod.mods.render.waypoints.Waypoints;
 import pw.latematt.xiv.mod.mods.world.BlockBBFixer;
 import pw.latematt.xiv.mod.mods.world.FastPlace;
 import pw.latematt.xiv.mod.mods.world.Speedmine;
+import pw.latematt.xiv.mod.mods.world.Tower;
 import pw.latematt.xiv.utils.ChatLogger;
 
 import java.io.BufferedReader;
@@ -83,6 +84,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Phase());
         contents.add(new PotionSaver());
         contents.add(new Regen());
+        contents.add(new SkinFlash());
         contents.add(new SlimeJump());
         contents.add(new SmoothAimbot());
         contents.add(new Sneak());
@@ -92,6 +94,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Step());
         contents.add(new StorageESP());
         contents.add(new Triggerbot());
+        contents.add(new Tower());
         contents.add(new Velocity());
         contents.add(new Waypoints());
         contents.add(new XIVChat());

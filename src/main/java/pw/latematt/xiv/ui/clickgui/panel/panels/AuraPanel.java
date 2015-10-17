@@ -8,8 +8,8 @@ import java.util.ArrayList;
  * @author Matthew
  */
 public class AuraPanel extends Panel {
-    public AuraPanel(float x, float y, float width, float height) {
-        super("Aura", new ArrayList<>(), x, y, width, height);
+    public AuraPanel(float x, float y) {
+        super("Aura", new ArrayList<>(), x, y, 20, 10);
 
         addValueElements("killaura_");
     }
