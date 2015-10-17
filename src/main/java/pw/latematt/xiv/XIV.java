@@ -95,9 +95,23 @@ public class XIV {
         macroManager.setup();
 
         /* load/save files on startup */
+        fileManager.showAllFiles();
+
         fileManager.loadAllFiles();
         fileManager.saveAllFiles();
 
+        /* save files on shutdown */
+        Runtime.getRuntime().addShutdownHook(new Thread("XIV Shutdown Thread") {
+            public void run() {
+                shutdown();
+            }
+        });
+
         logger.info("==  End XIV setup  == ");
+    }
+
+    public void shutdown() {
+        fileManager.saveAllFiles();
+        fileManager.hideAllFiles();
     }
 }
