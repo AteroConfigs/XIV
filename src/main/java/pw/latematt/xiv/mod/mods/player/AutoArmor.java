@@ -38,49 +38,49 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>,Comman
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
         if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
-            int item = -1;
+            int selectedSlotId = -1;
             if (time.hasReached(delay.getValue())) {
                 if (mc.thePlayer.inventory.armorItemInSlot(0) == null) {
-                    for (Item boot : boots) {
-                        int slotId = ItemUtils.getSlotID(boot);
+                    for (Item item : boots) {
+                        int slotId = ItemUtils.getSlotID(item);
                         if (slotId != -1) {
-                            item = slotId;
+                            selectedSlotId = slotId;
                         }
                     }
                 }
 
                 if (mc.thePlayer.inventory.armorItemInSlot(1) == null) {
-                    for (Item legging : leggings) {
-                        int slotId = ItemUtils.getSlotID(legging);
+                    for (Item item : leggings) {
+                        int slotId = ItemUtils.getSlotID(item);
                         if (slotId != -1) {
-                            item = slotId;
+                            selectedSlotId = slotId;
                         }
                     }
                 }
 
                 if (mc.thePlayer.inventory.armorItemInSlot(2) == null) {
-                    for (Item chestplate : chestplates) {
-                        int slotId = ItemUtils.getSlotID(chestplate);
+                    for (Item item : chestplates) {
+                        int slotId = ItemUtils.getSlotID(item);
                         if (slotId != -1) {
-                            item = slotId;
+                            selectedSlotId = slotId;
                         }
                     }
                 }
 
                 if (mc.thePlayer.inventory.armorItemInSlot(3) == null) {
-                    for (Item helmet : helmets) {
-                        int slotId = ItemUtils.getSlotID(helmet);
+                    for (Item item : helmets) {
+                        int slotId = ItemUtils.getSlotID(item);
                         if (slotId != -1) {
-                            item = slotId;
+                            selectedSlotId = slotId;
                         }
                     }
                 }
 
-                if (item != -1) {
-                    if (item < 9) {
-                        item += 36;
+                if (selectedSlotId != -1) {
+                    if (selectedSlotId < 9) {
+                        selectedSlotId += 36;
                     }
-                    mc.playerController.windowClick(0, item, 0, 1, mc.thePlayer);
+                    mc.playerController.windowClick(0, selectedSlotId, 0, 1, mc.thePlayer);
                     time.reset();
                 }
             }
