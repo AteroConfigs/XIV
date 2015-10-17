@@ -38,7 +38,9 @@ public class MassMessage implements CommandHandler, Listener<MotionUpdateEvent> 
                         NetworkPlayerInfo playerInfo = (NetworkPlayerInfo) o;
                         String mcname = StringUtils.stripControlCodes(mc.ingameGUI.getTabList().getPlayerName(playerInfo));
 
-                        players.add(mcname);
+                        if(!mcname.equalsIgnoreCase(mc.thePlayer.getName())) {
+                            players.add(mcname);
+                        }
                     }
                     timer.reset();
 
