@@ -18,6 +18,7 @@ import pw.latematt.xiv.mod.mods.combat.SmoothAimbot;
 import pw.latematt.xiv.mod.mods.combat.Triggerbot;
 import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
 import pw.latematt.xiv.mod.mods.misc.AntiTabComplete;
+import pw.latematt.xiv.mod.mods.misc.AutoBardKit;
 import pw.latematt.xiv.mod.mods.misc.DashNames;
 import pw.latematt.xiv.mod.mods.misc.NoRotationSet;
 import pw.latematt.xiv.mod.mods.movement.*;
@@ -55,6 +56,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new AntiSuffocate());
         contents.add(new AntiTabComplete());
         contents.add(new ArmorBreaker());
+        contents.add(new AutoArmor());
         //contents.add(new AutoHead());
         contents.add(new AutoHeal());
         contents.add(new AutoRespawn());
@@ -93,8 +95,8 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Sprint());
         contents.add(new Step());
         contents.add(new StorageESP());
-        contents.add(new Triggerbot());
         contents.add(new Tower());
+        contents.add(new Triggerbot());
         contents.add(new Velocity());
         contents.add(new Waypoints());
         contents.add(new XIVChat());

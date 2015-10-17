@@ -67,6 +67,18 @@ public class ItemUtils {
         }
     }
 
+    public static int getSlotID(Item item) {
+        for (int index = 0; index <= 36; index++) {
+            ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
+            if (stack == null)
+                continue;
+            if (stack.getItem() == item) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
     /* instanthealth stuff (used in AutoHeal) */
     public static boolean isValidHealthPotion(ItemStack stack) {
         if (stack == null)
