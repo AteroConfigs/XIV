@@ -39,12 +39,12 @@ public class KillAura extends Mod implements CommandHandler {
     public final Value<Long> randomDelay = new Value<>("killaura_random_delay", 0L);
     public final Value<Double> range = new Value<>("killaura_range", 3.8D);
     public final Value<Integer> fov = new Value<>("killaura_fov", 360);
-    private final Value<Boolean> friends = new Value<>("killaura_ignore_friends", true);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
     private final Value<Boolean> mobs = new Value<>("killaura_mobs", false);
     private final Value<Boolean> animals = new Value<>("killaura_animals", false);
     private final Value<Boolean> invisible = new Value<>("killaura_invisible", false);
     private final Value<Boolean> team = new Value<>("killaura_team", true);
+    private final Value<Boolean> friends = new Value<>("killaura_friends", false);
     public final Value<Boolean> silent = new Value<>("killaura_silent", true);
     public final Value<Boolean> autoSword = new Value<>("killaura_auto_sword", true);
     private final Value<Boolean> toggleDeath = new Value<>("killaura_toggle_death", false);
@@ -144,7 +144,9 @@ public class KillAura extends Mod implements CommandHandler {
             return false;
         // 85.136.70.107
         if (entity instanceof EntityPlayer) {
-            return players.getValue() && (!XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName()) && friends.getValue() || !friends.getValue());
+            if (!friends.getValue() && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName()))
+                return false;
+            return players.getValue();
         } else if (entity instanceof IAnimals && !(entity instanceof IMob)) {
             if (entity instanceof EntityHorse) {
                 EntityHorse horse = (EntityHorse) entity;
