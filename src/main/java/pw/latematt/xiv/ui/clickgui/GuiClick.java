@@ -46,7 +46,7 @@ public class GuiClick extends GuiScreen {
     }
 
     public void addPanel(Panel panel, int x, int y) {
-        for(int i = 0; i < panels.size(); i++) {
+        for (int i = 0; i < panels.size(); i++) {
             if (x > 4 + (102 * 3)) {
                 x = 4;
                 y += 15;
@@ -60,7 +60,7 @@ public class GuiClick extends GuiScreen {
 
         panels.add(panel);
     }
-    
+
     @Override
     public void initGui() {
         panels = new CopyOnWriteArrayList<>();
@@ -84,8 +84,10 @@ public class GuiClick extends GuiScreen {
         addPanel(new FastUsePanel(x, y), x, y);
         addPanel(new NameProtectPanel(x, y), x, y);
         addPanel(new TriggerbotPanel(x, y), x, y);
-        
-        for(ModType type: ModType.values()) {
+
+        for (ModType type : ModType.values()) {
+            if (type == ModType.NONE)
+                continue;
             addPanel(new ModulePanel(type, x, y), x, y);
         }
 
@@ -153,46 +155,28 @@ public class GuiClick extends GuiScreen {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
-        for (Panel panel : panels) {
-            if(panel.isShowing()) {
-                panel.mouseClicked(mouseX, mouseY, mouseButton);
-            }
-        }
+        panels.stream().filter(Panel::isShowing).forEach(panel -> panel.mouseClicked(mouseX, mouseY, mouseButton));
         XIV.getInstance().getFileManager().saveFile("gui");
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        drawRect(0, 0, width, height, 0x44000000);
+        drawDefaultBackground();
 
-        for (Panel panel : panels) {
-            if(panel.isShowing()) {
-                panel.drawPanel(mouseX, mouseY);
-            }
-        }
+        panels.stream().filter(Panel::isShowing).forEach(panel -> panel.drawPanel(mouseX, mouseY));
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         super.keyTyped(typedChar, keyCode);
 
-        for (Panel panel : panels) {
-            if(panel.isShowing()) {
-                panel.keyPressed(keyCode);
-            }
-        }
+        panels.stream().filter(Panel::isShowing).forEach(panel -> panel.keyPressed(keyCode));
     }
 
     @Override
     public void onGuiClosed() {
-        for (Panel panel : panels) {
-            if(panel.isShowing()) {
-                panel.onGuiClosed();
-            }
-        }
-
-        XIV.getInstance().getFileManager().saveFile("gui");
+        panels.stream().filter(Panel::isShowing).forEach(Panel::onGuiClosed);
     }
 
     public class PanelConfig {

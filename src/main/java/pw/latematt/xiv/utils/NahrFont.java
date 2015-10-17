@@ -92,7 +92,7 @@ public class NahrFont {
         this.resourceLocation = Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation("font" + font.toString() + size, this.dynamicTexture = new DynamicTexture(this.bufferedImage));
     }
 
-    private void drawChar(char character, float x, float y) throws ArrayIndexOutOfBoundsException {
+    private void drawChar(char character, float x, float y) {
         final Rectangle2D bounds = this.theMetrics.getStringBounds(Character.toString(character), this.theGraphics);
         drawTexturedModalRect(x, y, this.xPos[character - this.startChar], this.yPos[character - this.startChar], (float) bounds.getWidth(), (float) bounds.getHeight() + this.theMetrics.getMaxDescent() + 1.0F);
     }
@@ -132,11 +132,10 @@ public class NahrFont {
                 }
                 i++;
             } else {
-                try {
-                    final char c = text.charAt(i);
+                final char c = text.charAt(i);
+                if (c - this.startChar <= xPos.length && c - this.startChar <= yPos.length) {
                     drawChar(c, x, y);
                     x += getStringWidth(Character.toString(c)) * 2.0F;
-                } catch (final ArrayIndexOutOfBoundsException ignored) {
                 }
             }
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

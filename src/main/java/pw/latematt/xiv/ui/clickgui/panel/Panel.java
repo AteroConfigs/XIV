@@ -10,7 +10,6 @@ import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
 import pw.latematt.xiv.ui.clickgui.element.elements.PanelButton;
 import pw.latematt.xiv.ui.clickgui.element.elements.ValueButton;
 import pw.latematt.xiv.value.Value;
-import sun.security.pkcs11.Secmod;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -127,6 +126,7 @@ public class Panel {
 
             if (!Mouse.isButtonDown(0)) {
                 setDragging(false);
+                XIV.getInstance().getFileManager().saveFile("gui");
             }
         }
 
@@ -168,17 +168,15 @@ public class Panel {
                 dragY = (getY() - mouseY);
 
                 dragging = true;
-                ClickGUI clickGUI = (ClickGUI) XIV.getInstance().getModManager().find(ClickGUI.class);
-                if (Objects.nonNull(clickGUI)) {
-                    for (Panel panel : XIV.getInstance().getGuiClick().getPanels()) {
-                        if (panel.equals(this)) continue;
-                        panel.dragging = false;
-                    }
-                    XIV.getInstance().getGuiClick().getPanels().remove(this);
-                    XIV.getInstance().getGuiClick().getPanels().add(this);
+                for (Panel panel : XIV.getInstance().getGuiClick().getPanels()) {
+                    if (panel.equals(this)) continue;
+                    panel.dragging = false;
                 }
+                XIV.getInstance().getGuiClick().getPanels().remove(this);
+                XIV.getInstance().getGuiClick().getPanels().add(this);
             } else if (mouseButton == 1) {
                 open = !open;
+                XIV.getInstance().getFileManager().saveFile("gui");
             }
         }
 
@@ -196,9 +194,7 @@ public class Panel {
     public void onGuiClosed() {
         this.dragging = false;
 
-        for (Element element : elements) {
-            element.onGuiClosed();
-        }
+        elements.forEach(Element::onGuiClosed);
     }
 
     public void addModuleElements(ModType type) {

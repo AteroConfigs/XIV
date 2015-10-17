@@ -2,10 +2,6 @@ package pw.latematt.xiv.ui.alt;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import pw.latematt.xiv.utils.RenderUtils;
 
 public class AltSlot extends GuiSlot {
     private GuiAltManager screen;

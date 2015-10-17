@@ -5,12 +5,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -140,7 +138,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         if (armor.getValue()) {
             drawArmor(scaledResolution);
         }
-        if(direction.getValue()) {
+        if (direction.getValue()) {
             drawDirection(scaledResolution);
         }
 
@@ -234,7 +232,8 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
     }
 
     private void drawDirection(ScaledResolution scaledResolution) {
-        EnumFacing yaw = EnumFacing.getHorizontal(MathHelper.floor_double((double) (mc.thePlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);;
+        EnumFacing yaw = EnumFacing.getHorizontal(MathHelper.floor_double((double) (mc.thePlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
+        ;
 
         String displayString = yaw.getName().substring(0, 1).toUpperCase() + yaw.getName().substring(1);
 
@@ -245,26 +244,26 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         String lag = "|||||";
         int color = 0xFF00FF00;
 
-        if(timer.hasReached(20000L)) {
+        if (timer.hasReached(20000L)) {
             lag = "|";
             color = 0xFF990000;
-        }else{
-            if(timer.hasReached(15000L)) {
+        } else {
+            if (timer.hasReached(15000L)) {
                 lag = "||";
                 color = 0xFFFF0000;
-            }else{
-                if(timer.hasReached(10000L)) {
+            } else {
+                if (timer.hasReached(10000L)) {
                     lag = "|||";
                     color = 0xFFCC3300;
-                }else{
-                    if(timer.hasReached(5000L)) {
+                } else {
+                    if (timer.hasReached(5000L)) {
                         lag = "||||";
                         color = 0xFF669900;
-                    }else{
-                        if(timer.hasReached(1000L)) {
+                    } else {
+                        if (timer.hasReached(1000L)) {
                             lag = "||||";
                             color = 0xFF22DD00;
-                        }else{
+                        } else {
                             lag = "|||||";
                             color = 0xFF00FF00;
                         }
@@ -355,7 +354,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     }
                     ChatLogger.print(String.format("HUD will %s display your in-game name.", (ign.getValue() ? "now" : "no longer")));
                     break;
-                case "dir" :
+                case "dir":
                 case "direction":
                     if (arguments.length >= 3) {
                         if (arguments[2].equalsIgnoreCase("-d")) {
@@ -441,7 +440,8 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);;
+        XIV.getInstance().getListenerManager().add(this);
+        ;
         XIV.getInstance().getListenerManager().add(readPacketListener);
     }
 

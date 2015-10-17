@@ -296,7 +296,17 @@ public class Speed extends Mod implements CommandHandler {
         NEW, OLD;
 
         public String getName() {
-            return name().substring(0, 1) + name().substring(1, name().length()).toLowerCase();
+            String prettyName = "";
+            String[] actualNameSplit = name().split("_");
+            if (actualNameSplit.length > 0) {
+                for (String arg : actualNameSplit) {
+                    arg = arg.substring(0, 1).toUpperCase() + arg.substring(1, arg.length()).toLowerCase();
+                    prettyName += arg + " ";
+                }
+            } else {
+                prettyName = actualNameSplit[0].substring(0, 1).toUpperCase() + actualNameSplit[0].substring(1, actualNameSplit[0].length()).toLowerCase();
+            }
+            return prettyName.trim();
         }
     }
 }

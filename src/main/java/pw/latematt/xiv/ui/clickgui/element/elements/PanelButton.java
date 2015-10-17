@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 
@@ -33,6 +32,7 @@ public class PanelButton extends Element {
         if (isOverElement(mouseX, mouseY) && mouseButton == 0) {
             mc.getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(new ResourceLocation("gui.button.press"), 1.0F));
             getPanel().setShowing(!getPanel().isShowing());
+            XIV.getInstance().getFileManager().saveFile("gui");
         }
     }
 

@@ -7,10 +7,7 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.utils.BlockUtils;
-import pw.latematt.xiv.utils.EntityUtils;
 
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -29,8 +26,8 @@ public class SkinFlash extends Mod implements Listener<MotionUpdateEvent> {
     public void onEventCalled(MotionUpdateEvent event) {
         EnumPlayerModelParts[] parts = EnumPlayerModelParts.values();
 
-        if(parts != null) {
-            for(EnumPlayerModelParts part: parts) {
+        if (parts != null) {
+            for (EnumPlayerModelParts part : parts) {
                 mc.gameSettings.func_178878_a(part, random.nextBoolean());
             }
         }
@@ -45,11 +42,11 @@ public class SkinFlash extends Mod implements Listener<MotionUpdateEvent> {
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
 
-        if(mc.thePlayer != null) {
+        if (mc.thePlayer != null) {
             EnumPlayerModelParts[] parts = EnumPlayerModelParts.values();
 
-            if(parts != null) {
-                for(EnumPlayerModelParts part: parts) {
+            if (parts != null) {
+                for (EnumPlayerModelParts part : parts) {
                     mc.gameSettings.func_178878_a(part, true);
                 }
             }

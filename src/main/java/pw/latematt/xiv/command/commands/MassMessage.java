@@ -38,7 +38,7 @@ public class MassMessage implements CommandHandler, Listener<MotionUpdateEvent> 
                         NetworkPlayerInfo playerInfo = (NetworkPlayerInfo) o;
                         String mcname = StringUtils.stripControlCodes(mc.ingameGUI.getTabList().getPlayerName(playerInfo));
 
-                        if(!mcname.equalsIgnoreCase(mc.thePlayer.getName())) {
+                        if (!mcname.equalsIgnoreCase(mc.thePlayer.getName())) {
                             players.add(mcname);
                         }
                     }
@@ -52,7 +52,7 @@ public class MassMessage implements CommandHandler, Listener<MotionUpdateEvent> 
                 ChatLogger.print(String.format("\"%s\" is not a number.", arguments[1]));
             } catch (ArrayIndexOutOfBoundsException e) {
                 ChatLogger.print("Invalid arguments, valid: massmessage <delay> <message>");
-            } catch(StringIndexOutOfBoundsException e) {
+            } catch (StringIndexOutOfBoundsException e) {
                 ChatLogger.print("Invalid arguments, valid: massmessage <delay> <message>");
             }
         } else {

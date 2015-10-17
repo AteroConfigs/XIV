@@ -605,8 +605,8 @@ public class GuiIngame extends Gui
             XIV.getInstance().getListenerManager().call(scoreboard);
             XIV.getInstance().getListenerManager().call(scoreboard2);
 
-            this.func_175179_f().drawString(scoreboard.getString(), var25, var18, 553648127);
-            this.func_175179_f().drawString(scoreboard2.getString(), var19 - this.func_175179_f().getStringWidth(scoreboard2.getString()), var18, 553648127);
+            this.func_175179_f().drawString(scoreboard.getString().replaceAll("\247g", "\2473"), var25, var18, 553648127);
+            this.func_175179_f().drawString(scoreboard2.getString().replaceAll("\247g", "\2473"), var19 - this.func_175179_f().getStringWidth(scoreboard2.getString().replaceAll("\247g", "\2473")), var18, 553648127);
 
             if (var11 == var21.size())
             {
@@ -617,7 +617,7 @@ public class GuiIngame extends Gui
 
                 drawRect(var25 - 2, var18 - this.func_175179_f().FONT_HEIGHT - 1, var19, var18 - 1, 1610612736);
                 drawRect(var25 - 2, var18 - 1, var19, var18, 1342177280);
-                this.func_175179_f().drawString(scoreboard3.getString(), var25 + var6 / 2 - this.func_175179_f().getStringWidth(scoreboard3.getString()) / 2, var18 - this.func_175179_f().FONT_HEIGHT, 553648127);
+                this.func_175179_f().drawString(scoreboard3.getString().replaceAll("\247g", "\2473"), var25 + var6 / 2 - this.func_175179_f().getStringWidth(scoreboard3.getString().replaceAll("\247g", "\2473")) / 2, var18 - this.func_175179_f().FONT_HEIGHT, 553648127);
             }
         }
     }

@@ -151,8 +151,8 @@ public class GuiPlayerTabOverlay extends Gui
                 RenderStringEvent tab = new RenderStringEvent(var20, RenderStringEvent.State.TAB);
                 XIV.getInstance().getListenerManager().call(tab);
 
-                var21 = this.field_175250_f.fontRendererObj.getStringWidth(tab.getString());
-                this.field_175250_f.fontRendererObj.drawStringWithShadow(tab.getString(), (float)(p_175249_1_ / 2 - var21 / 2), (float)var15, -1);
+                var21 = this.field_175250_f.fontRendererObj.getStringWidth(tab.getString().replaceAll("\247g", "\2473"));
+                this.field_175250_f.fontRendererObj.drawStringWithShadow(tab.getString().replaceAll("\247g", "\2473"), (float)(p_175249_1_ / 2 - var21 / 2), (float)var15, -1);
             }
 
             ++var15;
@@ -180,7 +180,7 @@ public class GuiPlayerTabOverlay extends Gui
                 RenderStringEvent tab = new RenderStringEvent(var25, RenderStringEvent.State.TAB);
                 XIV.getInstance().getListenerManager().call(tab);
 
-                var25 = tab.getString();
+                var25 = tab.getString().replaceAll("\247g", "\2473");
 
                 if (var11)
                 {
@@ -232,8 +232,8 @@ public class GuiPlayerTabOverlay extends Gui
                 RenderStringEvent tab = new RenderStringEvent(var20, RenderStringEvent.State.TAB);
                 XIV.getInstance().getListenerManager().call(tab);
 
-                var21 = this.field_175250_f.fontRendererObj.getStringWidth(tab.getString());
-                this.field_175250_f.fontRendererObj.drawStringWithShadow(tab.getString(), (float)(p_175249_1_ / 2 - var21 / 2), (float)var15, -1);
+                var21 = this.field_175250_f.fontRendererObj.getStringWidth(tab.getString().replaceAll("\247g", "\2473"));
+                this.field_175250_f.fontRendererObj.drawStringWithShadow(tab.getString().replaceAll("\247g", "\2473"), (float)(p_175249_1_ / 2 - var21 / 2), (float)var15, -1);
             }
         }
     }
