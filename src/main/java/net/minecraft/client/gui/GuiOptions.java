@@ -13,6 +13,8 @@ import net.minecraft.client.stream.IStream;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.EnumDifficulty;
+import org.lwjgl.input.Keyboard;
+import pw.latematt.xiv.ui.alt.GuiAltManager;
 
 public class GuiOptions extends GuiScreen implements GuiYesNoCallback
 {
@@ -174,8 +176,13 @@ public class GuiOptions extends GuiScreen implements GuiYesNoCallback
 
             if (button.id == 102)
             {
-                this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new GuiLanguage(this, this.game_settings_1, this.mc.getLanguageManager()));
+                if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                    this.mc.gameSettings.saveOptions();
+                    this.mc.displayGuiScreen(new GuiAltManager(this));
+                }else {
+                    this.mc.gameSettings.saveOptions();
+                    this.mc.displayGuiScreen(new GuiLanguage(this, this.game_settings_1, this.mc.getLanguageManager()));
+                }
             }
 
             if (button.id == 103)

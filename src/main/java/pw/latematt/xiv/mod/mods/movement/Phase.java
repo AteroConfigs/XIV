@@ -42,12 +42,22 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
         blockAddBBListener = new Listener<BlockAddBBEvent>() {
             @Override
             public void onEventCalled(BlockAddBBEvent event) {
-                if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && BlockUtils.isInsideBlock(mc.thePlayer)) {
-                    event.setAxisAlignedBB(null);
-                }
+                if(mode.getValue() == Mode.VANILLA_SKIP) {
+                    if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer)) {
+                        event.setAxisAlignedBB(null);
+                    }
+                }else if(mode.getValue() == Mode.SKIP || mode.getValue() == Mode.VANILLA){
+                    if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && BlockUtils.isInsideBlock(mc.thePlayer)) {
+                        event.setAxisAlignedBB(null);
+                    }
 
-                if (mc.thePlayer.getEntityBoundingBox().maxY < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer)) {
-                    event.setAxisAlignedBB(null);
+                    if (mc.thePlayer.getEntityBoundingBox().maxY < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer)) {
+                        event.setAxisAlignedBB(null);
+                    }
+                }else if(mode.getValue() == Mode.VANILLA_CONTROL) {
+                    if(BlockUtils.isInsideBlock(mc.thePlayer)) {
+                        event.setAxisAlignedBB(null);
+                    }
                 }
             }
         };
@@ -73,62 +83,78 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     }
 
     public void onEventCalled(MotionUpdateEvent event) {
-        if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-            if (mode.getValue() == Mode.SKIP || mode.getValue() == Mode.VANILLA_SKIP) {
-                if (!mc.thePlayer.isCollidedHorizontally && collided) {
-                    collided = false;
-                }
+        if(mode.getValue() != Mode.VANILLA) {
+            if (!mc.thePlayer.isCollidedHorizontally && collided) {
+                collided = false;
+            }
 
-                boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed();
+            float dir = mc.thePlayer.rotationYaw;
 
+            if (mc.thePlayer.moveForward < 0.0F) {
+                dir += 180.0F;
+            }
+
+            if (mc.thePlayer.moveStrafing > 0.0F) {
+                dir -= 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
+            }
+
+            if (mc.thePlayer.moveStrafing < 0.0F) {
+                dir += 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
+            }
+
+            float xD = (float) Math.cos((dir + 90.0F) * Math.PI / 180.0D);
+            float zD = (float) Math.sin((dir + 90.0F) * Math.PI / 180.0D);
+
+            boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed();
+
+            if (mode.getValue() == Mode.SKIP) {
                 if (mc.thePlayer.isCollidedHorizontally && !collided && mc.thePlayer.onGround && !BlockUtils.isInsideBlock(mc.thePlayer) && moving) {
-                    if (mc.thePlayer.isCollidedHorizontally) {
-                        collided = true;
-                    }
-
-                    float dir = mc.thePlayer.rotationYaw;
-
-                    if (mc.thePlayer.moveForward < 0.0F) {
-                        dir += 180.0F;
-                    }
-
-                    if (mc.thePlayer.moveStrafing > 0.0F) {
-                        dir -= 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
-                    }
-
-                    if (mc.thePlayer.moveStrafing < 0.0F) {
-                        dir += 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
-                    }
-
-                    float xD = (float) Math.cos((dir + 90.0F) * Math.PI / 180.0D);
-                    float zD = (float) Math.sin((dir + 90.0F) * Math.PI / 180.0D);
                     float[] offset = new float[]{xD * 0.25F, 1.0F, zD * 0.25F};
 
-                    mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
+                    double[] movements = {
+                            -0.025000000372529D,
+                            -0.02857142899717604D,
+                            -0.0333333338300387D,
+                            -0.04000000059604645D};
 
-                    if (mode.getValue() == Mode.SKIP) {
-                        /**
-                         *  TOO MUCH MEME 6 YOU HAHA XBOYS CODE IN XIV TELL MOM!!!
-                         */
-
-                        double[] movements = {
-                                -0.025000000372529D,
-                                -0.02857142899717604D,
-                                -0.0333333338300387D,
-                                -0.04000000059604645D};
-
-                        for (int i = 0; i < movements.length; i++) {
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + (movements[i] * offset[1]) + 0.025F, mc.thePlayer.posZ, mc.thePlayer.onGround));
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + offset[0] * i, mc.thePlayer.posY, mc.thePlayer.posZ + offset[2] * i, mc.thePlayer.onGround));
-                        }
-
-                        mc.thePlayer.setPosition(mc.thePlayer.posX + (offset[0] * 0.05F), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2] * 0.05F));
-                    } else if (mode.getValue() == Mode.VANILLA_SKIP) {
-                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0] * 6), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2] * 6), mc.thePlayer.onGround));
+                    for (int i = 0; i < movements.length; i++) {
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + (movements[i] * offset[1]) + 0.025F, mc.thePlayer.posZ, mc.thePlayer.onGround));
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + offset[0] * i, mc.thePlayer.posY, mc.thePlayer.posZ + offset[2] * i, mc.thePlayer.onGround));
                     }
 
-                    if (mc.thePlayer != null && !mc.thePlayer.isSneaking()) {
-                        mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
+                    mc.thePlayer.setPosition(mc.thePlayer.posX + (offset[0] * 0.05F), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2] * 0.05F));
+                }
+
+                if (mc.thePlayer.isCollidedHorizontally) {
+                    collided = true;
+                }
+            } else if (mode.getValue() == Mode.VANILLA_SKIP) {
+                float[] offset = new float[]{xD * 1.9F, 1.0F, zD * 1.9F};
+
+                if (mc.thePlayer.isSneaking() && !mc.gameSettings.keyBindSneak.getIsKeyPressed()) {
+                    mc.thePlayer.setSneaking(false);
+                }
+
+                if (moving) {
+                    if (BlockUtils.isInsideBlock(mc.thePlayer)) {
+                        mc.thePlayer.setSneaking(true);
+                        mc.thePlayer.setPosition(mc.thePlayer.posX + (offset[0]), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2]));
+                    }
+                }
+            } else if (mode.getValue() == Mode.VANILLA_CONTROL) {
+                if (BlockUtils.isInsideBlock(mc.thePlayer)) {
+                    float motionY = 0;
+
+                    if (mc.gameSettings.keyBindJump.getIsKeyPressed()) {
+                        motionY = 0.4F;
+                    } else if (mc.gameSettings.keyBindSneak.getIsKeyPressed()) {
+                        motionY = -0.4F;
+                    }
+
+                    mc.thePlayer.motionY = motionY;
+
+                    if (motionY == 0 && mc.thePlayer.motionX == 0 && mc.thePlayer.motionZ == 0) {
+                        event.setCancelled(true);
                     }
                 }
             }
@@ -149,8 +175,14 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                                 this.mode.setValue(Mode.SKIP);
                                 ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
                                 break;
+                            case "vs" :
                             case "vanillaskip":
                                 this.mode.setValue(Mode.VANILLA_SKIP);
+                                ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
+                                break;
+                            case "vc" :
+                            case "vanillacontrol":
+                                this.mode.setValue(Mode.VANILLA_CONTROL);
                                 ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             case "vanilla":
@@ -162,7 +194,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                                 ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: skip, vanilla");
+                                ChatLogger.print("Invalid mode, valid: skip, vanilla, vanillaskip, vanillacontrol");
                                 break;
                         }
                         setTag(String.format("%s \2477%s", getName(), this.mode.getValue().getName()));
@@ -198,7 +230,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     }
 
     private enum Mode {
-        SKIP, VANILLA, VANILLA_SKIP;
+        SKIP, VANILLA, VANILLA_SKIP, VANILLA_CONTROL;
 
         public String getName() {
             String prettyName = "";
