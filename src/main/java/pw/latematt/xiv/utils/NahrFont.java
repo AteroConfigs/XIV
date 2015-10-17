@@ -115,16 +115,9 @@ public class NahrFont {
                     y += this.theMetrics.getAscent() + 2;
                     x = startX;
                 }
-                final int colorCode = "0123456789abcdefklmnorg".indexOf(oneMore);
-                if (colorCode < 16) {
-                    try {
-                        final int newColor = Minecraft.getMinecraft().fontRendererObj.colorCode[colorCode];
-                        GlStateManager.color((newColor >> 16) / 255.0F, (newColor >> 8 & 0xFF) / 255.0F, (newColor & 0xFF) / 255.0F, alpha);
-                    } catch (final Exception exception) {
-                        exception.printStackTrace();
-                    }
-                } else if (oneMore == 'f') {
-                    GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
+                final int colorCode = Minecraft.getMinecraft().fontRendererObj.func_175064_b(oneMore);
+                if (colorCode != 16777215) {
+                    GlStateManager.color((colorCode >> 16) / 255.0F, (colorCode >> 8 & 0xFF) / 255.0F, (colorCode & 0xFF) / 255.0F, alpha);
                 } else if (oneMore == 'r') {
                     GlStateManager.color(red, green, blue, alpha);
                 } else if (oneMore == 'g') {

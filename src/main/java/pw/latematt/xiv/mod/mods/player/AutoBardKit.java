@@ -1,7 +1,10 @@
 package pw.latematt.xiv.mod.mods.player;
 
+import net.minecraft.client.gui.GuiRepair;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.util.BlockPos;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -20,21 +23,21 @@ import java.util.Objects;
 /**
  * @author Matthew
  */
-public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
-    private final Item[] helmets = {Items.diamond_helmet, Items.iron_helmet, Items.golden_helmet, Items.chainmail_helmet, Items.leather_helmet};
-    private final Item[] chestplates = {Items.diamond_chestplate, Items.iron_chestplate, Items.golden_chestplate, Items.chainmail_chestplate, Items.leather_chestplate};
-    private final Item[] leggings = {Items.diamond_leggings, Items.iron_leggings, Items.golden_leggings, Items.chainmail_leggings, Items.leather_leggings};
-    private final Item[] boots = {Items.diamond_boots, Items.iron_boots, Items.golden_boots, Items.chainmail_boots, Items.leather_boots};
-    private final Value<Long> delay = new Value<>("autoarmor_delay", 250L);
+public class AutoBardKit extends Mod implements Listener<MotionUpdateEvent>,CommandHandler {
+    private final Item helmet = Items.golden_helmet;
+    private final Item chestplate = Items.golden_chestplate;
+    private final Item leggings = Items.golden_leggings;
+    private final Item boots = Items.golden_boots;
+    private final Value<Long> delay = new Value<>("autobardkit_delay", 250L);
     private final Timer time = new Timer();
 
-    public AutoArmor() {
-        super("AutoArmor", ModType.PLAYER, Keyboard.KEY_NONE, 0xFF5976EC);
+    public AutoBardKit() {
+        super("AutoBardKit", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFE3CC4D);
 
         Command.newCommand()
-                .cmd("autoarmor")
-                .description("Base command for the AutoArmor mod.")
-                .aliases("aarmor", "aa")
+                .cmd("autobardkit")
+                .description("Base command for the AutoBardKit mod.")
+                .aliases("abardkit", "autobk", "abk")
                 .arguments("<action>")
                 .handler(this)
                 .build();
@@ -46,38 +49,30 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, Comma
             int selectedSlotId = -1;
             if (time.hasReached(delay.getValue())) {
                 if (mc.thePlayer.inventory.armorItemInSlot(0) == null) {
-                    for (Item item : boots) {
-                        int slotId = ItemUtils.getSlotID(item);
-                        if (slotId != -1) {
-                            selectedSlotId = slotId;
-                        }
+                    int slotId = ItemUtils.getSlotID(boots);
+                    if (slotId != -1) {
+                        selectedSlotId = slotId;
                     }
                 }
 
                 if (mc.thePlayer.inventory.armorItemInSlot(1) == null) {
-                    for (Item item : leggings) {
-                        int slotId = ItemUtils.getSlotID(item);
-                        if (slotId != -1) {
-                            selectedSlotId = slotId;
-                        }
+                    int slotId = ItemUtils.getSlotID(leggings);
+                    if (slotId != -1) {
+                        selectedSlotId = slotId;
                     }
                 }
 
                 if (mc.thePlayer.inventory.armorItemInSlot(2) == null) {
-                    for (Item item : chestplates) {
-                        int slotId = ItemUtils.getSlotID(item);
-                        if (slotId != -1) {
-                            selectedSlotId = slotId;
-                        }
+                    int slotId = ItemUtils.getSlotID(chestplate);
+                    if (slotId != -1) {
+                        selectedSlotId = slotId;
                     }
                 }
 
                 if (mc.thePlayer.inventory.armorItemInSlot(3) == null) {
-                    for (Item item : helmets) {
-                        int slotId = ItemUtils.getSlotID(item);
-                        if (slotId != -1) {
-                            selectedSlotId = slotId;
-                        }
+                    int slotId = ItemUtils.getSlotID(helmet);
+                    if (slotId != -1) {
+                        selectedSlotId = slotId;
                     }
                 }
 
@@ -113,12 +108,12 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, Comma
 
                                 delay.setValue(newDelay);
                             }
-                            ChatLogger.print(String.format("AutoArmor Delay set to %sms", delay.getValue()));
+                            ChatLogger.print(String.format("AutoBardKit Delay set to %sms", delay.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));
                         }
                     } else {
-                        ChatLogger.print("Invalid arguments, valid: autoarmor delay <number>");
+                        ChatLogger.print("Invalid arguments, valid: autobardkit delay <number>");
                     }
                     break;
                 default:
@@ -126,7 +121,7 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, Comma
                     break;
             }
         } else {
-            ChatLogger.print("Invalid arguments, valid: autoarmor <action>");
+            ChatLogger.print("Invalid arguments, valid: autobardkit <action>");
         }
     }
 
