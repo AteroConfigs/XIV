@@ -56,15 +56,15 @@ public class GuiClick extends GuiScreen {
         themes.add(new PringlesTheme(this));
         themes.add(new XenonTheme(this));
 
-        panels.add(new ThemePanel(4, 4, 100, 14));
-        panels.add(new AuraPanel(106, 4, 100, 14));
-        panels.add(new ESPPanel(208, 4, 100, 14));
-        panels.add(new StorageESPPanel(310, 4, 100, 14));
+        panels.add(new ThemePanel(4, 4, 20, 10));
+        panels.add(new AuraPanel(106, 4, 20, 10));
+        panels.add(new ESPPanel(208, 4, 20, 10));
+        panels.add(new StorageESPPanel(310, 4, 20, 10));
 
-        panels.add(new WaypointsPanel(4, 19, 100, 14));
-        panels.add(new FastUsePanel(106, 19, 100, 14));
-        panels.add(new NameProtectPanel(208, 19, 100, 14));
-        panels.add(new TriggerbotPanel(310, 19, 100, 14));
+        panels.add(new WaypointsPanel(4, 19, 20, 10));
+        panels.add(new FastUsePanel(106, 19, 20, 10));
+        panels.add(new NameProtectPanel(208, 19, 20, 10));
+        panels.add(new TriggerbotPanel(310, 19, 20, 10));
 
         if (guiConfig == null) {
             guiConfig = new XIVFile("gui", "json") {
@@ -130,6 +130,7 @@ public class GuiClick extends GuiScreen {
         for (Panel panel : panels) {
             panel.mouseClicked(mouseX, mouseY, mouseButton);
         }
+        XIV.getInstance().getFileManager().saveFile("gui");
     }
 
     @Override
@@ -149,6 +150,15 @@ public class GuiClick extends GuiScreen {
         for (Panel panel : panels) {
             panel.keyPressed(keyCode);
         }
+    }
+
+    @Override
+    public void onGuiClosed() {
+        for (Panel panel : panels) {
+            panel.onGuiClosed();
+        }
+
+        XIV.getInstance().getFileManager().saveFile("gui");
     }
 
     public class PanelConfig {

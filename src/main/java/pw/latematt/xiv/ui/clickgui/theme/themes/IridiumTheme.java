@@ -19,7 +19,7 @@ public class IridiumTheme extends ClickTheme {
     protected GuiClick gui;
 
     public IridiumTheme(GuiClick gui) {
-        super("Iridium", 96, 17, gui);
+        super("Iridium", 104, 17, gui);
         this.gui = gui;
     }
 
@@ -31,11 +31,12 @@ public class IridiumTheme extends ClickTheme {
 
         panel.setOpenHeight(17);
         panel.setButtonOffset(1.5F);
+        panel.setWidth(105);
 
         RenderUtils.drawBorderedRect(panel.getX(), panel.getY() + 2, panel.getX() + panel.getWidth(), panel.getY() + (panel.isOpen() ? panel.getHeight() : panel.getOpenHeight()), 0.5F, 0xFF676767, 0xDD343434);
         font.drawString(panel.getName(), panel.getX() + 2, panel.getY() + 1.5F, NahrFont.FontType.SHADOW_THIN, 0xFFFFFFFF);
 
-        if(panel.isOpen()) {
+        if (panel.isOpen()) {
             RenderUtils.drawRect(panel.getX() + 2, panel.getY() + panel.getOpenHeight() - 1, panel.getX() + panel.getWidth() - 2, panel.getY() + panel.getOpenHeight() - 0.5F, 0xFF676767);
         }
 
@@ -51,7 +52,7 @@ public class IridiumTheme extends ClickTheme {
         element.setWidth(this.getElementWidth());
         element.setHeight(this.getElementHeight());
 
-        RenderUtils.drawBorderedRect(x, y, x + 96, y + height, 0.25F, enabled ? 0xFF368CF7 : 0xFF676767, enabled ? 0xDD145495 : 0xDD343434);
+        RenderUtils.drawBorderedRect(x, y, x + width - 3, y + height, 0.25F, enabled ? 0xFF368CF7 : 0xFF676767, enabled ? 0xDD145495 : 0xDD343434);
 
         font.drawString(name, x + (width - font.getStringWidth(name)) / 2, y, NahrFont.FontType.SHADOW_THIN, 0xFFFFFFFF);
     }

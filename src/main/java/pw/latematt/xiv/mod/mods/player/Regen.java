@@ -14,22 +14,12 @@ import pw.latematt.xiv.utils.BlockUtils;
  * @author Rederpz
  */
 public class Regen extends Mod implements Listener<MotionUpdateEvent> {
-    private boolean set = false;
-
     public Regen() {
         super("Regen", ModType.PLAYER, Keyboard.KEY_P, 0xFF9681D6);
     }
 
-    /**
-     * This mod is ment to speed up regen potions to make them instant, on servers that give you infinite regen (or if you have a regen beacon), it should act as a normal regen.
-     * keep in for martin kays?
-     */
     public void onEventCalled(MotionUpdateEvent event) {
         if (mc.thePlayer.getActivePotionEffect(Potion.REGENERATION) != null) {
-            if (!set) {
-                set = true;
-            }
-
             if (mc.thePlayer.onGround || BlockUtils.isOnLadder(mc.thePlayer) || BlockUtils.isInLiquid(mc.thePlayer) || BlockUtils.isOnLiquid(mc.thePlayer)) {
                 if (mc.thePlayer.getHealth() < mc.thePlayer.getMaxHealth()) {
                     for (int i = 0; i < mc.thePlayer.getMaxHealth() - mc.thePlayer.getHealth(); i++) {
@@ -37,8 +27,6 @@ public class Regen extends Mod implements Listener<MotionUpdateEvent> {
                     }
                 }
             }
-        } else {
-            set = false;
         }
     }
 

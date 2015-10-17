@@ -72,7 +72,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
 
     public void onEventCalled(Render3DEvent event) {
         RenderUtils.beginGl();
-        for (Entity entity : mc.theWorld.playerEntities) {
+        for (Entity entity : mc.theWorld.loadedEntityList) {
             if (!isValidEntity(entity))
                 continue;
 

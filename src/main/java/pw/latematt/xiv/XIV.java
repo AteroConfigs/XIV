@@ -1,7 +1,5 @@
 package pw.latematt.xiv;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pw.latematt.xiv.management.managers.*;
@@ -101,9 +99,5 @@ public class XIV {
         fileManager.saveAllFiles();
 
         logger.info("==  End XIV setup  == ");
-    }
-
-    public ScaledResolution newScaledResolution() {
-        return new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
     }
 }

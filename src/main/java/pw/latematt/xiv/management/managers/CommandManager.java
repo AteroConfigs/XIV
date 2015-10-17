@@ -1,8 +1,7 @@
 package pw.latematt.xiv.management.managers;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
@@ -10,30 +9,33 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.ScreenShotHelper;
 import net.minecraft.util.StatCollector;
-import org.apache.commons.codec.binary.Base64;
+import net.minecraft.util.StringUtils;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
+import pw.latematt.xiv.command.commands.MassMessage;
+import pw.latematt.xiv.command.commands.Screenshot;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
 import pw.latematt.xiv.management.ListManager;
+import pw.latematt.xiv.mod.mods.misc.DashNames;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
 
 /**
  * @author Matthew
@@ -475,87 +477,6 @@ public class CommandManager extends ListManager<Command> {
                     }
                 }).build();
         Command.newCommand()
-                .cmd("screenshot")
-                .aliases("scr", "capture", "image", "imgur")
-                .description("Take screenshots of your minecraft.")
-                .handler(message -> {
-                    if (mc.currentScreen instanceof GuiChat && mc.thePlayer != null) {
-                        mc.displayGuiScreen((GuiScreen) null);
-                    }
-
-                    ScreenShotHelper.saveScreenshot(mc.mcDataDir, mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
-
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            File screenshots = new File("screenshots");
-
-                            File[] files = screenshots.listFiles(new FileFilter() {
-                                @Override
-                                public boolean accept(File file) {
-                                    return file.isFile();
-                                }
-                            });
-
-                            long timeModified = -9223372036854775808L;
-                            File lastModified = null;
-                            for (File file : files) {
-                                if (file.lastModified() > timeModified) {
-                                    lastModified = file;
-                                    timeModified = file.lastModified();
-                                }
-                            }
-
-                            try {
-                                URL imgurApi = new URL("https://api.imgur.com/3/image");
-                                HttpURLConnection connection = (HttpURLConnection) imgurApi.openConnection();
-                                BufferedImage image = null;
-                                File file = new File(lastModified.getAbsolutePath());
-                                image = ImageIO.read(file);
-                                ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-                                ImageIO.write(image, "png", byteArray);
-                                byte[] byteImage = byteArray.toByteArray();
-                                String dataImage = Base64.encodeBase64String(byteImage);
-                                String data = URLEncoder.encode("image", "UTF-8") + "=" + URLEncoder.encode(dataImage, "UTF-8");
-                                connection.setDoOutput(true);
-                                connection.setDoInput(true);
-                                connection.setRequestMethod("POST");
-                                String secretKey = "8731c677af5b5a3188728f2f958f5bb0087f7128";
-                                String clientKey = "57e0280fe5e3a5e";
-                                connection.setRequestProperty("Authorization", "Client-ID " + clientKey);
-                                connection.setRequestMethod("POST");
-                                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                                connection.connect();
-                                StringBuilder stringBuilder = new StringBuilder();
-                                OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
-                                wr.write(data);
-                                wr.flush();
-
-                                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                                String line;
-                                while ((line = rd.readLine()) != null) {
-                                    stringBuilder.append(line).append(System.lineSeparator());
-                                }
-                                wr.close();
-                                rd.close();
-
-                                Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-                                String url = "http://i.imgur.com/" + stringBuilder.toString().substring(15, 22) + ".png";
-
-                                if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
-                                    desktop.browse(new URI(url));
-                                }
-                                ChatLogger.print("Screenshot uploaded to " + url);
-                            } catch (IOException e) {
-                                ChatLogger.print("Unable to upload screenshot.");
-                            } catch (URISyntaxException e) {
-                                ChatLogger.print("Unable to open screenshot.");
-                            }
-                        }
-                    });
-                    thread.start();
-                }).build();
-        Command.newCommand()
                 .cmd("history")
                 .aliases("namehistory", "nh")
                 .description("Get the name history of people.")
@@ -584,7 +505,6 @@ public class CommandManager extends ListManager<Command> {
                             while ((line = br.readLine()) != null) {
                                 originalName = line.split("\"")[3];
 
-                                int count = 5;
                                 for (int i = 0; i < line.split("\"").length; i++) {
                                     if ((i != line.split("\"").length - 1) && (line.split("\"")[(i + 1)].equals(","))) {
                                         if (oldNames.equals("")) {
@@ -608,6 +528,17 @@ public class CommandManager extends ListManager<Command> {
                         ChatLogger.print("Invalid arguments, valid: history <name>");
                     }
                 }).build();
+        Command.newCommand()
+                .cmd("massmessage")
+                .description("Send a message to every player in the tab list.")
+                .arguments("<delay> <message>")
+                .aliases("masscommand", "mc", "masschat", "mm")
+                .handler(new MassMessage()).build();
+        Command.newCommand()
+                .cmd("screenshot")
+                .description("Take a screenshot of your minecraft.")
+                .aliases("scr", "imgur", "image", "img")
+                .handler(new Screenshot()).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {
             public void onEventCalled(SendPacketEvent event) {
@@ -630,6 +561,19 @@ public class CommandManager extends ListManager<Command> {
     }
 
     public boolean parseCommand(String message) {
+        if (mc.thePlayer != null) {
+            if (XIV.getInstance().getModManager().find(DashNames.class) != null && XIV.getInstance().getModManager().find(DashNames.class).isEnabled()) {
+                for (Object o : mc.ingameGUI.getTabList().getPlayerList()) {
+                    NetworkPlayerInfo playerInfo = (NetworkPlayerInfo) o;
+                    String mcname = StringUtils.stripControlCodes(mc.ingameGUI.getTabList().getPlayerName(playerInfo));
+                    if (XIV.getInstance().getFriendManager().isFriend(mcname)) {
+                        String alias = XIV.getInstance().getFriendManager().getContents().get(mcname);
+                        message = message.replaceAll("(?i)" + Matcher.quoteReplacement("-" + alias), mcname);
+                    }
+                }
+            }
+        }
+
         String[] spaceSplit = message.split(" ");
         if (spaceSplit[0].startsWith(prefix)) {
             for (Command command : contents) {

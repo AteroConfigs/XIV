@@ -39,6 +39,7 @@ public class KillAura extends Mod implements CommandHandler {
     public final Value<Long> randomDelay = new Value<>("killaura_random_delay", 0L);
     public final Value<Double> range = new Value<>("killaura_range", 3.8D);
     public final Value<Integer> fov = new Value<>("killaura_fov", 360);
+    private final Value<Boolean> friends = new Value<>("killaura_friends", true);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
     private final Value<Boolean> mobs = new Value<>("killaura_mobs", false);
     private final Value<Boolean> animals = new Value<>("killaura_animals", false);
@@ -143,7 +144,7 @@ public class KillAura extends Mod implements CommandHandler {
             return false;
         // 85.136.70.107
         if (entity instanceof EntityPlayer) {
-            return players.getValue() && !XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName());
+            return players.getValue() && (!XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName()) && friends.getValue() || !friends.getValue());
         } else if (entity instanceof IAnimals && !(entity instanceof IMob)) {
             if (entity instanceof EntityHorse) {
                 EntityHorse horse = (EntityHorse) entity;
@@ -257,6 +258,19 @@ public class KillAura extends Mod implements CommandHandler {
                     } else {
                         ChatLogger.print("Invalid arguments, valid: killaura range <number>");
                     }
+                    break;
+                case "friends":
+                case "frnds":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            friends.setValue(friends.getDefault());
+                        } else {
+                            friends.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        friends.setValue(!friends.getValue());
+                    }
+                    ChatLogger.print(String.format("Kill Aura will %s attack friends.", (friends.getValue() ? "now" : "no longer")));
                     break;
                 case "players":
                 case "plyrs":

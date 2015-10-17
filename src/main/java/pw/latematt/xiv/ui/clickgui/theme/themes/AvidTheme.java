@@ -31,11 +31,12 @@ public class AvidTheme extends ClickTheme {
 
         panel.setOpenHeight(17);
         panel.setButtonOffset(1.5F);
+        panel.setWidth(115);
 
         RenderUtils.drawRect(panel.getX(), panel.getY() + 2, panel.getX() + panel.getWidth(), panel.getY() + panel.getOpenHeight() - 0.5F, 0xFF088FE5);
         font.drawString(panel.getName(), panel.getX() + 3, panel.getY() + 1, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
 
-        if(panel.isOpen()) {
+        if (panel.isOpen()) {
             RenderUtils.drawRect(panel.getX(), panel.getY() + panel.getOpenHeight(), panel.getX() + panel.getWidth(), panel.getY() + panel.getHeight(), 0xBBBEBEBE);
         }
 

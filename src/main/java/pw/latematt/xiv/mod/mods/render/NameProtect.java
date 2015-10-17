@@ -1,9 +1,11 @@
 package pw.latematt.xiv.mod.mods.render;
 
+import net.minecraft.entity.player.EntityPlayer;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
+import pw.latematt.xiv.event.events.MouseClickEvent;
 import pw.latematt.xiv.event.events.RenderStringEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
@@ -20,10 +22,32 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
     private final Value<Boolean> scoreboard = new Value<>("nameprotect_scoreboard", true);
     private final Value<Boolean> nametag = new Value<>("nameprotect_nametag", true);
     private final Value<Boolean> chat = new Value<>("nameprotect_chat", true);
+    private final Value<Boolean> middleClickFriends = new Value<>("nameprotect_middle_click_friends", true);
+
+    private final Listener mouseClickListener;
 
     public NameProtect() {
         super("NameProtect", ModType.RENDER);
-        this.setEnabled(true);
+        mouseClickListener = new Listener<MouseClickEvent>() {
+            @Override
+            public void onEventCalled(MouseClickEvent event) {
+                if (event.getButton() == 2 && middleClickFriends.getValue() && mc.thePlayer != null) {
+                    if (mc.objectMouseOver.entityHit != null) {
+                        if (mc.objectMouseOver.entityHit instanceof EntityPlayer) {
+                            EntityPlayer player = (EntityPlayer) mc.objectMouseOver.entityHit;
+
+                            if (XIV.getInstance().getFriendManager().isFriend(player.getName())) {
+                                XIV.getInstance().getFriendManager().remove(player.getName());
+                                ChatLogger.print(String.format("Friend \"%s\" removed.", player.getName()));
+                            } else {
+                                XIV.getInstance().getFriendManager().add(player.getName(), player.getName());
+                                ChatLogger.print(String.format("Friend \"\247g%s\247r\" added.", player.getName()));
+                            }
+                        }
+                    }
+                }
+            }
+        };
 
         Command.newCommand()
                 .cmd("nameprotect")
@@ -32,6 +56,8 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
                 .aliases("np")
                 .handler(this)
                 .build();
+
+        this.setEnabled(true);
     }
 
     @Override
@@ -101,8 +127,23 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
                     }
                     ChatLogger.print(String.format("NameProtect will %s protect in scoreboard.", (scoreboard.getValue() ? "now" : "no longer")));
                     break;
+                case "middleclick":
+                case "middleclickfriends":
+                case "middle":
+                case "click":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            middleClickFriends.setValue(middleClickFriends.getDefault());
+                        } else {
+                            middleClickFriends.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        middleClickFriends.setValue(!middleClickFriends.getValue());
+                    }
+                    ChatLogger.print(String.format("NameProtect will %s allow middle clicking friends.", (nametag.getValue() ? "now" : "no longer")));
+                    break;
                 default:
-                    ChatLogger.print("Invalid action, valid: chat, nametag, scoreboard, tab");
+                    ChatLogger.print("Invalid action, valid: chat, nametag, scoreboard, tab, middleclickfriends");
                     break;
             }
         } else {
@@ -113,10 +154,12 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
+        XIV.getInstance().getListenerManager().add(mouseClickListener);
     }
 
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
+        XIV.getInstance().getListenerManager().remove(mouseClickListener);
     }
 }

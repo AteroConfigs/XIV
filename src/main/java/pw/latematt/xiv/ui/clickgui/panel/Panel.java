@@ -145,7 +145,6 @@ public class Panel {
 
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (isOverPanel(mouseX, mouseY)) {
-            XIV.getInstance().getFileManager().saveFile("gui");
             if (mouseButton == 0) {
                 dragX = (getX() - mouseX);
                 dragY = (getY() - mouseY);
@@ -178,6 +177,10 @@ public class Panel {
 
     public void onGuiClosed() {
         this.dragging = false;
+
+        for (Element element : elements) {
+            element.onGuiClosed();
+        }
     }
 
     public void addValueElements(String prefix) {

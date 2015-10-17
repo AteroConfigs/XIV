@@ -1,5 +1,7 @@
 package pw.latematt.xiv.utils;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -214,7 +216,7 @@ public class RenderUtils {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(red, green, blue, alpha);
 
-        if(borderWidth == 1.0F) {
+        if (borderWidth == 1.0F) {
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
         }
 
@@ -233,7 +235,7 @@ public class RenderUtils {
         tessellator.draw();
         GL11.glLineWidth(2.0F);
 
-        if(borderWidth == 1.0F) {
+        if (borderWidth == 1.0F) {
             GL11.glDisable(GL11.GL_LINE_SMOOTH);
         }
 
@@ -258,7 +260,7 @@ public class RenderUtils {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(red, green, blue, alpha);
 
-        if(borderWidth == 1.0F) {
+        if (borderWidth == 1.0F) {
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
         }
 
@@ -277,7 +279,7 @@ public class RenderUtils {
         tessellator.draw();
         GL11.glLineWidth(2.0F);
 
-        if(borderWidth == 1.0F) {
+        if (borderWidth == 1.0F) {
             GL11.glDisable(GL11.GL_LINE_SMOOTH);
         }
 
@@ -288,5 +290,9 @@ public class RenderUtils {
 
     public static void drawBorderedGradientRect(double left, double top, double right, double bottom, int borderColor, int startColor, int endColor) {
         drawBorderedGradientRect(left, top, right, bottom, 1.0F, borderColor, startColor, endColor);
+    }
+
+    public static ScaledResolution newScaledResolution() {
+        return new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
     }
 }

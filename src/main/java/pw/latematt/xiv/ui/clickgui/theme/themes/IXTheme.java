@@ -33,11 +33,12 @@ public class IXTheme extends ClickTheme {
 
         panel.setOpenHeight(13);
         panel.setButtonOffset(1.0F);
+        panel.setWidth(100);
 
         RenderUtils.drawBorderedRect(panel.getX(), panel.getY() + 1, panel.getX() + panel.getWidth(), panel.getY() + (panel.isOpen() ? panel.getHeight() : panel.getOpenHeight()), 0.5F, 0xBB656565, 0x88121212);
         titleFont.drawString(panel.getName(), panel.getX() + 2, panel.getY() - 2, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
 
-        if(panel.isOpen()) {
+        if (panel.isOpen()) {
             RenderUtils.drawRect(panel.getX() + 1, panel.getY() + panel.getOpenHeight(), panel.getX() + panel.getWidth() - 1, panel.getY() + panel.getOpenHeight() + 1, 0xBB545454);
         }
 
@@ -51,7 +52,7 @@ public class IXTheme extends ClickTheme {
             this.modFont = new NahrFont("Tahoma", 17);
         }
 
-        element.setWidth(this.getElementWidth());
+        element.setWidth(this.getElementWidth() - 5);
         element.setHeight(this.getElementHeight());
 
         RenderUtils.drawBorderedRect(x, y, x + 12, y + height, 0.75F, enabled ? 0xFFFF9900 : 0xBB5A5A5A, enabled ? 0xFFB18716 : 0xBB5A5A5A);

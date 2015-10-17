@@ -25,16 +25,17 @@ public class PringlesTheme extends ClickTheme {
     @Override
     public void renderPanel(Panel panel) {
         if (Objects.isNull(font)) {
-            font = new NahrFont("Trebuchet MS", 18);
+            font = new NahrFont("Tahoma", 18);
         }
 
         panel.setOpenHeight(17);
         panel.setButtonOffset(1.5F);
+        panel.setWidth(100);
 
         RenderUtils.drawBorderedGradientRect(panel.getX(), panel.getY() + 2, panel.getX() + panel.getWidth(), panel.getY() + panel.getOpenHeight(), 0xFF000000, 0xDD082D6C, 0xDD0A0673);
         font.drawString(panel.getName().toUpperCase(), panel.getX() + 3, panel.getY() + 1.5F, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
 
-        if(panel.isOpen()) {
+        if (panel.isOpen()) {
             RenderUtils.drawBorderedRect(panel.getX(), panel.getY() + panel.getOpenHeight(), panel.getX() + panel.getWidth(), panel.getY() + panel.getHeight(), 0xFF000000, 0xBB000000);
         }
 
@@ -44,7 +45,7 @@ public class PringlesTheme extends ClickTheme {
     @Override
     public void renderButton(String name, boolean enabled, float x, float y, float width, float height, boolean overElement, Element element) {
         if (Objects.isNull(font)) {
-            font = new NahrFont("Trebuchet MS", 18);
+            font = new NahrFont("Tahoma", 18);
         }
 
         element.setWidth(this.getElementWidth());
@@ -58,7 +59,7 @@ public class PringlesTheme extends ClickTheme {
     @Override
     public void renderSlider(String name, float value, float x, float y, float width, float height, float sliderX, boolean overElement, Element element) {
         if (Objects.isNull(font)) {
-            font = new NahrFont("Trebuchet MS", 18);
+            font = new NahrFont("Tahoma", 18);
         }
 
         element.setWidth(96);
