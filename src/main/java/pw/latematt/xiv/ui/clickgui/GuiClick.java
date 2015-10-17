@@ -26,8 +26,6 @@ public class GuiClick extends GuiScreen {
     private List<Panel> panels;
     private List<ClickTheme> themes;
     private ClickTheme theme;
-    private XIVFile guiConfig;
-    private XIVFile themeConfig;
 
     public ClickTheme getTheme() {
         return theme;
@@ -93,54 +91,50 @@ public class GuiClick extends GuiScreen {
 
         addPanel(new HUBPanel(x, y), x, y);
 
-        if (guiConfig == null) {
-            guiConfig = new XIVFile("gui", "json") {
-                @Override
-                public void load() throws IOException {
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    BufferedReader reader = new BufferedReader(new FileReader(file));
-                    List<PanelConfig> panelConfigs = gson.fromJson(reader, new TypeToken<List<PanelConfig>>() {
-                    }.getType());
-                    for (PanelConfig panelConfig : panelConfigs) {
-                        panels.stream().filter(panel -> panelConfig.getName().equals(panel.getName())).forEach(panel -> {
-                            panel.setX(panelConfig.getX());
-                            panel.setY(panelConfig.getY());
-                            panel.setOpen(panelConfig.isOpen());
-                            panel.setShowing(panelConfig.isShowing());
-                        });
+        new XIVFile("gui", "json") {
+            @Override
+            public void load() throws IOException {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                List<PanelConfig> panelConfigs = gson.fromJson(reader, new TypeToken<List<PanelConfig>>() {
+                }.getType());
+                for (PanelConfig panelConfig : panelConfigs) {
+                    panels.stream().filter(panel -> panelConfig.getName().equals(panel.getName())).forEach(panel -> {
+                        panel.setX(panelConfig.getX());
+                        panel.setY(panelConfig.getY());
+                        panel.setOpen(panelConfig.isOpen());
+                        panel.setShowing(panelConfig.isShowing());
+                    });
+                }
+            }
+
+            @Override
+            public void save() throws IOException {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                List<PanelConfig> panelConfigs = panels.stream().map(panel -> new PanelConfig(panel.getName(), panel.getX(), panel.getY(), panel.isOpen(), panel.isShowing())).collect(Collectors.toList());
+                Files.write(gson.toJson(panelConfigs).getBytes("UTF-8"), file);
+            }
+        };
+
+        new XIVFile("guiTheme", "cfg") {
+            @Override
+            public void load() throws IOException {
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    final String finalizedLine = line;
+                    Optional<ClickTheme> newTheme = themes.stream().filter(theme -> finalizedLine.equals(theme.getName())).findFirst();
+                    if (newTheme.isPresent()) {
+                        theme = newTheme.get();
                     }
                 }
+            }
 
-                @Override
-                public void save() throws IOException {
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    List<PanelConfig> panelConfigs = panels.stream().map(panel -> new PanelConfig(panel.getName(), panel.getX(), panel.getY(), panel.isOpen(), panel.isShowing())).collect(Collectors.toList());
-                    Files.write(gson.toJson(panelConfigs).getBytes("UTF-8"), file);
-                }
-            };
-        }
-
-        if (themeConfig == null) {
-            themeConfig = new XIVFile("guiTheme", "cfg") {
-                @Override
-                public void load() throws IOException {
-                    BufferedReader reader = new BufferedReader(new FileReader(file));
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        final String finalizedLine = line;
-                        Optional<ClickTheme> newTheme = themes.stream().filter(theme -> finalizedLine.equals(theme.getName())).findFirst();
-                        if (newTheme.isPresent()) {
-                            theme = newTheme.get();
-                        }
-                    }
-                }
-
-                @Override
-                public void save() throws IOException {
-                    Files.write(theme.getName().getBytes("UTF-8"), file);
-                }
-            };
-        }
+            @Override
+            public void save() throws IOException {
+                Files.write(theme.getName().getBytes("UTF-8"), file);
+            }
+        };
 
         XIV.getInstance().getFileManager().loadFile("gui");
         XIV.getInstance().getFileManager().loadFile("guiTheme");

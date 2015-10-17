@@ -2,6 +2,7 @@ package pw.latematt.xiv;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.management.managers.*;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.utils.RenderUtils;
@@ -94,24 +95,20 @@ public class XIV {
         configManager.setup();
         macroManager.setup();
 
-        /* load/save files on startup */
-        fileManager.showAllFiles();
+        /* file stuffs on startup */
+        fileManager.setVisible(XIVFile.XIV_DIRECTORY, true);
 
         fileManager.loadAllFiles();
         fileManager.saveAllFiles();
 
-        /* save files on shutdown */
+        /* file stuffs on shutdown */
         Runtime.getRuntime().addShutdownHook(new Thread("XIV Shutdown Thread") {
             public void run() {
-                shutdown();
+                fileManager.saveAllFiles();
+                fileManager.setVisible(XIVFile.XIV_DIRECTORY, false);
             }
         });
 
         logger.info("==  End XIV setup  == ");
-    }
-
-    public void shutdown() {
-        fileManager.saveAllFiles();
-        fileManager.hideAllFiles();
     }
 }
