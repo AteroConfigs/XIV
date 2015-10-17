@@ -18,7 +18,7 @@ import pw.latematt.xiv.mod.mods.combat.SmoothAimbot;
 import pw.latematt.xiv.mod.mods.combat.Triggerbot;
 import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
 import pw.latematt.xiv.mod.mods.misc.AntiTabComplete;
-import pw.latematt.xiv.mod.mods.misc.AutoBardKit;
+import pw.latematt.xiv.mod.mods.player.AutoBardKit;
 import pw.latematt.xiv.mod.mods.misc.DashNames;
 import pw.latematt.xiv.mod.mods.misc.NoRotationSet;
 import pw.latematt.xiv.mod.mods.movement.*;
