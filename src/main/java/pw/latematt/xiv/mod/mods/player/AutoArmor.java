@@ -17,18 +17,14 @@ import pw.latematt.xiv.value.Value;
 
 import java.util.Objects;
 
-import static pw.latematt.xiv.utils.ItemUtils.dropFirst;
-import static pw.latematt.xiv.utils.ItemUtils.useFirst;
-import static pw.latematt.xiv.utils.ItemUtils.useFirstInstantHealth;
-
 /**
  * @author Matthew
  */
-public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>,CommandHandler {
-    private final Item[] helmets =      { Items.diamond_helmet,     Items.iron_helmet,      Items.golden_helmet,        Items.chainmail_helmet,     Items.leather_helmet };
-    private final Item[] chestplates =  { Items.diamond_chestplate, Items.iron_chestplate,  Items.golden_chestplate,    Items.chainmail_chestplate, Items.leather_chestplate };
-    private final Item[] leggings =     { Items.diamond_leggings,   Items.iron_leggings,    Items.golden_leggings,      Items.chainmail_leggings,   Items.leather_leggings };
-    private final Item[] boots =        { Items.diamond_boots,      Items.iron_boots,       Items.golden_boots,         Items.chainmail_boots,      Items.leather_boots };
+public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
+    private final Item[] helmets = {Items.diamond_helmet, Items.iron_helmet, Items.golden_helmet, Items.chainmail_helmet, Items.leather_helmet};
+    private final Item[] chestplates = {Items.diamond_chestplate, Items.iron_chestplate, Items.golden_chestplate, Items.chainmail_chestplate, Items.leather_chestplate};
+    private final Item[] leggings = {Items.diamond_leggings, Items.iron_leggings, Items.golden_leggings, Items.chainmail_leggings, Items.leather_leggings};
+    private final Item[] boots = {Items.diamond_boots, Items.iron_boots, Items.golden_boots, Items.chainmail_boots, Items.leather_boots};
     private final Value<Long> delay = new Value<>("autoarmor_delay", 250L);
     private final Timer time = new Timer();
 

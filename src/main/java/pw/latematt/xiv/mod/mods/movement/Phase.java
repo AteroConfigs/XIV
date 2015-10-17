@@ -42,11 +42,11 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
         blockAddBBListener = new Listener<BlockAddBBEvent>() {
             @Override
             public void onEventCalled(BlockAddBBEvent event) {
-                if(mode.getValue() == Mode.VANILLA_SKIP) {
+                if (mode.getValue() == Mode.VANILLA_SKIP) {
                     if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer)) {
                         event.setAxisAlignedBB(null);
                     }
-                }else if(mode.getValue() == Mode.SKIP || mode.getValue() == Mode.VANILLA){
+                } else if (mode.getValue() == Mode.SKIP || mode.getValue() == Mode.VANILLA) {
                     if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && BlockUtils.isInsideBlock(mc.thePlayer)) {
                         event.setAxisAlignedBB(null);
                     }
@@ -54,8 +54,8 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                     if (mc.thePlayer.getEntityBoundingBox().maxY < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer)) {
                         event.setAxisAlignedBB(null);
                     }
-                }else if(mode.getValue() == Mode.VANILLA_CONTROL) {
-                    if(BlockUtils.isInsideBlock(mc.thePlayer)) {
+                } else if (mode.getValue() == Mode.VANILLA_CONTROL) {
+                    if (BlockUtils.isInsideBlock(mc.thePlayer)) {
                         event.setAxisAlignedBB(null);
                     }
                 }
@@ -83,7 +83,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     }
 
     public void onEventCalled(MotionUpdateEvent event) {
-        if(mode.getValue() != Mode.VANILLA) {
+        if (mode.getValue() != Mode.VANILLA) {
             if (!mc.thePlayer.isCollidedHorizontally && collided) {
                 collided = false;
             }
@@ -107,6 +107,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
 
             boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed();
 
+            mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
             if (mode.getValue() == Mode.SKIP) {
                 if (mc.thePlayer.isCollidedHorizontally && !collided && mc.thePlayer.onGround && !BlockUtils.isInsideBlock(mc.thePlayer) && moving) {
                     float[] offset = new float[]{xD * 0.25F, 1.0F, zD * 0.25F};
@@ -122,7 +123,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                         mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + offset[0] * i, mc.thePlayer.posY, mc.thePlayer.posZ + offset[2] * i, mc.thePlayer.onGround));
                     }
 
-                    mc.thePlayer.setPosition(mc.thePlayer.posX + (offset[0] * 0.05F), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2] * 0.05F));
+                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0] * 0.05F), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2] * 0.05F), mc.thePlayer.onGround));
                 }
 
                 if (mc.thePlayer.isCollidedHorizontally) {
@@ -131,14 +132,9 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
             } else if (mode.getValue() == Mode.VANILLA_SKIP) {
                 float[] offset = new float[]{xD * 1.9F, 1.0F, zD * 1.9F};
 
-                if (mc.thePlayer.isSneaking() && !mc.gameSettings.keyBindSneak.getIsKeyPressed()) {
-                    mc.thePlayer.setSneaking(false);
-                }
-
                 if (moving) {
                     if (BlockUtils.isInsideBlock(mc.thePlayer)) {
-                        mc.thePlayer.setSneaking(true);
-                        mc.thePlayer.setPosition(mc.thePlayer.posX + (offset[0]), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2]));
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0]), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2]), mc.thePlayer.onGround));
                     }
                 }
             } else if (mode.getValue() == Mode.VANILLA_CONTROL) {
@@ -158,6 +154,10 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                     }
                 }
             }
+
+            if (!mc.thePlayer.isSneaking()) {
+                mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
+            }
         }
     }
 
@@ -175,12 +175,12 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                                 this.mode.setValue(Mode.SKIP);
                                 ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
                                 break;
-                            case "vs" :
+                            case "vs":
                             case "vanillaskip":
                                 this.mode.setValue(Mode.VANILLA_SKIP);
                                 ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
                                 break;
-                            case "vc" :
+                            case "vc":
                             case "vanillacontrol":
                                 this.mode.setValue(Mode.VANILLA_CONTROL);
                                 ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));

@@ -11,6 +11,7 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.Timer;
 
 import java.util.Objects;
 
@@ -22,6 +23,7 @@ public class AutoBardKit extends Mod implements Listener<MotionUpdateEvent> {
     private final Item chestplate = Items.golden_chestplate;
     private final Item leggings = Items.golden_leggings;
     private final Item boots = Items.golden_boots;
+    private final Timer timer = new Timer();
 
     public AutoBardKit() {
         super("AutoBardKit", ModType.MISCELLANEOUS, Keyboard.KEY_NONE, 0xFFE3CC4D);
@@ -29,11 +31,12 @@ public class AutoBardKit extends Mod implements Listener<MotionUpdateEvent> {
 
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
-        if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE) && mc.currentScreen instanceof GuiRepair) {
+        if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE) && mc.currentScreen instanceof GuiRepair && timer.hasReached(10000)) {
             if (Objects.nonNull(mc.thePlayer.getCurrentEquippedItem())) {
                 Item currentItem = mc.thePlayer.getCurrentEquippedItem().getItem();
                 if (Objects.equals(currentItem, helmet) || Objects.equals(currentItem, chestplate) || Objects.equals(currentItem, leggings) || Objects.equals(currentItem, boots)) {
                     mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, mc.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
+                    setEnabled(false);
                 }
             }
         }
@@ -41,6 +44,7 @@ public class AutoBardKit extends Mod implements Listener<MotionUpdateEvent> {
 
     @Override
     public void onEnabled() {
+        timer.reset();
         XIV.getInstance().getListenerManager().add(this);
     }
 
