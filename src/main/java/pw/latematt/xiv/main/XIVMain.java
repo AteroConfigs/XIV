@@ -9,7 +9,6 @@ import joptsimple.OptionSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.main.GameConfiguration;
 import net.minecraft.util.Session;
-import pw.latematt.xiv.XIV;
 
 import java.io.File;
 import java.net.Authenticator;

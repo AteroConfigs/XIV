@@ -1,8 +1,6 @@
 package pw.latematt.xiv.management.managers;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
@@ -11,10 +9,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.ScreenShotHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringUtils;
-import org.apache.commons.codec.binary.Base64;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.commands.MassMessage;
@@ -28,13 +24,13 @@ import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -509,7 +505,6 @@ public class CommandManager extends ListManager<Command> {
                             while ((line = br.readLine()) != null) {
                                 originalName = line.split("\"")[3];
 
-                                int count = 5;
                                 for (int i = 0; i < line.split("\"").length; i++) {
                                     if ((i != line.split("\"").length - 1) && (line.split("\"")[(i + 1)].equals(","))) {
                                         if (oldNames.equals("")) {
@@ -566,7 +561,7 @@ public class CommandManager extends ListManager<Command> {
     }
 
     public boolean parseCommand(String message) {
-        if(mc.thePlayer != null) {
+        if (mc.thePlayer != null) {
             if (XIV.getInstance().getModManager().find(DashNames.class) != null && XIV.getInstance().getModManager().find(DashNames.class).isEnabled()) {
                 for (Object o : mc.ingameGUI.getTabList().getPlayerList()) {
                     NetworkPlayerInfo playerInfo = (NetworkPlayerInfo) o;

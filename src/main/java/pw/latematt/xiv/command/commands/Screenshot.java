@@ -1,68 +1,60 @@
 package pw.latematt.xiv.command.commands;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ScreenShotHelper;
-import net.minecraft.util.StringUtils;
 import org.apache.commons.codec.binary.Base64;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.IngameHUDRenderEvent;
-import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.utils.Timer;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.*;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * @author Rederpz
  */
 public class Screenshot implements CommandHandler, Listener<IngameHUDRenderEvent> {
     private final Minecraft mc = Minecraft.getMinecraft();
-
     private final Timer timer = new Timer();
 
     @Override
     public void onCommandRan(String message) {
         timer.reset();
-
         XIV.getInstance().getListenerManager().add(this);
     }
 
     public void takeScreenshot() {
         ScreenShotHelper.saveScreenshot(mc.mcDataDir, mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                File screenshots = new File("screenshots");
+        Thread thread = new Thread(() -> {
+            File screenshots = new File("screenshots");
 
-                File[] files = screenshots.listFiles(new FileFilter() {
-                    @Override
-                    public boolean accept(File file) {
-                        return file.isFile();
-                    }
-                });
+            File[] files = screenshots.listFiles(File::isFile);
 
-                long timeModified = -9223372036854775808L;
-                File lastModified = null;
-                for (File file : files) {
-                    if (file.lastModified() > timeModified) {
-                        lastModified = file;
-                        timeModified = file.lastModified();
-                    }
+            long timeModified = -9223372036854775808L;
+            File lastModified = null;
+            for (File file : files) {
+                if (file.lastModified() > timeModified) {
+                    lastModified = file;
+                    timeModified = file.lastModified();
                 }
+            }
 
+            if (lastModified != null) {
                 try {
                     URL imgurApi = new URL("https://api.imgur.com/3/image");
                     HttpURLConnection connection = (HttpURLConnection) imgurApi.openConnection();
@@ -94,21 +86,22 @@ public class Screenshot implements CommandHandler, Listener<IngameHUDRenderEvent
                     }
                     wr.close();
                     rd.close();
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    JsonObject json = gson.fromJson(stringBuilder.toString(), JsonObject.class);
+                    String url = "http://i.imgur.com/" + json.get("data").getAsJsonObject().get("id").getAsString() + ".png";
 
-                    Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-                    String url = "http://i.imgur.com/" + stringBuilder.toString().substring(15, 22) + ".png";
-
-                    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
-                        desktop.browse(new URI(url));
-                    }
-                    ChatLogger.print("Screenshot uploaded to " + url);
+                    StringSelection contents = new StringSelection(url);
+                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    clipboard.setContents(contents, null);
+                    ChatLogger.print("Screenshot URL copied to clipboard.");
                 } catch (IOException e) {
                     ChatLogger.print("Unable to upload screenshot.");
-                } catch (URISyntaxException e) {
-                    ChatLogger.print("Unable to open screenshot.");
                 }
+            } else {
+                ChatLogger.print("Unable to find screenshot.");
             }
         });
+        thread.start();
     }
 
     @Override
@@ -127,7 +120,7 @@ public class Screenshot implements CommandHandler, Listener<IngameHUDRenderEvent
         }
 
         if (time > 0) {
-            mc.fontRendererObj.drawStringWithShadow(time + "", RenderUtils.newScaledResolution().getScaledWidth() / 2 + 7, RenderUtils.newScaledResolution().getScaledHeight() / 2 - 2, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow("" + time, RenderUtils.newScaledResolution().getScaledWidth() / 2 + 7, RenderUtils.newScaledResolution().getScaledHeight() / 2 - 2, 0xFFFFFFFF);
         }
     }
 }

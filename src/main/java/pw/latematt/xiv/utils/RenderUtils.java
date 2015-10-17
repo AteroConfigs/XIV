@@ -216,7 +216,7 @@ public class RenderUtils {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(red, green, blue, alpha);
 
-        if(borderWidth == 1.0F) {
+        if (borderWidth == 1.0F) {
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
         }
 
@@ -235,7 +235,7 @@ public class RenderUtils {
         tessellator.draw();
         GL11.glLineWidth(2.0F);
 
-        if(borderWidth == 1.0F) {
+        if (borderWidth == 1.0F) {
             GL11.glDisable(GL11.GL_LINE_SMOOTH);
         }
 
@@ -260,7 +260,7 @@ public class RenderUtils {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(red, green, blue, alpha);
 
-        if(borderWidth == 1.0F) {
+        if (borderWidth == 1.0F) {
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
         }
 
@@ -279,7 +279,7 @@ public class RenderUtils {
         tessellator.draw();
         GL11.glLineWidth(2.0F);
 
-        if(borderWidth == 1.0F) {
+        if (borderWidth == 1.0F) {
             GL11.glDisable(GL11.GL_LINE_SMOOTH);
         }
 

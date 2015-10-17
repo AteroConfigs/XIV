@@ -1,7 +1,5 @@
 package pw.latematt.xiv;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pw.latematt.xiv.management.managers.*;

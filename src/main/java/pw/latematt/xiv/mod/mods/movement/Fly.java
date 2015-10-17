@@ -39,12 +39,12 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
     public void onEventCalled(MotionUpdateEvent event) {
         double motionY = slowfall.getValue() ? -0.005D : 0;
 
-        if(cap.getValue() && mc.thePlayer.getEntityBoundingBox().maxY < yCap || !cap.getValue()) {
+        if (cap.getValue() && mc.thePlayer.getEntityBoundingBox().maxY < yCap || !cap.getValue()) {
             if (mc.gameSettings.keyBindJump.getIsKeyPressed()) {
                 motionY += verticalSpeed.getValue();
             }
             setTag(getName());
-        }else{
+        } else {
             setTag(String.format("%s \2477%s", getName(), "*"));
         }
 
@@ -99,7 +99,7 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
                     }
                     ChatLogger.print(String.format("Fly will %s slowly fall.", slowfall.getValue() ? "now" : "no longer"));
                     break;
-                case "limit" :
+                case "limit":
                 case "cap":
                     if (arguments.length >= 3) {
                         if (arguments[2].equalsIgnoreCase("-d")) {
@@ -125,7 +125,7 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
         if (Objects.nonNull(mc.thePlayer)) {
-            if(doDamage.getValue()) {
+            if (doDamage.getValue()) {
                 EntityUtils.damagePlayer();
             }
 

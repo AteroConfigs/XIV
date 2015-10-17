@@ -178,7 +178,7 @@ public class Panel {
     public void onGuiClosed() {
         this.dragging = false;
 
-        for(Element element: elements) {
+        for (Element element : elements) {
             element.onGuiClosed();
         }
     }

@@ -35,7 +35,7 @@ public class PringlesTheme extends ClickTheme {
         RenderUtils.drawBorderedGradientRect(panel.getX(), panel.getY() + 2, panel.getX() + panel.getWidth(), panel.getY() + panel.getOpenHeight(), 0xFF000000, 0xDD082D6C, 0xDD0A0673);
         font.drawString(panel.getName().toUpperCase(), panel.getX() + 3, panel.getY() + 1.5F, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
 
-        if(panel.isOpen()) {
+        if (panel.isOpen()) {
             RenderUtils.drawBorderedRect(panel.getX(), panel.getY() + panel.getOpenHeight(), panel.getX() + panel.getWidth(), panel.getY() + panel.getHeight(), 0xFF000000, 0xBB000000);
         }
 

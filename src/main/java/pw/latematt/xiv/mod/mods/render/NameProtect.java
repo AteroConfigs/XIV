@@ -1,19 +1,15 @@
 package pw.latematt.xiv.mod.mods.render;
 
 import net.minecraft.entity.player.EntityPlayer;
-import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.MouseClickEvent;
-import pw.latematt.xiv.event.events.RenderEntityEvent;
 import pw.latematt.xiv.event.events.RenderStringEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.utils.Timer;
 import pw.latematt.xiv.value.Value;
 
 import java.util.Objects;
@@ -35,17 +31,17 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
         mouseClickListener = new Listener<MouseClickEvent>() {
             @Override
             public void onEventCalled(MouseClickEvent event) {
-                if(event.getButton() == 2 && middleClickFriends.getValue() && mc.thePlayer != null) {
-                    if(mc.objectMouseOver.entityHit != null) {
-                        if(mc.objectMouseOver.entityHit instanceof EntityPlayer) {
+                if (event.getButton() == 2 && middleClickFriends.getValue() && mc.thePlayer != null) {
+                    if (mc.objectMouseOver.entityHit != null) {
+                        if (mc.objectMouseOver.entityHit instanceof EntityPlayer) {
                             EntityPlayer player = (EntityPlayer) mc.objectMouseOver.entityHit;
 
-                            if(XIV.getInstance().getFriendManager().isFriend(player.getName())) {
+                            if (XIV.getInstance().getFriendManager().isFriend(player.getName())) {
                                 XIV.getInstance().getFriendManager().remove(player.getName());
                                 ChatLogger.print(String.format("Friend \"%s\" removed.", player.getName()));
-                            }else{
+                            } else {
                                 XIV.getInstance().getFriendManager().add(player.getName(), player.getName());
-                                ChatLogger.print(String.format("Friend \"\2473%s\247r\" added.", player.getName()));
+                                ChatLogger.print(String.format("Friend \"\247g%s\247r\" added.", player.getName()));
                             }
                         }
                     }
@@ -131,8 +127,8 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
                     }
                     ChatLogger.print(String.format("NameProtect will %s protect in scoreboard.", (scoreboard.getValue() ? "now" : "no longer")));
                     break;
-                case "middleclick" :
-                case "middleclickfriends" :
+                case "middleclick":
+                case "middleclickfriends":
                 case "middle":
                 case "click":
                     if (arguments.length >= 3) {

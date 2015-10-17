@@ -65,13 +65,13 @@ public class FriendManager extends MapManager<String, String> {
                                     String mcname = arguments[2];
                                     XIV.getInstance().getFriendManager().add(mcname, mcname);
                                     XIV.getInstance().getFileManager().saveFile("friends");
-                                    ChatLogger.print(String.format("Friend \"\2473%s\247r\" added.", mcname));
+                                    ChatLogger.print(String.format("Friend \"\247g%s\247r\" added.", mcname));
                                 } else if (arguments.length >= 4) {
                                     String mcname = arguments[2];
                                     String alias = arguments[3];
                                     XIV.getInstance().getFriendManager().add(mcname, alias);
                                     XIV.getInstance().getFileManager().saveFile("friends");
-                                    ChatLogger.print(String.format("Friend \"\2473%s\247r\" added.", alias));
+                                    ChatLogger.print(String.format("Friend \"\247g%s\247r\" added.", alias));
                                 } else {
                                     ChatLogger.print("Invalid arguments, valid: friend add <mcname> [alias]");
                                 }
