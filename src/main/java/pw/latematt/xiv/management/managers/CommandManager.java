@@ -17,6 +17,7 @@ import net.minecraft.util.StringUtils;
 import org.apache.commons.codec.binary.Base64;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
+import pw.latematt.xiv.command.commands.MassMessage;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
@@ -612,6 +613,13 @@ public class CommandManager extends ListManager<Command> {
                         ChatLogger.print("Invalid arguments, valid: history <name>");
                     }
                 }).build();
+
+        Command.newCommand()
+                .cmd("massmessage")
+                .description("Send a message to every player in the tab list.")
+                .arguments("<delay> <message>")
+                .aliases("masscommand", "mc", "masschat", "mm")
+                .handler(new MassMessage()).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {
             public void onEventCalled(SendPacketEvent event) {

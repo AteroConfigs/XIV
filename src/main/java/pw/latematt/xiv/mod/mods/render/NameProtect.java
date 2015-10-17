@@ -26,22 +26,12 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
     private final Value<Boolean> scoreboard = new Value<>("nameprotect_scoreboard", true);
     private final Value<Boolean> nametag = new Value<>("nameprotect_nametag", true);
     private final Value<Boolean> chat = new Value<>("nameprotect_chat", true);
-    private final Value<Boolean> middleClickFriends = new Value<>("nameprotect_middleclickfriends", true);
+    private final Value<Boolean> middleClickFriends = new Value<>("nameprotect_middle_click_friends", true);
 
     private final Listener mouseClickListener;
 
     public NameProtect() {
         super("NameProtect", ModType.RENDER);
-        this.setEnabled(true);
-
-        Command.newCommand()
-                .cmd("nameprotect")
-                .description("Base command for NameProtect mod.")
-                .arguments("<action>")
-                .aliases("np")
-                .handler(this)
-                .build();
-
         mouseClickListener = new Listener<MouseClickEvent>() {
             @Override
             public void onEventCalled(MouseClickEvent event) {
@@ -62,6 +52,16 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
                 }
             }
         };
+
+        Command.newCommand()
+                .cmd("nameprotect")
+                .description("Base command for NameProtect mod.")
+                .arguments("<action>")
+                .aliases("np")
+                .handler(this)
+                .build();
+
+        this.setEnabled(true);
     }
 
     @Override
