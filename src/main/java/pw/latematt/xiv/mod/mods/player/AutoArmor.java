@@ -4,6 +4,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
@@ -32,7 +33,15 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>,Comman
     private final Timer time = new Timer();
 
     public AutoArmor() {
-        super("AutoArmor", ModType.PLAYER, Keyboard.KEY_NONE, 0xFF);
+        super("AutoArmor", ModType.PLAYER, Keyboard.KEY_NONE, 0xFF5976EC);
+
+        Command.newCommand()
+                .cmd("autoarmor")
+                .description("Base command for the AutoArmor mod.")
+                .aliases("aarmor", "aa")
+                .arguments("<action>")
+                .handler(this)
+                .build();
     }
 
     @Override
