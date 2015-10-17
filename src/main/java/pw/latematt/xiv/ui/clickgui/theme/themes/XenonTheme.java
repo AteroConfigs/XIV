@@ -30,6 +30,7 @@ public class XenonTheme extends ClickTheme {
 
         panel.setOpenHeight(15);
         panel.setButtonOffset(1.5F);
+        panel.setWidth(100);
 
         RenderUtils.drawBorderedRect(panel.getX(), panel.getY() + 2, panel.getX() + panel.getWidth(), panel.getY() + (panel.isOpen() ? panel.getHeight() : panel.getOpenHeight()), 0xFF000000, 0x66000000);
         font.drawString(panel.getName(), panel.getX() + 3, panel.getY() + 0.5F, NahrFont.FontType.NORMAL, 0xFFFFFFFF);

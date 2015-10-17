@@ -33,6 +33,7 @@ public class DarculaTheme extends ClickTheme {
 
         panel.setOpenHeight(14);
         panel.setButtonOffset(1.0F);
+        panel.setWidth(95);
 
         RenderUtils.drawBorderedRect(panel.getX(), panel.getY() + 1, panel.getX() + panel.getWidth(), panel.getY() + panel.getOpenHeight(), 0x801E1E1E, 0xFF3E434C);
         titleFont.drawString(panel.getName(), panel.getX() + 2, panel.getY() - 2, NahrFont.FontType.NORMAL, 0xFFFFFFFF);

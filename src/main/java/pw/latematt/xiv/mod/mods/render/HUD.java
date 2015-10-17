@@ -22,6 +22,7 @@ import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
 import java.io.BufferedReader;
@@ -89,7 +90,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         if (mc.gameSettings.showDebugInfo)
             return;
 
-        ScaledResolution scaledResolution = XIV.getInstance().newScaledResolution();
+        ScaledResolution scaledResolution = RenderUtils.newScaledResolution();
         GlStateManager.enableBlend();
         if (watermark.getValue()) {
             mc.fontRendererObj.drawStringWithShadow("XIV", 2, 2, 0xFFEEEEEE);

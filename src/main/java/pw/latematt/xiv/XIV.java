@@ -102,8 +102,4 @@ public class XIV {
 
         logger.info("==  End XIV setup  == ");
     }
-
-    public ScaledResolution newScaledResolution() {
-        return new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
-    }
 }

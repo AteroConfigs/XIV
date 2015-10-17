@@ -31,6 +31,7 @@ public class NorthStarTheme extends ClickTheme {
 
         panel.setOpenHeight(14);
         panel.setButtonOffset(1.0F);
+        panel.setWidth(100);
 
         RenderUtils.drawBorderedRect(panel.getX(), panel.getY() + 2, panel.getX() + panel.getWidth(), panel.getY() + (panel.isOpen() ? panel.getHeight() : panel.getOpenHeight()), 0xBB515151, 0xFF000000);
         font.drawString(panel.getName(), panel.getX() + 2, panel.getY() + 0.5F, NahrFont.FontType.SHADOW_THIN, 0xFFFFFFFF);
