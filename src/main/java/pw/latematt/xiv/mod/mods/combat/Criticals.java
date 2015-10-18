@@ -6,23 +6,26 @@ import net.minecraft.potion.Potion;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
+import pw.latematt.xiv.event.events.AttackEntityEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.BlockUtils;
 
 /**
  * @author Matthew
+ * @author Jack
  */
-public class Criticals extends Mod implements Listener<SendPacketEvent> {
-    private float fallDist;
+public class Criticals extends Mod implements Listener<AttackEntityEvent> {
+    // private float fallDist;
 
     public Criticals() {
         super("Criticals", ModType.COMBAT, Keyboard.KEY_NONE, 0xFFA38EC7);
     }
 
     @Override
-    public void onEventCalled(SendPacketEvent event) {
-        if (event.getPacket() instanceof C03PacketPlayer) {
+    public void onEventCalled(AttackEntityEvent event) { // this was send packet event before
+        /*if (event.getPacket() instanceof C03PacketPlayer) {
             C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
             if (!isSafe())
                 fallDist += mc.thePlayer.fallDistance;
@@ -38,7 +41,14 @@ public class Criticals extends Mod implements Listener<SendPacketEvent> {
             } else {
                 setTag(getName());
             }
-        }
+        }*/
+
+        if (!BlockUtils.isOnLiquid(mc.thePlayer)) {
+            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.05, mc.thePlayer.posZ, false));
+            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.012511, mc.thePlayer.posZ, false));
+            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+        } // Might need to lower timer if speed is enabled
     }
 
     private boolean isSafe() {
@@ -57,6 +67,6 @@ public class Criticals extends Mod implements Listener<SendPacketEvent> {
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
-        fallDist = 0.0F;
+        // fallDist = 0.0F;
     }
 }
