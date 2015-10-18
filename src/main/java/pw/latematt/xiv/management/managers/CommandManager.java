@@ -15,6 +15,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringUtils;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
+import pw.latematt.xiv.command.commands.FillWorldEdit;
 import pw.latematt.xiv.command.commands.MassMessage;
 import pw.latematt.xiv.command.commands.Screenshot;
 import pw.latematt.xiv.event.Listener;
@@ -540,6 +541,11 @@ public class CommandManager extends ListManager<Command> {
                 .description("Take a screenshot of your minecraft.")
                 .aliases("scr", "imgur", "image", "img")
                 .handler(new Screenshot()).build();
+        Command.newCommand()
+                .cmd("fillworldedit")
+                .description("Use world edit in 1.8 servers that don't have world edit.")
+                .aliases("fwe", "we", "//", "worldedit")
+                .handler(new FillWorldEdit()).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<WorldBobbingEvent>() {
             public void onEventCalled(WorldBobbingEvent event) {

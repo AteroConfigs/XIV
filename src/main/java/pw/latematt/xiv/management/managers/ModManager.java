@@ -58,7 +58,6 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Blink());
         contents.add(new BlockBBFixer());
         contents.add(new Commands());
-        contents.add(new CreativeWorldEdit());
         contents.add(new Criticals());
         contents.add(new DashNames());
         contents.add(new ESP());
