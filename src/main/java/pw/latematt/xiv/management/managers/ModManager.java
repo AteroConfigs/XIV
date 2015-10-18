@@ -117,9 +117,7 @@ public class ModManager extends ListManager<Mod> {
                                 ModOptions options = modOptions.get(modName);
                                 mod.setKeybind(Keyboard.getKeyIndex(options.getKeybind()));
                                 mod.setColor(options.getColor());
-                                if (!mod.getName().equals("Keybinds") && !mod.getName().equals("Commands")) {
-                                    mod.setEnabled(options.isEnabled());
-                                }
+                                mod.setEnabled(options.isEnabled());
                                 mod.setVisible(options.isVisible());
                             });
                 }
