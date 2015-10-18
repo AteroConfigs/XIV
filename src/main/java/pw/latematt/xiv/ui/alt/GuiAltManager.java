@@ -26,11 +26,21 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
 
     public List<AltAccount> getAccounts() {
         if (search != null && search.getText().length() > 0) {
-            if(search.getText().equalsIgnoreCase("@empty")) {
-                return XIV.getInstance().getAltManager().getContents().stream().filter(account -> account.getKeyword().isEmpty()).collect(Collectors.toCollection(ArrayList::new));
-            }
-            if(search.getText().equalsIgnoreCase("@notempty") || !search.getText().equalsIgnoreCase("@!empty")) {
-                return XIV.getInstance().getAltManager().getContents().stream().filter(account -> !account.getKeyword().isEmpty()).collect(Collectors.toCollection(ArrayList::new));
+            if(search.getText().startsWith("@")) {
+                String text = search.getText().substring(1);
+
+                // Custom search filters and stuff.. yay? Add on to this if you want...
+                if(text.equalsIgnoreCase("empty")) {
+                    return XIV.getInstance().getAltManager().getContents().stream().filter(account -> account.getKeyword().isEmpty()).collect(Collectors.toCollection(ArrayList::new));
+                }else if(text.equalsIgnoreCase("notempty") || text.equalsIgnoreCase("nonempty") || text.equalsIgnoreCase("!empty")) {
+                    return XIV.getInstance().getAltManager().getContents().stream().filter(account -> !account.getKeyword().isEmpty()).collect(Collectors.toCollection(ArrayList::new));
+                }
+                return XIV.getInstance().getAltManager().getContents();
+            }else if(search.getText().startsWith("!")) {
+                String text = search.getText().substring(1);
+
+                // Search for opposite of text given
+                return XIV.getInstance().getAltManager().getContents().stream().filter(account -> !account.getUsername().toLowerCase().contains(text.toLowerCase()) && !account.getKeyword().toLowerCase().contains(text.toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
             }
             return XIV.getInstance().getAltManager().getContents().stream().filter(account -> account.getUsername().toLowerCase().contains(search.getText().toLowerCase()) || account.getKeyword().toLowerCase().contains(search.getText().toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
         } else {
@@ -176,10 +186,13 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
         mc.fontRendererObj.drawStringWithShadow("Keyword:", width - 182, height - 96, 0xFFFFFFFF);
         keyword.drawTextBox();
 
+        String filters = "Custom Filters: '!', '@empty', '@!empty'";
+        mc.fontRendererObj.drawStringWithShadow(filters, width - 102 - (mc.fontRendererObj.getStringWidth(filters) / 2), height - 28, 0xFFFFFFFF);
+
         mc.fontRendererObj.drawStringWithShadow("Search:", width - 182, height - 62, 0xFFFFFFFF);
         search.drawTextBox();
 
-        drawCenteredString(mc.fontRendererObj, String.format("Accounts: %s/%s/%s", getAccounts().size(), XIV.getInstance().getAltManager().getContents().size() - getAccounts().size(), XIV.getInstance().getAltManager().getContents().size()), width / 2, 2, 0xFFFFFFFF);
+        drawCenteredString(mc.fontRendererObj, String.format("Accounts: §a%s§f/§c%s§f/§e%s§f", getAccounts().size(), XIV.getInstance().getAltManager().getContents().size() - getAccounts().size(), XIV.getInstance().getAltManager().getContents().size()), width / 2, 2, 0xFFFFFFFF);
         drawCenteredString(mc.fontRendererObj, thread == null ? "\247aLogged in as\247r " + mc.getSession().getUsername() : thread.getStatus(), width / 2, 12, 0xFFFFFFFF);
 
     }
