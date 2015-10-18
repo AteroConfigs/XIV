@@ -23,7 +23,7 @@ import static pw.latematt.xiv.utils.ItemUtils.*;
  * @author Matthew
  */
 public class AutoHeal extends Mod implements CommandHandler {
-    private final Value<Long> delay = new Value<>("autoheal_delay", 250L);
+    private final Value<Long> delay = new Value<>("autoheal_delay", 350L);
     private final Value<Float> health = new Value<>("autoheal_health", 13.0F);
     private final Value<Boolean> soup = new Value<>("autoheal_soup", false);
     private final Value<Boolean> potion = new Value<>("autoheal_potion", true);
@@ -49,24 +49,32 @@ public class AutoHeal extends Mod implements CommandHandler {
                             useFirst(Items.mushroom_stew);
 
                             if (mc.thePlayer.getHealth() <= health.getValue()) {
-                                healing = true;
-                                event.setYaw(-event.getYaw());
-                                event.setPitch(85);
+                                if (!hotbarHasInstantHealth()) {
+                                    getInstantHealthFromInventory();
+                                }
+
+                                if (hotbarHasInstantHealth()) {
+                                    healing = true;
+                                    event.setYaw(-event.getYaw());
+                                    event.setPitch(85);
+                                }
                             } else {
                                 timer.reset();
                             }
                         } else if (potion.getValue()) {
-                            healing = true;
-                            event.setYaw(-event.getYaw());
-                            event.setPitch(85);
+                            if (!hotbarHasInstantHealth()) {
+                                getInstantHealthFromInventory();
+                            }
+
+                            if (hotbarHasInstantHealth()) {
+                                healing = true;
+                                event.setYaw(-event.getYaw());
+                                event.setPitch(85);
+                            }
                         }
                     }
                 } else if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.POST)) {
                     if (healing) {
-                        if (!hotbarHasInstantHealth()) {
-                            getInstantHealthFromInventory();
-                        }
-
                         useFirstInstantHealth();
                         healing = false;
                         timer.reset();

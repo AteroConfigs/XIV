@@ -100,13 +100,6 @@ public class MacroManager extends ListManager<Macro> {
                         ChatLogger.print("Invalid arguments, valid: macro <action>");
                     }
                 }).build();
-
-        XIV.getInstance().getListenerManager().add(new Listener<KeyPressEvent>() {
-            @Override
-            public void onEventCalled(KeyPressEvent event) {
-                getContents().stream().filter(macro -> macro.getKeybind() != Keyboard.KEY_NONE).filter(macro -> macro.getKeybind() == event.getKeyCode()).forEach(macro -> XIV.getInstance().getCommandManager().parseCommand(XIV.getInstance().getCommandManager().getPrefix() + macro.getCommand()));
-            }
-        });
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
     }
 
