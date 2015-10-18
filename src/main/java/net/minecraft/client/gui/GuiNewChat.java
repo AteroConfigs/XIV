@@ -20,11 +20,11 @@ public class GuiNewChat extends Gui
     protected final Minecraft mc;
 
     /** A list of messages previously sent through the chat GUI */
-    protected final List sentMessages = Lists.newArrayList();
+    public final List sentMessages = Lists.newArrayList();
 
     /** Chat lines to be displayed in the chat box */
-    protected final List chatLines = Lists.newArrayList();
-    protected final List field_146253_i = Lists.newArrayList();
+    public final List chatLines = Lists.newArrayList();
+    public final List field_146253_i = Lists.newArrayList();
     protected int scrollPos;
     protected boolean isScrolled;
 

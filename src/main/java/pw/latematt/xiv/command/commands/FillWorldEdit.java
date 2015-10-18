@@ -102,7 +102,7 @@ public class FillWorldEdit implements CommandHandler, Listener<Render3DEvent> {
                     }
                     break;
                 case "set":
-                    if(arguments[2].length() > 0) {
+                    if(arguments.length >= 3) {
                         placeBlocks(arguments[2]);
                     }else{
                         ChatLogger.print("Invalid arguments, valid: fillworldedit set <block>");
