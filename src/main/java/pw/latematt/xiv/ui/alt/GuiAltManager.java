@@ -26,6 +26,12 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
 
     public List<AltAccount> getAccounts() {
         if (search != null && search.getText().length() > 0) {
+            if(search.getText().equalsIgnoreCase("@empty")) {
+                return XIV.getInstance().getAltManager().getContents().stream().filter(account -> account.getKeyword().isEmpty()).collect(Collectors.toCollection(ArrayList::new));
+            }
+            if(search.getText().equalsIgnoreCase("@notempty") || !search.getText().equalsIgnoreCase("@!empty")) {
+                return XIV.getInstance().getAltManager().getContents().stream().filter(account -> !account.getKeyword().isEmpty()).collect(Collectors.toCollection(ArrayList::new));
+            }
             return XIV.getInstance().getAltManager().getContents().stream().filter(account -> account.getUsername().toLowerCase().contains(search.getText().toLowerCase()) || account.getKeyword().toLowerCase().contains(search.getText().toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
         } else {
             return XIV.getInstance().getAltManager().getContents();
