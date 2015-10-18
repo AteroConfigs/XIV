@@ -1,4 +1,4 @@
-package pw.latematt.xiv.mod.mods.none;
+package pw.latematt.xiv.mod.mods.render;
 
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
@@ -10,7 +10,7 @@ import pw.latematt.xiv.ui.clickgui.GuiClick;
 
 public class ClickGUI extends Mod implements Listener<GuiScreenEvent> {
     public ClickGUI() {
-        super("ClickGUI", ModType.NONE, Keyboard.KEY_RSHIFT);
+        super("ClickGUI", ModType.RENDER, Keyboard.KEY_RSHIFT);
     }
 
     @Override

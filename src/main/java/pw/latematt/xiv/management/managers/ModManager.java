@@ -7,8 +7,6 @@ import com.google.gson.GsonBuilder;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
-import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.KeyPressEvent;
 import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.Mod;
@@ -17,13 +15,8 @@ import pw.latematt.xiv.mod.mods.combat.Criticals;
 import pw.latematt.xiv.mod.mods.combat.SmoothAimbot;
 import pw.latematt.xiv.mod.mods.combat.Triggerbot;
 import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
-import pw.latematt.xiv.mod.mods.misc.AntiTabComplete;
-import pw.latematt.xiv.mod.mods.player.AutoBardKit;
-import pw.latematt.xiv.mod.mods.misc.DashNames;
-import pw.latematt.xiv.mod.mods.misc.NoRotationSet;
+import pw.latematt.xiv.mod.mods.misc.*;
 import pw.latematt.xiv.mod.mods.movement.*;
-import pw.latematt.xiv.mod.mods.none.ClickGUI;
-import pw.latematt.xiv.mod.mods.none.TabGUI;
 import pw.latematt.xiv.mod.mods.player.*;
 import pw.latematt.xiv.mod.mods.render.*;
 import pw.latematt.xiv.mod.mods.render.waypoints.Waypoints;
@@ -64,6 +57,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new AutoTool());
         contents.add(new Blink());
         contents.add(new BlockBBFixer());
+        contents.add(new Commands());
         contents.add(new CreativeWorldEdit());
         contents.add(new Criticals());
         contents.add(new DashNames());
@@ -78,6 +72,7 @@ public class ModManager extends ListManager<Mod> {
         //contents.add(new Instinct());
         contents.add(new InventoryWalk());
         contents.add(new Jesus());
+        contents.add(new Keybinds());
         contents.add(new KillAura());
         contents.add(new NameProtect());
         contents.add(new Nametags());
@@ -116,13 +111,17 @@ public class ModManager extends ListManager<Mod> {
                 HashMap<String, ModOptions> modOptions = gson.fromJson(reader, new TypeToken<HashMap<String, ModOptions>>() {
                 }.getType());
                 for (Mod mod : XIV.getInstance().getModManager().getContents()) {
-                    modOptions.keySet().stream().filter(modName -> mod.getName().equals(modName)).forEach(modName -> {
-                        ModOptions options = modOptions.get(modName);
-                        mod.setKeybind(Keyboard.getKeyIndex(options.getKeybind()));
-                        mod.setColor(options.getColor());
-                        mod.setEnabled(options.isEnabled());
-                        mod.setVisible(options.isVisible());
-                    });
+                    modOptions.keySet().stream()
+                            .filter(modName -> mod.getName().equals(modName))
+                            .forEach(modName -> {
+                                ModOptions options = modOptions.get(modName);
+                                mod.setKeybind(Keyboard.getKeyIndex(options.getKeybind()));
+                                mod.setColor(options.getColor());
+                                if (!mod.getName().equals("Keybinds") && !mod.getName().equals("Commands")) {
+                                    mod.setEnabled(options.isEnabled());
+                                }
+                                mod.setVisible(options.isVisible());
+                            });
                 }
             }
 
@@ -220,12 +219,6 @@ public class ModManager extends ListManager<Mod> {
                         ChatLogger.print("Invalid arguments, valid: bind <module> <key>");
                     }
                 }).build();
-        XIV.getInstance().getListenerManager().add(new Listener<KeyPressEvent>() {
-            @Override
-            public void onEventCalled(KeyPressEvent event) {
-                getContents().stream().filter(mod -> mod.getKeybind() != Keyboard.KEY_NONE).filter(mod -> mod.getKeybind() == event.getKeyCode()).forEach(Mod::toggle);
-            }
-        });
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
     }
 

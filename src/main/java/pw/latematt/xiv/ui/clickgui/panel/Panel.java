@@ -200,6 +200,8 @@ public class Panel {
         for (Mod mod : XIV.getInstance().getModManager().getContents()) {
             if (!mod.getModType().equals(type))
                 continue;
+            if (mod.getName().equals("ClickGUI"))
+                continue;
 
             getElements().add(new ModButton(mod, x + 2, elementY + 2, XIV.getInstance().getGuiClick().getTheme().getElementWidth(), XIV.getInstance().getGuiClick().getTheme().getElementHeight()));
             elementY += XIV.getInstance().getGuiClick().getTheme().getElementHeight() + 1;

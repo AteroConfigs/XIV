@@ -32,10 +32,11 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
 
     public GuiTabHandler() {
         for (ModType type : ModType.values()) {
-            if (Objects.equals(type, ModType.NONE))
-                continue;
             final GuiTab tab = new GuiTab(this, type.getName());
-            XIV.getInstance().getModManager().getContents().stream().filter(mod -> mod.getModType() == type).forEach(mod -> tab.getMods().add(new GuiItem(mod)));
+            XIV.getInstance().getModManager().getContents().stream()
+                    .filter(mod -> mod.getModType() == type)
+                    .filter(mod -> mod.getName().equals("ClickGUI"))
+                    .forEach(mod -> tab.getMods().add(new GuiItem(mod)));
 
             this.tabs.add(tab);
         }

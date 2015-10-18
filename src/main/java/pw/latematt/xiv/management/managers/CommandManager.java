@@ -540,15 +540,6 @@ public class CommandManager extends ListManager<Command> {
                 .aliases("scr", "imgur", "image", "img")
                 .handler(new Screenshot()).build();
 
-        XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {
-            public void onEventCalled(SendPacketEvent event) {
-                if (event.getPacket() instanceof C01PacketChatMessage) {
-                    C01PacketChatMessage packet = (C01PacketChatMessage) event.getPacket();
-                    event.setCancelled(parseCommand(packet.getMessage()));
-                }
-            }
-        });
-
         XIV.getInstance().getListenerManager().add(new Listener<WorldBobbingEvent>() {
             public void onEventCalled(WorldBobbingEvent event) {
                 Value<Boolean> worldBobbing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_world_bobbing");

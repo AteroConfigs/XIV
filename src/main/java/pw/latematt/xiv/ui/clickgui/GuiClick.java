@@ -84,8 +84,6 @@ public class GuiClick extends GuiScreen {
         addPanel(new TriggerbotPanel(x, y), x, y);
 
         for (ModType type : ModType.values()) {
-            if (type == ModType.NONE)
-                continue;
             addPanel(new ModulePanel(type, x, y), x, y);
         }
 

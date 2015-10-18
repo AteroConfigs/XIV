@@ -1,4 +1,4 @@
-package pw.latematt.xiv.mod.mods.none;
+package pw.latematt.xiv.mod.mods.render;
 
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
@@ -21,7 +21,7 @@ public class TabGUI extends Mod implements Listener<IngameHUDRenderEvent> {
     private final HUD hud = (HUD) XIV.getInstance().getModManager().find("hud");
 
     public TabGUI() {
-        super("TabGUI", ModType.NONE);
+        super("TabGUI", ModType.RENDER);
     }
 
     public void onEventCalled(IngameHUDRenderEvent event) {

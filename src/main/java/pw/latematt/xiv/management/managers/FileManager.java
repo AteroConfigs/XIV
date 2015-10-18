@@ -1,6 +1,7 @@
 package pw.latematt.xiv.management.managers;
 
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.management.ListManager;
 
