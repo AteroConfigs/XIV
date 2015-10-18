@@ -5,7 +5,6 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.IngameHUDRenderEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.mod.mods.render.HUD;
 import pw.latematt.xiv.ui.tabgui.GuiTabHandler;
 import pw.latematt.xiv.value.Value;
 

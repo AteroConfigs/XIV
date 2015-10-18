@@ -19,12 +19,10 @@ import pw.latematt.xiv.command.commands.FillWorldEdit;
 import pw.latematt.xiv.command.commands.MassMessage;
 import pw.latematt.xiv.command.commands.Screenshot;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
 import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.mods.misc.DashNames;
-import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
@@ -37,8 +35,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 /**

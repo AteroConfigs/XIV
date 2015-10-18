@@ -7,8 +7,6 @@ import com.google.gson.GsonBuilder;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
-import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.KeyPressEvent;
 import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.macro.Macro;
 import pw.latematt.xiv.management.ListManager;

@@ -145,28 +145,22 @@ public class GuiXIVChat extends GuiNewChat {
     }
 
     @Override
-    public IChatComponent getChatComponent(int p_146236_1_, int p_146236_2_)
-    {
-        if (!this.getChatOpen())
-        {
+    public IChatComponent getChatComponent(int p_146236_1_, int p_146236_2_) {
+        if (!this.getChatOpen()) {
             return null;
-        }
-        else
-        {
+        } else {
             ScaledResolution var3 = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
             int var4 = var3.getScaleFactor();
             float var5 = this.getChatScale();
             int var6 = p_146236_1_ / var4 - 3;
             int var7 = p_146236_2_ / var4 - 27;
-            var6 = MathHelper.floor_float((float)var6 / var5);
-            var7 = MathHelper.floor_float((float)var7 / var5);
+            var6 = MathHelper.floor_float((float) var6 / var5);
+            var7 = MathHelper.floor_float((float) var7 / var5);
 
-            if (var6 >= 0 && var7 >= 0)
-            {
+            if (var6 >= 0 && var7 >= 0) {
                 int var8 = Math.min(this.getLineCount(), this.field_146253_i.size());
 
-                if (var6 <= MathHelper.floor_float((float)this.getChatWidth() / this.getChatScale()) && var7 < this.mc.fontRendererObj.FONT_HEIGHT * var8 + var8)
-                {
+                if (var6 <= MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) && var7 < this.mc.fontRendererObj.FONT_HEIGHT * var8 + var8) {
                     int yOffset = 0;
                     if (!mc.thePlayer.capabilities.isCreativeMode) {
                         yOffset = 2;
@@ -177,22 +171,18 @@ public class GuiXIVChat extends GuiNewChat {
                     }
                     int var9 = var7 / this.mc.fontRendererObj.FONT_HEIGHT + this.scrollPos - yOffset;
 
-                    if (var9 >= 0 && var9 < this.field_146253_i.size())
-                    {
-                        ChatLine var10 = (ChatLine)this.field_146253_i.get(var9);
+                    if (var9 >= 0 && var9 < this.field_146253_i.size()) {
+                        ChatLine var10 = (ChatLine) this.field_146253_i.get(var9);
                         int var11 = 0;
                         Iterator var12 = var10.getChatComponent().iterator();
 
-                        while (var12.hasNext())
-                        {
-                            IChatComponent var13 = (IChatComponent)var12.next();
+                        while (var12.hasNext()) {
+                            IChatComponent var13 = (IChatComponent) var12.next();
 
-                            if (var13 instanceof ChatComponentText)
-                            {
-                                var11 += this.mc.fontRendererObj.getStringWidth(GuiUtilRenderComponents.func_178909_a(((ChatComponentText)var13).getChatComponentText_TextValue(), false));
+                            if (var13 instanceof ChatComponentText) {
+                                var11 += this.mc.fontRendererObj.getStringWidth(GuiUtilRenderComponents.func_178909_a(((ChatComponentText) var13).getChatComponentText_TextValue(), false));
 
-                                if (var11 > var6)
-                                {
+                                if (var11 > var6) {
                                     return var13;
                                 }
                             }
@@ -200,14 +190,10 @@ public class GuiXIVChat extends GuiNewChat {
                     }
 
                     return null;
-                }
-                else
-                {
+                } else {
                     return null;
                 }
-            }
-            else
-            {
+            } else {
                 return null;
             }
         }
