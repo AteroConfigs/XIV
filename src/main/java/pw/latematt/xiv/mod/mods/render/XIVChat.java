@@ -1,67 +1,44 @@
 package pw.latematt.xiv.mod.mods.render;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiNewChat;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.ui.GuiXIVChat;
-
-import java.util.ArrayList;
 
 public class XIVChat extends Mod {
     public XIVChat() {
         super("XIVChat", ModType.RENDER);
     }
 
-    private GuiXIVChat xivChat;
-    private GuiNewChat originalChat;
-
     @Override
     public void onEnabled() {
-        createChats();
+        GuiNewChat chat = new GuiXIVChat(mc);
+        chat = copyLines(mc.ingameGUI.getChatGUI(), chat);
 
-        copyLines(originalChat, xivChat);
-
-        mc.ingameGUI.setChatGUI(xivChat);
+        mc.ingameGUI.setChatGUI(chat);
     }
 
     @Override
     public void onDisabled() {
-        createChats();
+        GuiNewChat chat = new GuiNewChat(mc);
+        chat = copyLines(mc.ingameGUI.getChatGUI(), chat);
 
-        copyLines(xivChat, originalChat);
-
-        mc.ingameGUI.setChatGUI(originalChat);
+        mc.ingameGUI.setChatGUI(chat);
     }
 
-    private void createChats() {
-        if(xivChat == null) {
-            this.xivChat = new GuiXIVChat(mc);
+    private GuiNewChat copyLines(GuiNewChat oldChat, GuiNewChat newChat) {
+        for (Object o : oldChat.getChatLines()) {
+            newChat.getChatLines().add(o);
         }
 
-        if(originalChat == null) {
-            this.originalChat = new GuiNewChat(mc);
-        }
-    }
-
-    private void copyLines(GuiNewChat oldChat, GuiNewChat newChat) {
-        for(Object o: oldChat.chatLines) {
-            newChat.chatLines.add(o);
+        for (Object o : oldChat.getSentMessages()) {
+            newChat.getSentMessages().add(o);
         }
 
-        ArrayList<String> sentMessages = new ArrayList<>();
-
-        for(Object o: oldChat.sentMessages) {
-            newChat.sentMessages.add(o);
+        for (Object o : oldChat.getField_146253_i()) {
+            newChat.getField_146253_i().add(o);
         }
 
-        for(Object o: oldChat.field_146253_i) {
-            newChat.field_146253_i.add(o);
-        }
-
-        oldChat.chatLines.clear();
-        oldChat.sentMessages.clear();
-        oldChat.field_146253_i.clear();
+        return newChat;
     }
 }

@@ -23,7 +23,6 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
 import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.management.ListManager;
-import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.mods.misc.Commands;
 import pw.latematt.xiv.mod.mods.misc.DashNames;
 import pw.latematt.xiv.mod.mods.misc.Keybinds;
@@ -291,11 +290,9 @@ public class CommandManager extends ListManager<Command> {
                 .description("Turn off all mods.")
                 .arguments("<action>")
                 .handler(message -> {
-                    for(Mod mod: XIV.getInstance().getModManager().getContents()) {
-                        if(!(mod instanceof Commands || mod instanceof Keybinds)) { // idk other mods??
-                            mod.setEnabled(false);
-                        }
-                    }
+                    XIV.getInstance().getModManager().getContents().stream()
+                            .filter(mod -> !(mod instanceof Commands || mod instanceof Keybinds))
+                            .forEach(mod -> mod.setEnabled(false));
                 }).build();
         Command.newCommand()
                 .cmd("clearxiv")
@@ -303,32 +300,30 @@ public class CommandManager extends ListManager<Command> {
                 .description("Clear your chat of client messages and client commands.")
                 .arguments("<action>")
                 .handler(message -> {
-                    ArrayList toRemove = new ArrayList();
-
-                    for(Object o: mc.ingameGUI.getChatGUI().chatLines) {
+                    List<ChatLine> toRemoveLines = new ArrayList<>();
+                    for (Object o : mc.ingameGUI.getChatGUI().getField_146253_i()) {
                         ChatLine line = (ChatLine) o;
 
-                        if (line.getChatComponent().getUnformattedText().startsWith("\247g[XIV]:\247r ")) {
-                            toRemove.add(o);
+                        if (line.getChatComponent().getUnformattedText().startsWith("\247g[XIV]")) {
+                            toRemoveLines.add(line);
                         }
                     }
 
-                    for(Object o: toRemove) {
-                        mc.ingameGUI.getChatGUI().chatLines.remove(o);
+                    for (ChatLine line : toRemoveLines) {
+                        mc.ingameGUI.getChatGUI().getField_146253_i().remove(line);
                     }
 
-                    toRemove.clear();
-
-                    for(Object o: mc.ingameGUI.getChatGUI().sentMessages) {
+                    List<String> toRemoveSent = new ArrayList<>();
+                    for (Object o : mc.ingameGUI.getChatGUI().getSentMessages()) {
                         String command = (String) o;
 
-                        if(command.startsWith(this.getPrefix())) {
-                            toRemove.add(o);
+                        if (command.startsWith(getPrefix())) {
+                            toRemoveSent.add(command);
                         }
                     }
 
-                    for(Object o: toRemove) {
-                        mc.ingameGUI.getChatGUI().sentMessages.remove(o);
+                    for (String msg : toRemoveSent) {
+                        mc.ingameGUI.getChatGUI().getSentMessages().remove(msg);
                     }
                 }).build();
         Command.newCommand()
