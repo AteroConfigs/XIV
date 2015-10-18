@@ -11,8 +11,8 @@ import pw.latematt.xiv.value.Value;
 
 /**
  * @author Jack
+ * @author Matthew
  */
-
 public class TabGUI extends Mod implements Listener<IngameHUDRenderEvent> {
     private final GuiTabHandler guiHandler = new GuiTabHandler();
     private final Value<Boolean> watermark = (Value<Boolean>) XIV.getInstance().getValueManager().find("hud_watermark");

@@ -35,10 +35,12 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
             final GuiTab tab = new GuiTab(this, type.getName());
             XIV.getInstance().getModManager().getContents().stream()
                     .filter(mod -> mod.getModType() == type)
-                    .filter(mod -> mod.getName().equals("ClickGUI"))
+                    .filter(mod -> !mod.getName().equals("ClickGUI"))
                     .forEach(mod -> tab.getMods().add(new GuiItem(mod)));
 
-            this.tabs.add(tab);
+            if (!tab.getMods().isEmpty()) {
+                this.tabs.add(tab);
+            }
         }
 
         this.guiHeight = this.tabs.size() * this.tabHeight;
@@ -126,7 +128,6 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
                     this.selectedItem = 0;
                 } else {
                     ((this.tabs.get(this.selectedTab)).getMods().get(this.selectedItem)).getMod().toggle();
-
                 }
                 break;
             case Keyboard.KEY_RETURN:
