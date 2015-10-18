@@ -105,7 +105,6 @@ public class XIV {
         Runtime.getRuntime().addShutdownHook(new Thread("XIV Shutdown Thread") {
             public void run() {
                 fileManager.saveAllFiles();
-                fileManager.setVisible(XIVFile.XIV_DIRECTORY, true);
             }
         });
 

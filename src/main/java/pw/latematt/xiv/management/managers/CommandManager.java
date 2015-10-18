@@ -2,6 +2,7 @@ package pw.latematt.xiv.management.managers;
 
 import com.google.common.io.Files;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
@@ -22,7 +23,9 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
 import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.management.ListManager;
+import pw.latematt.xiv.mod.mods.misc.Commands;
 import pw.latematt.xiv.mod.mods.misc.DashNames;
+import pw.latematt.xiv.mod.mods.misc.Keybinds;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
@@ -281,6 +284,48 @@ public class CommandManager extends ListManager<Command> {
                 .description("Clear your chat.")
                 .arguments("<action>")
                 .handler(message -> mc.ingameGUI.getChatGUI().clearChatMessages()).build();
+        Command.newCommand()
+                .cmd("alloff")
+                .aliases("legit", "hide")
+                .description("Turn off all mods.")
+                .arguments("<action>")
+                .handler(message -> {
+                    XIV.getInstance().getModManager().getContents().stream()
+                            .filter(mod -> !(mod instanceof Commands || mod instanceof Keybinds))
+                            .forEach(mod -> mod.setEnabled(false));
+                }).build();
+        Command.newCommand()
+                .cmd("clearxiv")
+                .aliases("clearclient")
+                .description("Clear your chat of client messages and client commands.")
+                .arguments("<action>")
+                .handler(message -> {
+                    List<ChatLine> toRemoveLines = new ArrayList<>();
+                    for (Object o : mc.ingameGUI.getChatGUI().getField_146253_i()) {
+                        ChatLine line = (ChatLine) o;
+
+                        if (line.getChatComponent().getUnformattedText().startsWith("\247g[XIV]")) {
+                            toRemoveLines.add(line);
+                        }
+                    }
+
+                    for (ChatLine line : toRemoveLines) {
+                        mc.ingameGUI.getChatGUI().getField_146253_i().remove(line);
+                    }
+
+                    List<String> toRemoveSent = new ArrayList<>();
+                    for (Object o : mc.ingameGUI.getChatGUI().getSentMessages()) {
+                        String command = (String) o;
+
+                        if (command.startsWith(getPrefix())) {
+                            toRemoveSent.add(command);
+                        }
+                    }
+
+                    for (String msg : toRemoveSent) {
+                        mc.ingameGUI.getChatGUI().getSentMessages().remove(msg);
+                    }
+                }).build();
         Command.newCommand()
                 .cmd("potion")
                 .aliases("pot")

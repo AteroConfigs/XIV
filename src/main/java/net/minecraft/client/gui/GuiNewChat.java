@@ -127,6 +127,14 @@ public class GuiNewChat extends Gui
         }
     }
 
+    public List getChatLines() {
+        return chatLines;
+    }
+
+    public List getField_146253_i() {
+        return field_146253_i;
+    }
+
     /**
      * Clears the chat.
      */
