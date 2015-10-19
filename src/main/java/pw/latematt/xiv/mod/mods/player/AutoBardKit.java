@@ -1,10 +1,7 @@
 package pw.latematt.xiv.mod.mods.player;
 
-import net.minecraft.client.gui.GuiRepair;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
-import net.minecraft.util.BlockPos;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -23,7 +20,7 @@ import java.util.Objects;
 /**
  * @author Matthew
  */
-public class AutoBardKit extends Mod implements Listener<MotionUpdateEvent>,CommandHandler {
+public class AutoBardKit extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private final Item helmet = Items.golden_helmet;
     private final Item chestplate = Items.golden_chestplate;
     private final Item leggings = Items.golden_leggings;

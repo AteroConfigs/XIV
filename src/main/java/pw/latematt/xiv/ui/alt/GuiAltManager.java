@@ -26,17 +26,17 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
 
     public List<AltAccount> getAccounts() {
         if (search != null && search.getText().length() > 0) {
-            if(search.getText().startsWith("@")) {
+            if (search.getText().startsWith("@")) {
                 String text = search.getText().substring(1);
 
                 // Custom search filters and stuff.. yay? Add on to this if you want...
-                if(text.equalsIgnoreCase("empty")) {
+                if (text.equalsIgnoreCase("empty")) {
                     return XIV.getInstance().getAltManager().getContents().stream().filter(account -> account.getKeyword().isEmpty()).collect(Collectors.toCollection(ArrayList::new));
-                }else if(text.equalsIgnoreCase("notempty") || text.equalsIgnoreCase("nonempty") || text.equalsIgnoreCase("!empty")) {
+                } else if (text.equalsIgnoreCase("notempty") || text.equalsIgnoreCase("nonempty") || text.equalsIgnoreCase("!empty")) {
                     return XIV.getInstance().getAltManager().getContents().stream().filter(account -> !account.getKeyword().isEmpty()).collect(Collectors.toCollection(ArrayList::new));
                 }
                 return XIV.getInstance().getAltManager().getContents();
-            }else if(search.getText().startsWith("!")) {
+            } else if (search.getText().startsWith("!")) {
                 String text = search.getText().substring(1);
 
                 // Search for opposite of text given

@@ -30,7 +30,7 @@ public class Criticals extends Mod implements Listener<AttackEntityEvent> {
             if (!isSafe())
                 fallDist += mc.thePlayer.fallDistance;
 
-            if (fallDist >= 3.0F || isSafe()) {
+            if (isSafe()) {
                 player.setOnGround(true);
                 fallDist = 0.0F;
                 mc.thePlayer.fallDistance = 0.0F;
@@ -52,11 +52,7 @@ public class Criticals extends Mod implements Listener<AttackEntityEvent> {
     }
 
     private boolean isSafe() {
-        return mc.thePlayer.isInWater()
-                || mc.thePlayer.isInsideOfMaterial(Material.lava)
-                || mc.thePlayer.isOnLadder()
-                || mc.thePlayer.getActivePotionEffects().contains(
-                Potion.BLINDNESS) || mc.thePlayer.ridingEntity != null;
+        return mc.thePlayer.isInWater() || mc.thePlayer.isInsideOfMaterial(Material.lava) || mc.thePlayer.isOnLadder() || mc.thePlayer.getActivePotionEffects().contains(Potion.BLINDNESS) || mc.thePlayer.ridingEntity != null || fallDist >= 3.0F;
     }
 
     @Override

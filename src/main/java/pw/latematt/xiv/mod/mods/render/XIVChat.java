@@ -12,11 +12,33 @@ public class XIVChat extends Mod {
 
     @Override
     public void onEnabled() {
-        mc.ingameGUI.setChatGUI(new GuiXIVChat(mc));
+        GuiNewChat chat = new GuiXIVChat(mc);
+        chat = copyLines(mc.ingameGUI.getChatGUI(), chat);
+
+        mc.ingameGUI.setChatGUI(chat);
     }
 
     @Override
     public void onDisabled() {
-        mc.ingameGUI.setChatGUI(new GuiNewChat(mc));
+        GuiNewChat chat = new GuiNewChat(mc);
+        chat = copyLines(mc.ingameGUI.getChatGUI(), chat);
+
+        mc.ingameGUI.setChatGUI(chat);
+    }
+
+    private GuiNewChat copyLines(GuiNewChat oldChat, GuiNewChat newChat) {
+        for (Object o : oldChat.getChatLines()) {
+            newChat.getChatLines().add(o);
+        }
+
+        for (Object o : oldChat.getSentMessages()) {
+            newChat.getSentMessages().add(o);
+        }
+
+        for (Object o : oldChat.getField_146253_i()) {
+            newChat.getField_146253_i().add(o);
+        }
+
+        return newChat;
     }
 }

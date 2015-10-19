@@ -1,6 +1,8 @@
 package pw.latematt.xiv.management.managers;
 
+import com.google.common.io.Files;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
@@ -9,17 +11,21 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringUtils;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
+import pw.latematt.xiv.command.commands.FillWorldEdit;
 import pw.latematt.xiv.command.commands.MassMessage;
 import pw.latematt.xiv.command.commands.Screenshot;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
+import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.management.ListManager;
+import pw.latematt.xiv.mod.mods.misc.Commands;
 import pw.latematt.xiv.mod.mods.misc.DashNames;
+import pw.latematt.xiv.mod.mods.misc.Keybinds;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
@@ -28,6 +34,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -61,6 +68,7 @@ public class CommandManager extends ListManager<Command> {
         // setup is not required in command management, commands will add themselves as they are built
         // however, we do add certain commands here
         XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
+
         Command.newCommand()
                 .cmd("help")
                 .description("Provides help with commands.")
@@ -272,11 +280,51 @@ public class CommandManager extends ListManager<Command> {
                 }).build();
         Command.newCommand()
                 .cmd("clearchat")
-                .aliases("cc")
+                .aliases("clear")
                 .description("Clear your chat.")
                 .arguments("<action>")
+                .handler(message -> mc.ingameGUI.getChatGUI().clearChatMessages()).build();
+        Command.newCommand()
+                .cmd("alloff")
+                .aliases("legit", "hide")
+                .description("Turn off all mods.")
+                .arguments("<action>")
                 .handler(message -> {
-                    mc.ingameGUI.getChatGUI().clearChatMessages();
+                    XIV.getInstance().getModManager().getContents().stream()
+                            .filter(mod -> !(mod instanceof Commands || mod instanceof Keybinds))
+                            .forEach(mod -> mod.setEnabled(false));
+                }).build();
+        Command.newCommand()
+                .cmd("clearxiv")
+                .aliases("clearclient")
+                .description("Clear your chat of client messages and client commands.")
+                .arguments("<action>")
+                .handler(message -> {
+                    List<ChatLine> toRemoveLines = new ArrayList<>();
+                    for (Object o : mc.ingameGUI.getChatGUI().getField_146253_i()) {
+                        ChatLine line = (ChatLine) o;
+
+                        if (line.getChatComponent().getUnformattedText().startsWith("\247g[XIV]")) {
+                            toRemoveLines.add(line);
+                        }
+                    }
+
+                    for (ChatLine line : toRemoveLines) {
+                        mc.ingameGUI.getChatGUI().getField_146253_i().remove(line);
+                    }
+
+                    List<String> toRemoveSent = new ArrayList<>();
+                    for (Object o : mc.ingameGUI.getChatGUI().getSentMessages()) {
+                        String command = (String) o;
+
+                        if (command.startsWith(getPrefix())) {
+                            toRemoveSent.add(command);
+                        }
+                    }
+
+                    for (String msg : toRemoveSent) {
+                        mc.ingameGUI.getChatGUI().getSentMessages().remove(msg);
+                    }
                 }).build();
         Command.newCommand()
                 .cmd("potion")
@@ -452,7 +500,7 @@ public class CommandManager extends ListManager<Command> {
                 .description("Copy the servers IP.")
                 .handler(message -> {
                     if (mc.isSingleplayer()) {
-                        ChatLogger.print("You're in singleplayer.");
+                        ChatLogger.print("Singleplayer does not have an IP.");
                     } else {
                         StringSelection contents = new StringSelection(mc.getCurrentServerData().serverIP);
                         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -466,15 +514,14 @@ public class CommandManager extends ListManager<Command> {
                 .aliases("cc")
                 .description("Copy your current coordinates.")
                 .handler(message -> {
-                    if (mc.isSingleplayer()) {
-                        ChatLogger.print("You're in singleplayer.");
-                    } else {
-                        StringSelection contents = new StringSelection((int) mc.thePlayer.posX + " " + (int) mc.thePlayer.posY + " " + (int) mc.thePlayer.posZ);
-                        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                        clipboard.setContents(contents, null);
+                    int x = MathHelper.floor_double(mc.thePlayer.posX);
+                    int y = MathHelper.floor_double(mc.thePlayer.posY);
+                    int z = MathHelper.floor_double(mc.thePlayer.posZ);
+                    StringSelection contents = new StringSelection(String.format("%s %s %s", x, y, z));
+                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    clipboard.setContents(contents, null);
 
-                        ChatLogger.print("Copied your current coordinates to clipboard.");
-                    }
+                    ChatLogger.print("Copied your current coordinates to clipboard.");
                 }).build();
         Command.newCommand()
                 .cmd("history")
@@ -539,15 +586,11 @@ public class CommandManager extends ListManager<Command> {
                 .description("Take a screenshot of your minecraft.")
                 .aliases("scr", "imgur", "image", "img")
                 .handler(new Screenshot()).build();
-
-        XIV.getInstance().getListenerManager().add(new Listener<SendPacketEvent>() {
-            public void onEventCalled(SendPacketEvent event) {
-                if (event.getPacket() instanceof C01PacketChatMessage) {
-                    C01PacketChatMessage packet = (C01PacketChatMessage) event.getPacket();
-                    event.setCancelled(parseCommand(packet.getMessage()));
-                }
-            }
-        });
+        Command.newCommand()
+                .cmd("fillworldedit")
+                .description("Use world edit in 1.8 servers that don't have world edit.")
+                .aliases("fwe", "we", "//", "worldedit")
+                .handler(new FillWorldEdit()).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<WorldBobbingEvent>() {
             public void onEventCalled(WorldBobbingEvent event) {
@@ -557,6 +600,36 @@ public class CommandManager extends ListManager<Command> {
                 }
             }
         });
+
+        new XIVFile("commandPrefix", "cfg") {
+            @Override
+            public void load() throws IOException {
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                prefix = reader.readLine();
+            }
+
+            @Override
+            public void save() throws IOException {
+                Files.write(getPrefix().getBytes("UTF-8"), file);
+            }
+        };
+
+        Command.newCommand()
+                .cmd("prefix")
+                .description("Changes your command prefix")
+                .arguments("<new prefix>")
+                .handler(message -> {
+                    String[] arguments = message.split(" ");
+                    if (arguments.length >= 2) {
+                        String newPrefix = message.substring((String.format("%s ", arguments[0])).length(), (String.format("%s ", arguments[0])).length() + 1);
+                        if (!newPrefix.equals("") && !newPrefix.equals(" ")) {
+                            prefix = newPrefix;
+                        }
+                        ChatLogger.print(String.format("Chat Prefix set to: %s", prefix));
+                    }
+                })
+                .build();
+
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
     }
 

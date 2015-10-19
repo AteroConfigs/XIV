@@ -7,8 +7,6 @@ import com.google.gson.GsonBuilder;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
-import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.KeyPressEvent;
 import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.macro.Macro;
 import pw.latematt.xiv.management.ListManager;
@@ -100,13 +98,6 @@ public class MacroManager extends ListManager<Macro> {
                         ChatLogger.print("Invalid arguments, valid: macro <action>");
                     }
                 }).build();
-
-        XIV.getInstance().getListenerManager().add(new Listener<KeyPressEvent>() {
-            @Override
-            public void onEventCalled(KeyPressEvent event) {
-                getContents().stream().filter(macro -> macro.getKeybind() != Keyboard.KEY_NONE).filter(macro -> macro.getKeybind() == event.getKeyCode()).forEach(macro -> XIV.getInstance().getCommandManager().parseCommand(XIV.getInstance().getCommandManager().getPrefix() + macro.getCommand()));
-            }
-        });
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
     }
 

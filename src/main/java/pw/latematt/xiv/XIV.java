@@ -96,7 +96,7 @@ public class XIV {
         macroManager.setup();
 
         /* file stuffs on startup */
-        fileManager.setVisible(XIVFile.XIV_DIRECTORY, true);
+        fileManager.setVisible(XIVFile.XIV_DIRECTORY, false);
 
         fileManager.loadAllFiles();
         fileManager.saveAllFiles();
@@ -105,7 +105,6 @@ public class XIV {
         Runtime.getRuntime().addShutdownHook(new Thread("XIV Shutdown Thread") {
             public void run() {
                 fileManager.saveAllFiles();
-                fileManager.setVisible(XIVFile.XIV_DIRECTORY, false);
             }
         });
 
