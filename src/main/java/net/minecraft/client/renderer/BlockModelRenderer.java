@@ -25,6 +25,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.Vec3i;
 import net.minecraft.world.IBlockAccess;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.BlockModelRenderEvent;
 
 public class BlockModelRenderer
 {
@@ -46,6 +48,8 @@ public class BlockModelRenderer
 
     public boolean renderBlockModel(IBlockAccess blockAccessIn, IBakedModel modelIn, IBlockState blockStateIn, BlockPos blockPosIn, WorldRenderer worldRendererIn, boolean checkSides)
     {
+        BlockModelRenderEvent event = new BlockModelRenderEvent(blockStateIn.getBlock(), blockPosIn);
+        XIV.getInstance().getListenerManager().call(event);
         boolean var7 = Minecraft.isAmbientOcclusionEnabled() && blockStateIn.getBlock().getLightValue() == 0 && modelIn.isGui3d();
 
         try
