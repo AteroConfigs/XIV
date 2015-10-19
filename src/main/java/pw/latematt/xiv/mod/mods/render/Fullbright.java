@@ -1,12 +1,15 @@
 package pw.latematt.xiv.mod.mods.render;
 
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.LoadWorldEvent;
+import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
@@ -17,6 +20,9 @@ import pw.latematt.xiv.value.Value;
  */
 public class Fullbright extends Mod implements Listener<LoadWorldEvent>, CommandHandler {
     private final Value<Float> brightness = new Value<>("fullbright_brightness", 0.4F);
+    public final Value<Boolean> potion = new Value<>("fullbright_potion", false);
+    private final Listener<MotionUpdateEvent> listener;
+    private float gamma;
 
     public Fullbright() {
         super("Fullbright", ModType.RENDER, Keyboard.KEY_C, 0xFFFCFDCD);
@@ -28,6 +34,15 @@ public class Fullbright extends Mod implements Listener<LoadWorldEvent>, Command
                 .aliases("bright", "b")
                 .handler(this)
                 .build();
+
+        this.listener = new Listener<MotionUpdateEvent>() {
+            @Override
+            public void onEventCalled(MotionUpdateEvent event) { // Change this if needed, never done it on world load event but that might work
+                if (potion.getValue()) {
+                    mc.thePlayer.addPotionEffect(new PotionEffect(Potion.NIGHT_VISION.getId(), 16350, 0));
+                }
+            }
+        };
     }
 
     public void editTable(WorldClient world, float value) {
@@ -44,7 +59,9 @@ public class Fullbright extends Mod implements Listener<LoadWorldEvent>, Command
 
     @Override
     public void onEventCalled(LoadWorldEvent event) {
-        editTable(event.getWorld(), brightness.getValue());
+        if (!potion.getValue()) {
+            editTable(event.getWorld(), brightness.getValue());
+        }
     }
 
     @Override
@@ -73,8 +90,20 @@ public class Fullbright extends Mod implements Listener<LoadWorldEvent>, Command
                         ChatLogger.print("Invalid arguments, valid: fullbright brightness <number>");
                     }
                     break;
+                case "potion":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            potion.setValue(potion.getDefault());
+                        } else {
+                            potion.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        potion.setValue(!potion.getValue());
+                    }
+                    ChatLogger.print(String.format("Fullbright will %s give night vision.", (potion.getValue() ? "now" : "no longer")));
+                    break;
                 default:
-                    ChatLogger.print("Invalid action, valid: brightness");
+                    ChatLogger.print("Invalid action, valid: brightness, potion");
                     break;
             }
         } else {
@@ -85,19 +114,31 @@ public class Fullbright extends Mod implements Listener<LoadWorldEvent>, Command
     @Override
     public void onEnabled() {
         if (mc.theWorld != null) {
-            editTable(mc.theWorld, brightness.getValue());
+            if (potion.getValue()) {
+                gamma = mc.gameSettings.gammaSetting;
+                mc.gameSettings.gammaSetting = 1.0F;
+            } else {
+                editTable(mc.theWorld, brightness.getValue());
+            }
         }
         XIV.getInstance().getListenerManager().add(this);
+        XIV.getInstance().getListenerManager().add(this.listener);
     }
 
     @Override
     public void onDisabled() {
         if (mc.theWorld != null) {
-            for (int var2 = 0; var2 <= 15; ++var2) {
-                float var3 = 1.0F - (float) var2 / 15.0F;
-                mc.theWorld.provider.lightBrightnessTable[var2] = (1.0F - var3) / (var3 * 3.0F + 1.0F);
+            if (this.potion.getValue()) {
+                mc.gameSettings.gammaSetting = gamma;
+                mc.thePlayer.removePotionEffect(Potion.NIGHT_VISION.getId());
+            } else {
+                for (int var2 = 0; var2 <= 15; ++var2) {
+                    float var3 = 1.0F - (float) var2 / 15.0F;
+                    mc.theWorld.provider.lightBrightnessTable[var2] = (1.0F - var3) / (var3 * 3.0F + 1.0F);
+                }
             }
         }
         XIV.getInstance().getListenerManager().remove(this);
+        XIV.getInstance().getListenerManager().remove(this.listener);
     }
 }
