@@ -32,10 +32,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -179,6 +176,10 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         for (Object o : mc.thePlayer.getActivePotionEffects()) {
             PotionEffect effect = (PotionEffect) o;
             String name = I18n.format(effect.getEffectName());
+
+            if (Objects.equals(effect.getPotionID(), Potion.NIGHT_VISION.getId()) && XIV.getInstance().getModManager().find(Fullbright.class).isEnabled() && ((Fullbright)XIV.getInstance().getModManager().find(Fullbright.class)).potion.getValue()) {
+                continue;
+            }
 
             if (effect.getAmplifier() == 1) {
                 name = name + " " + I18n.format("enchantment.level.2");
