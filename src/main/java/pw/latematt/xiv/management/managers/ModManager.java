@@ -46,6 +46,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new AntiSuffocate());
         contents.add(new AntiTabComplete());
         contents.add(new ArmorBreaker());
+        contents.add(new AutoAccept());
         contents.add(new AutoArmor());
         contents.add(new AutoBardKit());
         //contents.add(new AutoHead());
