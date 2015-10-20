@@ -222,6 +222,7 @@ public class Search extends Mod implements Listener<Render3DEvent>, CommandHandl
                 case "clear":
                     blockList.clear();
                     blockCache.clear();
+                    mc.renderGlobal.loadRenderers();
                     ChatLogger.print("Search cleared.");
                     break;
                 default:

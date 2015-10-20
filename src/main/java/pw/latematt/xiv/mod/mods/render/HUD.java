@@ -255,33 +255,33 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
     private void drawLag(ScaledResolution scaledResolution) {
         String lag;
         int color;
-        int difference = (int) timer.getDifference();
 
-        switch (difference) {
-            case 20000:
-                lag = "|";
-                color = 0xFF990000;
-                break;
-            case 15000:
+        if (timer.hasReached(20000L)) {
+            lag = "|";
+            color = 0xFF990000;
+        } else {
+            if (timer.hasReached(15000L)) {
                 lag = "||";
                 color = 0xFFFF0000;
-                break;
-            case 10000:
-                lag = "|||";
-                color = 0xFFCC3300;
-                break;
-            case 5000:
-                lag = "||||";
-                color = 0xFF669900;
-                break;
-            case 1000:
-                lag = "||||";
-                color = 0xFF22DD00;
-                break;
-            default:
-                lag = "|||||";
-                color = 0xFF00FF00;
-                break;
+            } else {
+                if (timer.hasReached(10000L)) {
+                    lag = "|||";
+                    color = 0xFFCC3300;
+                } else {
+                    if (timer.hasReached(5000L)) {
+                        lag = "||||";
+                        color = 0xFF669900;
+                    } else {
+                        if (timer.hasReached(1000L)) {
+                            lag = "||||";
+                            color = 0xFF22DD00;
+                        } else {
+                            lag = "|||||";
+                            color = 0xFF00FF00;
+                        }
+                    }
+                }
+            }
         }
 
         mc.fontRendererObj.drawStringWithShadow(lag, scaledResolution.getScaledWidth() / 2 + 93, scaledResolution.getScaledHeight() - 10, color);
