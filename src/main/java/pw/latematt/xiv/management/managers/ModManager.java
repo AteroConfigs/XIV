@@ -49,7 +49,6 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new AutoAccept());
         contents.add(new AutoArmor());
         contents.add(new AutoBardKit());
-        //contents.add(new AutoHead());
         contents.add(new AutoHeal());
         contents.add(new AutoLog());
         contents.add(new AutoRespawn());
@@ -67,7 +66,6 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Freecam());
         contents.add(new Fullbright());
         contents.add(new HUD());
-        //contents.add(new Instinct());
         contents.add(new InventoryWalk());
         contents.add(new Jesus());
         contents.add(new Keybinds());
@@ -80,6 +78,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Phase());
         contents.add(new PotionSaver());
         contents.add(new Regen());
+        contents.add(new Search());
         contents.add(new SkinFlash());
         contents.add(new SlimeJump());
         contents.add(new SmoothAimbot());
@@ -98,8 +97,14 @@ public class ModManager extends ListManager<Mod> {
 
         /* always load tabgui after all the mods */
         contents.add(new TabGUI());
+
         /* then load clickgui after tabgui */
         contents.add(new ClickGUI());
+
+        /* disabled mods
+        contents.add(new AutoHead());
+        contents.add(new Instinct());
+        */
 
         new XIVFile("modconfig", "json") {
             @Override

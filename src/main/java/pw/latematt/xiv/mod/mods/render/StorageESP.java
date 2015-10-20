@@ -194,7 +194,7 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
     }
 
     private void drawBoxes(AxisAlignedBB bb, float[] color) {
-        GlStateManager.color(color[0], color[1], color[2], 0.6F);
+        GlStateManager.color(color[0], color[1], color[2], 0.60F);
         RenderUtils.drawLines(bb);
         RenderGlobal.drawOutlinedBoundingBox(bb, -1);
         GlStateManager.color(color[0], color[1], color[2], 0.11F);
