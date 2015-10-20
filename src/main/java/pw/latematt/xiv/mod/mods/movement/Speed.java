@@ -1,9 +1,6 @@
 package pw.latematt.xiv.mod.mods.movement;
 
 import net.minecraft.init.Blocks;
-import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -11,7 +8,6 @@ import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.MoveEvent;
-import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
@@ -21,23 +17,13 @@ import pw.latematt.xiv.value.Value;
 import java.util.Objects;
 
 /**
- * @author Matthew
  * @author Jack
  * @author Rederpz
- * @author Capsar
- * @author TehNeon
- * @author ScoutRed
- * @author Friendly
- * @author Franky
- * @author Martin
- * @author Jar
  */
 public class Speed extends Mod implements CommandHandler {
     private final Listener motionUpdateListener, moveListener;
-
     private int delay;
     private boolean shouldBoost;
-
     private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.NEW);
     private final Value<Boolean> fastLadder = new Value<>("speed_fast_ladder", true);
 
@@ -64,20 +50,20 @@ public class Speed extends Mod implements CommandHandler {
                     if (shouldBoost) {
                         double speed = 2.035D;
 
-                        if(mc.thePlayer.moveStrafing != 0.0F) {
+                        if (mc.thePlayer.moveStrafing != 0.0F) {
                             speed -= 0.04D;
                         }
 
-                        if(!mc.thePlayer.isSprinting()) {
+                        if (!mc.thePlayer.isSprinting()) {
                             speed += 0.15D;
                         }
 
-                        if(BlockUtils.isOnIce(mc.thePlayer)) {
+                        if (BlockUtils.isOnIce(mc.thePlayer)) {
                             speed = 4.0D;
                             delay = 0;
                         }
 
-                        if(mc.thePlayer.hurtTime > 0) {
+                        if (mc.thePlayer.hurtTime > 0) {
                             speed += 0.01D;
                         }
 
@@ -86,7 +72,7 @@ public class Speed extends Mod implements CommandHandler {
 
                         if (delay >= 5) {
                             mc.timer.timerSpeed = 1.3F;
-                            if(delay >= 6) {
+                            if (delay >= 6) {
                                 delay = 0;
                             }
                         } else {
@@ -100,36 +86,18 @@ public class Speed extends Mod implements CommandHandler {
         this.motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                if(event.getCurrentState() == MotionUpdateEvent.State.POST) {
-                    if (currentMode.getValue() == Mode.NEW) {
-                        Step step = (Step) XIV.getInstance().getModManager().find("step");
-                        boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
-                        boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
-                        boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-                        boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed();
+                Step step = (Step) XIV.getInstance().getModManager().find("step");
+                boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
+                boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
+                boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+                boolean moving = movingForward && strafing || movingForward;
+                if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
+                    if (currentMode.getValue() == Mode.OLD) {
                         if (!mc.thePlayer.onGround || BlockUtils.isInLiquid(mc.thePlayer) || editingPackets || !moving) {
                             delay = 0;
                             mc.timer.timerSpeed = 1.0F;
                             shouldBoost = false;
                         } else {
-                            if (shouldBoost) {
-                                event.setY(event.getY() + 0.001D);
-                            }
-
-                            shouldBoost = !shouldBoost;
-                            delay++;
-                        }
-                    } else if (currentMode.getValue() == Mode.OLD) {
-                        Step step = (Step) XIV.getInstance().getModManager().find("step");
-                        boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
-                        boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
-                        boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-                        boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed();
-                        if (!mc.thePlayer.onGround || BlockUtils.isInLiquid(mc.thePlayer) || editingPackets || !moving) {
-                            delay = 0;
-                            mc.timer.timerSpeed = 1.0F;
-                            shouldBoost = false;
-                        }else if(moving) {
                             double speed = 3.1D;
                             double slow = 1.425D;
 
@@ -172,8 +140,21 @@ public class Speed extends Mod implements CommandHandler {
                                     delay = 0;
                                     break;
                             }
-                        }else{
+                        }
+                    }
+                } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
+                    if (currentMode.getValue() == Mode.NEW) {
+                        if (!mc.thePlayer.onGround || BlockUtils.isInLiquid(mc.thePlayer) || editingPackets || !moving) {
+                            delay = 0;
                             mc.timer.timerSpeed = 1.0F;
+                            shouldBoost = false;
+                        } else {
+                            if (shouldBoost) {
+                                event.setY(event.getY() + 0.001D);
+                            }
+
+                            shouldBoost = !shouldBoost;
+                            delay++;
                         }
                     }
                 }
