@@ -18,15 +18,19 @@ public class Timer {
         return lastMS;
     }
 
+    public void setLastMS(long currentMS) {
+        lastMS = currentMS;
+    }
+
+    public long getDifference() {
+        return getCurrentMS() - lastMS;
+    }
+
     public boolean hasReached(long milliseconds) {
         return getCurrentMS() - lastMS >= milliseconds;
     }
 
     public void reset() {
         lastMS = getCurrentMS();
-    }
-
-    public void setLastMS(long currentMS) {
-        lastMS = currentMS;
     }
 }

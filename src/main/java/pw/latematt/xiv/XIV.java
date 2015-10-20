@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.management.managers.*;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
+import pw.latematt.xiv.ui.tabgui.GuiTabHandler;
 import pw.latematt.xiv.utils.RenderUtils;
 
 /**
@@ -29,6 +30,7 @@ public class XIV {
     private final ConfigManager configManager = new ConfigManager();
     private final MacroManager macroManager = new MacroManager();
     private final GuiClick guiClick = new GuiClick();
+    private final GuiTabHandler tabHandler = new GuiTabHandler();
 
     public FileManager getFileManager() {
         return fileManager;
@@ -70,6 +72,10 @@ public class XIV {
         return guiClick;
     }
 
+    public GuiTabHandler getTabHandler() {
+        return tabHandler;
+    }
+
     /* logger */
     private final Logger logger = LogManager.getLogger("XIV");
 
@@ -90,14 +96,13 @@ public class XIV {
         commandManager.setup();
         listenerManager.setup();
         modManager.setup();
+        tabHandler.setup();
         friendManager.setup();
         altManager.setup();
         configManager.setup();
         macroManager.setup();
 
         /* file stuffs on startup */
-        fileManager.setVisible(XIVFile.XIV_DIRECTORY, false);
-
         fileManager.loadAllFiles();
         fileManager.saveAllFiles();
 

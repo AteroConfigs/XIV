@@ -95,10 +95,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new XIVChat());
         contents.add(new Zoot());
 
-        /* always load tabgui after all the mods */
-        contents.add(new TabGUI());
-
-        /* then load clickgui after tabgui */
+        /* always load clickgui after all mods */
         contents.add(new ClickGUI());
 
         /* disabled mods

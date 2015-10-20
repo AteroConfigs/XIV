@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
@@ -53,7 +54,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
     private final Value<Boolean> potions = new Value<>("hud_potions", true);
     private final Value<Boolean> armor = new Value<>("hud_armor", true);
     private final Value<Boolean> rudysucks = new Value<>("hud_rudysucks", false);
-
+    private final Value<Boolean> tabGui = new Value<>("hud_tabgui", true);
     private final Timer timer = new Timer();
     private final Listener readPacketListener;
 
@@ -62,6 +63,8 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         readPacketListener = new Listener<ReadPacketEvent>() {
             @Override
             public void onEventCalled(ReadPacketEvent event) {
+                if (event.getPacket() instanceof S02PacketChat)
+                    return;
                 timer.reset();
             }
         };
@@ -120,6 +123,15 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             if (watermark.getValue() || (watermark.getValue() && time.getValue()))
                 y += 8;
             mc.fontRendererObj.drawStringWithShadow("\2471r\2472u\2473d\2474y \2475s\2476u\2477c\2478k\2479s", 2, y, 0xFFFFFFFF);
+        }
+        if (tabGui.getValue()) {
+            int y = 2;
+            if (watermark.getValue() || rudysucks.getValue() || time.getValue())
+                y += 10;
+            if (watermark.getValue() && rudysucks.getValue())
+                y += 10;
+
+            XIV.getInstance().getTabHandler().drawGui(2, y);
         }
 
         drawInfo(scaledResolution);
@@ -191,7 +203,9 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                 name = name + " " + (effect.getAmplifier() + 1);
             }
 
-            name = String.format("%s \2477(%s)", name, Potion.getDurationString(effect));
+            int var1 = effect.getDuration() / 20;
+            var1 %= 60;
+            name = String.format("%s \247f(\247%s%s\247f)", name, var1 <= 5 ? "4" : "7", Potion.getDurationString(effect));
             mc.fontRendererObj.drawStringWithShadow(name, x - mc.fontRendererObj.getStringWidth(name), y, Potion.potionTypes[effect.getPotionID()].getLiquidColor());
             y -= 10;
         }
@@ -234,43 +248,40 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
 
     private void drawDirection(ScaledResolution scaledResolution) {
         EnumFacing yaw = EnumFacing.getHorizontal(MathHelper.floor_double((double) (mc.thePlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
-        ;
-
         String displayString = yaw.getName().substring(0, 1).toUpperCase() + yaw.getName().substring(1);
-
         mc.fontRendererObj.drawStringWithShadow(displayString, (scaledResolution.getScaledWidth() - mc.fontRendererObj.getStringWidth(displayString)) / 2, 2, 0xFFFFFFFF);
     }
 
     private void drawLag(ScaledResolution scaledResolution) {
-        String lag = "|||||";
-        int color = 0xFF00FF00;
+        String lag;
+        int color;
+        int difference = (int) timer.getDifference();
 
-        if (timer.hasReached(20000L)) {
-            lag = "|";
-            color = 0xFF990000;
-        } else {
-            if (timer.hasReached(15000L)) {
+        switch (difference) {
+            case 20000:
+                lag = "|";
+                color = 0xFF990000;
+                break;
+            case 15000:
                 lag = "||";
                 color = 0xFFFF0000;
-            } else {
-                if (timer.hasReached(10000L)) {
-                    lag = "|||";
-                    color = 0xFFCC3300;
-                } else {
-                    if (timer.hasReached(5000L)) {
-                        lag = "||||";
-                        color = 0xFF669900;
-                    } else {
-                        if (timer.hasReached(1000L)) {
-                            lag = "||||";
-                            color = 0xFF22DD00;
-                        } else {
-                            lag = "|||||";
-                            color = 0xFF00FF00;
-                        }
-                    }
-                }
-            }
+                break;
+            case 10000:
+                lag = "|||";
+                color = 0xFFCC3300;
+                break;
+            case 5000:
+                lag = "||||";
+                color = 0xFF669900;
+                break;
+            case 1000:
+                lag = "||||";
+                color = 0xFF22DD00;
+                break;
+            default:
+                lag = "|||||";
+                color = 0xFF00FF00;
+                break;
         }
 
         mc.fontRendererObj.drawStringWithShadow(lag, scaledResolution.getScaledWidth() / 2 + 93, scaledResolution.getScaledHeight() - 10, color);
@@ -416,6 +427,25 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     }
                     ChatLogger.print(String.format("HUD will %s display your lag.", (lag.getValue() ? "now" : "no longer")));
                     break;
+                case "tabgui":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            tabGui.setValue(tabGui.getDefault());
+                        } else {
+                            tabGui.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        tabGui.setValue(!tabGui.getValue());
+                    }
+
+                    if (tabGui.getValue()) {
+                        XIV.getInstance().getListenerManager().add(XIV.getInstance().getTabHandler());
+                    } else {
+                        XIV.getInstance().getListenerManager().remove(XIV.getInstance().getTabHandler());
+                    }
+
+                    ChatLogger.print(String.format("HUD will %s display a TabGUI.", (tabGui.getValue() ? "now" : "no longer")));
+                    break;
                 case "rudysucks":
                     if (arguments.length >= 3) {
                         if (arguments[2].equalsIgnoreCase("-d")) {
@@ -442,13 +472,18 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
-        ;
         XIV.getInstance().getListenerManager().add(readPacketListener);
+        if (tabGui.getValue()) {
+            XIV.getInstance().getListenerManager().add(XIV.getInstance().getTabHandler());
+        }
     }
 
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
         XIV.getInstance().getListenerManager().remove(readPacketListener);
+        if (!tabGui.getValue()) {
+            XIV.getInstance().getListenerManager().remove(XIV.getInstance().getTabHandler());
+        }
     }
 }

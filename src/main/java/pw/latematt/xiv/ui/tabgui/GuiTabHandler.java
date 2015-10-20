@@ -20,8 +20,8 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
     private final Minecraft mc = Minecraft.getMinecraft();
     private int colourBody = 0x95000400;
     private int colourBox = 0x804DB3FF;
-    private int guiHeight = 0;
-    private int guiWidth = 76;
+    private int guiHeight;
+    private int guiWidth;
     private boolean mainMenu = true;
     private int selectedItem = 0;
     private int selectedTab = 0;
@@ -30,7 +30,7 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
 
     private int transition = 0;
 
-    public GuiTabHandler() {
+    public void setup() {
         for (ModType type : ModType.values()) {
             final GuiTab tab = new GuiTab(this, type.getName());
             XIV.getInstance().getModManager().getContents().stream()
@@ -40,11 +40,14 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
 
             if (!tab.getMods().isEmpty()) {
                 this.tabs.add(tab);
+                int stringWidth = 2 + mc.fontRendererObj.getStringWidth(tab.getTabName()) + 4;
+                if (stringWidth > 2 + guiWidth + 2) {
+                    guiWidth = stringWidth;
+                }
             }
         }
 
         this.guiHeight = this.tabs.size() * this.tabHeight;
-        XIV.getInstance().getListenerManager().add(this);
     }
 
     public void drawGui(int x, int y) {

@@ -4,9 +4,10 @@ import com.sun.javafx.geom.Vec3d;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.util.ResourceLocation;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
@@ -22,6 +23,7 @@ import pw.latematt.xiv.value.Value;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.regex.Matcher;
 
 /**
  * @author Matthew
@@ -140,7 +142,7 @@ public class Search extends Mod implements Listener<Render3DEvent>, CommandHandl
         final float blue = (color & 0xFF) / 255.0F;
         GlStateManager.color(red, green, blue, 0.11F);
         RenderUtils.drawFilledBox(box);
-        GlStateManager.color(red, green, blue, 0.50F);
+        GlStateManager.color(red, green, blue, 0.60F);
         RenderUtils.drawLines(box);
         RenderGlobal.drawOutlinedBoundingBox(box, -1);
     }
@@ -160,7 +162,7 @@ public class Search extends Mod implements Listener<Render3DEvent>, CommandHandl
                         } catch (NumberFormatException e) {
                             for (Object o : Block.blockRegistry) {
                                 Block blockk = (Block) o;
-                                String name = blockk.getUnlocalizedName().replaceAll("tile.", "");
+                                String name = Block.blockRegistry.getNameForObject(blockk).toString().replaceAll(Matcher.quoteReplacement("minecraft:"), "");
                                 if (name.toLowerCase().startsWith(input.toLowerCase())) {
                                     block = blockk;
                                     break;
@@ -193,7 +195,7 @@ public class Search extends Mod implements Listener<Render3DEvent>, CommandHandl
                         } catch (NumberFormatException e) {
                             for (Object o : Block.blockRegistry) {
                                 Block blockk = (Block) o;
-                                String name = blockk.getUnlocalizedName().replaceAll("tile.", "");
+                                String name = Block.blockRegistry.getNameForObject(blockk).toString().replaceAll(Matcher.quoteReplacement("minecraft:"), "");
                                 if (name.toLowerCase().startsWith(input.toLowerCase())) {
                                     block = blockk;
                                     break;

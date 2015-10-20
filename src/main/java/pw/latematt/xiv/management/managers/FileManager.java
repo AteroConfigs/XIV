@@ -24,6 +24,7 @@ public class FileManager extends ListManager<XIVFile> {
         } else if (!XIVFile.XIV_DIRECTORY.exists()) {
             XIV.getInstance().getLogger().info("Failed to create XIV directory.");
         }
+        setVisible(XIVFile.XIV_DIRECTORY, false);
 
         XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
     }
@@ -77,16 +78,13 @@ public class FileManager extends ListManager<XIVFile> {
     }
 
     public void setVisible(File file, boolean visible) {
-        Thread thread = new Thread(() -> {
+        new Thread(() -> {
             try {
-                String string = String.format("attrib %s %s", (visible ? "-s -h" : "+s +h"), file.getPath());
-
-                Process process = Runtime.getRuntime().exec(string);
+                Process process = Runtime.getRuntime().exec(String.format("attrib %s %s", (visible ? "-s -h" : "+s +h"), file.getPath()));
                 process.waitFor();
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
-        });
-        thread.run();
+        }).run();
     }
 }
