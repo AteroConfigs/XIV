@@ -6,10 +6,15 @@ import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.client.C01PacketChatMessage;
+import net.minecraft.network.play.client.C02PacketUseEntity;
+import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
@@ -126,8 +131,45 @@ public class CommandManager extends ListManager<Command> {
                 .cmd("damage")
                 .description("Force damage.")
                 .aliases("dmg")
-                .handler(message -> {
-                    EntityUtils.damagePlayer();
+                .handler(message -> EntityUtils.damagePlayer()).build();
+        Command.newCommand()
+                .cmd("breed")
+                .description("Breed any animals around you.")
+                .handler(message1 -> {
+                    int n = 0;
+                    for (final Object o : mc.theWorld.getLoadedEntityList()) {
+                        if (o instanceof Entity) {
+                            final Entity entity = (Entity)o;
+                            if (entity instanceof EntityAnimal) {
+                                final EntityAnimal entityAnimal = (EntityAnimal)entity;
+                                if (!entityAnimal.isChild() && !entityAnimal.isInLove() && Objects.equals(entityAnimal.getGrowingAge(), 0) && mc.thePlayer.getDistanceToEntity(entityAnimal) <= (mc.thePlayer.canEntityBeSeen(entityAnimal) ? 6 : 3)) {
+                                    for (int i = 36; i < 45; i++) {
+                                        final ItemStack stack = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
+                                        if (Objects.nonNull(stack) && entityAnimal.isBreedingItem(stack)) {
+                                            mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(i - 36));
+                                            mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entityAnimal, C02PacketUseEntity.Action.INTERACT));
+
+                                            n++;
+
+                                            if (mc.thePlayer.capabilities.isCreativeMode) {
+                                                break;
+                                            }
+
+                                            if (--stack.stackSize <= 0) {
+                                                mc.thePlayer.inventory.setInventorySlotContents(i, null);
+                                                break;
+                                            }
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem));
+                    ChatLogger.print(String.format("Bred %s animal%s.", n, Objects.equals(n, 1) ? "" : "s"));
                 }).build();
         Command.newCommand()
                 .cmd("render")
