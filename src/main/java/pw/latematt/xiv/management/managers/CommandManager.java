@@ -67,7 +67,7 @@ public class CommandManager extends ListManager<Command> {
     public void setup() {
         // setup is not required in command management, commands will add themselves as they are built
         // however, we do add certain commands here
-        XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
+        XIV.getInstance().getLogger().info(String.format("Starting to setup %s.", getClass().getSimpleName()));
 
         Command.newCommand()
                 .cmd("help")

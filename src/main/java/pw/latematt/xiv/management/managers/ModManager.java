@@ -40,7 +40,8 @@ public class ModManager extends ListManager<Mod> {
 
     @Override
     public void setup() {
-        XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
+        XIV.getInstance().getLogger().info(String.format("Starting to setup %s.", getClass().getSimpleName()));
+
         contents.add(new AntiDrown());
         contents.add(new AntiHunger());
         contents.add(new AntiSuffocate());

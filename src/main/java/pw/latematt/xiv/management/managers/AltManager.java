@@ -21,7 +21,7 @@ public class AltManager extends ListManager<AltAccount> {
 
     @Override
     public void setup() {
-        XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + ".");
+        XIV.getInstance().getLogger().info(String.format("Starting to setup %s.", getClass().getSimpleName()));
         new XIVFile("alts", "txt") {
             @Override
             public void load() throws IOException {

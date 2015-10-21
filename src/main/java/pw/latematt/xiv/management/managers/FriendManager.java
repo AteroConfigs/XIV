@@ -27,7 +27,7 @@ public class FriendManager extends MapManager<String, String> {
 
     @Override
     public void setup() {
-        XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
+        XIV.getInstance().getLogger().info(String.format("Starting to setup %s.", getClass().getSimpleName()));
 
         new XIVFile("friends", "json") {
             @Override
