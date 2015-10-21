@@ -48,7 +48,7 @@ public class AltManager extends ListManager<AltAccount> {
                 Files.write(builder.toString().getBytes("UTF-8"), file);
             }
         };
-        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
+        XIV.getInstance().getLogger().info(String.format("Successfully setup %s.", getClass().getSimpleName()));
     }
 
     public void add(String username, String password) {

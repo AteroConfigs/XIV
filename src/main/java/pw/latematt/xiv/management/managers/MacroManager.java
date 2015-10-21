@@ -98,7 +98,7 @@ public class MacroManager extends ListManager<Macro> {
                         ChatLogger.print("Invalid arguments, valid: macro <action>");
                     }
                 }).build();
-        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
+        XIV.getInstance().getLogger().info(String.format("Successfully setup %s.", getClass().getSimpleName()));
     }
 
     public Macro getMacro(int keybind) {

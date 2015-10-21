@@ -217,7 +217,7 @@ public class ModManager extends ListManager<Mod> {
                         ChatLogger.print("Invalid arguments, valid: bind <module> <key>");
                     }
                 }).build();
-        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
+        XIV.getInstance().getLogger().info(String.format("Successfully setup %s, loaded %s.", getClass().getSimpleName(), getContents().size()));
     }
 
     public Mod find(Class clazz) {

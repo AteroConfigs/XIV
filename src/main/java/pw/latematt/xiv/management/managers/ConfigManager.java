@@ -74,7 +74,7 @@ public class ConfigManager {
                     }
                 }).build();
 
-        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
+        XIV.getInstance().getLogger().info(String.format("Successfully setup %s.", getClass().getSimpleName()));
     }
 
     public void parseConfig(File config) throws IOException {

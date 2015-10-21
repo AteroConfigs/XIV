@@ -26,7 +26,7 @@ public class FileManager extends ListManager<XIVFile> {
         }
         setVisible(XIVFile.XIV_DIRECTORY, false);
 
-        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
+        XIV.getInstance().getLogger().info(String.format("Successfully setup %s.", getClass().getSimpleName()));
     }
 
     public void loadAllFiles() {

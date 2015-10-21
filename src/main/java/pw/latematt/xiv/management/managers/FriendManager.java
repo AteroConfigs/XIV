@@ -95,7 +95,7 @@ public class FriendManager extends MapManager<String, String> {
                         ChatLogger.print("Invalid arguments, valid: friend <action>");
                     }
                 }).build();
-        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
+        XIV.getInstance().getLogger().info(String.format("Successfully setup %s.", getClass().getSimpleName()));
     }
 
     public void add(String mcname, String alias) {

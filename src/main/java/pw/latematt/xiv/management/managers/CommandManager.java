@@ -630,7 +630,7 @@ public class CommandManager extends ListManager<Command> {
                 })
                 .build();
 
-        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
+        XIV.getInstance().getLogger().info(String.format("Successfully setup %s, loaded %s(not accurate).", getClass().getSimpleName(), getContents().size()));
     }
 
     public boolean parseCommand(String message) {
