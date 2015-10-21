@@ -119,10 +119,9 @@ public class Speed extends Mod implements CommandHandler {
                                         delay = 0;
                                         break;
                                 }
-                                break;
                         }
                     } else {
-                        delay = 0;
+                        delay = currentMode.getValue() == Mode.NEW ? 0 : 4;
                         shouldBoost = false;
                         mc.timer.timerSpeed = 1.0F;
                         mc.thePlayer.motionX *= 0.98D;
