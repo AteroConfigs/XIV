@@ -23,6 +23,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.commands.FillWorldEdit;
 import pw.latematt.xiv.command.commands.MassMessage;
+import pw.latematt.xiv.command.commands.PluginFinder;
 import pw.latematt.xiv.command.commands.Screenshot;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
@@ -634,6 +635,12 @@ public class CommandManager extends ListManager<Command> {
                 .description("Use world edit in 1.8 servers that don't have world edit.")
                 .aliases("fwe", "we", "//", "worldedit")
                 .handler(new FillWorldEdit()).build();
+        Command.newCommand()
+                .cmd("pluginfinder")
+                .aliases("pl", "pf")
+                .description("Find plugins the server has.")
+                .arguments("<action>")
+                .handler(new PluginFinder()).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<WorldBobbingEvent>() {
             public void onEventCalled(WorldBobbingEvent event) {
@@ -670,10 +677,9 @@ public class CommandManager extends ListManager<Command> {
                         }
                         ChatLogger.print(String.format("Chat Prefix set to: %s", prefix));
                     }
-                })
-                .build();
+                }).build();
 
-        XIV.getInstance().getLogger().info(String.format("Successfully setup %s, loaded %s(not accurate).", getClass().getSimpleName(), getContents().size()));
+        XIV.getInstance().getLogger().info(String.format("Successfully setup %s.", getClass().getSimpleName()));
     }
 
     public boolean parseCommand(String message) {
