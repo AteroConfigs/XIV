@@ -22,7 +22,7 @@ public class ValueSlider extends Element {
         this.value = value;
         this.valuePrettyName = valuePrettyName;
 
-        this.value.setSliderX(96 / 2);
+        this.value.setSliderX(width / 2);
     }
 
     @Override
