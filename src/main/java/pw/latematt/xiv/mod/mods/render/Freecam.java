@@ -6,10 +6,7 @@ import net.minecraft.network.play.client.C0BPacketEntityAction;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.MotionUpdateEvent;
-import pw.latematt.xiv.event.events.MoveEvent;
-import pw.latematt.xiv.event.events.PushOutOfBlocksEvent;
-import pw.latematt.xiv.event.events.SendPacketEvent;
+import pw.latematt.xiv.event.events.*;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.movement.Sneak;
@@ -28,6 +25,7 @@ public class Freecam extends Mod {
     private final Listener motionListener;
     private final Listener moveListener;
     private final Listener pushOutOfBlocksListener;
+    private final Listener cullingListener;
     private EntityOtherPlayerMP entity;
 
     private boolean sneaking = false;
@@ -105,6 +103,13 @@ public class Freecam extends Mod {
                 event.setCancelled(true);
             }
         };
+
+        this.cullingListener = new Listener<CullingEvent>() {
+            @Override
+            public void onEventCalled(CullingEvent event) {
+                event.setCancelled(true);
+            }
+        };
     }
 
     @Override
@@ -126,7 +131,7 @@ public class Freecam extends Mod {
         XIV.getInstance().getListenerManager().add(this.motionListener);
         XIV.getInstance().getListenerManager().add(this.moveListener);
         XIV.getInstance().getListenerManager().add(this.pushOutOfBlocksListener);
-
+        XIV.getInstance().getListenerManager().add(this.cullingListener);
 
         // If you don't want the tracers to go to the freecam body, you can just not do this. Maybe a mode in the future?
         EntityUtils.setReference(entity);
@@ -140,6 +145,7 @@ public class Freecam extends Mod {
         XIV.getInstance().getListenerManager().remove(this.motionListener);
         XIV.getInstance().getListenerManager().remove(this.moveListener);
         XIV.getInstance().getListenerManager().remove(this.pushOutOfBlocksListener);
+        XIV.getInstance().getListenerManager().remove(this.cullingListener);
 
         if (Objects.nonNull(mc.thePlayer) && Objects.nonNull(entity)) {
             mc.thePlayer.noClip = false;

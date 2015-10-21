@@ -21,16 +21,18 @@ public class Sneak extends Mod implements Listener<MotionUpdateEvent> {
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
         boolean sneaking = mc.thePlayer.isSneaking();
+        boolean moving = mc.thePlayer.movementInput.moveForward != 0;
+        boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+        boolean movingCheck = moving || strafing;
         if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
-            boolean moving = mc.thePlayer.movementInput.moveForward != 0;
-            boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-            boolean movingCheck = moving || strafing;
             if (movingCheck && !sneaking) {
                 mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
                 mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
+            } else {
+                mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
             }
         } else if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.POST)) {
-            if (!sneaking) {
+            if (movingCheck && !sneaking) {
                 mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
             }
         }

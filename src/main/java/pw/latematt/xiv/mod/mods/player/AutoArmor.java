@@ -45,8 +45,8 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, Comma
         if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
             int selectedSlotId = -1;
             if (time.hasReached(delay.getValue())) {
-                if (mc.thePlayer.inventory.armorItemInSlot(0) == null) {
-                    for (Item item : boots) {
+                if (mc.thePlayer.inventory.armorItemInSlot(2) == null) {
+                    for (Item item : chestplates) {
                         int slotId = ItemUtils.getSlotID(item);
                         if (slotId != -1) {
                             selectedSlotId = slotId;
@@ -63,8 +63,8 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, Comma
                     }
                 }
 
-                if (mc.thePlayer.inventory.armorItemInSlot(2) == null) {
-                    for (Item item : chestplates) {
+                if (mc.thePlayer.inventory.armorItemInSlot(0) == null) {
+                    for (Item item : boots) {
                         int slotId = ItemUtils.getSlotID(item);
                         if (slotId != -1) {
                             selectedSlotId = slotId;

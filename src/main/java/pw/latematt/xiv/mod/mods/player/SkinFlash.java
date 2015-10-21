@@ -15,7 +15,6 @@ import java.util.Random;
  */
 
 public class SkinFlash extends Mod implements Listener<MotionUpdateEvent> {
-
     private final Random random = new Random();
 
     public SkinFlash() {

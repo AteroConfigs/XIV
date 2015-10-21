@@ -16,19 +16,19 @@ public class ClickGUI extends Mod implements Listener<GuiScreenEvent> {
     @Override
     public void onEventCalled(GuiScreenEvent event) {
         if (!(event.getScreen() instanceof GuiClick)) {
-            this.setEnabled(false);
+            setEnabled(false);
         }
     }
 
     @Override
     public void onEnabled() {
         if (!mc.inGameHasFocus) {
-            this.setEnabled(false);
+            setEnabled(false);
             return;
         }
 
         XIV.getInstance().getListenerManager().add(this);
-        this.mc.displayGuiScreen(XIV.getInstance().getGuiClick());
+        mc.displayGuiScreen(XIV.getInstance().getGuiClick());
     }
 
     @Override

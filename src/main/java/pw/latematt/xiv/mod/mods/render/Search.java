@@ -217,6 +217,27 @@ public class Search extends Mod implements Listener<Render3DEvent>, CommandHandl
                         ChatLogger.print("Invalid arguments, valid: search del <block name/id>");
                     }
                     break;
+                case "range":
+                case "r":
+                    if (arguments.length >= 3) {
+                        String newRangeString = arguments[2];
+                        try {
+                            float newRange = arguments[2].equalsIgnoreCase("-d") ? range.getDefault() : Float.parseFloat(newRangeString);
+                            if (newRange > 256) {
+                                newRange = 256;
+                            } else if (newRange < 10) {
+                                newRange = 10;
+                            }
+
+                            range.setValue(newRange);
+                            ChatLogger.print(String.format("Search Range set to %s", range.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newRangeString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: search range <number>");
+                    }
+                    break;
                 case "clear":
                     blockList.clear();
                     blockCache.clear();
@@ -224,7 +245,7 @@ public class Search extends Mod implements Listener<Render3DEvent>, CommandHandl
                     ChatLogger.print("Search cleared.");
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: add, del, clear");
+                    ChatLogger.print("Invalid action, valid: add, del, range, clear");
             }
         } else {
             ChatLogger.print("Invalid arguments, valid: search <action>");

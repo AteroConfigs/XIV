@@ -103,6 +103,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.CullingEvent;
 import pw.latematt.xiv.mod.mods.render.Freecam;
 
 public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListener
@@ -888,7 +889,9 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
 
     public void func_174970_a(Entity viewEntity, double partialTicks, ICamera camera, int frameCount, boolean playerSpectator)
     {
-        playerSpectator = XIV.getInstance().getModManager().find(Freecam.class).isEnabled();
+        CullingEvent event = new CullingEvent(playerSpectator);
+        XIV.getInstance().getListenerManager().call(event);
+        playerSpectator = event.isCancelled();
 
         if (this.mc.gameSettings.renderDistanceChunks != this.renderDistanceChunks)
         {

@@ -31,12 +31,12 @@ public class XIVChat extends Mod {
             newChat.getChatLines().add(o);
         }
 
-        for (Object o : oldChat.getSentMessages()) {
-            newChat.getSentMessages().add(o);
-        }
-
         for (Object o : oldChat.getField_146253_i()) {
             newChat.getField_146253_i().add(o);
+        }
+
+        for (Object o : oldChat.getSentMessages()) {
+            newChat.getSentMessages().add(o);
         }
 
         return newChat;

@@ -1,6 +1,7 @@
 package pw.latematt.xiv.mod.mods.movement;
 
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiRepair;
 import net.minecraft.client.gui.GuiScreenBook;
 import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraft.client.settings.KeyBinding;
@@ -15,34 +16,34 @@ import pw.latematt.xiv.mod.ModType;
  * @author TehNeon
  */
 public class InventoryWalk extends Mod implements Listener<MotionUpdateEvent> {
-
     public InventoryWalk() {
         super("Inventory Walk", ModType.MOVEMENT);
     }
 
     public void onEventCalled(MotionUpdateEvent event) {
-        if (mc.currentScreen == null) return;
+        if (mc.currentScreen == null)
+            return;
 
         if (mc.currentScreen instanceof GuiChat)
             return;
 
         if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-            mc.thePlayer.rotationPitch -= 4;
+            mc.thePlayer.setAngles(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch - 4);
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-            mc.thePlayer.rotationPitch += 4;
+            mc.thePlayer.setAngles(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch + 4);
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-            mc.thePlayer.rotationYaw -= 4;
+            mc.thePlayer.setAngles(mc.thePlayer.rotationYaw - 4, mc.thePlayer.rotationPitch);
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-            mc.thePlayer.rotationYaw += 4;
+            mc.thePlayer.setAngles(mc.thePlayer.rotationYaw + 4, mc.thePlayer.rotationPitch);
         }
 
-        if (mc.currentScreen instanceof GuiEditSign || mc.currentScreen instanceof GuiScreenBook)
+        if (mc.currentScreen instanceof GuiEditSign || mc.currentScreen instanceof GuiScreenBook || mc.currentScreen instanceof GuiRepair)
             return;
 
         KeyBinding[] keyBindings = {mc.gameSettings.keyBindForward, mc.gameSettings.keyBindBack, mc.gameSettings.keyBindLeft, mc.gameSettings.keyBindRight, mc.gameSettings.keyBindJump};

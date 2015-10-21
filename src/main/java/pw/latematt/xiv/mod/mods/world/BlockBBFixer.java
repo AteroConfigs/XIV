@@ -22,7 +22,6 @@ public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>, Comm
     private final Value<Boolean> cactus = new Value<>("blockbbfixer_cactus", true);
     private final Value<Boolean> cobweb = new Value<>("blockbbfixer_cobweb", true);
     private final Value<Boolean> fire = new Value<>("blockbbfixer_fire", true);
-    private boolean nextTick;
 
     public BlockBBFixer() {
         super("BlockBBFixer", ModType.WORLD);

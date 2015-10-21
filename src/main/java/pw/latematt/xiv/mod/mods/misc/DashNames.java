@@ -26,10 +26,10 @@ public class DashNames extends Mod implements Listener<SendPacketEvent> {
             C01PacketChatMessage message = (C01PacketChatMessage) event.getPacket();
             for (Object o : mc.ingameGUI.getTabList().getPlayerList()) {
                 NetworkPlayerInfo playerInfo = (NetworkPlayerInfo) o;
-                String mcname = StringUtils.stripControlCodes(mc.ingameGUI.getTabList().getPlayerName(playerInfo));
-                if (XIV.getInstance().getFriendManager().isFriend(mcname)) {
-                    String alias = XIV.getInstance().getFriendManager().getContents().get(mcname);
-                    message.setMessage(message.getMessage().replaceAll("(?i)" + Matcher.quoteReplacement("-" + alias), mcname));
+                String mcName = StringUtils.stripControlCodes(mc.ingameGUI.getTabList().getPlayerName(playerInfo));
+                if (XIV.getInstance().getFriendManager().isFriend(mcName)) {
+                    String alias = XIV.getInstance().getFriendManager().getContents().get(mcName);
+                    message.setMessage(message.getMessage().replaceAll("(?i)" + Matcher.quoteReplacement("-" + alias), mcName));
                 }
             }
         }
