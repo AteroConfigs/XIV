@@ -1,4 +1,4 @@
-package pw.latematt.xiv.mod.mods.example;
+package pw.latematt.xiv.mod.mods.disabled.example;
 
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
