@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiRepair;
 import net.minecraft.client.gui.GuiScreenBook;
 import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.MathHelper;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
@@ -28,19 +29,19 @@ public class InventoryWalk extends Mod implements Listener<MotionUpdateEvent> {
             return;
 
         if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-            mc.thePlayer.setAngles(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch - 4);
+            mc.thePlayer.rotationPitch = MathHelper.clamp_float(mc.thePlayer.rotationPitch - 4, -90.0F, 90.0F);
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-            mc.thePlayer.setAngles(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch + 4);
+            mc.thePlayer.rotationPitch = MathHelper.clamp_float(mc.thePlayer.rotationPitch + 4, -90.0F, 90.0F);
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-            mc.thePlayer.setAngles(mc.thePlayer.rotationYaw - 4, mc.thePlayer.rotationPitch);
+            mc.thePlayer.rotationYaw = MathHelper.clamp_float(mc.thePlayer.rotationYaw + 4, -180.0F, 180.0F);
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-            mc.thePlayer.setAngles(mc.thePlayer.rotationYaw + 4, mc.thePlayer.rotationPitch);
+            mc.thePlayer.rotationYaw = MathHelper.clamp_float(mc.thePlayer.rotationYaw - 4, -180.0F, 180.0F);
         }
 
         if (mc.currentScreen instanceof GuiEditSign || mc.currentScreen instanceof GuiScreenBook || mc.currentScreen instanceof GuiRepair)
