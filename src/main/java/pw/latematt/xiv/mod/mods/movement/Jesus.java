@@ -20,9 +20,7 @@ import pw.latematt.xiv.utils.BlockUtils;
  * @author Matthew
  */
 public class Jesus extends Mod {
-    private final Listener blockAddBBListener;
-    private final Listener motionUpdatesListener;
-    private final Listener sendPacketListener;
+    private final Listener blockAddBBListener, motionUpdatesListener, sendPacketListener;
     private boolean nextTick, shouldJump;
 
     public Jesus() {
@@ -42,7 +40,7 @@ public class Jesus extends Mod {
                         shouldJump = false;
                     }
 
-                    if (mc.thePlayer != null && shouldJump && event.getEntity() == mc.thePlayer && !BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.fallDistance < 3.0F && !mc.thePlayer.isSneaking()) {
+                    if (mc.thePlayer != null && shouldJump && event.getEntity() == mc.thePlayer && !BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.fallDistance <= 3.0F && !mc.thePlayer.isSneaking()) {
                         BlockPos pos = event.getPos();
                         event.setAxisAlignedBB(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
                     }

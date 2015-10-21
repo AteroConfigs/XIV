@@ -164,6 +164,7 @@ public class AutoHeal extends Mod implements CommandHandler {
                     useFirst(Items.mushroom_stew);
                     break;
                 case "usepotions":
+                case "usepots":
                     if (arguments.length >= 3) {
                         if (arguments[2].equalsIgnoreCase("-d")) {
                             potion.setValue(potion.getDefault());

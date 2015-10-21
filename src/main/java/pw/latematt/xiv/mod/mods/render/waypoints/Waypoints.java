@@ -4,6 +4,7 @@ import com.google.common.io.Files;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
@@ -58,6 +59,8 @@ public class Waypoints extends Mod implements CommandHandler {
         render3DListener = new Listener<Render3DEvent>() {
             @Override
             public void onEventCalled(Render3DEvent event) {
+                if (!Minecraft.isGuiEnabled())
+                    return;
                 RenderUtils.beginGl();
                 for (Waypoint waypoint : points) {
                     String server;

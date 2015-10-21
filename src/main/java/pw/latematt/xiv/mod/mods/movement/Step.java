@@ -75,11 +75,10 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                         String newHeightString = arguments[2];
                         try {
                             float newHeight = arguments[2].equalsIgnoreCase("-d") ? height.getDefault() : Float.parseFloat(newHeightString);
-                            if (newHeight > 10.0F) {
+                            if (newHeight > 10.0F)
                                 newHeight = 10.0F;
-                            } else if (newHeight < 0.5F) {
+                            else if (newHeight < 0.5F)
                                 newHeight = 0.5F;
-                            }
                             height.setValue(newHeight);
                             mc.thePlayer.stepHeight = height.getValue();
                             ChatLogger.print(String.format("Step Height set to %s", height.getValue()));
@@ -107,9 +106,8 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
         XIV.getInstance().getListenerManager().add(sendPacketListener);
-        if (mc.thePlayer != null) {
+        if (mc.thePlayer != null)
             mc.thePlayer.stepHeight = height.getValue();
-        }
     }
 
     @Override
@@ -117,8 +115,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
         XIV.getInstance().getListenerManager().remove(this);
         XIV.getInstance().getListenerManager().remove(sendPacketListener);
         editPackets = false;
-        if (mc.thePlayer != null) {
+        if (mc.thePlayer != null)
             mc.thePlayer.stepHeight = 0.5F;
-        }
     }
 }

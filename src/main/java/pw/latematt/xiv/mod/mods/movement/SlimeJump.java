@@ -47,10 +47,10 @@ public class SlimeJump extends Mod implements Listener<MotionUpdateEvent>, Comma
         if (arguments.length >= 2) {
             String action = arguments[1];
             switch (action.toLowerCase()) {
-                case "h":
-                case "height":
                 case "multiplier":
                 case "m":
+                case "h":
+                case "height":
                     if (arguments.length >= 3) {
                         String newMultiplierString = arguments[2];
                         try {

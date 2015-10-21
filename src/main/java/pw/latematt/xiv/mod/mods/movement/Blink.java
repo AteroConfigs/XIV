@@ -37,12 +37,12 @@ public final class Blink extends Mod {
             @Override
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
-                    final boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
+                    final boolean moving = mc.thePlayer.movementInput.moveForward != 0;
                     final boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-                    final boolean moving = movingForward || strafing;
+                    final boolean movingCheck = moving || strafing;
 
                     event.setCancelled(true);
-                    if (moving) {
+                    if (movingCheck) {
                         packets.add(event.getPacket());
                     }
                 }
@@ -76,14 +76,14 @@ public final class Blink extends Mod {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this.packetListener);
-        XIV.getInstance().getListenerManager().add(this.renderListener);
+        XIV.getInstance().getListenerManager().add(packetListener);
+        XIV.getInstance().getListenerManager().add(renderListener);
 
         if (Objects.nonNull(mc.thePlayer)) {
-            this.position = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
-            this.position.copyLocationAndAnglesFrom(mc.thePlayer);
+            position = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
+            position.copyLocationAndAnglesFrom(mc.thePlayer);
 
-            EntityUtils.setReference(this.position);
+            EntityUtils.setReference(position);
         }
     }
 
@@ -95,11 +95,11 @@ public final class Blink extends Mod {
         if (Objects.nonNull(mc.thePlayer)) {
             EntityUtils.setReference(mc.thePlayer);
 
-            for (Packet packet : this.packets) {
-                mc.getNetHandler().getNetworkManager().sendPacket(packet);
+            for (Packet packet : packets) {
+                mc.getNetHandler().addToSendQueue(packet);
             }
         }
 
-        this.packets.clear();
+        packets.clear();
     }
 }

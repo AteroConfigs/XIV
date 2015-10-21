@@ -72,26 +72,24 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                 Block border4 = mc.theWorld.getBlockState(new BlockPos(tileChest.getPos().getX() + 1, tileChest.getPos().getY(), tileChest.getPos().getZ())).getBlock();
                 if (chest == Blocks.chest) {
                     if (border != Blocks.chest) {
-                        if (border2 == Blocks.chest) {
+                        if (border2 == Blocks.chest)
                             draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 2.0D, partialTicks);
-                        } else if (border4 == Blocks.chest) {
+                        else if (border4 == Blocks.chest)
                             draw(tileChest.getBlockType(), x, y, z, x + 2.0D, y + 1.0D, z + 1.0D, partialTicks);
-                        } else if (border4 == Blocks.chest) {
+                        else if (border4 == Blocks.chest)
                             draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
-                        } else if ((border != Blocks.chest) && (border2 != Blocks.chest) && (border3 != Blocks.chest) && (border4 != Blocks.chest)) {
+                        else if ((border != Blocks.chest) && (border2 != Blocks.chest) && (border3 != Blocks.chest) && (border4 != Blocks.chest))
                             draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
-                        }
                     }
                 } else if ((chest == Blocks.trapped_chest) && (border != Blocks.trapped_chest)) {
-                    if (border2 == Blocks.trapped_chest) {
+                    if (border2 == Blocks.trapped_chest)
                         draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 2.0D, partialTicks);
-                    } else if (border4 == Blocks.trapped_chest) {
+                    else if (border4 == Blocks.trapped_chest)
                         draw(tileChest.getBlockType(), x, y, z, x + 2.0D, y + 1.0D, z + 1.0D, partialTicks);
-                    } else if (border4 == Blocks.trapped_chest) {
+                    else if (border4 == Blocks.trapped_chest)
                         draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
-                    } else if ((border != Blocks.trapped_chest) && (border2 != Blocks.trapped_chest) && (border3 != Blocks.trapped_chest) && (border4 != Blocks.trapped_chest)) {
+                    else if ((border != Blocks.trapped_chest) && (border2 != Blocks.trapped_chest) && (border3 != Blocks.trapped_chest) && (border4 != Blocks.trapped_chest))
                         draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
-                    }
                 }
             } else if (tileEntity instanceof TileEntityEnderChest && enderChests.getValue()) {
                 TileEntityEnderChest tileEnderChest = (TileEntityEnderChest) tileEntity;

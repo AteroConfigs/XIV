@@ -23,7 +23,6 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
     private final Value<Boolean> nametag = new Value<>("nameprotect_nametag", true);
     private final Value<Boolean> chat = new Value<>("nameprotect_chat", true);
     private final Value<Boolean> middleClickFriends = new Value<>("nameprotect_middle_click_friends", true);
-
     private final Listener mouseClickListener;
 
     public NameProtect() {
@@ -48,6 +47,7 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
                 }
             }
         };
+        setEnabled(true);
 
         Command.newCommand()
                 .cmd("nameprotect")
@@ -56,8 +56,6 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
                 .aliases("np")
                 .handler(this)
                 .build();
-
-        this.setEnabled(true);
     }
 
     @Override
@@ -127,10 +125,9 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
                     }
                     ChatLogger.print(String.format("NameProtect will %s protect in scoreboard.", (scoreboard.getValue() ? "now" : "no longer")));
                     break;
-                case "middleclick":
                 case "middleclickfriends":
-                case "middle":
-                case "click":
+                case "middlecf":
+                case "mcf":
                     if (arguments.length >= 3) {
                         if (arguments[2].equalsIgnoreCase("-d")) {
                             middleClickFriends.setValue(middleClickFriends.getDefault());

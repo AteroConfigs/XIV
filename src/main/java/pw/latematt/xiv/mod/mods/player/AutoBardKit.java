@@ -45,8 +45,8 @@ public class AutoBardKit extends Mod implements Listener<MotionUpdateEvent>, Com
         if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
             int selectedSlotId = -1;
             if (time.hasReached(delay.getValue())) {
-                if (mc.thePlayer.inventory.armorItemInSlot(0) == null) {
-                    int slotId = ItemUtils.getSlotID(boots);
+                if (mc.thePlayer.inventory.armorItemInSlot(2) == null) {
+                    int slotId = ItemUtils.getSlotID(chestplate);
                     if (slotId != -1) {
                         selectedSlotId = slotId;
                     }
@@ -59,8 +59,8 @@ public class AutoBardKit extends Mod implements Listener<MotionUpdateEvent>, Com
                     }
                 }
 
-                if (mc.thePlayer.inventory.armorItemInSlot(2) == null) {
-                    int slotId = ItemUtils.getSlotID(chestplate);
+                if (mc.thePlayer.inventory.armorItemInSlot(0) == null) {
+                    int slotId = ItemUtils.getSlotID(boots);
                     if (slotId != -1) {
                         selectedSlotId = slotId;
                     }

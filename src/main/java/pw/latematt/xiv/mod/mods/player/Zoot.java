@@ -20,7 +20,6 @@ import java.util.Objects;
 /**
  * @author Jack
  */
-
 public class Zoot extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private final Value<Boolean> fire = new Value<>("zoot_fire", true);
     private final Value<Boolean> potions = new Value<>("zoot_potions", true);
@@ -38,27 +37,23 @@ public class Zoot extends Mod implements Listener<MotionUpdateEvent>, CommandHan
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-            if (this.fire.getValue() && mc.thePlayer.isBurning() && !mc.thePlayer.isInsideOfMaterial(Material.fire) && !mc.thePlayer.isInsideOfMaterial(Material.lava)) {
+            if (fire.getValue() && mc.thePlayer.isBurning() && !mc.thePlayer.isInsideOfMaterial(Material.fire) && !mc.thePlayer.isInsideOfMaterial(Material.lava)) {
                 for (int x = 0; x < 20; x++) {
-                    mc.thePlayer.sendQueue.getNetworkManager().sendPacket(new C03PacketPlayer(mc.thePlayer.onGround));
+                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
                 }
             }
 
-            if (!this.potions.getValue()) {
+            if (!potions.getValue())
                 return;
-            }
 
-            if (mc.thePlayer.isPotionActive(Potion.BLINDNESS.getId())) {
+            if (mc.thePlayer.isPotionActive(Potion.BLINDNESS.getId()))
                 mc.thePlayer.removePotionEffect(Potion.BLINDNESS.getId());
-            }
 
-            if (mc.thePlayer.isPotionActive(Potion.NAUSEA.getId())) {
+            if (mc.thePlayer.isPotionActive(Potion.NAUSEA.getId()))
                 mc.thePlayer.removePotionEffect(Potion.NAUSEA.getId());
-            }
 
-            if (mc.thePlayer.isPotionActive(Potion.MINING_FATIGUE.getId())) {
+            if (mc.thePlayer.isPotionActive(Potion.MINING_FATIGUE.getId()))
                 mc.thePlayer.removePotionEffect(Potion.MINING_FATIGUE.getId());
-            }
 
             final Potion[] potionTypes;
             for (int length = (potionTypes = Potion.potionTypes).length, i = 0; i < length; i++) {
@@ -66,7 +61,7 @@ public class Zoot extends Mod implements Listener<MotionUpdateEvent>, CommandHan
                 if (Objects.nonNull(potion) && potion.isBadEffect() && mc.thePlayer.isPotionActive(potion)) {
                     final PotionEffect effect = mc.thePlayer.getActivePotionEffect(potion);
                     for (int x = 0; x < effect.getDuration() / 20; x++) {
-                        mc.thePlayer.sendQueue.getNetworkManager().sendPacket(new C03PacketPlayer(mc.thePlayer.onGround));
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
                     }
                 }
             }

@@ -21,8 +21,7 @@ import pw.latematt.xiv.value.Value;
 public class Fullbright extends Mod implements Listener<LoadWorldEvent>, CommandHandler {
     private final Value<Float> brightness = new Value<>("fullbright_brightness", 0.4F);
     public final Value<Boolean> potion = new Value<>("fullbright_potion", false);
-    private final Listener<MotionUpdateEvent> listener;
-    private float gamma;
+    private final Listener motionUpdateListener;
 
     public Fullbright() {
         super("Fullbright", ModType.RENDER, Keyboard.KEY_C, 0xFFFCFDCD);
@@ -35,7 +34,7 @@ public class Fullbright extends Mod implements Listener<LoadWorldEvent>, Command
                 .handler(this)
                 .build();
 
-        this.listener = new Listener<MotionUpdateEvent>() {
+        this.motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) { // Change this if needed, never done it on world load event but that might work
                 if (potion.getValue()) {
@@ -113,23 +112,17 @@ public class Fullbright extends Mod implements Listener<LoadWorldEvent>, Command
 
     @Override
     public void onEnabled() {
-        if (mc.theWorld != null) {
-            if (potion.getValue()) {
-                gamma = mc.gameSettings.gammaSetting;
-                mc.gameSettings.gammaSetting = 1.0F;
-            } else {
-                editTable(mc.theWorld, brightness.getValue());
-            }
+        if (mc.theWorld != null && !potion.getValue()) {
+            editTable(mc.theWorld, brightness.getValue());
         }
         XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(this.listener);
+        XIV.getInstance().getListenerManager().add(motionUpdateListener);
     }
 
     @Override
     public void onDisabled() {
         if (mc.theWorld != null) {
-            if (this.potion.getValue()) {
-                mc.gameSettings.gammaSetting = gamma;
+            if (potion.getValue()) {
                 mc.thePlayer.removePotionEffect(Potion.NIGHT_VISION.getId());
             } else {
                 for (int var2 = 0; var2 <= 15; ++var2) {
@@ -139,6 +132,6 @@ public class Fullbright extends Mod implements Listener<LoadWorldEvent>, Command
             }
         }
         XIV.getInstance().getListenerManager().remove(this);
-        XIV.getInstance().getListenerManager().remove(this.listener);
+        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
     }
 }

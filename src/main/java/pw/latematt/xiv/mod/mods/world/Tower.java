@@ -10,11 +10,9 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 
 /**
- * @author Jack
- * @author Matthew
+ * @author Rederpz
  */
 public class Tower extends Mod implements Listener<MotionUpdateEvent> {
-
     public Tower() {
         super("Tower", ModType.WORLD, Keyboard.KEY_NONE, 0xFF0099CC);
     }

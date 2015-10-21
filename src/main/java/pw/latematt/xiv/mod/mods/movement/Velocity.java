@@ -20,8 +20,7 @@ import pw.latematt.xiv.value.Value;
 public class Velocity extends Mod implements CommandHandler {
     private final Value<Float> reducedVelocity = new Value<>("velocity_reduction", 0.0F);
     private final Value<Boolean> liquid = new Value<>("velocity_water", true);
-    private final Listener readPacketListener;
-    private final Listener liquidVelocityListener;
+    private final Listener readPacketListener, liquidVelocityListener;
 
     public Velocity() {
         super("Velocity", ModType.MOVEMENT, Keyboard.KEY_BACKSLASH, 0xFF36454F, true);
