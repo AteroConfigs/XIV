@@ -72,7 +72,7 @@ public class AntiTabComplete extends Mod implements Listener<SendPacketEvent>, C
         if (event.getPacket() instanceof C14PacketTabComplete) {
             C14PacketTabComplete packet = (C14PacketTabComplete) event.getPacket();
 
-            if (packet.getMessage().startsWith(".")) {
+            if (packet.getMessage().startsWith(XIV.getInstance().getCommandManager().getPrefix())) {
                 String[] arguments = packet.getMessage().split(" ");
                 String[] messages = new String[]{"hey what's up ", "dude ", "hey ", "hi ", "man ", "yo ", "howdy ", "omg "};
                 Random random = new Random();

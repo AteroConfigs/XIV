@@ -72,7 +72,7 @@ public class CommandManager extends ListManager<Command> {
     public void setup() {
         // setup is not required in command management, commands will add themselves as they are built
         // however, we do add certain commands here
-        XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + "...");
+        XIV.getInstance().getLogger().info(String.format("Starting to setup %s.", getClass().getSimpleName()));
 
         Command.newCommand()
                 .cmd("help")
@@ -139,9 +139,9 @@ public class CommandManager extends ListManager<Command> {
                     int n = 0;
                     for (final Object o : mc.theWorld.getLoadedEntityList()) {
                         if (o instanceof Entity) {
-                            final Entity entity = (Entity)o;
+                            final Entity entity = (Entity) o;
                             if (entity instanceof EntityAnimal) {
-                                final EntityAnimal entityAnimal = (EntityAnimal)entity;
+                                final EntityAnimal entityAnimal = (EntityAnimal) entity;
                                 if (!entityAnimal.isChild() && !entityAnimal.isInLove() && Objects.equals(entityAnimal.getGrowingAge(), 0) && mc.thePlayer.getDistanceToEntity(entityAnimal) <= (mc.thePlayer.canEntityBeSeen(entityAnimal) ? 6 : 3)) {
                                     for (int i = 36; i < 45; i++) {
                                         final ItemStack stack = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
@@ -672,7 +672,7 @@ public class CommandManager extends ListManager<Command> {
                 })
                 .build();
 
-        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
+        XIV.getInstance().getLogger().info(String.format("Successfully setup %s, loaded %s(not accurate).", getClass().getSimpleName(), getContents().size()));
     }
 
     public boolean parseCommand(String message) {

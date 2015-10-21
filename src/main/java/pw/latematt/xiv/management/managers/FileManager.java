@@ -18,7 +18,8 @@ public class FileManager extends ListManager<XIVFile> {
 
     @Override
     public void setup() {
-        XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + ".");
+        XIV.getInstance().getLogger().info(String.format("Starting to setup %s.", getClass().getSimpleName()));
+
         if ((!XIVFile.XIV_DIRECTORY.exists()) && XIVFile.XIV_DIRECTORY.mkdirs()) {
             XIV.getInstance().getLogger().info("Successfully created XIV directory at \"" + XIVFile.XIV_DIRECTORY.getAbsolutePath() + "\".");
         } else if (!XIVFile.XIV_DIRECTORY.exists()) {
@@ -26,7 +27,7 @@ public class FileManager extends ListManager<XIVFile> {
         }
         setVisible(XIVFile.XIV_DIRECTORY, false);
 
-        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
+        XIV.getInstance().getLogger().info(String.format("Successfully setup %s.", getClass().getSimpleName()));
     }
 
     public void loadAllFiles() {

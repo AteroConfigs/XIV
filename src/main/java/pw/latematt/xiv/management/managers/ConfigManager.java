@@ -17,7 +17,8 @@ public class ConfigManager {
     private final File configDir = new File(XIVFile.XIV_DIRECTORY + File.separator + "configs");
 
     public void setup() {
-        XIV.getInstance().getLogger().info("Starting to setup " + getClass().getSimpleName() + ".");
+        XIV.getInstance().getLogger().info(String.format("Starting to setup %s.", getClass().getSimpleName()));
+
         if ((!configDir.isDirectory() || !configDir.exists()) && configDir.mkdir()) {
             XIV.getInstance().getLogger().info("Successfully created config directory at \"" + XIVFile.XIV_DIRECTORY.getAbsolutePath() + "\".");
         } else if (!configDir.isDirectory() || !configDir.exists()) {
@@ -74,7 +75,7 @@ public class ConfigManager {
                     }
                 }).build();
 
-        XIV.getInstance().getLogger().info("Successfully setup " + getClass().getSimpleName() + ".");
+        XIV.getInstance().getLogger().info(String.format("Successfully setup %s.", getClass().getSimpleName()));
     }
 
     public void parseConfig(File config) throws IOException {
