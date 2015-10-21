@@ -40,19 +40,18 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
     public void onEventCalled(MotionUpdateEvent event) {
         final EntityPlayer target = this.getClosestPlayerToCursor(this.fov.getValue());
         if (Objects.nonNull(target)) {
+            mc.thePlayer.rotationYaw = mc.thePlayer.rotationYaw + (EntityUtils.getYawChange(target) / speed.getValue());
             if (pitch.getValue())
                 mc.thePlayer.rotationPitch = mc.thePlayer.rotationPitch + (EntityUtils.getPitchChange(target) / speed.getValue());
-            mc.thePlayer.rotationYaw = mc.thePlayer.rotationYaw + (EntityUtils.getYawChange(target) / speed.getValue());
         }
     }
 
     private EntityPlayer getClosestPlayerToCursor(final float angle) {
         float distance = angle;
         EntityPlayer tempPlayer = null;
-        for (final Object o : mc.theWorld.playerEntities) {
-            final EntityPlayer player = (EntityPlayer) o;
+        for (final EntityPlayer player : mc.theWorld.playerEntities) {
 
-            if (this.isValidEntity(player)) {
+            if (isValidEntity(player)) {
                 final float yaw = EntityUtils.getYawChange(player);
                 final float pitch = EntityUtils.getPitchChange(player);
 
@@ -70,6 +69,11 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
         }
 
         return tempPlayer;
+    }
+
+    private boolean isValidEntity(final EntityPlayer player) {
+        return Objects.nonNull(player) && player.isEntityAlive() && player.getDistanceToEntity(mc.thePlayer) <= this.range.getValue() &&
+                player.ticksExisted > 20 && !player.isInvisibleToPlayer(mc.thePlayer) && !XIV.getInstance().getFriendManager().isFriend(player.getName());
     }
 
     @Override
@@ -144,11 +148,6 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
         } else {
             ChatLogger.print("Invalid arguments, valid: smoothaimbot <action>");
         }
-    }
-
-    private boolean isValidEntity(final EntityPlayer player) {
-        return Objects.nonNull(player) && player.isEntityAlive() && player.getDistanceToEntity(mc.thePlayer) <= this.range.getValue() &&
-                player.ticksExisted > 20 && !player.isInvisibleToPlayer(mc.thePlayer) && !XIV.getInstance().getFriendManager().isFriend(player.getName());
     }
 
     @Override

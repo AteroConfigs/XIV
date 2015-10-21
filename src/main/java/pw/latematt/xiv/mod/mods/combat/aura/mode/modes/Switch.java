@@ -33,9 +33,16 @@ public class Switch extends AuraMode {
                     .filter(entity -> entity instanceof EntityLivingBase)
                     .filter(entity -> killAura.isValidEntity((EntityLivingBase) entity))
                     .sorted((entity1, entity2) -> {
-                        double entity1YawDistance = EntityUtils.getYawChange((EntityLivingBase) entity1);
-                        double entity2YawDistance = EntityUtils.getYawChange((EntityLivingBase) entity2);
-                        return entity1YawDistance > entity2YawDistance ? 1 : entity2YawDistance > entity1YawDistance ? -1 : 0;
+                        float yaw = EntityUtils.getYawChange((EntityLivingBase) entity1);
+                        float pitch = EntityUtils.getPitchChange((EntityLivingBase) entity1);
+                        final float firstEntityDistance = (yaw + pitch) / 2F;
+
+                        yaw = EntityUtils.getYawChange((EntityLivingBase) entity2);
+                        pitch = EntityUtils.getPitchChange((EntityLivingBase) entity2);
+                        final float secondEntityDistance = (yaw + pitch) / 2F;
+
+                        return firstEntityDistance > secondEntityDistance ? -1 :
+                                secondEntityDistance > firstEntityDistance ? 1 : 0;
                     }).forEach(entity -> entities.add((EntityLivingBase) entity));
         }
 

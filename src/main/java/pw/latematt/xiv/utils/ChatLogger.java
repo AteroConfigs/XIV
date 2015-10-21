@@ -12,7 +12,7 @@ public class ChatLogger {
     private static boolean enabled = true;
 
     public static void print(String message) {
-        if(enabled) {
+        if (enabled) {
             if (Minecraft.getMinecraft().thePlayer != null) {
                 Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(PREFIX + message));
             } else {

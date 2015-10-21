@@ -60,7 +60,7 @@ public class ConfigManager {
                                 } catch (IOException e) {
                                     if (output) {
                                         ChatLogger.print("Failed to parse config, a stacktrace has been printed.");
-                                    }else{
+                                    } else {
                                         ChatLogger.setEnabled(true);
                                     }
                                     e.printStackTrace();

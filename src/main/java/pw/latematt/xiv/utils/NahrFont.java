@@ -238,12 +238,12 @@ public class NahrFont {
 
     private boolean isFormatColor(char par0) {
         return par0 >= '0' && par0 <= '9' || par0 >= 'a' && par0 <= 'f'
-                || par0 >= 'A' && par0 <= 'F' ;
+                || par0 >= 'A' && par0 <= 'F';
     }
 
     private boolean isFormatSpecial(char par0) {
         return par0 >= 'k' && par0 <= 'o' || par0 >= 'K' && par0 <= 'O'
-                || par0 == 'r' || par0 == 'R' ;
+                || par0 == 'r' || par0 == 'R';
     }
 
     public List listFormattedStringToWidth(String s, int width) {

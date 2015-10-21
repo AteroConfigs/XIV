@@ -43,16 +43,6 @@ public class AutoLog extends Mod implements Listener<MotionUpdateEvent>, Command
     }
 
     @Override
-    public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
-    }
-
-    @Override
-    public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
-    }
-
-    @Override
     public void onCommandRan(String message) {
         String[] arguments = message.split(" ");
         if (arguments.length >= 2) {
@@ -63,9 +53,7 @@ public class AutoLog extends Mod implements Listener<MotionUpdateEvent>, Command
                         String newHealthString = arguments[2];
                         try {
                             float newHealth = arguments[2].equalsIgnoreCase("-d") ? health.getDefault() : Float.parseFloat(newHealthString);
-                            if (newHealth > 19.0F) {
-                                newHealth = 19.0F;
-                            } else if (newHealth < 1.0F) {
+                            if (newHealth < 1.0F) {
                                 newHealth = 1.0F;
                             }
                             health.setValue(newHealth);
@@ -81,5 +69,15 @@ public class AutoLog extends Mod implements Listener<MotionUpdateEvent>, Command
         } else {
             ChatLogger.print("Invalid arguments, valid: autolog <action>");
         }
+    }
+
+    @Override
+    public void onEnabled() {
+        XIV.getInstance().getListenerManager().add(this);
+    }
+
+    @Override
+    public void onDisabled() {
+        XIV.getInstance().getListenerManager().remove(this);
     }
 }

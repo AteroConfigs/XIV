@@ -21,11 +21,11 @@ import java.util.Objects;
  * @author Rederpz
  */
 public class Speed extends Mod implements CommandHandler {
+    private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.NEW);
+    private final Value<Boolean> fastLadder = new Value<>("speed_fast_ladder", true);
     private final Listener motionUpdateListener, moveListener;
     private int delay;
     private boolean shouldBoost;
-    private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.NEW);
-    private final Value<Boolean> fastLadder = new Value<>("speed_fast_ladder", true);
 
     public Speed() {
         super("Speed", ModType.MOVEMENT, Keyboard.KEY_F, 0xFFDC5B18);
@@ -49,34 +49,25 @@ public class Speed extends Mod implements CommandHandler {
                 if (currentMode.getValue() == Mode.NEW) {
                     if (shouldBoost) {
                         double speed = 2.035D;
-
-                        if (mc.thePlayer.moveStrafing != 0.0F) {
+                        if (mc.thePlayer.moveStrafing != 0.0F)
                             speed -= 0.04D;
-                        }
-
-                        if (!mc.thePlayer.isSprinting()) {
+                        if (!mc.thePlayer.isSprinting())
                             speed += 0.15D;
-                        }
-
-                        if (BlockUtils.isOnIce(mc.thePlayer)) {
+                        if (BlockUtils.isOnIce(mc.thePlayer))
                             speed = 4.0D;
-                            delay = 0;
-                        }
-
-                        if (mc.thePlayer.hurtTime > 0) {
+                        if (mc.thePlayer.hurtTime > 0)
                             speed += 0.01D;
-                        }
-
                         event.setMotionX(event.getMotionX() * speed);
                         event.setMotionZ(event.getMotionZ() * speed);
 
-                        if (delay >= 5) {
+                        if (!BlockUtils.isOnIce(mc.thePlayer) && delay >= 5) {
                             mc.timer.timerSpeed = 1.3F;
                             if (delay >= 6) {
                                 delay = 0;
                             }
                         } else {
                             mc.timer.timerSpeed = 1.0F;
+                            delay = 0;
                         }
                     }
                 }
@@ -86,65 +77,57 @@ public class Speed extends Mod implements CommandHandler {
         this.motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                Step step = (Step) XIV.getInstance().getModManager().find("step");
-                boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
-                boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
-                boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-                boolean moving = movingForward && strafing || movingForward;
                 if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
+                    Step step = (Step) XIV.getInstance().getModManager().find("step");
+                    boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
+                    boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
+                    boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+                    boolean moving = movingForward && strafing || movingForward;
+
+                    boolean valid = mc.thePlayer.onGround && !BlockUtils.isOnLiquid(mc.thePlayer) && !BlockUtils.isInLiquid(mc.thePlayer) && !editingPackets && moving;
                     if (currentMode.getValue() == Mode.OLD) {
-                        if (!mc.thePlayer.onGround || BlockUtils.isInLiquid(mc.thePlayer) || editingPackets || !moving) {
-                            delay = 0;
-                            mc.timer.timerSpeed = 1.0F;
-                            shouldBoost = false;
-                        } else {
-                            double speed = 3.1D;
-                            double slow = 1.425D;
+                        if (!valid)
+                            delay = -1;
 
-                            if (BlockUtils.isOnIce(mc.thePlayer)) {
-                                mc.thePlayer.motionX *= 1.51D;
-                                mc.thePlayer.motionZ *= 1.51D;
+                        double speed = 3.1D;
+                        double slow = 1.425D;
+                        if (mc.thePlayer.moveStrafing != 0.0F)
+                            speed -= 0.1D;
+                        if (mc.thePlayer.isInWater())
+                            speed -= 0.1D;
 
-                                return;
-                            }
-
-                            if (BlockUtils.isOnLiquid(mc.thePlayer)) {
-                                return;
-                            }
-
-                            if (mc.thePlayer.moveStrafing != 0.0F) {
-                                speed -= 0.1D;
-                            }
-
-                            if (mc.thePlayer.isInWater()) {
-                                speed -= 0.1D;
-                            }
-
-                            ++delay;
-                            switch (delay) {
-                                case 1:
-                                    mc.timer.timerSpeed = 1.325F;
-                                    mc.thePlayer.motionX *= speed;
-                                    mc.thePlayer.motionZ *= speed;
-                                    break;
-                                case 2:
-                                    mc.timer.timerSpeed = 1.0F;
-                                    mc.thePlayer.motionX /= slow;
-                                    mc.thePlayer.motionZ /= slow;
-                                    break;
-                                case 3:
-                                    mc.timer.timerSpeed = 1.05F;
-                                    break;
-                                case 4:
-                                    mc.timer.timerSpeed = 1.0F;
-                                    delay = 0;
-                                    break;
-                            }
+                        if (BlockUtils.isOnIce(mc.thePlayer)) {
+                            mc.thePlayer.motionX *= 1.51D;
+                            mc.thePlayer.motionZ *= 1.51D;
+                            return;
                         }
-                    }
-                } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
-                    if (currentMode.getValue() == Mode.NEW) {
-                        if (!mc.thePlayer.onGround || BlockUtils.isInLiquid(mc.thePlayer) || editingPackets || !moving) {
+
+                        switch (++delay) {
+                            case 1:
+                                mc.timer.timerSpeed = 1.325F;
+                                mc.thePlayer.motionX *= speed;
+                                mc.thePlayer.motionZ *= speed;
+                                break;
+                            case 2:
+                                mc.timer.timerSpeed = 1.0F;
+                                mc.thePlayer.motionX /= slow;
+                                mc.thePlayer.motionZ /= slow;
+                                break;
+                            case 3:
+                                mc.timer.timerSpeed = 1.05F;
+                                break;
+                            case 4:
+                                mc.timer.timerSpeed = 1.0F;
+                                delay = 0;
+                                break;
+                            default:
+                                mc.timer.timerSpeed = 1.0F;
+                                mc.thePlayer.motionX *= 0.98D;
+                                mc.thePlayer.motionZ *= 0.98D;
+                                break;
+                        }
+                    } else if (currentMode.getValue() == Mode.NEW) {
+                        if (!valid || BlockUtils.isOnLiquid(mc.thePlayer)) {
                             delay = 0;
                             mc.timer.timerSpeed = 1.0F;
                             shouldBoost = false;
@@ -207,7 +190,7 @@ public class Speed extends Mod implements CommandHandler {
                     ChatLogger.print(String.format("Speed will %s go fast on ladders.", (fastLadder.getValue() ? "now" : "no longer")));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: bypass, fastladder, speed");
+                    ChatLogger.print("Invalid action, valid: mode, fastladder");
                     break;
             }
         } else {

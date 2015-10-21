@@ -130,6 +130,8 @@ public class KillAura extends Mod implements CommandHandler {
             return false;
         if (entity == mc.thePlayer)
             return false;
+        if (entity == EntityUtils.getReference())
+            return false;
         if (EntityUtils.getAngle(EntityUtils.getEntityRotations(entity)) > fov.getValue())
             return false;
         if (!entity.isEntityAlive())
@@ -424,14 +426,6 @@ public class KillAura extends Mod implements CommandHandler {
         } else {
             ChatLogger.print("Invalid arguments, valid: killaura <action>");
         }
-    }
-
-    public AuraMode getMode() {
-        return mode.getValue();
-    }
-
-    public void setMode(AuraMode mode) {
-        this.mode.setValue(mode);
     }
 
     public Long getDelay() {

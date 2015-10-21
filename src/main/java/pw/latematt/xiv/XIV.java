@@ -2,7 +2,6 @@ package pw.latematt.xiv;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.management.managers.*;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.tabgui.GuiTabHandler;

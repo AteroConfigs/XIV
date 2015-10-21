@@ -19,7 +19,7 @@ public class AutoAccept extends Mod implements Listener<ReadPacketEvent> {
     @Override
     public void onEventCalled(ReadPacketEvent event) {
         if (event.getPacket() instanceof S02PacketChat) {
-            final S02PacketChat packetChat = (S02PacketChat)event.getPacket();
+            final S02PacketChat packetChat = (S02PacketChat) event.getPacket();
             XIV.getInstance().getFriendManager().getContents().keySet().stream().filter(friend ->
                     packetChat.func_148915_c().getFormattedText().contains(friend) &&
                             (packetChat.func_148915_c().getFormattedText().contains("has requested to teleport to you.")) ||

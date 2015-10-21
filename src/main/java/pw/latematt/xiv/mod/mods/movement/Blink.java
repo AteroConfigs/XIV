@@ -25,8 +25,7 @@ import java.util.Objects;
  */
 
 public final class Blink extends Mod {
-    private final Listener<SendPacketEvent> packetListener;
-    private final Listener<Render3DEvent> renderListener;
+    private final Listener packetListener, renderListener;
     private final List<Packet> packets = new ArrayList<>();
     private EntityOtherPlayerMP position;
 
@@ -96,8 +95,8 @@ public final class Blink extends Mod {
         if (Objects.nonNull(mc.thePlayer)) {
             EntityUtils.setReference(mc.thePlayer);
 
-            for (final Packet packet : this.packets) {
-                mc.thePlayer.sendQueue.getNetworkManager().sendPacket(packet);
+            for (Packet packet : this.packets) {
+                mc.getNetHandler().getNetworkManager().sendPacket(packet);
             }
         }
 

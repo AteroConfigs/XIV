@@ -71,9 +71,9 @@ public class FillWorldEdit implements CommandHandler, Listener<Render3DEvent> {
                     if (pos1 != null) {
                         ChatLogger.print("First Position set to: " + pos1);
 
-                        if(pos2 != null) {
+                        if (pos2 != null) {
                             XIV.getInstance().getListenerManager().add(this);
-                        }else{
+                        } else {
                             XIV.getInstance().getListenerManager().remove(this);
                         }
                     }
@@ -94,17 +94,17 @@ public class FillWorldEdit implements CommandHandler, Listener<Render3DEvent> {
                     if (pos2 != null) {
                         ChatLogger.print("Second Position set to: " + pos2);
 
-                        if(pos1 != null) {
+                        if (pos1 != null) {
                             XIV.getInstance().getListenerManager().add(this);
-                        }else{
+                        } else {
                             XIV.getInstance().getListenerManager().remove(this);
                         }
                     }
                     break;
                 case "set":
-                    if(arguments.length >= 3) {
+                    if (arguments.length >= 3) {
                         placeBlocks(arguments[2]);
-                    }else{
+                    } else {
                         ChatLogger.print("Invalid arguments, valid: fillworldedit set <block>");
                     }
                     break;

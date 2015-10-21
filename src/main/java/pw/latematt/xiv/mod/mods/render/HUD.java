@@ -189,7 +189,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             PotionEffect effect = (PotionEffect) o;
             String name = I18n.format(effect.getEffectName());
 
-            if (Objects.equals(effect.getPotionID(), Potion.NIGHT_VISION.getId()) && XIV.getInstance().getModManager().find(Fullbright.class).isEnabled() && ((Fullbright)XIV.getInstance().getModManager().find(Fullbright.class)).potion.getValue()) {
+            if (Objects.equals(effect.getPotionID(), Potion.NIGHT_VISION.getId()) && XIV.getInstance().getModManager().find(Fullbright.class).isEnabled() && ((Fullbright) XIV.getInstance().getModManager().find(Fullbright.class)).potion.getValue()) {
                 continue;
             }
 
@@ -204,8 +204,14 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             }
 
             int var1 = effect.getDuration() / 20;
+            int var2 = var1 / 60;
             var1 %= 60;
-            name = String.format("%s \247f(\247%s%s\247f)", name, var1 <= 5 ? "4" : "7", Potion.getDurationString(effect));
+            char color = '7';
+            if (var2 == 0 && var1 <= 10)
+                color = 'c';
+            if (var2 == 0 && var1 <= 5)
+                color = '4';
+            name = String.format("%s \2477(\247%s%s\2477)", name, color, Potion.getDurationString(effect));
             mc.fontRendererObj.drawStringWithShadow(name, x - mc.fontRendererObj.getStringWidth(name), y, Potion.potionTypes[effect.getPotionID()].getLiquidColor());
             y -= 10;
         }
