@@ -139,9 +139,9 @@ public class CommandManager extends ListManager<Command> {
                     int n = 0;
                     for (final Object o : mc.theWorld.getLoadedEntityList()) {
                         if (o instanceof Entity) {
-                            final Entity entity = (Entity)o;
+                            final Entity entity = (Entity) o;
                             if (entity instanceof EntityAnimal) {
-                                final EntityAnimal entityAnimal = (EntityAnimal)entity;
+                                final EntityAnimal entityAnimal = (EntityAnimal) entity;
                                 if (!entityAnimal.isChild() && !entityAnimal.isInLove() && Objects.equals(entityAnimal.getGrowingAge(), 0) && mc.thePlayer.getDistanceToEntity(entityAnimal) <= (mc.thePlayer.canEntityBeSeen(entityAnimal) ? 6 : 3)) {
                                     for (int i = 36; i < 45; i++) {
                                         final ItemStack stack = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
