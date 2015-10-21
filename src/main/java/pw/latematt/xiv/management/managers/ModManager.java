@@ -140,11 +140,8 @@ public class ModManager extends ListManager<Mod> {
                 .description("Provides a list of all modules.")
                 .aliases("modules", "hacks", "cheats", "lm")
                 .handler(message -> {
-                    List<Mod> moduleList = XIV.getInstance().getModManager().getContents();
-                    StringBuilder mods = new StringBuilder("Mods (" + moduleList.size() + "): ");
-                    for (Mod mod : moduleList) {
-                        mods.append(mod.isEnabled() ? "\247a" : "\247c").append(mod.getName()).append("\247r, ");
-                    }
+                    StringBuilder mods = new StringBuilder("Mods (" + XIV.getInstance().getModManager().getContents().size() + "): ");
+                    XIV.getInstance().getModManager().getContents().stream().forEach(mod -> mods.append(mod.isEnabled() ? "\247a" : "\247c").append(mod.getName()).append("\247r, "));
                     ChatLogger.print(mods.toString().substring(0, mods.length() - 2));
                 }).build();
 
