@@ -10,13 +10,17 @@ public class SliderValue<T> extends Value<T> {
     private DecimalFormat format;
     private float sliderX;
 
-    public SliderValue(String name, T value, T min, T max, DecimalFormat format) {
-        super(name, value);
+    public SliderValue(String name, T value, T min, T max, DecimalFormat format, boolean autoAdd) {
+        super(name, value, autoAdd);
 
         this.start = value;
         this.min = min;
         this.max = max;
         this.format = format;
+    }
+
+    public SliderValue(String name, T value, T min, T max, DecimalFormat format) {
+        this(name, value, min, max, format, true);
     }
 
     public T getDefaultValue() {

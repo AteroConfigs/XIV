@@ -10,10 +10,16 @@ public class Value<T> {
     private T value;
     private T def;
 
-    public Value(String name, T value) {
+    public Value(String name, T value, boolean autoAdd) {
         this.name = name;
         this.def = this.value = value;
-        XIV.getInstance().getValueManager().getContents().add(this);
+        if(autoAdd) {
+            XIV.getInstance().getValueManager().getContents().add(this);
+        }
+    }
+
+    public Value(String name, T value) {
+        this(name, value, true);
     }
 
     public String getName() {
