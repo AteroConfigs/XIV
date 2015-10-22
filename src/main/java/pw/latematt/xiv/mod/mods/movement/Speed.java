@@ -83,12 +83,15 @@ public class Speed extends Mod implements CommandHandler {
             public void onEventCalled(MotionUpdateEvent event) {
                 if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
                     Step step = (Step) XIV.getInstance().getModManager().find("step");
-                    boolean editingPackets = !Objects.isNull(step) && step.isEditingPackets();
+                    boolean editingPackets = step != null && step.isEditingPackets();
                     boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
                     boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
                     boolean moving = movingForward && strafing || movingForward;
 
-                    boolean valid = mc.thePlayer.onGround && !BlockUtils.isOnLiquid(mc.thePlayer) && !BlockUtils.isInLiquid(mc.thePlayer) && !editingPackets && moving;
+                    boolean valid = mc.thePlayer.onGround &&
+                            !BlockUtils.isOnLiquid(mc.thePlayer) &&
+                            !BlockUtils.isInLiquid(mc.thePlayer) &&
+                            !editingPackets && moving;
                     if (valid) {
                         switch (currentMode.getValue()) {
                             case NEW:
@@ -137,10 +140,10 @@ public class Speed extends Mod implements CommandHandler {
     }
 
     private double getSpeedPotionSlowdown(double speed) {
-        if (Objects.isNull(mc.thePlayer.getActivePotionEffect(Potion.SPEED)))
+        if (mc.thePlayer.getActivePotionEffect(Potion.SPEED) == null)
             return speed;
         PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
-        speed -= (effect.getAmplifier() > 3 ? 3 : effect.getAmplifier()) - 0.3D;
+        speed -= (0.20000000298023224D * (effect.getAmplifier() > 0 ? effect.getAmplifier() : 1)) - 0.3D;
         if (speed < 1.0D)
             speed = 1.0D;
         return speed;
