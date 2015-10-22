@@ -63,7 +63,7 @@ public class AvidTheme extends ClickTheme {
             this.font = new NahrFont(new Font("Verdana", Font.BOLD, 17), 17);
         }
 
-        element.setWidth(96);
+        element.setWidth(112);
         element.setHeight(this.getElementHeight());
 
         RenderUtils.drawBorderedRect(x, y + 1, x + element.getWidth(), y + height, 0x801E1E1E, 0xFF212121);

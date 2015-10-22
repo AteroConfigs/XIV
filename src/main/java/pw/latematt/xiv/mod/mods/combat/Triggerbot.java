@@ -24,6 +24,7 @@ import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.Timer;
 import pw.latematt.xiv.value.Value;
 
+import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.Random;
 
