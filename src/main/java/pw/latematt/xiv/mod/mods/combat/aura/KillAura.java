@@ -28,6 +28,7 @@ import pw.latematt.xiv.mod.mods.combat.aura.mode.modes.Switch;
 import pw.latematt.xiv.mod.mods.player.AutoHeal;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 import java.util.Random;
@@ -37,10 +38,10 @@ import java.util.Random;
  */
 public class KillAura extends Mod implements CommandHandler {
     private final Listener motionUpdateListener, sendPacketListener, playerDeathListener;
-    public final Value<Long> delay = new Value<>("killaura_delay", 166L);
-    public final Value<Long> randomDelay = new Value<>("killaura_random_delay", 0L);
-    public final Value<Double> range = new Value<>("killaura_range", 3.8D);
-    public final Value<Integer> fov = new Value<>("killaura_fov", 360);
+    public final ClampedValue<Long> delay = new ClampedValue<>("killaura_delay", 166L, 0L, 1000L);
+    public final ClampedValue<Long> randomDelay = new ClampedValue<>("killaura_random_delay", 0L, 0L, 1000L);
+    public final ClampedValue<Double> range = new ClampedValue<>("killaura_range", 3.8D, 3.0D, 6.0D);
+    public final ClampedValue<Integer> fov = new ClampedValue<>("killaura_fov", 360, 0, 360);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
     private final Value<Boolean> mobs = new Value<>("killaura_mobs", false);
     private final Value<Boolean> animals = new Value<>("killaura_animals", false);

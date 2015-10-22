@@ -218,8 +218,39 @@ public class Panel {
         }
     }
 
+    public void addSliders() {
+        float elementY = 4;
+
+        for (Value value : XIV.getInstance().getValueManager().getContents()) {
+            String prefix = value.getName();
+
+            if(value.getName().contains("_")) {
+                prefix = value.getName().substring(value.getName().split("_")[0].length());
+            }
+
+            String actualName = value.getName().replaceAll(prefix, "");
+            String prettyName = "";
+            String[] actualNameSplit = actualName.split("_");
+            if (actualNameSplit.length > 0) {
+                for (String arg : actualNameSplit) {
+                    arg = arg.substring(0, 1).toUpperCase() + arg.substring(1, arg.length());
+                    prettyName += arg + " ";
+                }
+            } else {
+                prettyName = actualNameSplit[0].substring(0, 1).toUpperCase() + actualNameSplit[0].substring(1, actualNameSplit[0].length());
+            }
+
+            if (value instanceof ClampedValue) {
+                getElements().add(new ValueSlider((ClampedValue) value, prettyName, x + 2, elementY + 2, XIV.getInstance().getGuiClick().getTheme().getElementWidth(), XIV.getInstance().getGuiClick().getTheme().getElementHeight()));
+            }
+
+            elementY += XIV.getInstance().getGuiClick().getTheme().getElementHeight() + 1;
+        }
+    }
+
     public void addValueElements(String prefix) {
         float elementY = 4;
+
         for (Value value : XIV.getInstance().getValueManager().getContents()) {
             if (!value.getName().startsWith(prefix))
                 continue;
@@ -237,8 +268,6 @@ public class Panel {
 
             if (value.getValue() instanceof Boolean) {
                 getElements().add(new ValueButton(value, prettyName, x + 2, elementY + 2, XIV.getInstance().getGuiClick().getTheme().getElementWidth(), XIV.getInstance().getGuiClick().getTheme().getElementHeight()));
-            } else if (value instanceof ClampedValue) {
-                // getElements().add(new ValueSlider((ClampedValue) value, prettyName, x + 2, elementY + 2, XIV.getInstance().getGuiClick().getTheme().getElementWidth(), XIV.getInstance().getGuiClick().getTheme().getElementHeight()));
             }
             elementY += XIV.getInstance().getGuiClick().getTheme().getElementHeight() + 1;
         }

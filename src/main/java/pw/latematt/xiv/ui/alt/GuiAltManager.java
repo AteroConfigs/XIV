@@ -214,6 +214,8 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
             } else if (search.isFocused()) {
                 search.setFocused(!search.isFocused());
                 username.setFocused(true);
+            }else if(!username.isFocused() && !password.isFocused() && !keyword.isFocused() && !search.isFocused()){
+                username.setFocused(true);
             }
         }
 

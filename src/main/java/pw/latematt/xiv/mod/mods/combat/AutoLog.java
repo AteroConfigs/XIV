@@ -9,6 +9,7 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 import java.util.Objects;
@@ -18,7 +19,7 @@ import java.util.Objects;
  */
 
 public class AutoLog extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
-    private final Value<Float> health = new Value<>("autolog_health", 6.0F);
+    private final ClampedValue<Float> health = new ClampedValue<>("autolog_health", 6.0F, 1.0F, 20.0F);
 
     public AutoLog() {
         super("AutoLog", ModType.COMBAT, Keyboard.KEY_NONE, 9868950);

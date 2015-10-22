@@ -11,6 +11,7 @@ import pw.latematt.xiv.event.events.AttackEntityEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 import java.util.Objects;
@@ -20,7 +21,7 @@ import java.util.Objects;
  */
 
 public final class ArmorBreaker extends Mod implements Listener<AttackEntityEvent>, CommandHandler {
-    private final Value<Integer> packets = new Value<>("armorbreaker_packets", 50);
+    private final ClampedValue<Integer> packets = new ClampedValue<>("armorbreaker_packets", 50, 0, 100);
     private int itemSwitchTicks = 0;
 
     public ArmorBreaker() {

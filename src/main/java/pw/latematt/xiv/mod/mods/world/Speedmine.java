@@ -9,6 +9,7 @@ import pw.latematt.xiv.event.events.BreakingBlockEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 /**
@@ -16,8 +17,8 @@ import pw.latematt.xiv.value.Value;
  * @author Matthew
  */
 public class Speedmine extends Mod implements Listener<BreakingBlockEvent>, CommandHandler {
-    private final Value<Double> multiplier = new Value<>("speedmine_multiplier", 1.25D);
-    private final Value<Integer> hitDelay = new Value<>("speedmine_hit_delay", 0);
+    private final ClampedValue<Double> multiplier = new ClampedValue<>("speedmine_multiplier", 1.25D, 0.75D, 5.0D);
+    private final ClampedValue<Integer> hitDelay = new ClampedValue<>("speedmine_hit_delay", 0, 0, 5);
 
     public Speedmine() {
         super("Speedmine", ModType.WORLD, Keyboard.KEY_G, 0xFF77A24E);

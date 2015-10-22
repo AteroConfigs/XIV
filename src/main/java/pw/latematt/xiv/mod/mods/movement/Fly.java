@@ -10,6 +10,7 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 import java.util.Objects;
@@ -21,7 +22,7 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
     private final Value<Boolean> doDamage = new Value<>("fly_damage", true);
     private final Value<Boolean> slowfall = new Value<>("fly_slowfall", true);
     private final Value<Boolean> cap = new Value<>("fly_cap", false);
-    private final Value<Double> verticalSpeed = new Value<>("fly_vertical", 0.5);
+    private final ClampedValue<Double> verticalSpeed = new ClampedValue<>("fly_vertical", 0.5, 0.0, 2.0);
 
     private double yCap;
 

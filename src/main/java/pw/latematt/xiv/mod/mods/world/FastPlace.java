@@ -9,13 +9,14 @@ import pw.latematt.xiv.event.events.PlacingBlockEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 /**
  * @author Rederpz
  */
 public class FastPlace extends Mod implements Listener<PlacingBlockEvent>, CommandHandler {
-    private final Value<Integer> placeDelay = new Value<>("fastplace_delay", 0);
+    private final ClampedValue<Integer> placeDelay = new ClampedValue<>("fastplace_delay", 0, 0, 4);
 
     public FastPlace() {
         super("FastPlace", ModType.WORLD, Keyboard.KEY_K, 0xFFFF9933);

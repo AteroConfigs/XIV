@@ -12,13 +12,14 @@ import pw.latematt.xiv.event.events.ReadPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 /**
  * @author TehNeon
  */
 public class Velocity extends Mod implements CommandHandler {
-    private final Value<Float> reducedVelocity = new Value<>("velocity_reduction", 0.0F);
+    private final ClampedValue<Float> reducedVelocity = new ClampedValue<>("velocity_reduction", 0.0F, 0.0F, 100.0F);
     private final Value<Boolean> liquid = new Value<>("velocity_water", true);
     private final Listener readPacketListener, liquidVelocityListener;
 
