@@ -11,13 +11,14 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 /**
  * @author Matthew
  */
 public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandler {
-    private final Value<Float> height = new Value<>("step_height", 1.0646F);
+    private final ClampedValue<Float> height = new ClampedValue<>("step_height", 1.0646F, 0.5F, 10.0F);
     private final Listener sendPacketListener;
     private boolean editPackets;
 

@@ -86,6 +86,7 @@ public class GuiClick extends GuiScreen {
         for (ModType type : ModType.values()) {
             addPanel(new ModulePanel(type, x, y), x, y);
         }
+        //addPanel(new ValuePanel(x, y), x, y);
 
         addPanel(new HUBPanel(x, y), x, y);
 

@@ -11,6 +11,7 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 import java.util.Objects;
@@ -20,9 +21,9 @@ import java.util.Objects;
  */
 
 public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
-    private final Value<Float> fov = new Value<>("smoothaimbot_fov", 80F);
-    private final Value<Float> speed = new Value<>("smoothaimbot_speed", 8F);
-    private final Value<Double> range = new Value<>("smoothaimbot_range", 3.8D);
+    private final ClampedValue<Float> fov = new ClampedValue<>("smoothaimbot_fov", 80F, 0F, 360F);
+    private final ClampedValue<Float> speed = new ClampedValue<>("smoothaimbot_speed", 8F, 0F, 15F);
+    private final ClampedValue<Double> range = new ClampedValue<>("smoothaimbot_range", 3.8D, 3.0D, 6.0D);
     private final Value<Boolean> pitch = new Value<>("smoothaimbot_pitch", true);
 
     public SmoothAimbot() {

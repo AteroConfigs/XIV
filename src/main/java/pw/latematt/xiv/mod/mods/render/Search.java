@@ -16,6 +16,7 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.RenderUtils;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class Search extends Mod implements Listener<Render3DEvent>, CommandHandl
     private final Listener blockModelRenderListener;
     private final List<Block> blockList = new ArrayList<>();
     private final List<Vec3d> blockCache = new CopyOnWriteArrayList<>();
-    private final Value<Float> range = new Value<>("search_range", 128.0F);
+    private final ClampedValue<Float> range = new ClampedValue<>("search_range", 128.0F, 5.0F, 500.0F);
 
     public Search() {
         super("Search", ModType.RENDER);

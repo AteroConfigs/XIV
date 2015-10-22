@@ -22,6 +22,7 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.Timer;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 import java.text.DecimalFormat;
@@ -32,8 +33,8 @@ import java.util.Random;
  * @author TehNeon
  */
 public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
-    public final Value<Long> delay = new Value<>("triggerbot_delay", 125L);
-    public final Value<Long> randomDelay = new Value<>("triggerbot_random_delay", 0L);
+    public final ClampedValue<Long> delay = new ClampedValue<>("triggerbot_delay", 125L, 0L, 1000L);
+    public final ClampedValue<Long> randomDelay = new ClampedValue<>("triggerbot_random_delay", 0L, 0L, 1000L);
     private final Value<Boolean> players = new Value<>("triggerbot_players", true);
     private final Value<Boolean> mobs = new Value<>("triggerbot_mobs", false);
     private final Value<Boolean> animals = new Value<>("triggerbot_animals", false);

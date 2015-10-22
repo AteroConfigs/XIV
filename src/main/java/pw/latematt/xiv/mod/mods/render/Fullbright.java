@@ -13,13 +13,14 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 /**
  * @author Matthew
  */
 public class Fullbright extends Mod implements Listener<LoadWorldEvent>, CommandHandler {
-    private final Value<Float> brightness = new Value<>("fullbright_brightness", 0.4F);
+    private final ClampedValue<Float> brightness = new ClampedValue<>("fullbright_brightness", 0.4F, 0.0F, 1.0F);
     public final Value<Boolean> potion = new Value<>("fullbright_potion", false);
     private final Listener motionUpdateListener;
 

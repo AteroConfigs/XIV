@@ -10,11 +10,13 @@ import pw.latematt.xiv.value.ClampedValue;
 
 /**
  * @author Rederpz
+ * @author TehNawnanon
+ *
  */
 public class ValueSlider extends Element {
 
     private final ClampedValue<Float> sliderValue;
-    private double amountScrolled = 0.0D;
+    private double amountScrolled = 0.0;
     private boolean dragging = false;
 
     private static Minecraft mc = Minecraft.getMinecraft();
@@ -26,7 +28,7 @@ public class ValueSlider extends Element {
         this.sliderValue = value;
         this.valuePrettyName = valuePrettyName;
 
-        amountScrolled = value.getDefault() / value.getMax();
+        amountScrolled = toFloat(value.getDefault() / value.getMax()).doubleValue();
     }
 
     @Override
@@ -38,8 +40,8 @@ public class ValueSlider extends Element {
 
             if (mouseX > getX()) {
                 double diff = mouseX - getX();
-                amountScrolled = diff / getWidth();
-                amountScrolled = amountScrolled < 0 ? 0 : amountScrolled > 1 ? 1 : amountScrolled;
+                amountScrolled = toFloat(diff / getWidth());
+                amountScrolled = toFloat(amountScrolled < 0 ? 0 : amountScrolled > 1 ? 1 : amountScrolled);
                 setValue();
             }
 
@@ -52,12 +54,11 @@ public class ValueSlider extends Element {
         if (!dragging) {
             return;
         }
-        /*
-        TODO: figure out how I should do this
-        final float incrementValue = sliderValue.getIncrementValue();
-        final float calculatedValue = ((float) amountScrolled * (sliderValue.getMax() - sliderValue.getMin()));
 
-        sliderValue.setValue(calculatedValue + sliderValue.getMin());*/
+        final float incrementValue = sliderValue.getSliderX();
+        final float calculatedValue = toFloat(amountScrolled * (sliderValue.getMax() - sliderValue.getMin()));
+
+        sliderValue.setValue(calculatedValue + sliderValue.getMin());
     }
 
     @Override
@@ -82,5 +83,28 @@ public class ValueSlider extends Element {
 
     @Override
     public void onGuiClosed() {
+    }
+
+    public Float toFloat(Object value) {
+        if(value instanceof Integer) {
+            Integer val = (Integer) value;
+
+            return val.floatValue();
+        }else if(value instanceof Double) {
+            Double val = (Double) value;
+
+            return val.floatValue();
+        }else if(value instanceof Long) {
+            Long val = (Long) value;
+
+            return val.floatValue();
+        }else if(value instanceof Short) {
+            Short val = (Short) value;
+
+            return val.floatValue();
+        }else if(value instanceof Float) {
+            return (Float) value;
+        }
+        return null;
     }
 }

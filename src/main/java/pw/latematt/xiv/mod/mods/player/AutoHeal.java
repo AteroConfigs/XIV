@@ -13,6 +13,7 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.Timer;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 import java.util.Objects;
@@ -23,7 +24,7 @@ import static pw.latematt.xiv.utils.ItemUtils.*;
  * @author Matthew
  */
 public class AutoHeal extends Mod implements CommandHandler {
-    private final Value<Long> delay = new Value<>("autoheal_delay", 350L);
+    private final ClampedValue<Long> delay = new ClampedValue<>("autoheal_delay", 350L, 0L, 1000L);
     private final Value<Float> health = new Value<>("autoheal_health", 13.0F);
     private final Value<Boolean> soup = new Value<>("autoheal_soup", false);
     private final Value<Boolean> potion = new Value<>("autoheal_potion", true);
