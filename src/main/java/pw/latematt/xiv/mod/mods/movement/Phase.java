@@ -7,10 +7,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.BlockAddBBEvent;
-import pw.latematt.xiv.event.events.MotionUpdateEvent;
-import pw.latematt.xiv.event.events.PushOutOfBlocksEvent;
-import pw.latematt.xiv.event.events.SendPacketEvent;
+import pw.latematt.xiv.event.events.*;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
@@ -22,9 +19,7 @@ import pw.latematt.xiv.value.Value;
  */
 public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private final Value<Mode> mode = new Value<>("phase_mode", Mode.SKIP);
-    private final Listener blockAddBBListener;
-    private final Listener pushOutOfBlocksListener;
-    private final Listener sendPacketListener;
+    private final Listener blockAddBBListener, pushOutOfBlocksListener, sendPacketListener, cullingListener;
     private boolean collided = false;
 
     public Phase() {
@@ -62,6 +57,18 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
             }
         };
 
+        sendPacketListener = new Listener<SendPacketEvent>() {
+            @Override
+            public void onEventCalled(SendPacketEvent event) {
+                if (event.getPacket() instanceof C03PacketPlayer) {
+                    C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
+                    if (mode.getValue() == Mode.VANILLA && BlockUtils.isInsideBlock(mc.thePlayer)) {
+                        player.setY(player.getY() - 0.1F);
+                    }
+                }
+            }
+        };
+
         this.pushOutOfBlocksListener = new Listener<PushOutOfBlocksEvent>() {
             @Override
             public void onEventCalled(PushOutOfBlocksEvent event) {
@@ -69,15 +76,10 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
             }
         };
 
-        sendPacketListener = new Listener<SendPacketEvent>() {
+        this.cullingListener = new Listener<CullingEvent>() {
             @Override
-            public void onEventCalled(SendPacketEvent event) {
-                if (event.getPacket() instanceof C03PacketPlayer) {
-                    C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    if (mode.getValue() == Mode.VANILLA && BlockUtils.isInsideBlock(mc.thePlayer)) {
-                        player.setY(player.getY() + 0.1F);
-                    }
-                }
+            public void onEventCalled(CullingEvent event) {
+                event.setCancelled(true);
             }
         };
     }
@@ -132,10 +134,8 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
             } else if (mode.getValue() == Mode.VANILLA_SKIP) {
                 float[] offset = new float[]{xD * 1.9F, 1.0F, zD * 1.9F};
 
-                if (moving) {
-                    if (BlockUtils.isInsideBlock(mc.thePlayer)) {
-                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0]), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2]), mc.thePlayer.onGround));
-                    }
+                if (moving && BlockUtils.isInsideBlock(mc.thePlayer)) {
+                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0]), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2]), mc.thePlayer.onGround));
                 }
             } else if (mode.getValue() == Mode.VANILLA_CONTROL) {
                 if (BlockUtils.isInsideBlock(mc.thePlayer)) {
@@ -217,6 +217,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
         XIV.getInstance().getListenerManager().add(blockAddBBListener);
         XIV.getInstance().getListenerManager().add(pushOutOfBlocksListener);
         XIV.getInstance().getListenerManager().add(sendPacketListener);
+        XIV.getInstance().getListenerManager().add(cullingListener);
     }
 
     @Override
@@ -225,6 +226,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
         XIV.getInstance().getListenerManager().remove(blockAddBBListener);
         XIV.getInstance().getListenerManager().remove(pushOutOfBlocksListener);
         XIV.getInstance().getListenerManager().remove(sendPacketListener);
+        XIV.getInstance().getListenerManager().remove(cullingListener);
 
         this.collided = false;
     }

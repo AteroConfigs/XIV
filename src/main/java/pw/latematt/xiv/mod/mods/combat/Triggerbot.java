@@ -32,13 +32,14 @@ import java.util.Random;
  * @author TehNeon
  */
 public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
-    public final SliderValue<Long> delay = new SliderValue<>("triggerbot_delay", 125L, 0L, 1000L, new DecimalFormat("#"));
-    public final Value<Boolean> weaponOnly = new Value<>("triggerbot_weapon_only", true);
+    public final Value<Long> delay = new Value<>("triggerbot_delay", 125L);
+    public final Value<Long> randomDelay = new Value<>("triggerbot_random_delay", 0L);
     private final Value<Boolean> players = new Value<>("triggerbot_players", true);
     private final Value<Boolean> mobs = new Value<>("triggerbot_mobs", false);
     private final Value<Boolean> animals = new Value<>("triggerbot_animals", false);
     private final Value<Boolean> invisible = new Value<>("triggerbot_invisible", false);
     private final Value<Boolean> team = new Value<>("triggerbot_team", true);
+    public final Value<Boolean> weaponOnly = new Value<>("triggerbot_weapon_only", true);
     private final Timer timer = new Timer();
     private final Random random = new Random();
 
@@ -62,12 +63,11 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
             Entity entity = objectMouseOver.entityHit;
             if (entity instanceof EntityLivingBase) {
                 EntityLivingBase living = (EntityLivingBase) entity;
-                long skip = getRandom(0, 75);
-                if (timer.hasReached(delay.getValue() + skip)) {
+                if (timer.hasReached(getDelay())) {
                     if (!isValidEntity(living))
                         return;
 
-                    if (!properWeapon(mc.thePlayer.getHeldItem()))
+                    if (!checkWeapon(mc.thePlayer.getHeldItem()))
                         return;
 
                     mc.thePlayer.swingItem();
@@ -77,6 +77,20 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
                 }
             }
         }
+    }
+
+    public boolean checkWeapon(ItemStack itemStack) {
+        if (!weaponOnly.getValue())
+            return true;
+        if (itemStack != null) {
+            Item item = itemStack.getItem();
+
+            if (item instanceof ItemSword || item instanceof ItemAxe) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean isValidEntity(EntityLivingBase entity) {
@@ -106,20 +120,8 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
         return false;
     }
 
-    public boolean properWeapon(ItemStack itemStack) {
-        if (weaponOnly.getValue()) {
-            if (itemStack != null) {
-                Item item = itemStack.getItem();
-
-                if (item instanceof ItemSword || item instanceof ItemAxe) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        return true;
+    public Long getDelay() {
+        return randomDelay.getValue() == 0 ? delay.getValue() : Long.valueOf(delay.getValue() + random.nextInt(randomDelay.getValue().intValue()));
     }
 
     @Override
@@ -141,6 +143,25 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
                         }
                     } else {
                         ChatLogger.print("Invalid arguments, valid: triggerbot delay <number>");
+                    }
+                    break;
+                case "randomdelay":
+                case "rd":
+                    if (arguments.length >= 3) {
+                        String newRandomDelayString = arguments[2];
+                        try {
+                            long newRandomDelay = arguments[2].equalsIgnoreCase("-d") ? randomDelay.getDefault() : Long.parseLong(newRandomDelayString);
+                            if (newRandomDelay < 0) {
+                                newRandomDelay = 0;
+                            }
+
+                            randomDelay.setValue(newRandomDelay);
+                            ChatLogger.print(String.format("Triggerbot Random Delay set to %sms", randomDelay.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newRandomDelayString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: triggerbot randomdelay <number>");
                     }
                     break;
                 case "weapononly":
@@ -220,7 +241,7 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
                     ChatLogger.print(String.format("Triggerbot will %s attack your team.", (team.getValue() ? "now" : "no longer")));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, weapon, players, mobs, animals, invisible, team");
+                    ChatLogger.print("Invalid action, valid: delay, randomdelay, weapon, players, mobs, animals, invisible, team");
                     break;
             }
         } else {
@@ -236,9 +257,5 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
-    }
-
-    public int getRandom(int floor, int cap) {
-        return floor + random.nextInt(cap);
     }
 }

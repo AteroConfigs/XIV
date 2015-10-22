@@ -23,6 +23,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.commands.FillWorldEdit;
 import pw.latematt.xiv.command.commands.MassMessage;
+import pw.latematt.xiv.command.commands.PluginFinder;
 import pw.latematt.xiv.command.commands.Screenshot;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
@@ -48,6 +49,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 /**
  * @author Matthew
@@ -119,7 +121,7 @@ public class CommandManager extends ListManager<Command> {
                         try {
                             double newBlockChange = Double.parseDouble(blockChangeString);
                             mc.thePlayer.func_174826_a(mc.thePlayer.getEntityBoundingBox().offset(0, newBlockChange, 0));
-                            ChatLogger.print(String.format("You've teleported %s %s block%s", newBlockChange < 0 ? "down" : "up", newBlockChange, (newBlockChange > 1 || newBlockChange < -1) ? "s" : ""));
+                            ChatLogger.print(String.format("Teleported %s %s block%s", newBlockChange < 0 ? "down" : "up", newBlockChange, (newBlockChange > 1 || newBlockChange < -1) ? "s" : ""));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", blockChangeString));
                         }
@@ -135,41 +137,43 @@ public class CommandManager extends ListManager<Command> {
         Command.newCommand()
                 .cmd("breed")
                 .description("Breed any animals around you.")
-                .handler(message1 -> {
-                    int n = 0;
-                    for (final Object o : mc.theWorld.getLoadedEntityList()) {
-                        if (o instanceof Entity) {
-                            final Entity entity = (Entity) o;
-                            if (entity instanceof EntityAnimal) {
-                                final EntityAnimal entityAnimal = (EntityAnimal) entity;
-                                if (!entityAnimal.isChild() && !entityAnimal.isInLove() && Objects.equals(entityAnimal.getGrowingAge(), 0) && mc.thePlayer.getDistanceToEntity(entityAnimal) <= (mc.thePlayer.canEntityBeSeen(entityAnimal) ? 6 : 3)) {
-                                    for (int i = 36; i < 45; i++) {
-                                        final ItemStack stack = mc.thePlayer.inventoryContainer.getSlot(i).getStack();
-                                        if (Objects.nonNull(stack) && entityAnimal.isBreedingItem(stack)) {
-                                            mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(i - 36));
-                                            mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entityAnimal, C02PacketUseEntity.Action.INTERACT));
+                .handler(message -> {
+                    int counter = 0;
+                    for (final Entity entity : mc.theWorld.loadedEntityList.stream().filter(entity1 -> entity1 instanceof EntityAnimal).collect(Collectors.toList())) {
+                        final EntityAnimal entityAnimal = (EntityAnimal) entity;
+                        if (entityAnimal.isChild())
+                            continue;
+                        if (entityAnimal.isInLove())
+                            continue;
+                        if (!Objects.equals(entityAnimal.getGrowingAge(), 0))
+                            continue;
+                        if (mc.thePlayer.getDistanceToEntity(entityAnimal) > (mc.thePlayer.canEntityBeSeen(entityAnimal) ? 6 : 3))
+                            continue;
+                        for (int i = 0; i < 9; i++) {
+                            final ItemStack stack = mc.thePlayer.inventory.getStackInSlot(i);
+                            if (Objects.isNull(stack))
+                                continue;
+                            if (entityAnimal.isBreedingItem(stack)) {
+                                mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(i - 36));
+                                mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(entityAnimal, C02PacketUseEntity.Action.INTERACT));
+                                counter++;
 
-                                            n++;
-
-                                            if (mc.thePlayer.capabilities.isCreativeMode) {
-                                                break;
-                                            }
-
-                                            if (--stack.stackSize <= 0) {
-                                                mc.thePlayer.inventory.setInventorySlotContents(i, null);
-                                                break;
-                                            }
-
-                                            break;
-                                        }
-                                    }
+                                if (mc.thePlayer.capabilities.isCreativeMode) {
+                                    break;
                                 }
+
+                                if (--stack.stackSize <= 0) {
+                                    mc.thePlayer.inventory.setInventorySlotContents(i, null);
+                                    break;
+                                }
+
+                                break;
                             }
                         }
                     }
 
                     mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(mc.thePlayer.inventory.currentItem));
-                    ChatLogger.print(String.format("Bred %s animal%s.", n, Objects.equals(n, 1) ? "" : "s"));
+                    ChatLogger.print(String.format("Bred %s animal%s.", counter, Objects.equals(counter, 1) ? "" : "s"));
                 }).build();
         Command.newCommand()
                 .cmd("render")
@@ -331,11 +335,9 @@ public class CommandManager extends ListManager<Command> {
                 .aliases("legit", "hide")
                 .description("Turn off all mods.")
                 .arguments("<action>")
-                .handler(message -> {
-                    XIV.getInstance().getModManager().getContents().stream()
-                            .filter(mod -> !(mod instanceof Commands || mod instanceof Keybinds))
-                            .forEach(mod -> mod.setEnabled(false));
-                }).build();
+                .handler(message -> XIV.getInstance().getModManager().getContents().stream()
+                        .filter(mod -> !(mod instanceof Commands || mod instanceof Keybinds))
+                        .forEach(mod -> mod.setEnabled(false))).build();
         Command.newCommand()
                 .cmd("clearxiv")
                 .aliases("clearclient")
@@ -633,6 +635,12 @@ public class CommandManager extends ListManager<Command> {
                 .description("Use world edit in 1.8 servers that don't have world edit.")
                 .aliases("fwe", "we", "//", "worldedit")
                 .handler(new FillWorldEdit()).build();
+        Command.newCommand()
+                .cmd("pluginfinder")
+                .aliases("pl", "pf")
+                .description("Find plugins the server has.")
+                .arguments("<action>")
+                .handler(new PluginFinder()).build();
 
         XIV.getInstance().getListenerManager().add(new Listener<WorldBobbingEvent>() {
             public void onEventCalled(WorldBobbingEvent event) {
@@ -669,10 +677,9 @@ public class CommandManager extends ListManager<Command> {
                         }
                         ChatLogger.print(String.format("Chat Prefix set to: %s", prefix));
                     }
-                })
-                .build();
+                }).build();
 
-        XIV.getInstance().getLogger().info(String.format("Successfully setup %s, loaded %s(not accurate).", getClass().getSimpleName(), getContents().size()));
+        XIV.getInstance().getLogger().info(String.format("Successfully setup %s.", getClass().getSimpleName()));
     }
 
     public boolean parseCommand(String message) {

@@ -5,6 +5,10 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import org.lwjgl.input.Keyboard;
@@ -32,9 +36,7 @@ import java.util.Random;
  * @author Matthew
  */
 public class KillAura extends Mod implements CommandHandler {
-    private final Listener motionUpdateListener;
-    private final Listener sendPacketListener;
-    private final Listener playerDeathListener;
+    private final Listener motionUpdateListener, sendPacketListener, playerDeathListener;
     public final Value<Long> delay = new Value<>("killaura_delay", 166L);
     public final Value<Long> randomDelay = new Value<>("killaura_random_delay", 0L);
     public final Value<Double> range = new Value<>("killaura_range", 3.8D);
@@ -49,6 +51,7 @@ public class KillAura extends Mod implements CommandHandler {
     public final Value<Boolean> autoSword = new Value<>("killaura_auto_sword", true);
     private final Value<Boolean> toggleDeath = new Value<>("killaura_toggle_death", false);
     public final Value<Boolean> autoBlock = new Value<>("killaura_auto_block", false);
+    public final Value<Boolean> weaponOnly = new Value<>("killaura_weapon_only", false);
     private final Value<AuraMode> mode = new Value<>("killaura_mode", new Singular(this));
     private final Random random = new Random();
 
@@ -126,6 +129,8 @@ public class KillAura extends Mod implements CommandHandler {
     }
 
     public boolean isValidEntity(EntityLivingBase entity) {
+        if (!checkWeapon(mc.thePlayer.getHeldItem()))
+            return false;
         if (entity == null)
             return false;
         if (entity == mc.thePlayer)
@@ -158,6 +163,20 @@ public class KillAura extends Mod implements CommandHandler {
         } else if (entity instanceof IMob) {
             return mobs.getValue();
         }
+        return false;
+    }
+
+    public boolean checkWeapon(ItemStack itemStack) {
+        if (!weaponOnly.getValue())
+            return true;
+        if (itemStack != null) {
+            Item item = itemStack.getItem();
+
+            if (item instanceof ItemSword || item instanceof ItemAxe) {
+                return true;
+            }
+        }
+
         return false;
     }
 

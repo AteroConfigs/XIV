@@ -1,5 +1,6 @@
 package pw.latematt.xiv.mod.mods.render;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,7 +34,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
     public final Value<Boolean> mobs = new Value<>("esp_mobs", false);
     public final Value<Boolean> animals = new Value<>("esp_animals", false);
     public final Value<Boolean> items = new Value<>("esp_items", false);
-    public final Value<Boolean> enderpearls = new Value<>("esp_enderpearls", false);
+    public final Value<Boolean> enderpearls = new Value<>("esp_ender_pearls", false);
     public final Value<Boolean> boxes = new Value<>("esp_boxes", true);
     public final Value<Boolean> outline = new Value<>("esp_outline", false);
     public final Value<Boolean> wallhack = new Value<>("esp_wallhack", false);
@@ -43,14 +44,6 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
 
     public ESP() {
         super("ESP", ModType.RENDER, Keyboard.KEY_I);
-
-        Command.newCommand()
-                .cmd("esp")
-                .description("Base command for the ESP mod.")
-                .arguments("<action>")
-                .handler(this)
-                .build();
-
         renderEntityListener = new Listener<RenderEntityEvent>() {
             @Override
             public void onEventCalled(RenderEntityEvent event) {
@@ -67,10 +60,17 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
             }
         };
 
-
+        Command.newCommand()
+                .cmd("esp")
+                .description("Base command for the ESP mod.")
+                .arguments("<action>")
+                .handler(this)
+                .build();
     }
 
     public void onEventCalled(Render3DEvent event) {
+        if (!Minecraft.isGuiEnabled())
+            return;
         RenderUtils.beginGl();
         for (Entity entity : mc.theWorld.loadedEntityList) {
             if (!isValidEntity(entity))
@@ -331,7 +331,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                     } else {
                         enderpearls.setValue(!enderpearls.getValue());
                     }
-                    ChatLogger.print(String.format("ESP will %s display enderpearls.", (enderpearls.getValue() ? "now" : "no longer")));
+                    ChatLogger.print(String.format("ESP will %s display ender pearls.", (enderpearls.getValue() ? "now" : "no longer")));
                     break;
                 case "boxes":
                 case "box":

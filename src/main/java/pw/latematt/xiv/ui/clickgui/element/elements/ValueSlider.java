@@ -70,7 +70,7 @@ public class ValueSlider extends Element {
         }
     }
 
-    public ClampedValue<Boolean> getValue() {
+    public ClampedValue<Float> getValue() {
         return sliderValue;
     }
 

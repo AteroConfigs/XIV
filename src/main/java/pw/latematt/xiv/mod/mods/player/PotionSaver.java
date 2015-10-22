@@ -13,7 +13,6 @@ import pw.latematt.xiv.utils.EntityUtils;
 /**
  * @author Rederpz
  */
-
 public class PotionSaver extends Mod implements Listener<SendPacketEvent> {
     private final Listener potionIncrementListener;
 

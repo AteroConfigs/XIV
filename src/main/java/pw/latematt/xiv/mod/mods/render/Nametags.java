@@ -1,5 +1,6 @@
 package pw.latematt.xiv.mod.mods.render;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -33,8 +34,7 @@ import java.util.List;
  * @author Matthew
  */
 public class Nametags extends Mod implements CommandHandler {
-    private final Listener nametagRenderListener;
-    private final Listener render3DListener;
+    private final Listener nametagRenderListener, render3DListener;
     private final Value<Boolean> health = new Value<>("nametags_health", true);
     private final Value<Boolean> armor = new Value<>("nametags_armor", false);
     private final DecimalFormat decimalFormat = new DecimalFormat("#.#");
@@ -54,6 +54,8 @@ public class Nametags extends Mod implements CommandHandler {
         render3DListener = new Listener<Render3DEvent>() {
             @Override
             public void onEventCalled(Render3DEvent event) {
+                if (!Minecraft.isGuiEnabled())
+                    return;
                 for (EntityPlayer player : mc.theWorld.playerEntities) {
                     if (!isValidEntity(player))
                         continue;
