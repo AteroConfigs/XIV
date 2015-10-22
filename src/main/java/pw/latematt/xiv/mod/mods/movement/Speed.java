@@ -1,6 +1,8 @@
 package pw.latematt.xiv.mod.mods.movement;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -57,6 +59,8 @@ public class Speed extends Mod implements CommandHandler {
                             speed += 0.15D;
                         if (mc.thePlayer.hurtTime > 0)
                             speed += 0.01D;
+                        speed = getSpeedPotionSlowdown(speed);
+
                         event.setMotionX(event.getMotionX() * speed);
                         event.setMotionZ(event.getMotionZ() * speed);
 
@@ -130,6 +134,16 @@ public class Speed extends Mod implements CommandHandler {
                 }
             }
         };
+    }
+
+    private double getSpeedPotionSlowdown(double speed) {
+        if (Objects.isNull(mc.thePlayer.getActivePotionEffect(Potion.SPEED)))
+            return speed;
+        PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
+        speed -= (effect.getAmplifier() > 3 ? 3 : effect.getAmplifier()) - 0.3D;
+        if (speed < 1.0D)
+            speed = 1.0D;
+        return speed;
     }
 
     @Override
