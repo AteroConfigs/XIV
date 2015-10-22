@@ -63,7 +63,7 @@ public class IridiumTheme extends ClickTheme {
             this.font = new NahrFont(new Font("Arial", Font.BOLD, 20), 20);
         }
 
-        element.setWidth(96);
+        element.setWidth(101);
         element.setHeight(this.getElementHeight());
 
         RenderUtils.drawBorderedRect(x, y + 1, x + element.getWidth(), y + height, 0x801E1E1E, 0xFF212121);

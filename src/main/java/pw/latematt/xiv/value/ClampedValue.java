@@ -3,32 +3,37 @@ package pw.latematt.xiv.value;
 import java.text.DecimalFormat;
 
 /**
- * @author Matthew
+ * Created by TehNeon on 10/21/2015.
  */
-public class SliderValue<T> extends Value<T> {
-    private T start, min, max;
-    private DecimalFormat format;
-    private float sliderX;
+public class ClampedValue<T> extends Value<T> {
 
-    public SliderValue(String name, T value, T min, T max, DecimalFormat format) {
+    private T min;
+    private T max;
+    private float sliderX;
+    private DecimalFormat format;
+
+    public ClampedValue(String name, T value, T min, T max, DecimalFormat format) {
         super(name, value);
 
-        this.start = value;
         this.min = min;
         this.max = max;
         this.format = format;
-    }
-
-    public T getDefaultValue() {
-        return start;
     }
 
     public T getMin() {
         return min;
     }
 
+    public void setMin(T min) {
+        this.min = min;
+    }
+
     public T getMax() {
         return max;
+    }
+
+    public void setMax(T max) {
+        this.max = max;
     }
 
     public DecimalFormat getFormat() {
@@ -39,7 +44,7 @@ public class SliderValue<T> extends Value<T> {
         return sliderX;
     }
 
-    public SliderValue<T> setSliderX(float sliderX) {
+    public ClampedValue<T> setSliderX(float sliderX) {
         this.sliderX = sliderX;
         return this;
     }

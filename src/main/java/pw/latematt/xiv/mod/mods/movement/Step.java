@@ -37,7 +37,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
                     if (editPackets) {
-                        if (mc.thePlayer.posY - mc.thePlayer.lastTickPosY >= 0.75D) {
+                        if (mc.thePlayer.posY - mc.thePlayer.lastTickPosY >= 0.80D) {
                             player.setY(player.getY() + 0.0646D);
                         }
                         editPackets = false;
@@ -52,13 +52,11 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
         if (mc.thePlayer == null || !event.canStep())
             return;
 
-        if (mc.thePlayer.stepHeight != height.getValue()) {
-            mc.thePlayer.stepHeight = height.getValue();
-        }
-
         if (event.getEntity() != mc.thePlayer)
             return;
 
+        if (mc.thePlayer.stepHeight != height.getValue())
+            mc.thePlayer.stepHeight = height.getValue();
 
         editPackets = !BlockUtils.isInLiquid(mc.thePlayer);
         event.setCancelled(!editPackets);

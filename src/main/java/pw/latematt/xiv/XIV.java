@@ -76,7 +76,7 @@ public class XIV {
     }
 
     /* logger */
-    private final Logger logger = LogManager.getLogger("XIV");
+    private final Logger logger = LogManager.getLogger();
 
     public Logger getLogger() {
         return logger;
