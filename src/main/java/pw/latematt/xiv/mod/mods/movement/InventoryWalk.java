@@ -37,11 +37,11 @@ public class InventoryWalk extends Mod implements Listener<MotionUpdateEvent> {
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-            mc.thePlayer.rotationYaw = MathHelper.clamp_float(mc.thePlayer.rotationYaw + 4, -180.0F, 180.0F);
+            mc.thePlayer.rotationYaw = MathHelper.clamp_float(mc.thePlayer.rotationYaw - 4, -180.0F, 180.0F);
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-            mc.thePlayer.rotationYaw = MathHelper.clamp_float(mc.thePlayer.rotationYaw - 4, -180.0F, 180.0F);
+            mc.thePlayer.rotationYaw = MathHelper.clamp_float(mc.thePlayer.rotationYaw + 4, -180.0F, 180.0F);
         }
 
         if (mc.currentScreen instanceof GuiEditSign || mc.currentScreen instanceof GuiScreenBook || mc.currentScreen instanceof GuiRepair)

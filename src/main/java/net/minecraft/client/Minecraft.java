@@ -385,11 +385,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
         ImageIO.setUseCache(false);
         Bootstrap.register();
-        Runtime.getRuntime().addShutdownHook(new Thread("Client Shutdown Thread") {
-            public void run() {
-                Minecraft.stopIntegratedServer();
-            }
-        });
     }
 
     public void run()
@@ -400,6 +395,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         try
         {
             this.startGame();
+            XIV.getInstance().setup();
         }
         catch (Throwable var11)
         {
@@ -408,7 +404,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage
             this.displayCrashReport(this.addGraphicsAndWorldToCrashReport(var2));
             return;
         }
-        XIV.getInstance().setup();
 
         while (true)
         {
@@ -760,25 +755,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     public void displayCrashReport(CrashReport crashReportIn)
     {
-        File var2 = new File(getMinecraft().mcDataDir, "crash-reports");
-        File var3 = new File(var2, "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-client.txt");
-        Bootstrap.func_179870_a(crashReportIn.getCompleteReport());
-
-        if (crashReportIn.getFile() != null)
-        {
-            Bootstrap.func_179870_a("#@!@# Game crashed! Crash report saved to: #@!@# " + crashReportIn.getFile());
-            System.exit(-1);
-        }
-        else if (crashReportIn.saveToFile(var3))
-        {
-            Bootstrap.func_179870_a("#@!@# Game crashed! Crash report saved to: #@!@# " + var3.getAbsolutePath());
-            System.exit(-1);
-        }
-        else
-        {
-            Bootstrap.func_179870_a("#@?@# Game crashed! Crash report could not be saved. #@?@#");
-            System.exit(-2);
-        }
+        Bootstrap.func_179870_a("#@?@# Game crashed! Crash report could not be saved. #@?@#");
+        System.exit(-2);
     }
 
     public boolean isUnicode()

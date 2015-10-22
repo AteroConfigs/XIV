@@ -110,8 +110,7 @@ public class Main
             }
         });
         Thread.currentThread().setName("Client thread");
-        Minecraft mc = new Minecraft(var42);
-        mc.run();
+        new Minecraft(var42).run();
     }
 
     private static boolean func_110121_a(String p_110121_0_)
