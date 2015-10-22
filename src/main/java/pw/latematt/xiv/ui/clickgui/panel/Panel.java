@@ -9,6 +9,7 @@ import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
 import pw.latematt.xiv.ui.clickgui.element.elements.PanelButton;
 import pw.latematt.xiv.ui.clickgui.element.elements.ValueButton;
 import pw.latematt.xiv.ui.clickgui.element.elements.ValueSlider;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 import java.util.ArrayList;
@@ -236,8 +237,8 @@ public class Panel {
 
             if (value.getValue() instanceof Boolean) {
                 getElements().add(new ValueButton(value, prettyName, x + 2, elementY + 2, XIV.getInstance().getGuiClick().getTheme().getElementWidth(), XIV.getInstance().getGuiClick().getTheme().getElementHeight()));
-            } else if (value instanceof SliderValue) {
-                getElements().add(new ValueSlider((SliderValue) value, prettyName, x + 2, elementY + 2, XIV.getInstance().getGuiClick().getTheme().getElementWidth(), XIV.getInstance().getGuiClick().getTheme().getElementHeight()));
+            } else if (value instanceof ClampedValue) {
+                // getElements().add(new ValueSlider((ClampedValue) value, prettyName, x + 2, elementY + 2, XIV.getInstance().getGuiClick().getTheme().getElementWidth(), XIV.getInstance().getGuiClick().getTheme().getElementHeight()));
             }
             elementY += XIV.getInstance().getGuiClick().getTheme().getElementHeight() + 1;
         }

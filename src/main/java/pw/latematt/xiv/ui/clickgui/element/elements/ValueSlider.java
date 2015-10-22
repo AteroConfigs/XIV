@@ -52,10 +52,12 @@ public class ValueSlider extends Element {
         if (!dragging) {
             return;
         }
+        /*
+        TODO: figure out how I should do this
         final float incrementValue = sliderValue.getIncrementValue();
         final float calculatedValue = ((float) amountScrolled * (sliderValue.getMax() - sliderValue.getMin()));
 
-        sliderValue.setValue(calculatedValue + sliderValue.getMin());
+        sliderValue.setValue(calculatedValue + sliderValue.getMin());*/
     }
 
     @Override
