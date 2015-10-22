@@ -71,7 +71,7 @@ public class DarculaTheme extends ClickTheme {
             this.modFont = new NahrFont("Tahoma", 17);
         }
 
-        element.setWidth(96);
+        element.setWidth(92);
         element.setHeight(this.getElementHeight());
 
         RenderUtils.drawBorderedGradientRect(x, y + 1, x + element.getWidth(), y + height, 0x801E1E1E, 0xFF515658, 0xFF44494B);
