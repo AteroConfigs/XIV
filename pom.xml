@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>net.minecraft</groupId>
 			<artifactId>launchwrapper</artifactId>
-			<version>1.7</version>
+			<version>1.9</version>
 		</dependency>
 		<dependency>
 			<groupId>com.paulscode</groupId>
@@ -208,7 +208,11 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
         </plugins>
     </build>
 </project>

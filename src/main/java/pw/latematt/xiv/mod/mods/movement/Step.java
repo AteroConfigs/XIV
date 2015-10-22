@@ -12,7 +12,6 @@ import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.ClampedValue;
-import pw.latematt.xiv.value.Value;
 
 /**
  * @author Matthew

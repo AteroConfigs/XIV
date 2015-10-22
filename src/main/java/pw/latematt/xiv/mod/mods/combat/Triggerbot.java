@@ -25,7 +25,6 @@ import pw.latematt.xiv.utils.Timer;
 import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
-import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.Random;
 

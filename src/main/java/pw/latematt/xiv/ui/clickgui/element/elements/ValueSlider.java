@@ -11,10 +11,8 @@ import pw.latematt.xiv.value.ClampedValue;
 /**
  * @author Rederpz
  * @author TehNawnanon
- *
  */
 public class ValueSlider extends Element {
-
     private final ClampedValue<Float> sliderValue;
     private double amountScrolled = 0.0;
     private boolean dragging = false;
@@ -86,23 +84,23 @@ public class ValueSlider extends Element {
     }
 
     public Float toFloat(Object value) {
-        if(value instanceof Integer) {
+        if (value instanceof Integer) {
             Integer val = (Integer) value;
 
             return val.floatValue();
-        }else if(value instanceof Double) {
+        } else if (value instanceof Double) {
             Double val = (Double) value;
 
             return val.floatValue();
-        }else if(value instanceof Long) {
+        } else if (value instanceof Long) {
             Long val = (Long) value;
 
             return val.floatValue();
-        }else if(value instanceof Short) {
+        } else if (value instanceof Short) {
             Short val = (Short) value;
 
             return val.floatValue();
-        }else if(value instanceof Float) {
+        } else if (value instanceof Float) {
             return (Float) value;
         }
         return null;
