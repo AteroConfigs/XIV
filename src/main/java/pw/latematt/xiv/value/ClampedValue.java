@@ -1,7 +1,5 @@
 package pw.latematt.xiv.value;
 
-import java.text.DecimalFormat;
-
 /**
  * Created by TehNeon on 10/21/2015.
  */

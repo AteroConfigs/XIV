@@ -39,9 +39,9 @@ public class InventoryWalk extends Mod implements Listener<MotionUpdateEvent> {
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
             mc.thePlayer.rotationYaw -= 4;
 
-            if(mc.thePlayer.rotationYaw < 180.0F) {
+            if (mc.thePlayer.rotationYaw < 180.0F) {
                 mc.thePlayer.rotationYaw += 360.0F;
-            }else if(mc.thePlayer.rotationYaw > 180.0F) {
+            } else if (mc.thePlayer.rotationYaw > 180.0F) {
                 mc.thePlayer.rotationYaw -= 360.0F;
             }
         }
@@ -49,9 +49,9 @@ public class InventoryWalk extends Mod implements Listener<MotionUpdateEvent> {
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
             mc.thePlayer.rotationYaw += 4;
 
-            if(mc.thePlayer.rotationYaw < 180.0F) {
+            if (mc.thePlayer.rotationYaw < 180.0F) {
                 mc.thePlayer.rotationYaw += 360.0F;
-            }else if(mc.thePlayer.rotationYaw > 180.0F) {
+            } else if (mc.thePlayer.rotationYaw > 180.0F) {
                 mc.thePlayer.rotationYaw -= 360.0F;
             }
         }

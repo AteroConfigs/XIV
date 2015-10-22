@@ -1,18 +1,12 @@
 package pw.latematt.xiv.mod.mods.misc;
 
 import net.minecraft.network.play.client.C14PacketTabComplete;
-import net.minecraft.network.play.server.S3APacketTabComplete;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.command.Command;
-import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.ReadPacketEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.utils.ChatLogger;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 /**

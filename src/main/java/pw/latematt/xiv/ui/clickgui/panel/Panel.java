@@ -224,7 +224,7 @@ public class Panel {
         for (Value value : XIV.getInstance().getValueManager().getContents()) {
             String prefix = value.getName();
 
-            if(value.getName().contains("_")) {
+            if (value.getName().contains("_")) {
                 prefix = value.getName().substring(value.getName().split("_")[0].length());
             }
 

@@ -12,7 +12,6 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.ClampedValue;
-import pw.latematt.xiv.value.Value;
 
 import java.util.Objects;
 
