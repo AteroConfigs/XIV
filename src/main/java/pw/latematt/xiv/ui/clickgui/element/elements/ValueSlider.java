@@ -6,50 +6,56 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.ui.clickgui.element.Element;
-import pw.latematt.xiv.value.SliderValue;
+import pw.latematt.xiv.value.ClampedValue;
 
 /**
  * @author Rederpz
  */
 public class ValueSlider extends Element {
+
+    private final ClampedValue<Float> sliderValue;
+    private double amountScrolled = 0.0D;
+    private boolean dragging = false;
+
     private static Minecraft mc = Minecraft.getMinecraft();
-    private final SliderValue<Boolean> value;
     private final String valuePrettyName;
 
-    public ValueSlider(SliderValue<Boolean> value, String valuePrettyName, float x, float y, float width, float height) {
+    public ValueSlider(ClampedValue<Float> value, String valuePrettyName, float x, float y, float width, float height) {
         super(x, y, width, height);
 
-        this.value = value;
+        this.sliderValue = value;
         this.valuePrettyName = valuePrettyName;
 
-        this.value.setSliderX(width / 2);
+        amountScrolled = value.getDefault() / value.getMax();
     }
 
     @Override
     public void drawElement(int mouseX, int mouseY) {
-        XIV.getInstance().getGuiClick().getTheme().renderSlider(getValuePrettyName(), toFloat(getValue()).getValue(), getX(), getY(), getWidth(), getHeight(), getValue().getSliderX(), isOverElement(mouseX, mouseY), this);
-
-        SliderValue<Float> val = toFloat(value);
-
-        if (value.getSliderX() > getWidth() - 1) {
-            value.setSliderX(getWidth() - 1);
-        } else if (value.getSliderX() < 2) {
-            value.setSliderX(2);
-        }
+        XIV.getInstance().getGuiClick().getTheme().renderSlider(getValuePrettyName(), sliderValue.getValue(), getX(), getY(), getWidth(), getHeight(), getValue().getSliderX(), isOverElement(mouseX, mouseY), this);
 
         if (isOverElement(mouseX, mouseY) && Mouse.isButtonDown(0)) {
-            value.setSliderX((mouseX) - getX());
+            dragging = true;
 
-            if (value.getSliderX() > getWidth() - 1) {
-                value.setSliderX(getWidth() - 1);
-            } else if (value.getSliderX() < 2) {
-                value.setSliderX(2);
+            if (mouseX > getX()) {
+                double diff = mouseX - getX();
+                amountScrolled = diff / getWidth();
+                amountScrolled = amountScrolled < 0 ? 0 : amountScrolled > 1 ? 1 : amountScrolled;
+                setValue();
             }
 
-            float frac = (getWidth() - 3) / (val.getMax() - val.getMin());
-
-            toFloat(Float.parseFloat(val.getFormat().format(((value.getSliderX() - 2) / frac) + val.getMin())), value);
+        } else {
+            dragging = false;
         }
+    }
+
+    public void setValue() {
+        if (!dragging) {
+            return;
+        }
+        final float incrementValue = sliderValue.getIncrementValue();
+        final float calculatedValue = ((float) amountScrolled * (sliderValue.getMax() - sliderValue.getMin()));
+
+        sliderValue.setValue(calculatedValue + sliderValue.getMin());
     }
 
     @Override
@@ -61,13 +67,11 @@ public class ValueSlider extends Element {
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (isOverElement(mouseX, mouseY) && mouseButton == 0) {
             mc.getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(new ResourceLocation("gui.button.press"), 1.0F));
-//            ModuleValue<Float> val = toFloat(value);
-
         }
     }
 
-    public SliderValue<Boolean> getValue() {
-        return value;
+    public ClampedValue<Boolean> getValue() {
+        return sliderValue;
     }
 
     public String getValuePrettyName() {
@@ -76,63 +80,5 @@ public class ValueSlider extends Element {
 
     @Override
     public void onGuiClosed() {
-    }
-
-    public SliderValue<Float> toFloat(SliderValue value) {
-        if (value.getValue() instanceof Integer) {
-            SliderValue<Integer> val = (SliderValue<Integer>) value;
-
-            SliderValue<Float> newValue = new SliderValue<Float>(val.getName(), val.getValue().floatValue(), val.getMin().floatValue(), val.getMax().floatValue(), val.getFormat(), false);
-
-            return newValue.setSliderX(value.getSliderX());
-        } else if (value.getValue() instanceof Double) {
-            SliderValue<Double> val = (SliderValue<Double>) value;
-
-            SliderValue<Float> newValue = new SliderValue<Float>(val.getName(), val.getValue().floatValue(), val.getMin().floatValue(), val.getMax().floatValue(), val.getFormat(), false);
-
-            return newValue.setSliderX(value.getSliderX());
-        } else if (value.getValue() instanceof Long) {
-            SliderValue<Long> val = (SliderValue<Long>) value;
-
-            SliderValue<Float> newValue = new SliderValue<Float>(val.getName(), val.getValue().floatValue(), val.getMin().floatValue(), val.getMax().floatValue(), val.getFormat(), false);
-
-            return newValue.setSliderX(value.getSliderX());
-        } else if (value.getValue() instanceof Short) {
-            SliderValue<Short> val = (SliderValue<Short>) value;
-
-            SliderValue<Float> newValue = new SliderValue<Float>(val.getName(), val.getValue().floatValue(), val.getMin().floatValue(), val.getMax().floatValue(), val.getFormat(), false);
-
-            return newValue.setSliderX(value.getSliderX());
-        } else if (value.getValue() instanceof Float) {
-            SliderValue<Float> val = (SliderValue<Float>) value;
-
-            return val;
-        }
-        return null;
-    }
-
-    public SliderValue<Float> toFloat(Float newValue, SliderValue value) {
-        if (value.getValue() instanceof Integer) {
-            SliderValue<Integer> val = (SliderValue<Integer>) value;
-
-            val.setValue(newValue.intValue());
-        } else if (value.getValue() instanceof Double) {
-            SliderValue<Double> val = (SliderValue<Double>) value;
-
-            val.setValue(newValue.doubleValue());
-        } else if (value.getValue() instanceof Long) {
-            SliderValue<Long> val = (SliderValue<Long>) value;
-
-            val.setValue(newValue.longValue());
-        } else if (value.getValue() instanceof Short) {
-            SliderValue<Short> val = (SliderValue<Short>) value;
-
-            val.setValue(newValue.shortValue());
-        } else if (value.getValue() instanceof Float) {
-            SliderValue<Float> val = (SliderValue<Float>) value;
-
-            val.setValue(newValue);
-        }
-        return null;
     }
 }

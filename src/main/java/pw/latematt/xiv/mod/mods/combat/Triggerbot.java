@@ -22,7 +22,6 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.Timer;
-import pw.latematt.xiv.value.SliderValue;
 import pw.latematt.xiv.value.Value;
 
 import java.text.DecimalFormat;
