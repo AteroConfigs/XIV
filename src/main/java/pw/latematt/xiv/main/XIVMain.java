@@ -98,8 +98,12 @@ public class XIVMain {
         /* game runs now */
         GameConfiguration gameConfiguration = new GameConfiguration(new GameConfiguration.UserInformation(session, userPropertiesMap, proxy), new GameConfiguration.DisplayInformation(widthInt, heightInt, fullscreen, checkGlErrors), new GameConfiguration.FolderInformation(gameDirFile, resourcePackDirFile, assetsDirFile, uuidIndex), new GameConfiguration.GameInformation(demo, versionString), new GameConfiguration.ServerInformation(serverString, portInteger.intValue()));
         Thread.currentThread().setName("Client Thread");
-        Minecraft mc = new Minecraft(gameConfiguration);
-        mc.run();
+        Runtime.getRuntime().addShutdownHook(new Thread("Client Shutdown Thread") {
+            public void run() {
+                Minecraft.stopIntegratedServer();
+            }
+        });
+        new Minecraft(gameConfiguration).run();
     }
 
     private static boolean func_110121_a(String p_110121_0_) {
