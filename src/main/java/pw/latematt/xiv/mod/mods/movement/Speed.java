@@ -143,7 +143,8 @@ public class Speed extends Mod implements CommandHandler {
         if (mc.thePlayer.getActivePotionEffect(Potion.SPEED) == null)
             return speed;
         PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
-        speed -= (0.20000000298023224D * (effect.getAmplifier() > 0 ? effect.getAmplifier() : 1)) - 0.3D;
+        speed -= 0.36D;
+        speed -= (0.20000000298023224D * effect.getAmplifier());
         if (speed < 1.0D)
             speed = 1.0D;
         return speed;

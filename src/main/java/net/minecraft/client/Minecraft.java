@@ -190,6 +190,7 @@ import org.lwjgl.util.glu.GLU;
 
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.*;
+import pw.latematt.xiv.file.XIVFile;
 
 public class Minecraft implements IThreadListener, IPlayerUsage
 {
@@ -755,8 +756,25 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     public void displayCrashReport(CrashReport crashReportIn)
     {
-        Bootstrap.func_179870_a("#@?@# Game crashed! Crash report could not be saved. #@?@#");
-        System.exit(-2);
+        File var2 = new File(XIVFile.XIV_DIRECTORY, "crash-reports");
+        File var3 = new File(var2, "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-client.txt");
+        Bootstrap.func_179870_a(crashReportIn.getCompleteReport());
+
+        if (crashReportIn.getFile() != null)
+        {
+            Bootstrap.func_179870_a("#@!@# Game crashed! Crash report saved to: #@!@# " + crashReportIn.getFile());
+            System.exit(-1);
+        }
+        else if (crashReportIn.saveToFile(var3))
+        {
+            Bootstrap.func_179870_a("#@!@# Game crashed! Crash report saved to: #@!@# " + var3.getAbsolutePath());
+            System.exit(-1);
+        }
+        else
+        {
+            Bootstrap.func_179870_a("#@?@# Game crashed! Crash report could not be saved. #@?@#");
+            System.exit(-2);
+        }
     }
 
     public boolean isUnicode()
