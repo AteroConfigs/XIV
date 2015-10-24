@@ -1,6 +1,5 @@
 package pw.latematt.xiv.mod.mods.combat;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
@@ -10,8 +9,9 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.AttackEntityEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.mod.mods.movement.Speed;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.value.ClampedValue;
+import pw.latematt.xiv.value.Value;
 
 import java.util.Objects;
 
@@ -20,8 +20,8 @@ import java.util.Objects;
  */
 
 public final class ArmorBreaker extends Mod implements Listener<AttackEntityEvent>, CommandHandler {
-    private final ClampedValue<Integer> packets = new ClampedValue<>("armorbreaker_packets", 50, 0, 100);
-    private int itemSwitchTicks = 0;
+    private final Value<Boolean> crits = new Value<>("armorbreaker_crits", true);
+    private int delay = 0;
 
     public ArmorBreaker() {
         super("ArmorBreaker", ModType.COMBAT, Keyboard.KEY_NONE, 0xFF808080);
@@ -29,45 +29,52 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
         Command.newCommand()
                 .cmd("armorbreaker")
                 .description("Base command for ArmorBreaker mod.")
-                .arguments("<number>")
+                .arguments("<crits>")
                 .aliases("ab")
                 .handler(this).build();
     }
 
     @Override
     public void onEventCalled(AttackEntityEvent event) {
-        if (this.packets.getValue() != 0) {
-            for (int i = 0; i < this.packets.getValue(); i++) {
-                mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
-            }
+        if (Objects.isNull(mc.thePlayer.getCurrentEquippedItem()) || Objects.isNull(mc.thePlayer.inventoryContainer.getSlot(27).getStack())) {
+            return;
         }
 
-        switch (++this.itemSwitchTicks) {
-            case 2: {
-                if (!mc.thePlayer.inventoryContainer.getSlot(27).getHasStack()) {
-                    break;
-                }
+        this.delay++;
 
-                final ItemStack item = mc.thePlayer.inventoryContainer.getSlot(27).getStack();
-
-                if (Objects.nonNull(item)) {
-                    mc.playerController.windowClick(0, 27, 0, 2, mc.thePlayer);
-                    break;
-                }
-
-                break;
+        if (this.crits.getValue()) { // attempt at lessening flags due to crits
+            if (XIV.getInstance().getModManager().find(Speed.class).isEnabled()) {
+                mc.timer.timerSpeed = 1.0F;
             }
 
-            case 4: {
-                if (mc.thePlayer.inventoryContainer.getSlot(27).getHasStack()) {
-                    final ItemStack item = mc.thePlayer.inventoryContainer.getSlot(27).getStack();
-                    if (Objects.nonNull(item)) {
-                        mc.playerController.windowClick(0, 27, 0, 2, mc.thePlayer);
-                    }
+            switch (this.delay) {
+                case 1: { // switch
+                    mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, 27, mc.thePlayer.inventory.currentItem, 2, mc.thePlayer);
+                    break;
                 }
 
-                this.itemSwitchTicks = 0;
-                break;
+                case 2: { // crit
+                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.0625101, mc.thePlayer.posZ, false));
+                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+                    break;
+                }
+
+                case 3: { // switch
+                    mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, 27, mc.thePlayer.inventory.currentItem, 2, mc.thePlayer);
+                    break;
+                }
+
+                case 4: { // crit & reset
+                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.0625101, mc.thePlayer.posZ, false));
+                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+                    this.delay = 0;
+                    break;
+                }
+            }
+        } else {
+            if (this.delay >= 2) {
+                mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, 27, mc.thePlayer.inventory.currentItem, 2, mc.thePlayer);
+                this.delay = 0;
             }
         }
     }
@@ -78,29 +85,21 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
         if (arguments.length >= 2) {
             String action = arguments[1];
             switch (action.toLowerCase()) {
-                case "packets":
+                case "crits":
+                case "criticals":
                     if (arguments.length >= 3) {
-                        String newPacketsString = arguments[2];
-                        try {
-                            if (arguments[2].equalsIgnoreCase("-d")) {
-                                packets.setValue(packets.getDefault());
-                            } else {
-                                int newPackets = Integer.parseInt(newPacketsString);
-                                if (newPackets < 0) {
-                                    newPackets = 0;
-                                }
-                                packets.setValue(newPackets);
-                            }
-                            ChatLogger.print(String.format("ArmorBreaker Packet Amount set to %s", packets.getValue()));
-                        } catch (NumberFormatException e) {
-                            ChatLogger.print(String.format("\"%s\" is not a number.", newPacketsString));
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            crits.setValue(crits.getDefault());
+                        } else {
+                            crits.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
-                        ChatLogger.print("Invalid arguments, valid: armorbreaker packets <number>");
+                        crits.setValue(!crits.getValue());
                     }
+                    ChatLogger.print(String.format("ArmorBreaker will %s perform crits.", (crits.getValue() ? "now" : "no longer")));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: packets");
+                    ChatLogger.print("Invalid action, valid: crits");
                     break;
             }
         } else {
@@ -116,6 +115,6 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
-        this.itemSwitchTicks = 0;
+        this.delay = 0;
     }
 }
