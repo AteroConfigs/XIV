@@ -47,10 +47,7 @@ public class Waypoints extends Mod implements CommandHandler {
     private final Value<Boolean> boxes = new Value<>("waypoints_boxes", true);
     private final Value<Boolean> tracerLines = new Value<>("waypoints_tracer_lines", true);
     private final Value<Boolean> nametags = new Value<>("waypoints_nametags", true);
-    private final Listener render3DListener;
-    private final Listener motionUpdateListener;
-    private final Listener addWeatherListener;
-    private final Listener playerDeathListener;
+    private final Listener render3DListener, motionUpdateListener, addWeatherListener, playerDeathListener;
 
     public Waypoints() {
         super("Waypoints", ModType.RENDER);
@@ -365,7 +362,7 @@ public class Waypoints extends Mod implements CommandHandler {
                     ChatLogger.print(String.format("Waypoints will %s set waypoints at death.", deathPoints.getValue() ? "now" : "no longer"));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: add, del, tracerlines, boxes, nametags, lightning, death");
+                    ChatLogger.print("Invalid action, valid: add, here, del, tracerlines, boxes, nametags, lightning, death");
                     break;
             }
         } else {
