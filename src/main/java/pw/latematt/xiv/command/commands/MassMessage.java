@@ -3,12 +3,12 @@ package pw.latematt.xiv.command.commands;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.StringUtils;
+import pw.latematt.timer.Timer;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.utils.Timer;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 

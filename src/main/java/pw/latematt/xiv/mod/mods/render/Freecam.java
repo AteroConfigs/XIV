@@ -4,6 +4,7 @@ import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import org.lwjgl.input.Keyboard;
+import pw.latematt.timer.Timer;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.*;
@@ -11,7 +12,6 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.movement.Sneak;
 import pw.latematt.xiv.utils.EntityUtils;
-import pw.latematt.xiv.utils.Timer;
 
 import java.util.Objects;
 
@@ -20,13 +20,9 @@ import java.util.Objects;
  * @author Matthew
  */
 public class Freecam extends Mod {
-    private Timer timer = new Timer();
-    private final Listener packetListener;
-    private final Listener motionListener;
-    private final Listener moveListener;
-    private final Listener pushOutOfBlocksListener;
-    private final Listener cullingListener;
+    private final Listener packetListener, motionListener, moveListener, pushOutOfBlocksListener, cullingListener;
     private EntityOtherPlayerMP entity;
+    private Timer timer = new Timer();
 
     private boolean sneaking = false;
 

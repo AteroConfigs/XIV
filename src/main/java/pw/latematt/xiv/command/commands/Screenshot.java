@@ -6,13 +6,13 @@ import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ScreenShotHelper;
 import org.apache.commons.codec.binary.Base64;
+import pw.latematt.timer.Timer;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.IngameHUDRenderEvent;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.RenderUtils;
-import pw.latematt.xiv.utils.Timer;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

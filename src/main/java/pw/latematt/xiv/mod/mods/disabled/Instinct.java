@@ -8,12 +8,12 @@ import net.minecraft.item.ItemFlintAndSteel;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.util.BlockPos;
 import org.lwjgl.input.Keyboard;
+import pw.latematt.timer.Timer;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.utils.Timer;
 
 /**
  * @author Rederpz

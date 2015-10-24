@@ -1,6 +1,5 @@
 package pw.latematt.xiv.event.events;
 
-import net.minecraft.network.Packet;
 import net.minecraft.potion.Potion;
 import pw.latematt.xiv.event.Cancellable;
 import pw.latematt.xiv.event.Event;

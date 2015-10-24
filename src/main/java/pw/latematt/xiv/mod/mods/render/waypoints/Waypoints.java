@@ -72,7 +72,7 @@ public class Waypoints extends Mod implements CommandHandler {
                     if (!waypoint.getServer().equals(server))
                         continue;
 
-                    if(waypoint.getDimension() != mc.thePlayer.dimension)
+                    if (waypoint.getDimension() != mc.thePlayer.dimension)
                         continue;
 
                     if (boxes.getValue()) {
