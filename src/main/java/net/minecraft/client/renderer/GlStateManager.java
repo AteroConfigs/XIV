@@ -30,9 +30,9 @@ public class GlStateManager
     public static boolean clearEnabled = true;
 
 
-    public static void pushAttrib()
+    public static void pushAttrib(int attrib)
     {
-        GL11.glPushAttrib(8256);
+        GL11.glPushAttrib(attrib);
     }
 
     public static void popAttrib()

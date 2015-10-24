@@ -160,7 +160,7 @@ public class RenderItemFrame extends Render
                     GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                 }
 
-                GlStateManager.pushAttrib();
+                GlStateManager.pushAttrib(8256);
                 RenderHelper.enableStandardItemLighting();
                 this.field_177074_h.func_175043_b(var3.getEntityItem());
                 RenderHelper.disableStandardItemLighting();
