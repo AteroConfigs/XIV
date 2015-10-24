@@ -34,7 +34,7 @@ public class Freecam extends Mod {
             public void onEventCalled(MotionUpdateEvent event) {
                 mc.thePlayer.renderArmPitch += 400.0F;
 
-                if (timer.hasReached(7000L)) {
+                if (timer.hasReached(7000L) && mc.thePlayer.motionX != 0 && mc.thePlayer.motionY != 0 && mc.thePlayer.motionZ != 0) {
                     mc.renderGlobal.loadRenderers();
                     timer.reset();
                 }
@@ -160,6 +160,9 @@ public class Freecam extends Mod {
             entity.swingProgress = mc.thePlayer.swingProgress;
             entity.swingProgressInt = mc.thePlayer.swingProgressInt;
             entity.isSwingInProgress = mc.thePlayer.isSwingInProgress;
+            if(mc.thePlayer.getItemInUse() != null) {
+                entity.setItemInUse(mc.thePlayer.getItemInUse(), mc.thePlayer.getItemInUseCount());
+            }
             entity.setEating(mc.thePlayer.isEating());
             entity.setInvisible(mc.thePlayer.isInvisible());
             entity.setHealth(mc.thePlayer.getHealth());
