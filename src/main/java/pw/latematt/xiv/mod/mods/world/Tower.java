@@ -19,10 +19,10 @@ public class Tower extends Mod implements Listener<MotionUpdateEvent> {
 
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
-        if (mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemBlock) {
+        if (mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemBlock && event.getCurrentState() == MotionUpdateEvent.State.POST) {
             if (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && mc.thePlayer.onGround && mc.gameSettings.keyBindUseItem.getIsKeyPressed()) {
                 if (mc.thePlayer.rotationPitch > 40) {
-                    mc.thePlayer.func_174826_a(mc.thePlayer.getEntityBoundingBox().offset(0.0D, 1.2D, 0.0D));
+                    mc.thePlayer.func_174826_a(mc.thePlayer.getEntityBoundingBox().offset(0.0F, 1.15F, 0.0F));
                 }
             }
         }

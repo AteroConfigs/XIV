@@ -76,6 +76,7 @@ import net.minecraft.world.LockCode;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.PotionRenderEvent;
 import pw.latematt.xiv.mod.mods.movement.NoSlowdown;
 
 public abstract class EntityPlayer extends EntityLivingBase
@@ -2255,7 +2256,13 @@ public abstract class EntityPlayer extends EntityLivingBase
         else
         {
             Team var2 = this.getTeam();
-            return var2 == null || playerIn == null || playerIn.getTeam() != var2 || !var2.func_98297_h();
+
+            PotionRenderEvent event = new PotionRenderEvent(Potion.INVISIBILITY);
+            event.setCancelled(var2 == null || playerIn == null || playerIn.getTeam() != var2 || !var2.func_98297_h());
+
+            XIV.getInstance().getListenerManager().call(event);
+
+            return event.isCancelled();
         }
     }
 

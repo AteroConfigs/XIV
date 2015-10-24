@@ -21,11 +21,17 @@ public class AutoAccept extends Mod implements Listener<ReadPacketEvent> {
         if (event.getPacket() instanceof S02PacketChat) {
             final S02PacketChat packetChat = (S02PacketChat) event.getPacket();
             XIV.getInstance().getFriendManager().getContents().keySet().stream().filter(friend ->
-                    packetChat.func_148915_c().getFormattedText().contains(friend) &&
-                            (packetChat.func_148915_c().getFormattedText().contains("has requested to teleport to you.")) ||
-                            packetChat.func_148915_c().getFormattedText().contains("has requested that you teleport to them.")).
-                    forEach(friend -> mc.thePlayer.sendChatMessage("/tpaccept " + friend));
+                    packetChat.func_148915_c().getFormattedText().contains(friend) && isValidMessage(packetChat.func_148915_c().getFormattedText())).forEach(friend -> mc.thePlayer.sendChatMessage("/tpaccept " + friend));
         }
+    }
+
+    public boolean isValidMessage(String message) {
+
+        if(message.contains("has requested to teleport to you.") || message.contains("has requested that you teleport to them.") ||
+                message.contains("te ha pedido teletransportarse hasta ti.") || message.contains("te ha pedido que te teletransportes hasta él.")) {
+            return true;
+        }
+        return false;
     }
 
     @Override

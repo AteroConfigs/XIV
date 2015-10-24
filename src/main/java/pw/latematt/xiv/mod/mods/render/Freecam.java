@@ -58,10 +58,6 @@ public class Freecam extends Mod {
                 event.setMotionY(0.0D);
                 mc.thePlayer.motionY = 0.0D;
 
-                if (!mc.inGameHasFocus) {
-                    return;
-                }
-
                 event.setMotionX(event.getMotionX() * speed);
                 event.setMotionZ(event.getMotionZ() * speed);
 

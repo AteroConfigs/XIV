@@ -26,8 +26,8 @@ public class Speed extends Mod implements CommandHandler {
     private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.NEW);
     private final Value<Boolean> fastLadder = new Value<>("speed_fast_ladder", true);
     private final Listener motionUpdateListener, moveListener;
-    private int delay;
     private boolean shouldBoost;
+    private int delay;
 
     public Speed() {
         super("Speed", ModType.MOVEMENT, Keyboard.KEY_F, 0xFFDC5B18);
@@ -84,9 +84,7 @@ public class Speed extends Mod implements CommandHandler {
                 if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
                     Step step = (Step) XIV.getInstance().getModManager().find("step");
                     boolean editingPackets = step != null && step.isEditingPackets();
-                    boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
-                    boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-                    boolean moving = movingForward && strafing || movingForward;
+                    boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed();
 
                     boolean valid = mc.thePlayer.onGround &&
                             !BlockUtils.isOnLiquid(mc.thePlayer) &&
@@ -142,11 +140,14 @@ public class Speed extends Mod implements CommandHandler {
     private double getSpeedPotionSlowdown(double speed) {
         if (mc.thePlayer.getActivePotionEffect(Potion.SPEED) == null)
             return speed;
+
         PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
-        speed -= 0.36D;
-        speed -= (0.20000000298023224D * effect.getAmplifier());
+
+        speed -= (0.34D * (effect.getAmplifier() + 1));
+
         if (speed < 1.0D)
             speed = 1.0D;
+
         return speed;
     }
 

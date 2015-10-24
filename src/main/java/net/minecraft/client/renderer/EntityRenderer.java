@@ -79,6 +79,7 @@ import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Project;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.PotionRenderEvent;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
 
@@ -857,7 +858,10 @@ public class EntityRenderer implements IResourceManagerReloadListener
         {
             byte var5 = 20;
 
-            if (this.mc.thePlayer.isPotionActive(Potion.NAUSEA))
+            PotionRenderEvent nausea = new PotionRenderEvent(Potion.NAUSEA);
+            XIV.getInstance().getListenerManager().call(nausea);
+
+            if (this.mc.thePlayer.isPotionActive(Potion.NAUSEA) && !nausea.isCancelled())
             {
                 var5 = 7;
             }
@@ -2089,7 +2093,10 @@ public class EntityRenderer implements IResourceManagerReloadListener
         double fogYFactor1 = var2.provider.getVoidFogYFactor();
         double var23 = (var3.lastTickPosY + (var3.posY - var3.lastTickPosY) * (double)partialTicks) * fogYFactor1;
 
-        if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.BLINDNESS))
+        PotionRenderEvent blindness = new PotionRenderEvent(Potion.BLINDNESS);
+        XIV.getInstance().getListenerManager().call(blindness);
+
+        if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.BLINDNESS) && !blindness.isCancelled())
         {
             int var24 = ((EntityLivingBase)var3).getActivePotionEffect(Potion.BLINDNESS).getDuration();
 
@@ -2200,7 +2207,10 @@ public class EntityRenderer implements IResourceManagerReloadListener
         {
             float var6;
 
-            if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.BLINDNESS))
+            PotionRenderEvent blindness = new PotionRenderEvent(Potion.BLINDNESS);
+            XIV.getInstance().getListenerManager().call(blindness);
+
+            if (var3 instanceof EntityLivingBase && ((EntityLivingBase)var3).isPotionActive(Potion.BLINDNESS) && !blindness.isCancelled())
             {
                 var6 = 5.0F;
                 int var71 = ((EntityLivingBase)var3).getActivePotionEffect(Potion.BLINDNESS).getDuration();

@@ -72,6 +72,9 @@ public class Waypoints extends Mod implements CommandHandler {
                     if (!waypoint.getServer().equals(server))
                         continue;
 
+                    if(waypoint.getDimension() != mc.thePlayer.dimension)
+                        continue;
+
                     if (boxes.getValue()) {
                         GlStateManager.pushMatrix();
                         GlStateManager.func_179090_x();
@@ -127,7 +130,7 @@ public class Waypoints extends Mod implements CommandHandler {
                     return;
                 if (event.getEntity() instanceof EntityLightningBolt) {
                     EntityLightningBolt lightningBolt = (EntityLightningBolt) event.getEntity();
-                    Waypoint point = new Waypoint("Lightning", getCurrentServerIP(), lightningBolt.posX, lightningBolt.posY, lightningBolt.posZ, true);
+                    Waypoint point = new Waypoint("Lightning", getCurrentServerIP(), lightningBolt.posX, lightningBolt.posY, lightningBolt.posZ, mc.thePlayer.dimension, true);
                     points.add(point);
                     XIV.getInstance().getFileManager().saveFile("waypoints");
                     ChatLogger.print(String.format("Lightning Waypoint added at %s, %s, %s", point.getX(), point.getY(), point.getZ()));
@@ -140,7 +143,7 @@ public class Waypoints extends Mod implements CommandHandler {
             public void onEventCalled(PlayerDeathEvent event) {
                 if (!deathPoints.getValue())
                     return;
-                Waypoint point = new Waypoint("Death", getCurrentServerIP(), mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false);
+                Waypoint point = new Waypoint("Death", getCurrentServerIP(), mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.dimension, false);
                 points.add(point);
                 XIV.getInstance().getFileManager().saveFile("waypoints");
                 ChatLogger.print(String.format("Death Waypoint added at %s, %s, %s", point.getX(), point.getY(), point.getZ()));
@@ -203,23 +206,22 @@ public class Waypoints extends Mod implements CommandHandler {
         double x = waypoint.getX() + 0.5F - mc.getRenderManager().renderPosX;
         double y = waypoint.getY() - mc.getRenderManager().renderPosY;
         double z = waypoint.getZ() + 0.5F - mc.getRenderManager().renderPosZ;
-        final double dist = mc.thePlayer.getDistance(waypoint.getX(), waypoint.getY(), waypoint.getZ());
+        double dist = mc.thePlayer.getDistance(waypoint.getX(), waypoint.getY(), waypoint.getZ());
         final String text = waypoint.getName() + " \2477" + Math.round(dist) + "m\247r";
         double far = this.mc.gameSettings.renderDistanceChunks * 12.8D;
         double dl = Math.sqrt(x * x + z * z + y * y);
         double d;
+
         if (dl > far) {
             d = far / dl;
+            dist *= d;
             x *= d;
-            z *= d;
             y *= d;
+            z *= d;
         }
 
         float var13 = ((float) dist / 5 <= 2 ? 2.0F : (float) dist / 5) * ((Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_size")).getValue().floatValue();
         float var14 = 0.016666668F * var13;
-        if (var14 > 0.3F) {
-            var14 = 0.3F;
-        }
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y + 1.5F, z);
         GL11.glNormal3f(0.0F, 1.0F, 0.0F);
@@ -259,21 +261,44 @@ public class Waypoints extends Mod implements CommandHandler {
             switch (action.toLowerCase()) {
                 case "add":
                 case "a":
-                    if (arguments.length >= 6) {
+                    if (arguments.length >= 7) {
                         try {
                             int x = Integer.parseInt(arguments[2]);
                             int y = Integer.parseInt(arguments[3]);
                             int z = Integer.parseInt(arguments[4]);
-                            String name = message.substring((String.format("%s %s %s %s %s ", arguments[0], arguments[1], arguments[2], arguments[3], arguments[4])).length());
-                            Waypoint waypoint = new Waypoint(name, getCurrentServerIP(), x, y, z, true);
+
+                            boolean temporary = Boolean.parseBoolean(arguments[5]);
+
+                            String name = message.substring((String.format("%s %s %s %s %s %s ", arguments[0], arguments[1], arguments[2], arguments[3], arguments[4], arguments[5])).length());
+                            Waypoint waypoint = new Waypoint(name, getCurrentServerIP(), x, y, z, mc.thePlayer.dimension, temporary);
                             points.add(waypoint);
                             XIV.getInstance().getFileManager().saveFile("waypoints");
                             ChatLogger.print(String.format("Waypoint \"%s\" added at %s, %s, %s", waypoint.getName(), waypoint.getX(), waypoint.getY(), waypoint.getZ()));
                         } catch (NumberFormatException e) {
-                            ChatLogger.print("Invalid integer, valid arguments: waypoints add <x> <y> <z> <name>");
+                            ChatLogger.print("Invalid integer, valid arguments: waypoints add <x> <y> <z> <temp> <name>");
                         }
                     } else {
-                        ChatLogger.print("Invalid arguments, valid: waypoints add <x> <y> <z> <name>");
+                        ChatLogger.print("Invalid arguments, valid: waypoints add <x> <y> <z> <temp> <name>");
+                    }
+                    break;
+                case "here":
+                case "h":
+                    if (arguments.length >= 3) {
+                        try {
+                            int x = mc.thePlayer.getPosition().getX();
+                            int y = mc.thePlayer.getPosition().getY();
+                            int z = mc.thePlayer.getPosition().getZ();
+
+                            String name = message.substring((String.format("%s %s ", arguments[0], arguments[1])).length());
+                            Waypoint waypoint = new Waypoint(name, getCurrentServerIP(), x, y, z, mc.thePlayer.dimension, false);
+                            points.add(waypoint);
+                            XIV.getInstance().getFileManager().saveFile("waypoints");
+                            ChatLogger.print(String.format("Waypoint \"%s\" added at %s, %s, %s", waypoint.getName(), waypoint.getX(), waypoint.getY(), waypoint.getZ()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print("Invalid integer, valid arguments: waypoints here <name>");
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: waypoints here <name>");
                     }
                     break;
                 case "del":

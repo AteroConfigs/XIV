@@ -9,6 +9,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.boss.BossStatus;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.potion.Potion;
@@ -255,7 +256,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
     private void drawDirection(ScaledResolution scaledResolution) {
         EnumFacing yaw = EnumFacing.getHorizontal(MathHelper.floor_double((double) (mc.thePlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
         String displayString = yaw.getName().substring(0, 1).toUpperCase() + yaw.getName().substring(1);
-        mc.fontRendererObj.drawStringWithShadow(displayString, (scaledResolution.getScaledWidth() - mc.fontRendererObj.getStringWidth(displayString)) / 2, 2, 0xFFFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(displayString, (scaledResolution.getScaledWidth() - mc.fontRendererObj.getStringWidth(displayString)) / 2, (BossStatus.statusBarTime > 0 ? 20 : 2), 0xFFFFFFFF);
     }
 
     private void drawLag(ScaledResolution scaledResolution) {

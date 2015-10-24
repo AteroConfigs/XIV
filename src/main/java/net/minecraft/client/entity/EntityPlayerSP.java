@@ -53,6 +53,7 @@ import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
+import pw.latematt.xiv.event.events.PotionRenderEvent;
 import pw.latematt.xiv.event.events.PushOutOfBlocksEvent;
 import pw.latematt.xiv.event.events.UsingItemSlowdownEvent;
 
@@ -715,6 +716,10 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
         this.prevTimeInPortal = this.timeInPortal;
 
+
+        PotionRenderEvent nausea = new PotionRenderEvent(Potion.NAUSEA);
+        XIV.getInstance().getListenerManager().call(nausea);
+
         if (this.inPortal)
         {
             if (this.mc.currentScreen != null && !this.mc.currentScreen.doesGuiPauseGame())
@@ -736,7 +741,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
             this.inPortal = false;
         }
-        else if (this.isPotionActive(Potion.NAUSEA) && this.getActivePotionEffect(Potion.NAUSEA).getDuration() > 60)
+        else if (this.isPotionActive(Potion.NAUSEA) && this.getActivePotionEffect(Potion.NAUSEA).getDuration() > 60 && !nausea.isCancelled())
         {
             this.timeInPortal += 0.006666667F;
 
