@@ -15,6 +15,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.RenderChatEvent;
 
 public class GuiChat extends GuiScreen
 {
@@ -298,6 +300,9 @@ public class GuiChat extends GuiScreen
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
+        RenderChatEvent event = new RenderChatEvent(inputField.getText());
+        XIV.getInstance().getListenerManager().call(event);
+
         drawRect(2, this.height - 14, this.width - 2, this.height - 2, Integer.MIN_VALUE);
         this.inputField.drawTextBox();
         IChatComponent var4 = this.mc.ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY());

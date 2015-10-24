@@ -21,6 +21,7 @@ import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.player.FastUse;
+import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.RenderUtils;
 
 import java.util.ArrayList;
@@ -84,6 +85,7 @@ public class Trajectories extends Mod implements Listener<Render3DEvent> {
         motionZ *= pow * (item instanceof ItemFishingRod ? 0.75F : 1.5F);
 
         RenderUtils.beginGl();
+
         if (power > 0.6F) {
             GlStateManager.color(0.0F, 1.0F, 0.0F, 1.0F);
         } else if (power > 0.3F) {
