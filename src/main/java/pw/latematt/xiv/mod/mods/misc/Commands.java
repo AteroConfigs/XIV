@@ -4,7 +4,6 @@ import net.minecraft.network.play.client.C01PacketChatMessage;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.event.events.RenderChatEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
@@ -25,39 +24,27 @@ public class Commands extends Mod implements Listener<SendPacketEvent> {
         renderChatListener = new Listener<RenderChatEvent>() {
             @Override
             public void onEventCalled(RenderChatEvent event) {
-                if(event.getString().startsWith(XIV.getInstance().getCommandManager().getPrefix())) {
+                if (event.getString().startsWith(XIV.getInstance().getCommandManager().getPrefix())) {
                     String message = event.getString().substring(1);
 
-                    ArrayList<String> commands = new ArrayList<>();
-                    for(Command command: XIV.getInstance().getCommandManager().getContents()) {
-                        if(command.getCmd().toLowerCase().startsWith(message.split(" ")[0].toLowerCase())) {
-                            if(!commands.contains(command.getCmd())) {
-                                commands.add(command.getCmd());
-                            }
+                    String predictedCommand = "";
+                    for (Command command : XIV.getInstance().getCommandManager().getContents()) {
+                        if (command.getCmd().toLowerCase().startsWith(message.split(" ")[0].toLowerCase())) {
+                            predictedCommand = command.getCmd();
                         }
 
-                        if(command.getAliases() != null) {
+                        if (command.getAliases() != null) {
                             for (String alias : command.getAliases()) {
-                                if (alias.toLowerCase().contains(message.split(" ")[0].toLowerCase())) {
-                                    if (!commands.contains(alias)) {
-                                        commands.add(alias);
-                                    }
+                                if (alias.toLowerCase().startsWith(message.split(" ")[0].toLowerCase())) {
+                                    predictedCommand = alias;
                                 }
                             }
                         }
                     }
 
-                    if(!message.equalsIgnoreCase("")) {
-                        int x = 0;
+                    if (!predictedCommand.equalsIgnoreCase("") && !message.contains(" ")) {
                         int y = RenderUtils.newScaledResolution().getScaledHeight() - 12;
-                        for (String cmd : commands) {
-                            String command = XIV.getInstance().getCommandManager().getPrefix() + cmd;
-
-                            x = RenderUtils.newScaledResolution().getScaledWidth() - mc.fontRendererObj.getStringWidth(command) - 2;
-                            y -= 12;
-
-                            mc.fontRendererObj.drawStringWithShadow(command, x, y, 0xFFFFFFFF);
-                        }
+                        mc.fontRendererObj.drawStringWithShadow(predictedCommand, 6, y, 0xFFFFFFFF);
                     }
                 }
             }

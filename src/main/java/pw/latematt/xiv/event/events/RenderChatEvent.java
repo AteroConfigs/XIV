@@ -1,6 +1,5 @@
 package pw.latematt.xiv.event.events;
 
-import net.minecraft.client.Minecraft;
 import pw.latematt.xiv.event.Event;
 
 /**

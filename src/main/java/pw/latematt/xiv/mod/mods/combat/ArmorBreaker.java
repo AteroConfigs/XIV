@@ -18,7 +18,6 @@ import java.util.Objects;
 /**
  * @author Jack
  */
-
 public final class ArmorBreaker extends Mod implements Listener<AttackEntityEvent>, CommandHandler {
     private final Value<Boolean> crits = new Value<>("armorbreaker_crits", true);
     private int delay = 0;
@@ -36,45 +35,31 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
 
     @Override
     public void onEventCalled(AttackEntityEvent event) {
-        if (Objects.isNull(mc.thePlayer.getCurrentEquippedItem()) || Objects.isNull(mc.thePlayer.inventoryContainer.getSlot(27).getStack())) {
+        if (Objects.isNull(mc.thePlayer.getCurrentEquippedItem()) || Objects.isNull(mc.thePlayer.inventoryContainer.getSlot(27).getStack()))
             return;
-        }
 
-        this.delay++;
-
-        if (this.crits.getValue()) { // attempt at lessening flags due to crits
-            if (XIV.getInstance().getModManager().find(Speed.class).isEnabled()) {
+        if (crits.getValue()) { // attempt at lessening flags due to crits
+            Speed speed = (Speed) XIV.getInstance().getModManager().find(Speed.class);
+            if (speed != null && speed.isEnabled())
                 mc.timer.timerSpeed = 1.0F;
-            }
 
-            switch (this.delay) {
+            switch (++delay) {
                 case 1: { // switch
                     mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, 27, mc.thePlayer.inventory.currentItem, 2, mc.thePlayer);
                     break;
                 }
 
-                case 2: { // crit
+                case 2: { // crit & reset
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.0625101, mc.thePlayer.posZ, false));
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                    break;
-                }
-
-                case 3: { // switch
-                    mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, 27, mc.thePlayer.inventory.currentItem, 2, mc.thePlayer);
-                    break;
-                }
-
-                case 4: { // crit & reset
-                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.0625101, mc.thePlayer.posZ, false));
-                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                    this.delay = 0;
+                    delay = 0;
                     break;
                 }
             }
         } else {
-            if (this.delay >= 2) {
+            if (++delay >= 2) {
                 mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, 27, mc.thePlayer.inventory.currentItem, 2, mc.thePlayer);
-                this.delay = 0;
+                delay = 0;
             }
         }
     }

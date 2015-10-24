@@ -14,11 +14,15 @@ public class ChatLogger {
     public static void print(String message) {
         if (enabled) {
             if (Minecraft.getMinecraft().thePlayer != null) {
-                Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(PREFIX + message));
+                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(PREFIX + message));
             } else {
                 XIV.getInstance().getLogger().info(message);
             }
         }
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public static void setEnabled(boolean enable) {

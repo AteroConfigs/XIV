@@ -2,6 +2,8 @@ package pw.latematt.xiv;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pw.latematt.timer.TimeConverter;
+import pw.latematt.timer.Timer;
 import pw.latematt.xiv.management.managers.*;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.tabgui.GuiTabHandler;
@@ -84,7 +86,8 @@ public class XIV {
 
     /* sets up the client base (called in Main#main(p_main_0_) at line 114) */
     public void setup() {
-        logger.info("== Begin XIV setup == ");
+        Timer timer = new Timer();
+        logger.info("-> Begin XIV setup");
         /* call setup on all managers */
         /* the order that these are called in is important, do not change! */
         /* setup is not required with all managers */
@@ -112,6 +115,6 @@ public class XIV {
             }
         });
 
-        logger.info("==  End XIV setup  == ");
+        logger.info(String.format("-> End XIV setup (Took %s seconds)", new TimeConverter().millisecondsToSeconds(timer.getDifference())));
     }
 }

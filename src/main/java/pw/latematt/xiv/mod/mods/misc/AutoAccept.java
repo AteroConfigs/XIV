@@ -26,12 +26,8 @@ public class AutoAccept extends Mod implements Listener<ReadPacketEvent> {
     }
 
     public boolean isValidMessage(String message) {
-
-        if (message.contains("has requested to teleport to you.") || message.contains("has requested that you teleport to them.") ||
-                message.contains("te ha pedido teletransportarse hasta ti.") || message.contains("te ha pedido que te teletransportes hasta él.")) {
-            return true;
-        }
-        return false;
+        return message.contains("has requested to teleport to you.") || message.contains("has requested that you teleport to them.") ||
+                message.contains("te ha pedido teletransportarse hasta ti.") || message.contains("te ha pedido que te teletransportes hasta él.");
     }
 
     @Override

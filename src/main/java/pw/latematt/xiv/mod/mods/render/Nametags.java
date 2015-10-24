@@ -98,6 +98,12 @@ public class Nametags extends Mod implements CommandHandler {
             entityName = StringUtils.stripControlCodes(entityName);
         }
 
+        if ((entity instanceof EntityPlayer) && ((EntityPlayer) entity).capabilities.isFlying)
+            entityName = "\247a[F] \247r" + entityName;
+
+        if ((entity instanceof EntityPlayer) && ((EntityPlayer) entity).capabilities.isCreativeMode)
+            entityName = "\247a[C] \247r" + entityName;
+
         if (entity.getDistanceToEntity(mc.thePlayer) >= 64) {
             entityName = "\2472* \247r" + entityName;
         }

@@ -186,6 +186,8 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
     private void drawPotions(ScaledResolution scaledResolution) {
         int x = scaledResolution.getScaledWidth() - 2;
         int y = scaledResolution.getScaledHeight() - 10;
+        if (mc.ingameGUI.getChatGUI().getChatOpen())
+            y -= 13;
         for (Object o : mc.thePlayer.getActivePotionEffects()) {
             PotionEffect effect = (PotionEffect) o;
             String name = I18n.format(effect.getEffectName());
@@ -247,6 +249,8 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         }
 
         int y = scaledResolution.getScaledHeight() - 10;
+        if (mc.ingameGUI.getChatGUI().getChatOpen())
+            y -= 13;
         for (String infoString : info) {
             mc.fontRendererObj.drawStringWithShadow(infoString, 2, y, 0xFFFFFFFF);
             y -= 9;
@@ -291,7 +295,10 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             }
         }
 
-        mc.fontRendererObj.drawStringWithShadow(lag, scaledResolution.getScaledWidth() / 2 + 93, scaledResolution.getScaledHeight() - 10, color);
+        int y = scaledResolution.getScaledHeight() - 10;
+        if (mc.ingameGUI.getChatGUI().getChatOpen())
+            y -= 13;
+        mc.fontRendererObj.drawStringWithShadow(lag, scaledResolution.getScaledWidth() / 2 + 93, y, color);
     }
 
     @Override

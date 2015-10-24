@@ -1,18 +1,14 @@
 package pw.latematt.xiv.mod.mods.render;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Cylinder;
 import org.lwjgl.util.glu.GLU;
 import pw.latematt.xiv.XIV;
@@ -20,8 +16,6 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.mod.mods.player.FastUse;
-import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.RenderUtils;
 
 import java.util.ArrayList;
@@ -29,11 +23,11 @@ import java.util.List;
 
 /**
  * @author Rederpz
- * @author WhoEverDidTheMathOriginally
+ * @author Whoever did this math originally
  */
-public class Trajectories extends Mod implements Listener<Render3DEvent> {
-    public Trajectories() {
-        super("Trajectories", ModType.RENDER);
+public class Projectiles extends Mod implements Listener<Render3DEvent> {
+    public Projectiles() {
+        super("Projectiles", ModType.RENDER);
     }
 
     @Override

@@ -160,7 +160,7 @@ public class Freecam extends Mod {
             entity.swingProgress = mc.thePlayer.swingProgress;
             entity.swingProgressInt = mc.thePlayer.swingProgressInt;
             entity.isSwingInProgress = mc.thePlayer.isSwingInProgress;
-            if(mc.thePlayer.getItemInUse() != null) {
+            if (mc.thePlayer.getItemInUse() != null) {
                 entity.setItemInUse(mc.thePlayer.getItemInUse(), mc.thePlayer.getItemInUseCount());
             }
             entity.setEating(mc.thePlayer.isEating());
