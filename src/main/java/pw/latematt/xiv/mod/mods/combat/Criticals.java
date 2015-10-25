@@ -6,52 +6,64 @@ import net.minecraft.potion.Potion;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.SendPacketEvent;
+import pw.latematt.xiv.event.events.AttackEntityEvent;
+import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
 
 /**
  * @author Matthew
  */
 public class Criticals extends Mod {
-    private float fallDist;
-    private Listener sendPacketListener;
+    private Listener motionUpdateListener, attackEntityListener;
+    private int delay;
 
     public Criticals() {
         super("Criticals", ModType.COMBAT, Keyboard.KEY_NONE, 0xFFA38EC7);
 
-        sendPacketListener = new Listener<SendPacketEvent>() {
+        attackEntityListener = new Listener<AttackEntityEvent>() {
             @Override
-            public void onEventCalled(SendPacketEvent event) {
-                if (event.getPacket() instanceof C03PacketPlayer) {
-                    C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    if (!isSafe())
-                        fallDist += mc.thePlayer.fallDistance;
+            public void onEventCalled(AttackEntityEvent event) {
+                if (!isSafe())
+                    return;
+                mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.0625101, mc.thePlayer.posZ, false));
+                mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+            }
+        };
 
-                    if (isSafe() || fallDist >= 3.0F) {
-                        player.setOnGround(true);
-                        fallDist = 0.0F;
-                        mc.thePlayer.fallDistance = 0.0F;
-                    } else if (fallDist > 0.0F) {
-                        player.setOnGround(false);
-                    }
+        motionUpdateListener = new Listener<MotionUpdateEvent>() {
+            @Override
+            public void onEventCalled(MotionUpdateEvent event) {
+                if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                    if (!isSafe())
+                        return;
+                    int endDelay = 3;
+                    event.setCancelled(++delay >= endDelay);
+                    delay = (event.isCancelled() ? 0 : delay);
                 }
             }
         };
     }
 
     private boolean isSafe() {
-        return mc.thePlayer.isInWater() || mc.thePlayer.isInsideOfMaterial(Material.lava) || mc.thePlayer.isOnLadder() || mc.thePlayer.getActivePotionEffects().contains(Potion.BLINDNESS) || mc.thePlayer.ridingEntity != null;
+        return !mc.thePlayer.isInWater()
+                && !mc.thePlayer.isInsideOfMaterial(Material.lava)
+                && !mc.thePlayer.isOnLadder()
+                && !mc.thePlayer.getActivePotionEffects().contains(Potion.BLINDNESS)
+                && mc.thePlayer.ridingEntity == null
+                && mc.thePlayer.onGround;
     }
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(sendPacketListener);
+        XIV.getInstance().getListenerManager().add(motionUpdateListener);
+        XIV.getInstance().getListenerManager().add(attackEntityListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(sendPacketListener);
-        fallDist = 0.0F;
+        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
+        XIV.getInstance().getListenerManager().remove(attackEntityListener);
     }
 }
