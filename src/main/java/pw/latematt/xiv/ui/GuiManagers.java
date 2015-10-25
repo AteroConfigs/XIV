@@ -2,9 +2,9 @@ package pw.latematt.xiv.ui;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import pw.latematt.xiv.ui.alt.GuiAltManager;
-import pw.latematt.xiv.ui.mod.GuiModManager;
-import pw.latematt.xiv.ui.waypoint.GuiWaypointManager;
+import pw.latematt.xiv.ui.managers.alt.GuiAltManager;
+import pw.latematt.xiv.ui.managers.mod.GuiModManager;
+import pw.latematt.xiv.ui.managers.waypoint.GuiWaypointManager;
 
 /**
  * @author Rederpz

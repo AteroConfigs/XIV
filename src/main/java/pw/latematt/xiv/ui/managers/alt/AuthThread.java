@@ -1,4 +1,4 @@
-package pw.latematt.xiv.ui.alt;
+package pw.latematt.xiv.ui.managers.alt;
 
 import com.mojang.authlib.Agent;
 import com.mojang.authlib.exceptions.AuthenticationException;

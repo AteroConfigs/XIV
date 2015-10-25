@@ -1,11 +1,8 @@
-package pw.latematt.xiv.ui.waypoint;
+package pw.latematt.xiv.ui.managers.waypoint;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
-import org.lwjgl.input.Keyboard;
-import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.mods.render.waypoints.base.Waypoint;
-import pw.latematt.xiv.ui.mod.GuiModManager;
 
 public class WaypointSlot extends GuiSlot {
     private GuiWaypointManager screen;

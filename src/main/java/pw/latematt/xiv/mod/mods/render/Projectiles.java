@@ -1,9 +1,12 @@
 package pw.latematt.xiv.mod.mods.render;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -16,6 +19,7 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.RenderUtils;
 
 import java.util.ArrayList;
@@ -90,8 +94,10 @@ public class Projectiles extends Mod implements Listener<Render3DEvent> {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer renderer = tessellator.getWorldRenderer();
         renderer.startDrawing(3);
+
         float size = (float) (item instanceof ItemBow ? 0.3D : 0.25D);
         boolean hasLanded = false;
+        Entity landingOnEntity = null;
         MovingObjectPosition landingPosition = null;
         while (!hasLanded && posY > 0.0D) {
             Vec3 present = new Vec3(posX, posY, posZ);
@@ -113,6 +119,7 @@ public class Projectiles extends Mod implements Listener<Render3DEvent> {
                     MovingObjectPosition possibleEntityLanding = var12.calculateIntercept(present, future);
                     if (possibleEntityLanding != null) {
                         hasLanded = true;
+                        landingOnEntity = boundingBox;
                         landingPosition = possibleEntityLanding;
                     }
                 }
@@ -129,24 +136,40 @@ public class Projectiles extends Mod implements Listener<Render3DEvent> {
             renderer.addVertex(posX - renderPosX, posY - renderPosY, posZ - renderPosZ);
         }
         tessellator.draw();
-        GlStateManager.translate(posX - renderPosX, posY - renderPosY, posZ - renderPosZ);
+
         if (landingPosition != null && landingPosition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            int side = landingPosition.field_178784_b.getIndex();
+            if (landingOnEntity != null) {
+                double x = landingOnEntity.lastTickPosX + (landingOnEntity.posX - landingOnEntity.lastTickPosX) * event.getPartialTicks() - mc.getRenderManager().renderPosX;
+                double y = landingOnEntity.lastTickPosY + (landingOnEntity.posY - landingOnEntity.lastTickPosY) * event.getPartialTicks() - mc.getRenderManager().renderPosY;
+                double z = landingOnEntity.lastTickPosZ + (landingOnEntity.posZ - landingOnEntity.lastTickPosZ) * event.getPartialTicks() - mc.getRenderManager().renderPosZ;
 
-            if (side == 2) {
-                GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
-            } else if (side == 3) {
-                GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
-            } else if (side == 4) {
-                GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
-            } else if (side == 5) {
-                GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
+                AxisAlignedBB box = AxisAlignedBB.fromBounds(x - landingOnEntity.width, y, z - landingOnEntity.width, x + landingOnEntity.width, y + landingOnEntity.height + 0.2D, z + landingOnEntity.width);
+                if (landingOnEntity instanceof EntityLivingBase) {
+                    box = AxisAlignedBB.fromBounds(x - landingOnEntity.width + 0.2D, y, z - landingOnEntity.width + 0.2D, x + landingOnEntity.width - 0.2D, y + landingOnEntity.height + (landingOnEntity.isSneaking() ? 0.02D : 0.2D), z + landingOnEntity.width - 0.2D);
+                }
+
+                RenderUtils.drawLines(box);
+                RenderGlobal.drawOutlinedBoundingBox(box, -1);
+            } else {
+                GlStateManager.translate(posX - renderPosX, posY - renderPosY, posZ - renderPosZ);
+
+                int side = landingPosition.field_178784_b.getIndex();
+
+                if (side == 2) {
+                    GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+                } else if (side == 3) {
+                    GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+                } else if (side == 4) {
+                    GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
+                } else if (side == 5) {
+                    GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
+                }
+
+                Cylinder c = new Cylinder();
+                GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+                c.setDrawStyle(GLU.GLU_LINE);
+                c.draw(0.6F, 0.3F, 0.0F, 4, 1);
             }
-
-            Cylinder c = new Cylinder();
-            GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
-            c.setDrawStyle(GLU.GLU_LINE);
-            c.draw(0.6F, 0.3F, 0.0F, 4, 1);
         }
         RenderUtils.endGl();
     }

@@ -1,4 +1,4 @@
-package pw.latematt.xiv.ui.alt;
+package pw.latematt.xiv.ui.managers.alt;
 
 /**
  * Created by TehNeon on 9/27/2015.

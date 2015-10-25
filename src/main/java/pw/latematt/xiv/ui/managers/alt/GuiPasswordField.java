@@ -1,4 +1,4 @@
-package pw.latematt.xiv.ui.alt;
+package pw.latematt.xiv.ui.managers.alt;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;

@@ -1,14 +1,12 @@
-package pw.latematt.xiv.ui.waypoint;
+package pw.latematt.xiv.ui.managers.waypoint;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.mods.render.waypoints.Waypoints;
 import pw.latematt.xiv.mod.mods.render.waypoints.base.Waypoint;
-import pw.latematt.xiv.ui.mod.ModSlot;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,8 +21,6 @@ public class GuiWaypointManager extends GuiScreen {
 
     public GuiWaypointManager(GuiScreen parent) {
         this.parent = parent;
-
-        XIV.getInstance().getFileManager().loadFile("waypoints");
     }
 
     public List<Waypoint> getWaypoints() {
@@ -38,7 +34,7 @@ public class GuiWaypointManager extends GuiScreen {
             }
             return waypoints.getPoints().stream().filter(waypoint -> waypoint.getName().toLowerCase().contains(search.getText().toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
         } else {
-            return waypoints.getPoints();
+            return null;
         }
     }
 

@@ -32,7 +32,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
 import pw.latematt.xiv.ui.GuiManagers;
-import pw.latematt.xiv.ui.alt.GuiAltManager;
 
 public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
 {

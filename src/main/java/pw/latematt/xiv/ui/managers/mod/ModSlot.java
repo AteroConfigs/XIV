@@ -1,13 +1,15 @@
-package pw.latematt.xiv.ui.alt;
+package pw.latematt.xiv.ui.managers.mod;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
+import org.lwjgl.input.Keyboard;
+import pw.latematt.xiv.mod.Mod;
 
-public class AltSlot extends GuiSlot {
-    private GuiAltManager screen;
+public class ModSlot extends GuiSlot {
+    private GuiModManager screen;
     private int selected;
 
-    public AltSlot(GuiAltManager screen, Minecraft mcIn, int width, int height, int p_i1052_4_, int p_i1052_5_, int p_i1052_6_) {
+    public ModSlot(GuiModManager screen, Minecraft mcIn, int width, int height, int p_i1052_4_, int p_i1052_5_, int p_i1052_6_) {
         super(mcIn, width, height, p_i1052_4_, p_i1052_5_, p_i1052_6_);
 
         this.screen = screen;
@@ -15,7 +17,7 @@ public class AltSlot extends GuiSlot {
 
     @Override
     protected int getSize() {
-        return screen.getAccounts().size();
+        return screen.getMods().size();
     }
 
     @Override
@@ -26,11 +28,6 @@ public class AltSlot extends GuiSlot {
     @Override
     protected void elementClicked(int slot, boolean var2, int var3, int var4) {
         this.selected = slot;
-        this.screen.keyword.setText(getAlt().getKeyword());
-
-        if (var2) {
-            screen.login(getAlt());
-        }
     }
 
     @Override
@@ -46,8 +43,8 @@ public class AltSlot extends GuiSlot {
         this.selected = slot;
     }
 
-    public AltAccount getAlt() {
-        return getAlt(getSelected());
+    public Mod getMod() {
+        return getMod(getSelected());
     }
 
     @Override
@@ -57,21 +54,22 @@ public class AltSlot extends GuiSlot {
 
     @Override
     protected void drawSlot(int slot, int x, int y, int var4, int var5, int var6) {
-        AltAccount alt = getAlt(slot);
+        Mod mod = getMod(slot);
 
-        if (alt != null) {
-            mc.fontRendererObj.drawStringWithShadow(alt.getUsername(), x + 1, y + 2, 0xFFFFFFFF);
-            mc.fontRendererObj.drawStringWithShadow(alt.getPassword().replaceAll("(?s).", "*"), x + 1, y + 12, 0xFF888888);
-            mc.fontRendererObj.drawStringWithShadow((alt.getKeyword().isEmpty() ? "No keyword set" : alt.getKeyword()), x + 1, y + 22, 0xFFFFFF00);
+        if (mod != null) {
+            mc.fontRendererObj.drawStringWithShadow(mod.getName(), x + 1, y + 1, mod.getColor());
+            mc.fontRendererObj.drawStringWithShadow("State: " + mod.isEnabled(), x + 1, y + 12, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow("Key: " + Keyboard.getKeyName(mod.getKeybind()), x + 1, y + 23, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow("Visible: " + mod.isVisible(), x + 1, y + 34, 0xFFFFFFFF);
         }
     }
 
-    public AltAccount getAlt(int slot) {
+    public Mod getMod(int slot) {
         int count = 0;
 
-        for (AltAccount alt : screen.getAccounts()) {
+        for (Mod mod : screen.getMods()) {
             if (count == slot) {
-                return alt;
+                return mod;
             }
             count++;
         }

@@ -1,4 +1,4 @@
-package pw.latematt.xiv.ui.mod;
+package pw.latematt.xiv.ui.managers.mod;
 
 import net.minecraft.client.gui.*;
 import org.lwjgl.input.Keyboard;
@@ -8,13 +8,11 @@ import pw.latematt.xiv.mod.Mod;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 public class GuiModManager extends GuiScreen {
     private GuiScreen parent;
     private ModSlot slot;
-
     public GuiTextField search;
 
     public GuiModManager(GuiScreen parent) {

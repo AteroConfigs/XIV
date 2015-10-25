@@ -15,7 +15,6 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.EnumDifficulty;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.ui.GuiManagers;
-import pw.latematt.xiv.ui.alt.GuiAltManager;
 
 public class GuiOptions extends GuiScreen implements GuiYesNoCallback
 {

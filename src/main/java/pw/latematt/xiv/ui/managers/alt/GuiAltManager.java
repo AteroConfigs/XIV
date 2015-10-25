@@ -1,4 +1,4 @@
-package pw.latematt.xiv.ui.alt;
+package pw.latematt.xiv.ui.managers.alt;
 
 import net.minecraft.client.gui.*;
 import org.lwjgl.input.Keyboard;
