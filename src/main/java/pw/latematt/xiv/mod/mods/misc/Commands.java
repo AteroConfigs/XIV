@@ -43,7 +43,7 @@ public class Commands extends Mod implements Listener<SendPacketEvent> {
                     predictedCommand = XIV.getInstance().getCommandManager().getPrefix() + predictedCommand;
                     if (!predictedCommand.equalsIgnoreCase("") && !message.contains(" ")) {
                         int y = RenderUtils.newScaledResolution().getScaledHeight() - 12;
-                        mc.fontRendererObj.drawStringWithShadow(predictedCommand, 6, y, 0xFFFFFFFF);
+                        mc.fontRendererObj.drawStringWithShadow(predictedCommand, 4, y, 0xFFFFFFFF);
                     }
                 }
             }
