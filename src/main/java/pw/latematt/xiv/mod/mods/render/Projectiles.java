@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.*;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -44,7 +45,7 @@ public class Projectiles extends Mod implements Listener<Render3DEvent> {
         Item item;
 
         if (mc.thePlayer.getHeldItem() != null && mc.gameSettings.thirdPersonView == 0) {
-            if (!isValidPotion(mc.thePlayer.getHeldItem(), mc.thePlayer.getHeldItem().getItem()) && !(mc.thePlayer.getHeldItem().getItem() instanceof ItemFishingRod) && !(mc.thePlayer.getHeldItem().getItem() instanceof ItemBow) && !(mc.thePlayer.getHeldItem().getItem() instanceof ItemSnowball) && !(mc.thePlayer.getHeldItem().getItem() instanceof ItemEnderPearl) && !(mc.thePlayer.getHeldItem().getItem() instanceof ItemEgg))
+            if (!isValidPotion(mc.thePlayer.getHeldItem(), mc.thePlayer.getHeldItem().getItem()) && (mc.thePlayer.getHeldItem().getItem() != Items.experience_bottle) && !(mc.thePlayer.getHeldItem().getItem() instanceof ItemFishingRod) && !(mc.thePlayer.getHeldItem().getItem() instanceof ItemBow) && !(mc.thePlayer.getHeldItem().getItem() instanceof ItemSnowball) && !(mc.thePlayer.getHeldItem().getItem() instanceof ItemEnderPearl) && !(mc.thePlayer.getHeldItem().getItem() instanceof ItemEgg))
                 return;
             stack = mc.thePlayer.getHeldItem();
             item = mc.thePlayer.getHeldItem().getItem();
@@ -76,11 +77,11 @@ public class Projectiles extends Mod implements Listener<Render3DEvent> {
         motionY /= distance;
         motionZ /= distance;
 
-        float pow = (item instanceof ItemBow ? power * 2.0F : isValidPotion(stack, item) ? 0.325F : item instanceof ItemFishingRod ? 1.25F : 1.0F);
+        float pow = (item instanceof ItemBow ? power * 2.0F : isValidPotion(stack, item) ? 0.325F : item instanceof ItemFishingRod ? 1.25F : mc.thePlayer.getHeldItem().getItem() == Items.experience_bottle ? 0.9F : 1.0F);
 
-        motionX *= pow * (item instanceof ItemFishingRod ? 0.75F : 1.5F);
-        motionY *= pow * (item instanceof ItemFishingRod ? 0.75F : 1.5F);
-        motionZ *= pow * (item instanceof ItemFishingRod ? 0.75F : 1.5F);
+        motionX *= pow * (item instanceof ItemFishingRod ? 0.75F : mc.thePlayer.getHeldItem().getItem() == Items.experience_bottle ? 0.75F : 1.5F);
+        motionY *= pow * (item instanceof ItemFishingRod ? 0.75F : mc.thePlayer.getHeldItem().getItem() == Items.experience_bottle ? 0.75F : 1.5F);
+        motionZ *= pow * (item instanceof ItemFishingRod ? 0.75F : mc.thePlayer.getHeldItem().getItem() == Items.experience_bottle ? 0.75F : 1.5F);
 
         RenderUtils.beginGl();
 
