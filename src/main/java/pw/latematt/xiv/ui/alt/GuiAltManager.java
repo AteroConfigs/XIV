@@ -187,7 +187,7 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
         keyword.drawTextBox();
 
         String filters = "Custom Filters: '!', '@empty', '@!empty'";
-        mc.fontRendererObj.drawStringWithShadow(filters, width - 102 - (mc.fontRendererObj.getStringWidth(filters) / 2), height - 28, 0xFFFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(filters, width - 105 - (mc.fontRendererObj.getStringWidth(filters) / 2), height - 28, 0xFFFFFFFF);
 
         mc.fontRendererObj.drawStringWithShadow("Search:", width - 182, height - 62, 0xFFFFFFFF);
         search.drawTextBox();

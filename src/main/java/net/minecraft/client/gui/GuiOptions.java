@@ -14,6 +14,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.EnumDifficulty;
 import org.lwjgl.input.Keyboard;
+import pw.latematt.xiv.ui.GuiManagers;
 import pw.latematt.xiv.ui.alt.GuiAltManager;
 
 public class GuiOptions extends GuiScreen implements GuiYesNoCallback
@@ -178,7 +179,7 @@ public class GuiOptions extends GuiScreen implements GuiYesNoCallback
             {
                 if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
                     this.mc.gameSettings.saveOptions();
-                    this.mc.displayGuiScreen(new GuiAltManager(this));
+                    this.mc.displayGuiScreen(new GuiManagers(this));
                 }else {
                     this.mc.gameSettings.saveOptions();
                     this.mc.displayGuiScreen(new GuiLanguage(this, this.game_settings_1, this.mc.getLanguageManager()));
