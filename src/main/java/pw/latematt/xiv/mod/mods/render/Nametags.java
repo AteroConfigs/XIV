@@ -90,13 +90,11 @@ public class Nametags extends Mod implements CommandHandler {
         if (XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             RenderStringEvent event = new RenderStringEvent(entityName, RenderStringEvent.State.NAMETAG);
             XIV.getInstance().getListenerManager().call(event);
-
             entityName = event.getString();
         }
 
-        if (getNametagColor(entity) != 0xFFFFFFFF) {
+        if (getNametagColor(entity) != 0xFFFFFFFF)
             entityName = StringUtils.stripControlCodes(entityName);
-        }
 
         if ((entity instanceof EntityPlayer) && ((EntityPlayer) entity).capabilities.isFlying)
             entityName = "\247a[F] \247r" + entityName;
@@ -112,19 +110,17 @@ public class Nametags extends Mod implements CommandHandler {
         double maxHealth = entity.getMaxHealth() / 2;
         double percentage = 100 * (health / maxHealth);
         String healthColor;
-        if (percentage > 75) {
+        if (percentage > 75)
             healthColor = "2";
-        } else if (percentage > 50) {
+        else if (percentage > 50)
             healthColor = "e";
-        } else if (percentage > 25) {
+        else if (percentage > 25)
             healthColor = "6";
-        } else {
+        else
             healthColor = "4";
-        }
 
-        if (this.health.getValue()) {
+        if (this.health.getValue())
             entityName = String.format("%s \247%s%s", entityName, healthColor, decimalFormat.format(health));
-        }
 
         float distance = mc.thePlayer.getDistanceToEntity(entity);
         float var13 = (distance / 5 <= 2 ? 2.0F : distance / 5) * ((Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_size")).getValue().floatValue();

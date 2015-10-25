@@ -97,12 +97,12 @@ public class Velocity extends Mod implements CommandHandler {
                         String newVelocityString = arguments[2];
                         try {
                             float newPercent = arguments[2].equalsIgnoreCase("-d") ? reducedVelocity.getDefault() : Float.parseFloat(newVelocityString);
-                            if (newPercent < -150.0F) {
-                                newPercent = -150.0F;
-                            } else if (newPercent > 150.0F) {
-                                newPercent = 150.0F;
-                            }
                             reducedVelocity.setValue((newPercent / 100));
+                            if (reducedVelocity.getValue() > reducedVelocity.getMax())
+                                reducedVelocity.setValue(reducedVelocity.getMax());
+                            else if (reducedVelocity.getValue() < reducedVelocity.getMin())
+                                reducedVelocity.setValue(reducedVelocity.getMin());
+
                             setTag(String.format("%s \2477%s", getName(), (reducedVelocity.getValue() * 100) + "%"));
                             ChatLogger.print(String.format("Velocity Percent set to %s", (reducedVelocity.getValue() * 100F) + "%"));
                         } catch (NumberFormatException e) {

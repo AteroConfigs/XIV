@@ -60,10 +60,10 @@ public class GuiWaypointManager extends GuiScreen {
         if (button.enabled) {
             if (button.id == 0) {
                 mc.displayGuiScreen(parent);
-            }else{
+            } else {
                 Waypoints waypoints = (Waypoints) XIV.getInstance().getModManager().find(Waypoints.class);
 
-                if(waypoints != null) {
+                if (waypoints != null) {
                     waypoints.getPoints().remove(slot.getWaypoint());
                 }
             }

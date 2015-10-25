@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  * @author Matthew
  */
 public class Waypoints extends Mod implements CommandHandler {
-    private final float[] color = new float[]{0.68F, 0.45F, 0.76F};
+    private final float[] color = new float[]{0.89F, 0.15F, 0.21F};
     private final List<Waypoint> points;
     private final Value<Boolean> lightningPoints = new Value<>("waypoints_lightning_points", false);
     private final Value<Boolean> deathPoints = new Value<>("waypoints_death_points", false);
@@ -263,7 +263,6 @@ public class Waypoints extends Mod implements CommandHandler {
                             int x = Integer.parseInt(arguments[2]);
                             int y = Integer.parseInt(arguments[3]);
                             int z = Integer.parseInt(arguments[4]);
-
                             boolean temporary = Boolean.parseBoolean(arguments[5]);
 
                             String name = message.substring((String.format("%s %s %s %s %s %s ", arguments[0], arguments[1], arguments[2], arguments[3], arguments[4], arguments[5])).length());

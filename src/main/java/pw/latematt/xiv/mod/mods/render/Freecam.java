@@ -24,8 +24,6 @@ public class Freecam extends Mod {
     private EntityOtherPlayerMP entity;
     private Timer timer = new Timer();
 
-    private boolean sneaking = false;
-
     public Freecam() {
         super("Freecam", ModType.RENDER, Keyboard.KEY_V);
 
@@ -63,10 +61,7 @@ public class Freecam extends Mod {
                     event.setMotionY(-(speed / 4.0D));
                 }
 
-                /**
-                 *  Update entity state
-                 */
-
+                // Update entity state
                 clonePlayer(entity);
             }
         };
@@ -106,26 +101,23 @@ public class Freecam extends Mod {
 
     @Override
     public void onEnabled() {
-        if (Objects.nonNull(mc.thePlayer)) {
+        if (mc.thePlayer != null) {
             entity = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
             entity.copyLocationAndAnglesFrom(mc.thePlayer);
             entity.rotationYawHead = mc.thePlayer.rotationYawHead;
-
             clonePlayer(entity);
+            entity.setSneaking(mc.thePlayer.isSneaking() || XIV.getInstance().getModManager().find(Sneak.class).isEnabled());
 
             mc.theWorld.addEntityToWorld(-1, entity);
             mc.renderGlobal.loadRenderers();
-
-            sneaking = mc.thePlayer.isSneaking() || XIV.getInstance().getModManager().find(Sneak.class).isEnabled();
         }
 
-        XIV.getInstance().getListenerManager().add(this.packetListener);
-        XIV.getInstance().getListenerManager().add(this.motionListener);
-        XIV.getInstance().getListenerManager().add(this.moveListener);
-        XIV.getInstance().getListenerManager().add(this.pushOutOfBlocksListener);
-        XIV.getInstance().getListenerManager().add(this.cullingListener);
+        XIV.getInstance().getListenerManager().add(packetListener);
+        XIV.getInstance().getListenerManager().add(motionListener);
+        XIV.getInstance().getListenerManager().add(moveListener);
+        XIV.getInstance().getListenerManager().add(pushOutOfBlocksListener);
+        XIV.getInstance().getListenerManager().add(cullingListener);
 
-        // If you don't want the tracers to go to the freecam body, you can just not do this. Maybe a mode in the future?
         EntityUtils.setReference(entity);
     }
 
@@ -133,13 +125,13 @@ public class Freecam extends Mod {
     public void onDisabled() {
         EntityUtils.setReference(mc.thePlayer);
 
-        XIV.getInstance().getListenerManager().remove(this.packetListener);
-        XIV.getInstance().getListenerManager().remove(this.motionListener);
-        XIV.getInstance().getListenerManager().remove(this.moveListener);
-        XIV.getInstance().getListenerManager().remove(this.pushOutOfBlocksListener);
-        XIV.getInstance().getListenerManager().remove(this.cullingListener);
+        XIV.getInstance().getListenerManager().remove(packetListener);
+        XIV.getInstance().getListenerManager().remove(motionListener);
+        XIV.getInstance().getListenerManager().remove(moveListener);
+        XIV.getInstance().getListenerManager().remove(pushOutOfBlocksListener);
+        XIV.getInstance().getListenerManager().remove(cullingListener);
 
-        if (Objects.nonNull(mc.thePlayer) && Objects.nonNull(entity)) {
+        if (mc.thePlayer != null && entity != null) {
             mc.thePlayer.noClip = false;
             mc.thePlayer.copyLocationAndAnglesFrom(entity);
             mc.theWorld.removeEntityFromWorld(-1);
@@ -150,13 +142,10 @@ public class Freecam extends Mod {
                 mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
             }
         }
-
-        this.sneaking = false;
     }
 
     public void clonePlayer(EntityOtherPlayerMP entity) {
         if (entity != null) {
-            entity.setSneaking(sneaking);
             entity.swingProgress = mc.thePlayer.swingProgress;
             entity.swingProgressInt = mc.thePlayer.swingProgressInt;
             entity.isSwingInProgress = mc.thePlayer.isSwingInProgress;

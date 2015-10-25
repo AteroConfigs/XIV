@@ -21,7 +21,7 @@ import pw.latematt.xiv.value.Value;
  * @author Matthew
  */
 public class FastUse extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
-    private final ClampedValue<Integer> ticksToWait = new ClampedValue<>("fastuse_ticks_to_wait", 16, 0, 20);
+    private final ClampedValue<Integer> ticksToWait = new ClampedValue<>("fastuse_ticks_to_wait", 16, 0, 31);
     private final Value<Boolean> bow = new Value<>("fastuse_bow", false);
     private final Value<Boolean> food = new Value<>("fastuse_food", true);
     private final Value<Boolean> milk = new Value<>("fastuse_milk", true);
@@ -128,12 +128,12 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
                         String newTicksString = arguments[2];
                         try {
                             int newTicks = arguments[2].equalsIgnoreCase("-d") ? ticksToWait.getDefault() : Integer.parseInt(newTicksString);
-                            if (newTicks > 31) {
-                                newTicks = 31;
-                            } else if (newTicks < 0) {
-                                newTicks = 0;
-                            }
                             ticksToWait.setValue(newTicks);
+                            if (ticksToWait.getValue() > ticksToWait.getMax())
+                                ticksToWait.setValue(ticksToWait.getMax());
+                            else if (ticksToWait.getValue() < ticksToWait.getMin())
+                                ticksToWait.setValue(ticksToWait.getMin());
+
                             ChatLogger.print(String.format("FastUse Ticks to Wait set to %s", ticksToWait.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newTicksString));

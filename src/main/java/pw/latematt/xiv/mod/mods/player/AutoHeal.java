@@ -25,11 +25,10 @@ import static pw.latematt.xiv.utils.ItemUtils.*;
  */
 public class AutoHeal extends Mod implements CommandHandler {
     private final ClampedValue<Long> delay = new ClampedValue<>("autoheal_delay", 350L, 0L, 1000L);
-    private final Value<Float> health = new Value<>("autoheal_health", 13.0F);
+    private final ClampedValue<Float> health = new ClampedValue<>("autoheal_health", 13.0F, 1.0F, 20.0F);
     private final Value<Boolean> soup = new Value<>("autoheal_soup", false);
     private final Value<Boolean> potion = new Value<>("autoheal_potion", true);
-    private final Listener sendPacketListener;
-    private final Listener motionUpdateListener;
+    private final Listener sendPacketListener, motionUpdateListener;
     private final Timer timer = new Timer();
     private boolean healing;
 
@@ -124,11 +123,11 @@ public class AutoHeal extends Mod implements CommandHandler {
                                 delay.setValue(delay.getDefault());
                             } else {
                                 long newDelay = Long.parseLong(newDelayString);
-                                if (newDelay < 10) {
-                                    newDelay = 10;
-                                }
-
                                 delay.setValue(newDelay);
+                                if (delay.getValue() > delay.getMax())
+                                    delay.setValue(delay.getMax());
+                                else if (delay.getValue() < delay.getMin())
+                                    delay.setValue(delay.getMin());
                             }
                             ChatLogger.print(String.format("AutoHeal Delay set to %sms", delay.getValue()));
                         } catch (NumberFormatException e) {
@@ -148,6 +147,11 @@ public class AutoHeal extends Mod implements CommandHandler {
                                 Float newHealth = Float.parseFloat(newHealthString);
                                 health.setValue(newHealth);
                             }
+                            if (health.getValue() > health.getMax())
+                                health.setValue(health.getMax());
+                            else if (health.getValue() < health.getMin())
+                                health.setValue(health.getMin());
+
                             ChatLogger.print(String.format("AutoHeal Health set to %s", health.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newHealthString));

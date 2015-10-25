@@ -1,6 +1,5 @@
 package pw.latematt.xiv.management.managers;
 
-import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Event;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.management.ListManager;

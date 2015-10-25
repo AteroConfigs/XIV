@@ -75,12 +75,12 @@ public class Fullbright extends Mod implements Listener<LoadWorldEvent>, Command
                         String newBrightnessString = arguments[2];
                         try {
                             float newBrightness = arguments[2].equalsIgnoreCase("-d") ? brightness.getDefault() : Float.parseFloat(newBrightnessString);
-                            if (newBrightness > 1.0F) {
-                                newBrightness = 1.0F;
-                            } else if (newBrightness < 0.1F) {
-                                newBrightness = 0.1F;
-                            }
                             brightness.setValue(newBrightness);
+                            if (brightness.getValue() > brightness.getMax())
+                                brightness.setValue(brightness.getMax());
+                            else if (brightness.getValue() < brightness.getMin())
+                                brightness.setValue(brightness.getMin());
+
                             editTable(mc.theWorld, brightness.getValue());
                             ChatLogger.print(String.format("Fullbright Brightness set to %s", brightness.getValue()));
                         } catch (NumberFormatException e) {

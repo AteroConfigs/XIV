@@ -9,9 +9,8 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 
 /**
- * @author Jack
+ * @author Rederpz
  */
-
 public class NoPotion extends Mod implements Listener<PotionRenderEvent> {
     public NoPotion() {
         super("NoPotion", ModType.RENDER, Keyboard.KEY_NONE);
@@ -19,11 +18,7 @@ public class NoPotion extends Mod implements Listener<PotionRenderEvent> {
 
     @Override
     public void onEventCalled(PotionRenderEvent event) {
-        if (event.getEffect() == Potion.INVISIBILITY) {
-            event.setCancelled(false);
-        } else {
-            event.setCancelled(true);
-        }
+        event.setCancelled(event.getEffect() != Potion.INVISIBILITY);
     }
 
     @Override

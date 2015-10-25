@@ -91,34 +91,24 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                     else if ((border != Blocks.trapped_chest) && (border2 != Blocks.trapped_chest) && (border3 != Blocks.trapped_chest) && (border4 != Blocks.trapped_chest))
                         draw(tileChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
                 }
-            } else if (tileEntity instanceof TileEntityEnderChest && enderChests.getValue()) {
-                TileEntityEnderChest tileEnderChest = (TileEntityEnderChest) tileEntity;
-                draw(tileEnderChest.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
-            } else if (tileEntity instanceof TileEntityFurnace && furnaces.getValue()) {
-                TileEntityFurnace tileFurnace = (TileEntityFurnace) tileEntity;
-                draw(tileFurnace.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
-            } else if (tileEntity instanceof TileEntityBrewingStand && brewingStands.getValue()) {
-                TileEntityBrewingStand tileBrewingStand = (TileEntityBrewingStand) tileEntity;
-                draw(tileBrewingStand.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
-            } else if (tileEntity instanceof TileEntityHopper && hoppers.getValue()) {
-                TileEntityHopper tileHopper = (TileEntityHopper) tileEntity;
-                draw(tileHopper.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
-            } else if (tileEntity instanceof TileEntityDropper && droppers.getValue()) {
-                TileEntityDropper tileDropper = (TileEntityDropper) tileEntity;
-                draw(tileDropper.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
-            } else if (tileEntity instanceof TileEntityDispenser && dispensers.getValue()) {
-                TileEntityDispenser tileDispenser = (TileEntityDispenser) tileEntity;
-                draw(tileDispenser.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
-            } else if (tileEntity instanceof TileEntityCommandBlock && commandBlocks.getValue()) {
-                TileEntityCommandBlock tileCommandBlock = (TileEntityCommandBlock) tileEntity;
-                draw(tileCommandBlock.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
-            } else if (tileEntity instanceof TileEntityMobSpawner && mobSpawners.getValue()) {
-                TileEntityMobSpawner tileMobSpawner = (TileEntityMobSpawner) tileEntity;
-                draw(tileMobSpawner.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
-            } else if (tileEntity instanceof TileEntityEnchantmentTable && enchantmentTables.getValue()) {
-                TileEntityEnchantmentTable tileEnchantmentTable = (TileEntityEnchantmentTable) tileEntity;
-                draw(tileEnchantmentTable.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
-            }
+            } else if (tileEntity instanceof TileEntityEnderChest && enderChests.getValue())
+                draw(tileEntity.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+            else if (tileEntity instanceof TileEntityFurnace && furnaces.getValue())
+                draw(tileEntity.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+            else if (tileEntity instanceof TileEntityBrewingStand && brewingStands.getValue())
+                draw(tileEntity.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+            else if (tileEntity instanceof TileEntityHopper && hoppers.getValue())
+                draw(tileEntity.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+            else if (tileEntity instanceof TileEntityDropper && droppers.getValue())
+                draw(tileEntity.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+            else if (tileEntity instanceof TileEntityDispenser && dispensers.getValue())
+                draw(tileEntity.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+            else if (tileEntity instanceof TileEntityCommandBlock && commandBlocks.getValue())
+                draw(tileEntity.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+            else if (tileEntity instanceof TileEntityMobSpawner && mobSpawners.getValue())
+                draw(tileEntity.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
+            else if (tileEntity instanceof TileEntityEnchantmentTable && enchantmentTables.getValue())
+                draw(tileEntity.getBlockType(), x, y, z, x + 1.0D, y + 1.0D, z + 1.0D, partialTicks);
         }
         RenderUtils.endGl();
     }

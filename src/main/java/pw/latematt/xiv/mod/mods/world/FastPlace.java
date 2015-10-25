@@ -45,12 +45,12 @@ public class FastPlace extends Mod implements Listener<PlacingBlockEvent>, Comma
                         String newDelayString = arguments[2];
                         try {
                             int newPlaceDelay = arguments[2].equalsIgnoreCase("-d") ? placeDelay.getDefault() : Integer.parseInt(newDelayString);
-                            if (newPlaceDelay > 4) {
-                                newPlaceDelay = 4;
-                            } else if (newPlaceDelay < 0) {
-                                newPlaceDelay = 0;
-                            }
                             placeDelay.setValue(newPlaceDelay);
+                            if (placeDelay.getValue() > placeDelay.getMax())
+                                placeDelay.setValue(placeDelay.getMax());
+                            else if (placeDelay.getValue() < placeDelay.getMin())
+                                placeDelay.setValue(placeDelay.getMin());
+
                             ChatLogger.print(String.format("FastPlace Place Delay set to %s", placeDelay.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));

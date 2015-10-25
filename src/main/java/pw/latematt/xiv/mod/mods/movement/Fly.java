@@ -68,6 +68,11 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
                         try {
                             double newVertical = arguments[2].equalsIgnoreCase("-d") ? verticalSpeed.getDefault() : Double.parseDouble(newVerticalString);
                             verticalSpeed.setValue(newVertical);
+                            if (verticalSpeed.getValue() > verticalSpeed.getMax())
+                                verticalSpeed.setValue(verticalSpeed.getMax());
+                            else if (verticalSpeed.getValue() < verticalSpeed.getMin())
+                                verticalSpeed.setValue(verticalSpeed.getMin());
+
                             ChatLogger.print(String.format("Fly vertical speed set to %s", verticalSpeed.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newVerticalString));

@@ -89,6 +89,11 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
                         try {
                             float newFov = arguments[2].equalsIgnoreCase("-d") ? fov.getDefault() : Float.parseFloat(newFovString);
                             fov.setValue(newFov);
+                            if (fov.getValue() > fov.getMax())
+                                fov.setValue(fov.getMax());
+                            else if (fov.getValue() < fov.getMin())
+                                fov.setValue(fov.getMin());
+
                             ChatLogger.print(String.format("SmoothAimbot FOV set to %s", newFov));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newFovString));
@@ -104,6 +109,11 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
                         try {
                             float newSpeed = arguments[2].equalsIgnoreCase("-d") ? speed.getDefault() : Float.parseFloat(newSpeedString);
                             speed.setValue(newSpeed);
+                            if (speed.getValue() > speed.getMax())
+                                speed.setValue(speed.getMax());
+                            else if (speed.getValue() < speed.getMin())
+                                speed.setValue(speed.getMin());
+
                             ChatLogger.print(String.format("SmoothAimbot Speed set to %s", newSpeed));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newSpeedString));
@@ -120,6 +130,11 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
                         try {
                             double newRange = arguments[2].equalsIgnoreCase("-d") ? range.getDefault() : Double.parseDouble(newRangeString);
                             range.setValue(newRange);
+                            if (range.getValue() > range.getMax())
+                                range.setValue(range.getMax());
+                            else if (range.getValue() < range.getMin())
+                                range.setValue(range.getMin());
+
                             ChatLogger.print(String.format("SmoothAimbot Range set to %s", range.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newRangeString));

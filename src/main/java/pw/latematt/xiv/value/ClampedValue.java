@@ -1,10 +1,9 @@
 package pw.latematt.xiv.value;
 
 /**
- * Created by TehNeon on 10/21/2015.
+ * @author TehNeon
  */
 public class ClampedValue<T> extends Value<T> {
-
     private T min;
     private T max;
     private float sliderX;
@@ -34,5 +33,9 @@ public class ClampedValue<T> extends Value<T> {
 
     public float getSliderX() {
         return sliderX;
+    }
+
+    public void setSliderX(float sliderX) {
+        this.sliderX = sliderX;
     }
 }

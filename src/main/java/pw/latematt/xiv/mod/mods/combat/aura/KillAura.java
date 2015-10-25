@@ -198,11 +198,12 @@ public class KillAura extends Mod implements CommandHandler {
                         String newDelayString = arguments[2];
                         try {
                             long newDelay = arguments[2].equalsIgnoreCase("-d") ? delay.getDefault() : Long.parseLong(newDelayString);
-                            if (newDelay < 10) {
-                                newDelay = 10;
-                            }
-
                             delay.setValue(newDelay);
+                            if (delay.getValue() > delay.getMax())
+                                delay.setValue(delay.getMax());
+                            else if (delay.getValue() < delay.getMin())
+                                delay.setValue(delay.getMin());
+
                             ChatLogger.print(String.format("Kill Aura Delay set to %sms", delay.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));
@@ -217,11 +218,12 @@ public class KillAura extends Mod implements CommandHandler {
                         String newRandomDelayString = arguments[2];
                         try {
                             long newRandomDelay = arguments[2].equalsIgnoreCase("-d") ? randomDelay.getDefault() : Long.parseLong(newRandomDelayString);
-                            if (newRandomDelay < 0) {
-                                newRandomDelay = 0;
-                            }
-
                             randomDelay.setValue(newRandomDelay);
+                            if (randomDelay.getValue() > randomDelay.getMax())
+                                randomDelay.setValue(randomDelay.getMax());
+                            else if (randomDelay.getValue() < randomDelay.getMin())
+                                randomDelay.setValue(randomDelay.getMin());
+
                             ChatLogger.print(String.format("Kill Aura Random Delay set to %sms", randomDelay.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newRandomDelayString));
@@ -235,11 +237,12 @@ public class KillAura extends Mod implements CommandHandler {
                         String newApsString = arguments[2];
                         try {
                             long newAps = arguments[2].equalsIgnoreCase("-d") ? delay.getDefault() : Long.parseLong(newApsString);
-                            if (newAps < 1) {
-                                newAps = 1;
-                            }
-
                             delay.setValue(1000 / newAps);
+                            if (delay.getValue() > delay.getMax())
+                                delay.setValue(delay.getMax());
+                            else if (delay.getValue() < delay.getMin())
+                                delay.setValue(delay.getMin());
+
                             ChatLogger.print(String.format("Kill Aura Attacks/second set to %s (%sms)", newAps, delay.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newApsString));
@@ -253,13 +256,12 @@ public class KillAura extends Mod implements CommandHandler {
                         String newFOVString = arguments[2];
                         try {
                             int newFOV = arguments[2].equalsIgnoreCase("-d") ? fov.getDefault() : Integer.parseInt(newFOVString);
-                            if (newFOV < 10) {
-                                newFOV = 10;
-                            } else if (newFOV > 360) {
-                                newFOV = 360;
-                            }
-
                             fov.setValue(newFOV);
+                            if (fov.getValue() > fov.getMax())
+                                fov.setValue(fov.getMax());
+                            else if (fov.getValue() < fov.getMin())
+                                fov.setValue(fov.getMin());
+
                             ChatLogger.print(String.format("Kill Aura FOV set to %s", fov.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newFOVString));
@@ -275,6 +277,11 @@ public class KillAura extends Mod implements CommandHandler {
                         try {
                             double newRange = arguments[2].equalsIgnoreCase("-d") ? range.getDefault() : Double.parseDouble(newRangeString);
                             range.setValue(newRange);
+                            if (range.getValue() > range.getMax())
+                                range.setValue(range.getMax());
+                            else if (range.getValue() < range.getMin())
+                                range.setValue(range.getMin());
+
                             ChatLogger.print(String.format("Kill Aura Range set to %s", range.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newRangeString));

@@ -67,7 +67,7 @@ public class WaypointSlot extends GuiSlot {
     public Waypoint getWaypoint(int slot) {
         int count = 0;
 
-        for (Waypoint waypoint: screen.getWaypoints()) {
+        for (Waypoint waypoint : screen.getWaypoints()) {
             if (count == slot) {
                 return waypoint;
             }

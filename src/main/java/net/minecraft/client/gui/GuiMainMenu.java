@@ -32,6 +32,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
 import pw.latematt.xiv.ui.GuiManagers;
+import pw.latematt.xiv.ui.managers.alt.GuiAltManager;
 
 public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
 {
@@ -253,7 +254,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
         if (button.id == 5)
         {
             if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-                this.mc.displayGuiScreen(new GuiManagers(this));
+                this.mc.displayGuiScreen(new GuiAltManager(this));
             } else {
                 this.mc.displayGuiScreen(new GuiLanguage(this, this.mc.gameSettings, this.mc.getLanguageManager()));
             }

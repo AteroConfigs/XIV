@@ -223,13 +223,12 @@ public class Search extends Mod implements Listener<Render3DEvent>, CommandHandl
                         String newRangeString = arguments[2];
                         try {
                             float newRange = arguments[2].equalsIgnoreCase("-d") ? range.getDefault() : Float.parseFloat(newRangeString);
-                            if (newRange > 256) {
-                                newRange = 256;
-                            } else if (newRange < 10) {
-                                newRange = 10;
-                            }
-
                             range.setValue(newRange);
+                            if (range.getValue() > range.getMax())
+                                range.setValue(range.getMax());
+                            else if (range.getValue() < range.getMin())
+                                range.setValue(range.getMin());
+
                             ChatLogger.print(String.format("Search Range set to %s", range.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newRangeString));

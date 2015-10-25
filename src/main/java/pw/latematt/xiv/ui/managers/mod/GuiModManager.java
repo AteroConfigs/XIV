@@ -1,6 +1,8 @@
 package pw.latematt.xiv.ui.managers.mod;
 
-import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.mod.Mod;
@@ -57,7 +59,7 @@ public class GuiModManager extends GuiScreen {
         if (button.enabled) {
             if (button.id == 0) {
                 mc.displayGuiScreen(parent);
-            }else if(button.id == 1) {
+            } else if (button.id == 1) {
                 this.slot.getMod().setEnabled(!slot.getMod().isEnabled());
             }
         }
@@ -74,12 +76,12 @@ public class GuiModManager extends GuiScreen {
         this.slot.drawScreen(mouseX, mouseY, partialTicks);
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        if(this.slot.getMod() != null) {
+        if (this.slot.getMod() != null) {
             Mod mod = this.slot.getMod();
             mc.fontRendererObj.drawStringWithShadow(mod.getName(), 2, 2, mod.getColor());
 
             ((GuiButton) this.buttonList.get(1)).enabled = true;
-        }else{
+        } else {
             ((GuiButton) this.buttonList.get(1)).enabled = false;
         }
 

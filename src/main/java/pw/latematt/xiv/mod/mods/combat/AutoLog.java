@@ -53,9 +53,11 @@ public class AutoLog extends Mod implements Listener<MotionUpdateEvent>, Command
                         String newHealthString = arguments[2];
                         try {
                             float newHealth = arguments[2].equalsIgnoreCase("-d") ? health.getDefault() : Float.parseFloat(newHealthString);
-                            if (newHealth < 1.0F) {
-                                newHealth = 1.0F;
-                            }
+                            if (health.getValue() > health.getMax())
+                                health.setValue(health.getMax());
+                            else if (health.getValue() < health.getMin())
+                                health.setValue(health.getMin());
+
                             health.setValue(newHealth);
                             ChatLogger.print(String.format("AutoLog Health set to %s", health.getValue()));
                         } catch (NumberFormatException e) {

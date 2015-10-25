@@ -137,6 +137,11 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
                         try {
                             long newDelay = arguments[2].equalsIgnoreCase("-d") ? delay.getDefault() : Long.parseLong(newDelayString);
                             delay.setValue(newDelay);
+                            if (delay.getValue() > delay.getMax())
+                                delay.setValue(delay.getMax());
+                            else if (delay.getValue() < delay.getMin())
+                                delay.setValue(delay.getMin());
+
                             ChatLogger.print(String.format("Triggerbot delay set to %s", delay.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));
@@ -151,11 +156,12 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
                         String newRandomDelayString = arguments[2];
                         try {
                             long newRandomDelay = arguments[2].equalsIgnoreCase("-d") ? randomDelay.getDefault() : Long.parseLong(newRandomDelayString);
-                            if (newRandomDelay < 0) {
-                                newRandomDelay = 0;
-                            }
-
                             randomDelay.setValue(newRandomDelay);
+                            if (delay.getValue() > delay.getMax())
+                                delay.setValue(delay.getMax());
+                            else if (delay.getValue() < delay.getMin())
+                                delay.setValue(delay.getMin());
+
                             ChatLogger.print(String.format("Triggerbot Random Delay set to %sms", randomDelay.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newRandomDelayString));

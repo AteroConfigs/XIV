@@ -73,11 +73,12 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                         String newHeightString = arguments[2];
                         try {
                             float newHeight = arguments[2].equalsIgnoreCase("-d") ? height.getDefault() : Float.parseFloat(newHeightString);
-                            if (newHeight > 10.0F)
-                                newHeight = 10.0F;
-                            else if (newHeight < 0.5F)
-                                newHeight = 0.5F;
                             height.setValue(newHeight);
+                            if (height.getValue() > height.getMax())
+                                height.setValue(height.getMax());
+                            else if (height.getValue() < height.getMin())
+                                height.setValue(height.getMin());
+
                             mc.thePlayer.stepHeight = height.getValue();
                             ChatLogger.print(String.format("Step Height set to %s", height.getValue()));
                         } catch (NumberFormatException e) {

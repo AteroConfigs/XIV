@@ -28,8 +28,8 @@ public class GuiManagers extends GuiScreen {
 
     @Override
     public void actionPerformed(GuiButton button) {
-        if(button.enabled) {
-            switch(button.id) {
+        if (button.enabled) {
+            switch (button.id) {
                 case 0:
                     mc.displayGuiScreen(parent);
                     break;
