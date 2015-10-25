@@ -181,6 +181,8 @@ public class Projectiles extends Mod implements Listener<Render3DEvent> {
     private boolean isValidPotion(ItemStack stack, Item item) {
         if (item != null && item instanceof ItemPotion) {
             ItemPotion potion = (ItemPotion) item;
+            if (!ItemPotion.isSplash(stack.getItemDamage()))
+                return false;
 
             if (potion.getEffects(stack) != null) {
                 return true;

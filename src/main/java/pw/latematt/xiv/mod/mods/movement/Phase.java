@@ -62,9 +62,6 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    if (mode.getValue() == Mode.VANILLA && BlockUtils.isInsideBlock(mc.thePlayer)) {
-                        player.setY(player.getY() - 0.1F);
-                    }
                 }
             }
         };
@@ -86,32 +83,28 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
 
     public void onEventCalled(MotionUpdateEvent event) {
         if (mode.getValue() != Mode.VANILLA) {
-            if (!mc.thePlayer.isCollidedHorizontally && collided) {
+            if (!mc.thePlayer.isCollidedHorizontally && collided)
                 collided = false;
-            }
 
             float dir = mc.thePlayer.rotationYaw;
-
-            if (mc.thePlayer.moveForward < 0.0F) {
+            if (mc.thePlayer.moveForward < 0.0F)
                 dir += 180.0F;
-            }
 
-            if (mc.thePlayer.moveStrafing > 0.0F) {
+            if (mc.thePlayer.moveStrafing > 0.0F)
                 dir -= 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
-            }
 
-            if (mc.thePlayer.moveStrafing < 0.0F) {
+            if (mc.thePlayer.moveStrafing < 0.0F)
                 dir += 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
-            }
 
             float xD = (float) Math.cos((dir + 90.0F) * Math.PI / 180.0D);
             float zD = (float) Math.sin((dir + 90.0F) * Math.PI / 180.0D);
 
             boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed();
+            if (mc.thePlayer.isCollidedHorizontally && !collided && mc.thePlayer.onGround && !BlockUtils.isInsideBlock(mc.thePlayer) && moving) {
+                if (!mc.thePlayer.isSneaking())
+                    mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
 
-            mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
-            if (mode.getValue() == Mode.SKIP) {
-                if (mc.thePlayer.isCollidedHorizontally && !collided && mc.thePlayer.onGround && !BlockUtils.isInsideBlock(mc.thePlayer) && moving) {
+                if (mode.getValue() == Mode.SKIP) {
                     float[] offset = new float[]{xD * 0.25F, 1.0F, zD * 0.25F};
 
                     double[] movements = {
@@ -126,37 +119,29 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                     }
 
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0] * 0.05F), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2] * 0.05F), mc.thePlayer.onGround));
-                }
 
-                if (mc.thePlayer.isCollidedHorizontally) {
-                    collided = true;
-                }
-            } else if (mode.getValue() == Mode.VANILLA_SKIP) {
-                float[] offset = new float[]{xD * 1.9F, 1.0F, zD * 1.9F};
+                    if (mc.thePlayer.isCollidedHorizontally)
+                        collided = true;
+                } else if (mode.getValue() == Mode.VANILLA_SKIP) {
+                    float[] offset = new float[]{xD * 1.9F, 1.0F, zD * 1.9F};
 
-                if (moving && BlockUtils.isInsideBlock(mc.thePlayer)) {
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0]), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2]), mc.thePlayer.onGround));
-                }
-            } else if (mode.getValue() == Mode.VANILLA_CONTROL) {
-                if (BlockUtils.isInsideBlock(mc.thePlayer)) {
+                } else if (mode.getValue() == Mode.VANILLA_CONTROL) {
                     float motionY = 0;
 
-                    if (mc.gameSettings.keyBindJump.getIsKeyPressed()) {
+                    if (mc.gameSettings.keyBindJump.getIsKeyPressed())
                         motionY = 0.4F;
-                    } else if (mc.gameSettings.keyBindSneak.getIsKeyPressed()) {
+                    else if (mc.gameSettings.keyBindSneak.getIsKeyPressed())
                         motionY = -0.4F;
-                    }
 
                     mc.thePlayer.motionY = motionY;
 
-                    if (motionY == 0 && mc.thePlayer.motionX == 0 && mc.thePlayer.motionZ == 0) {
+                    if (motionY == 0 && mc.thePlayer.motionX == 0 && mc.thePlayer.motionZ == 0)
                         event.setCancelled(true);
-                    }
                 }
-            }
 
-            if (!mc.thePlayer.isSneaking()) {
-                mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
+                if (!mc.thePlayer.isSneaking())
+                    mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
             }
         }
     }

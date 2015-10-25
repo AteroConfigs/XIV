@@ -12,6 +12,8 @@ import pw.latematt.xiv.utils.EntityUtils;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * @author Matthew
@@ -32,22 +34,23 @@ public class Switch extends AuraMode {
             mc.theWorld.loadedEntityList.stream()
                     .filter(entity -> entity instanceof EntityLivingBase)
                     .filter(entity -> killAura.isValidEntity((EntityLivingBase) entity))
-                    .sorted((entity1, entity2) -> {
-                        float yaw = EntityUtils.getYawChange((EntityLivingBase) entity1);
-                        float pitch = EntityUtils.getPitchChange((EntityLivingBase) entity1);
-                        final float firstEntityDistance = (yaw + pitch) / 2F;
-
-                        yaw = EntityUtils.getYawChange((EntityLivingBase) entity2);
-                        pitch = EntityUtils.getPitchChange((EntityLivingBase) entity2);
-                        final float secondEntityDistance = (yaw + pitch) / 2F;
-
-                        return firstEntityDistance > secondEntityDistance ? -1 :
-                                secondEntityDistance > firstEntityDistance ? 1 : 0;
-                    }).forEach(entity -> entities.add((EntityLivingBase) entity));
+                    .forEach(entity -> entities.add((EntityLivingBase) entity));
         }
 
         if (!entities.isEmpty()) {
-            EntityLivingBase firstInArray = entities.get(0);
+            EntityLivingBase firstInArray = entities.stream()
+                    .sorted((entity1, entity2) -> {
+                        float yaw = EntityUtils.getYawChange(entity1);
+                        float pitch = EntityUtils.getPitchChange(entity1);
+                        final float firstEntityDistance = (yaw + pitch) / 2F;
+
+                        yaw = EntityUtils.getYawChange(entity2);
+                        pitch = EntityUtils.getPitchChange(entity2);
+                        final float secondEntityDistance = (yaw + pitch) / 2F;
+
+                        return firstEntityDistance > secondEntityDistance ? 1 :
+                                secondEntityDistance > firstEntityDistance ? -1 : 0;
+                    }).collect(Collectors.toList()).get(0);
             if (killAura.isValidEntity(firstInArray)) {
                 entityToAttack = firstInArray;
             } else {

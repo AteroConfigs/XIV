@@ -179,7 +179,7 @@ public class GuiOptions extends GuiScreen implements GuiYesNoCallback
             {
                 if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
                     this.mc.displayGuiScreen(new GuiAltManager(this));
-                }else {
+                } else {
                     this.mc.gameSettings.saveOptions();
                     this.mc.displayGuiScreen(new GuiLanguage(this, this.game_settings_1, this.mc.getLanguageManager()));
                 }
