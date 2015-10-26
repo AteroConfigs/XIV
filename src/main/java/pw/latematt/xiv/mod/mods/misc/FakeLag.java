@@ -1,7 +1,7 @@
 package pw.latematt.xiv.mod.mods.misc;
 
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.client.C01PacketChatMessage;
+import net.minecraft.network.play.client.*;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.timer.Timer;
 import pw.latematt.xiv.XIV;
@@ -23,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class FakeLag extends Mod implements Listener<SendPacketEvent>, CommandHandler {
     private final Timer timer = new Timer();
-    private final ClampedValue<Long> delay = new ClampedValue<>("fakelag_delay", 1000L, 1000L, 20000L);
+    private final ClampedValue<Long> delay = new ClampedValue<>("fakelag_delay", 1000L, 100L, 20000L);
     private final List<Packet> packets = new CopyOnWriteArrayList<>();
     private final Listener motionUpdateListener;
 
@@ -56,8 +56,14 @@ public class FakeLag extends Mod implements Listener<SendPacketEvent>, CommandHa
 
     @Override
     public void onEventCalled(SendPacketEvent event) {
-        packets.add(event.getPacket());
-        event.setCancelled(true);
+        if(!mc.thePlayer.isDead) {
+            if(!event.isCancelled()) { // This was sending packets that weren't needed to be delayed, like chat messages (it was also sending client commands)
+                if (event.getPacket() instanceof C03PacketPlayer || event.getPacket() instanceof C07PacketPlayerDigging || event.getPacket() instanceof C08PacketPlayerBlockPlacement || event.getPacket() instanceof C0BPacketEntityAction || event.getPacket() instanceof C02PacketUseEntity || event.getPacket() instanceof C0APacketAnimation) {
+                    packets.add(event.getPacket());
+                    event.setCancelled(true);
+                }
+            }
+        }
     }
 
     @Override
