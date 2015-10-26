@@ -20,7 +20,7 @@ import java.util.Objects;
  */
 public final class ArmorBreaker extends Mod implements Listener<AttackEntityEvent>, CommandHandler {
     private final Value<Boolean> crits = new Value<>("armorbreaker_crits", true);
-    private int delay = 0;
+    private int ticks = 0;
 
     public ArmorBreaker() {
         super("ArmorBreaker", ModType.COMBAT, Keyboard.KEY_NONE, 0xFF808080);
@@ -43,7 +43,7 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
             if (speed != null && speed.isEnabled())
                 mc.timer.timerSpeed = 1.0F;
 
-            switch (++delay) {
+            switch (++ticks) {
                 case 1: { // switch
                     mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, 27, mc.thePlayer.inventory.currentItem, 2, mc.thePlayer);
                     break;
@@ -52,14 +52,14 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
                 case 2: { // crit & reset
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.0625101, mc.thePlayer.posZ, false));
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                    delay = 0;
+                    ticks = 0;
                     break;
                 }
             }
         } else {
-            if (++delay >= 2) {
+            if (++ticks >= 2) {
                 mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, 27, mc.thePlayer.inventory.currentItem, 2, mc.thePlayer);
-                delay = 0;
+                ticks = 0;
             }
         }
     }
@@ -100,6 +100,6 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
-        this.delay = 0;
+        ticks = 0;
     }
 }

@@ -146,11 +146,11 @@ public class AutoHeal extends Mod implements CommandHandler {
                             } else {
                                 Float newHealth = Float.parseFloat(newHealthString);
                                 health.setValue(newHealth);
+                                if (health.getValue() > health.getMax())
+                                    health.setValue(health.getMax());
+                                else if (health.getValue() < health.getMin())
+                                    health.setValue(health.getMin());
                             }
-                            if (health.getValue() > health.getMax())
-                                health.setValue(health.getMax());
-                            else if (health.getValue() < health.getMin())
-                                health.setValue(health.getMin());
 
                             ChatLogger.print(String.format("AutoHeal Health set to %s", health.getValue()));
                         } catch (NumberFormatException e) {

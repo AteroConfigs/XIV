@@ -59,6 +59,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Criticals());
         contents.add(new DashNames());
         contents.add(new ESP());
+        contents.add(new FakeLag());
         contents.add(new FastPlace());
         contents.add(new FastUse());
         contents.add(new Fly());
@@ -77,6 +78,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new NoRotationSet());
         contents.add(new NoSlowdown());
         contents.add(new Phase());
+        contents.add(new PingSpoof());
         contents.add(new PotionSaver());
         contents.add(new Regen());
         contents.add(new Search());

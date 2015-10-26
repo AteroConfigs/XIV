@@ -1,6 +1,7 @@
 package pw.latematt.xiv.mod.mods.movement;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
@@ -16,18 +17,16 @@ import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
 
-import java.util.Objects;
-
 /**
  * @author Jack
  * @author Rederpz
  */
 public class Speed extends Mod implements CommandHandler {
-    private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.NEW);
     private final Value<Boolean> fastLadder = new Value<>("speed_fast_ladder", true);
+    private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.NEW);
     private final Listener motionUpdateListener, moveListener;
-    private int delay;
     private boolean nextTick;
+    private int ticks;
 
     public Speed() {
         super("Speed", ModType.MOVEMENT, Keyboard.KEY_F, 0xFFDC5B18);
@@ -54,83 +53,91 @@ public class Speed extends Mod implements CommandHandler {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (Objects.equals(currentMode.getValue(), Mode.OLD)) {
-                        if (isValid()) {
-                            double speed = 3.0D;
-                            double slow = 1.425D;
-                            if (mc.thePlayer.moveStrafing == 0.0F) {
-                                speed += 0.05D;
-                            }
+                    double speed;
+                    switch (currentMode.getValue()) {
+                        case NEW:
+                            speed = 2.37D;
+                            if (isValid()) {
+                                if (mc.thePlayer.isPotionActive(Potion.SPEED)) {
+                                    PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
+                                    switch (effect.getAmplifier()) {
+                                        case 0:
+                                            speed -= 0.2975D;
+                                            break;
+                                        case 1:
+                                            speed -= 0.5575;
+                                            break;
+                                        case 2:
+                                            speed -= 0.7858;
+                                            break;
+                                        case 3:
+                                            speed -= 0.9075;
+                                            break;
+                                    }
+                                }
 
-                            switch (++delay) {
-                                case 1:
-                                    mc.timer.timerSpeed = 1.325F;
+                                boolean strafe = mc.thePlayer.moveStrafing != 0.0F;
+                                speed = speed + (mc.thePlayer.isSprinting() ? 0.02D : 0.40D);
+
+                                if (!strafe) {
+                                    speed += 0.04F;
+                                }
+
+                                if (nextTick = !nextTick) {
                                     mc.thePlayer.motionX *= speed;
                                     mc.thePlayer.motionZ *= speed;
-                                    break;
-                                case 2:
+                                    mc.timer.timerSpeed = 1.15F;
+                                    Criticals crits = (Criticals) XIV.getInstance().getModManager().find("criticals");
+                                    event.setY(event.getY() + 0.0001D);
+                                    if (crits.isEnabled() && crits.getFallDistance() > 0.0F) {
+                                        crits.setFallDistance(crits.getFallDistance() + 0.0001F);
+                                    }
+                                } else {
+                                    mc.thePlayer.motionX /= 1.50D;
+                                    mc.thePlayer.motionZ /= 1.50D;
                                     mc.timer.timerSpeed = 1.0F;
-                                    mc.thePlayer.motionX /= slow;
-                                    mc.thePlayer.motionZ /= slow;
-                                    break;
-                                case 3:
-                                    mc.timer.timerSpeed = 1.05F;
-                                    break;
-                                default:
-                                    mc.timer.timerSpeed = 1.0F;
-                                    delay = 0;
-                                    break;
-                            }
-                        } else {
-                            delay = 4;
-                            mc.timer.timerSpeed = 1.0F;
-                            mc.thePlayer.motionX *= 0.98D;
-                            mc.thePlayer.motionZ *= 0.98D;
-                        }
-                    }
-
-                    if (Objects.equals(currentMode.getValue(), Mode.NEW)) {
-                        double speed = 2.3D;
-
-                        for (final Object o : mc.thePlayer.getActivePotionEffects()) {
-                            final PotionEffect effect = (PotionEffect) o;
-                            switch (effect.getAmplifier()) {
-                                case 0: {
-                                    speed -= 0.3D;
-                                    break;
                                 }
+                            } else if (nextTick) {
+                                mc.thePlayer.motionX /= speed;
+                                mc.thePlayer.motionZ /= speed;
+                                mc.timer.timerSpeed = 1.0F;
+                                nextTick = false;
                             }
-                        }
+                            break;
+                        case OLD:
+                            if (isValid()) {
+                                speed = 3.0D;
+                                double slow = 1.425D;
+                                if (mc.thePlayer.moveStrafing == 0.0F) {
+                                    speed += 0.05D;
+                                }
 
-                        final boolean strafe = mc.thePlayer.moveStrafing != 0.0F;
-                        speed = speed + (mc.thePlayer.isSprinting() ? 0.02D : 0.40D);
-
-                        if (!strafe) {
-                            speed += 0.04F;
-                        }
-
-                        if (isValid()) {
-                            nextTick = !nextTick;
-                            if (nextTick) {
-                                mc.thePlayer.motionX *= speed;
-                                mc.thePlayer.motionZ *= speed;
-                                mc.timer.timerSpeed = 1.15F;
-                                Criticals crits = (Criticals) XIV.getInstance().getModManager().find("criticals");
-                                event.setY(event.getY() + 0.0001D);
-                                if (crits.isEnabled() && crits.getFallDistance() > 0.0F) {
-                                    crits.setFallDistance(crits.getFallDistance() + 0.0001F);
+                                switch (++ticks) {
+                                    case 1:
+                                        mc.timer.timerSpeed = 1.325F;
+                                        mc.thePlayer.motionX *= speed;
+                                        mc.thePlayer.motionZ *= speed;
+                                        break;
+                                    case 2:
+                                        mc.timer.timerSpeed = 1.0F;
+                                        mc.thePlayer.motionX /= slow;
+                                        mc.thePlayer.motionZ /= slow;
+                                        break;
+                                    case 3:
+                                        mc.timer.timerSpeed = 1.05F;
+                                        break;
+                                    default:
+                                        mc.timer.timerSpeed = 1.0F;
+                                        ticks = 0;
+                                        break;
                                 }
                             } else {
-                                mc.thePlayer.motionX /= 1.50D;
-                                mc.thePlayer.motionZ /= 1.50D;
+                                ticks = 4;
                                 mc.timer.timerSpeed = 1.0F;
+                                mc.thePlayer.motionX *= 0.98D;
+                                mc.thePlayer.motionZ *= 0.98D;
                             }
-                        } else if (nextTick) {
-                            mc.thePlayer.motionX /= speed;
-                            mc.thePlayer.motionZ /= speed;
-                            mc.timer.timerSpeed = 1.0F;
-                            nextTick = false;
-                        }
+                            break;
                     }
                 }
             }
