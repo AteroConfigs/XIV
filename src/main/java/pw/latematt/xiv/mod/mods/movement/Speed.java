@@ -12,22 +12,21 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.MoveEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.mod.mods.combat.Criticals;
 import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
-
-import java.util.Objects;
 
 /**
  * @author Jack
  * @author Rederpz
  */
 public class Speed extends Mod implements CommandHandler {
-    private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.NEW);
     private final Value<Boolean> fastLadder = new Value<>("speed_fast_ladder", true);
+    private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.NEW);
     private final Listener motionUpdateListener, moveListener;
-    private boolean shouldBoost;
-    private int delay;
+    private boolean nextTick;
+    private int ticks;
 
     public Speed() {
         super("Speed", ModType.MOVEMENT, Keyboard.KEY_F, 0xFFDC5B18);
@@ -47,65 +46,73 @@ public class Speed extends Mod implements CommandHandler {
                     mc.thePlayer.motionY = 0.1D;
                     event.setMotionY(event.getMotionY() * 2.25D);
                 }
-
-                if (currentMode.getValue() == Mode.NEW) {
-                    if (shouldBoost) {
-                        double speed = 2.035D;
-                        if (BlockUtils.isOnIce(mc.thePlayer))
-                            speed = 4.0D;
-                        if (mc.thePlayer.moveStrafing != 0.0F)
-                            speed -= 0.04D;
-                        if (!mc.thePlayer.isSprinting())
-                            speed += 0.15D;
-                        if (mc.thePlayer.hurtTime > 0)
-                            speed += 0.01D;
-                        speed = getSpeedPotionSlowdown(speed);
-
-                        event.setMotionX(event.getMotionX() * speed);
-                        event.setMotionZ(event.getMotionZ() * speed);
-
-                        if (!BlockUtils.isOnIce(mc.thePlayer) && ++delay >= 5) {
-                            mc.timer.timerSpeed = 1.3F;
-                            if (delay >= 6) {
-                                delay = 0;
-                            }
-                        } else {
-                            mc.timer.timerSpeed = 1.0F;
-                            delay = 0;
-                        }
-                    }
-                }
             }
         };
 
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
-                    Step step = (Step) XIV.getInstance().getModManager().find("step");
-                    boolean editingPackets = step != null && step.isEditingPackets();
-                    boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed();
+                if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                    double speed;
+                    switch (currentMode.getValue()) {
+                        case NEW:
+                            speed = 2.37D;
+                            if (isValid()) {
+                                if (mc.thePlayer.isPotionActive(Potion.SPEED)) {
+                                    PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
+                                    switch (effect.getAmplifier()) {
+                                        case 0:
+                                            speed -= 0.2975D;
+                                            break;
+                                        case 1:
+                                            speed -= 0.5575;
+                                            break;
+                                        case 2:
+                                            speed -= 0.7858;
+                                            break;
+                                        case 3:
+                                            speed -= 0.9075;
+                                            break;
+                                    }
+                                }
 
-                    boolean valid = mc.thePlayer.onGround &&
-                            !BlockUtils.isOnLiquid(mc.thePlayer) &&
-                            !BlockUtils.isInLiquid(mc.thePlayer) &&
-                            !editingPackets && moving;
-                    if (valid) {
-                        switch (currentMode.getValue()) {
-                            case NEW:
-                                if (shouldBoost)
-                                    event.setY(event.getY() + 0.001D);
+                                boolean strafe = mc.thePlayer.moveStrafing != 0.0F;
+                                speed = speed + (mc.thePlayer.isSprinting() ? 0.02D : 0.40D);
 
-                                shouldBoost = !shouldBoost;
-                                break;
-                            case OLD:
-                                double speed = 3.0D;
+                                if (!strafe) {
+                                    speed += 0.04F;
+                                }
+
+                                if (nextTick = !nextTick) {
+                                    mc.thePlayer.motionX *= speed;
+                                    mc.thePlayer.motionZ *= speed;
+                                    mc.timer.timerSpeed = 1.15F;
+                                    Criticals crits = (Criticals) XIV.getInstance().getModManager().find("criticals");
+                                    event.setY(event.getY() + 0.0001D);
+                                    if (crits.isEnabled() && crits.getFallDistance() > 0.0F) {
+                                        crits.setFallDistance(crits.getFallDistance() + 0.0001F);
+                                    }
+                                } else {
+                                    mc.thePlayer.motionX /= 1.50D;
+                                    mc.thePlayer.motionZ /= 1.50D;
+                                    mc.timer.timerSpeed = 1.0F;
+                                }
+                            } else if (nextTick) {
+                                mc.thePlayer.motionX /= speed;
+                                mc.thePlayer.motionZ /= speed;
+                                mc.timer.timerSpeed = 1.0F;
+                                nextTick = false;
+                            }
+                            break;
+                        case OLD:
+                            if (isValid()) {
+                                speed = 3.0D;
                                 double slow = 1.425D;
                                 if (mc.thePlayer.moveStrafing == 0.0F) {
                                     speed += 0.05D;
                                 }
 
-                                switch (++delay) {
+                                switch (++ticks) {
                                     case 1:
                                         mc.timer.timerSpeed = 1.325F;
                                         mc.thePlayer.motionX *= speed;
@@ -121,34 +128,33 @@ public class Speed extends Mod implements CommandHandler {
                                         break;
                                     default:
                                         mc.timer.timerSpeed = 1.0F;
-                                        delay = 0;
+                                        ticks = 0;
                                         break;
                                 }
-                        }
-                    } else {
-                        delay = currentMode.getValue() == Mode.NEW ? 0 : 4;
-                        shouldBoost = false;
-                        mc.timer.timerSpeed = 1.0F;
-                        mc.thePlayer.motionX *= 0.98D;
-                        mc.thePlayer.motionZ *= 0.98D;
+                            } else {
+                                ticks = 4;
+                                mc.timer.timerSpeed = 1.0F;
+                                mc.thePlayer.motionX *= 0.98D;
+                                mc.thePlayer.motionZ *= 0.98D;
+                            }
+                            break;
                     }
                 }
             }
         };
     }
 
-    private double getSpeedPotionSlowdown(double speed) {
-        if (mc.thePlayer.getActivePotionEffect(Potion.SPEED) == null)
-            return speed;
+    private boolean isValid() {
+        Step step = (Step) XIV.getInstance().getModManager().find("step");
+        boolean editingPackets = step != null && step.isEditingPackets();
+        boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
+        boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+        boolean moving = movingForward && strafing || movingForward;
 
-        PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
-
-        speed -= (0.34D * (effect.getAmplifier() + 1));
-
-        if (speed < 1.0D)
-            speed = 1.0D;
-
-        return speed;
+        return mc.thePlayer.onGround &&
+                !BlockUtils.isOnLiquid(mc.thePlayer) &&
+                !BlockUtils.isInLiquid(mc.thePlayer) &&
+                !editingPackets && moving;
     }
 
     @Override
@@ -239,3 +245,4 @@ public class Speed extends Mod implements CommandHandler {
         }
     }
 }
+

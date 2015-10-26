@@ -300,10 +300,9 @@ public class GuiChat extends GuiScreen
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
+        drawRect(2, this.height - 14, this.width - 2, this.height - 2, Integer.MIN_VALUE);
         RenderChatEvent event = new RenderChatEvent(inputField.getText());
         XIV.getInstance().getListenerManager().call(event);
-
-        drawRect(2, this.height - 14, this.width - 2, this.height - 2, Integer.MIN_VALUE);
         this.inputField.drawTextBox();
         IChatComponent var4 = this.mc.ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY());
 

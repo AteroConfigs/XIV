@@ -23,17 +23,17 @@ public class Commands extends Mod implements Listener<SendPacketEvent> {
             @Override
             public void onEventCalled(RenderChatEvent event) {
                 if (event.getString().startsWith(XIV.getInstance().getCommandManager().getPrefix())) {
-                    String message = event.getString().substring(1);
+                    String message = event.getString();
 
                     String predictedCommand = "";
                     for (Command command : XIV.getInstance().getCommandManager().getContents()) {
-                        if (command.getCmd().toLowerCase().startsWith(message.split(" ")[0].toLowerCase())) {
+                        if ((XIV.getInstance().getCommandManager().getPrefix() + command.getCmd()).toLowerCase().startsWith(message.split(" ")[0].toLowerCase())) {
                             predictedCommand = command.getCmd();
                         }
 
                         if (command.getAliases() != null) {
                             for (String alias : command.getAliases()) {
-                                if (alias.toLowerCase().startsWith(message.split(" ")[0].toLowerCase())) {
+                                if ((XIV.getInstance().getCommandManager().getPrefix() + alias).toLowerCase().startsWith(message.split(" ")[0].toLowerCase())) {
                                     predictedCommand = alias;
                                 }
                             }
@@ -43,7 +43,7 @@ public class Commands extends Mod implements Listener<SendPacketEvent> {
                     predictedCommand = XIV.getInstance().getCommandManager().getPrefix() + predictedCommand;
                     if (!predictedCommand.equalsIgnoreCase("") && !message.contains(" ")) {
                         int y = RenderUtils.newScaledResolution().getScaledHeight() - 12;
-                        mc.fontRendererObj.drawStringWithShadow(predictedCommand, 4, y, 0xFFFFFFFF);
+                        mc.fontRendererObj.drawStringWithShadow(predictedCommand, 4, y, 0xFF808080);
                     }
                 }
             }

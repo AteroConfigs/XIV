@@ -38,7 +38,7 @@ import java.util.Random;
  */
 public class KillAura extends Mod implements CommandHandler {
     private final Listener motionUpdateListener, sendPacketListener, playerDeathListener;
-    public final ClampedValue<Long> delay = new ClampedValue<>("killaura_delay", 166L, 0L, 1000L);
+    public final ClampedValue<Long> delay = new ClampedValue<>("killaura_delay", 200L, 0L, 1000L);
     public final ClampedValue<Long> randomDelay = new ClampedValue<>("killaura_random_delay", 0L, 0L, 1000L);
     public final ClampedValue<Double> range = new ClampedValue<>("killaura_range", 3.8D, 3.0D, 6.0D);
     public final ClampedValue<Integer> fov = new ClampedValue<>("killaura_fov", 360, 0, 360);
@@ -456,7 +456,7 @@ public class KillAura extends Mod implements CommandHandler {
     }
 
     public Long getDelay() {
-        return randomDelay.getValue() == 0 ? delay.getValue() : Long.valueOf(delay.getValue() + random.nextInt(randomDelay.getValue().intValue()));
+        return randomDelay.getValue() == 0 ? delay.getValue() : Long.valueOf(delay.getValue() - random.nextInt(randomDelay.getValue().intValue()));
     }
 
     public boolean isHealing() {

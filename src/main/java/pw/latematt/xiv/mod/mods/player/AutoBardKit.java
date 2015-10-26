@@ -13,6 +13,7 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.ItemUtils;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 import java.util.Objects;
@@ -25,7 +26,7 @@ public class AutoBardKit extends Mod implements Listener<MotionUpdateEvent>, Com
     private final Item chestplate = Items.golden_chestplate;
     private final Item leggings = Items.golden_leggings;
     private final Item boots = Items.golden_boots;
-    private final Value<Long> delay = new Value<>("autobardkit_delay", 250L);
+    private final ClampedValue<Long> delay = new ClampedValue<>("autobardkit_delay", 250L, 0L, 1000L);
     private final Timer time = new Timer();
 
     public AutoBardKit() {
@@ -99,12 +100,13 @@ public class AutoBardKit extends Mod implements Listener<MotionUpdateEvent>, Com
                                 delay.setValue(delay.getDefault());
                             } else {
                                 long newDelay = Long.parseLong(newDelayString);
-                                if (newDelay < 10) {
-                                    newDelay = 10;
-                                }
-
                                 delay.setValue(newDelay);
+                                if (delay.getValue() > delay.getMax())
+                                    delay.setValue(delay.getMax());
+                                else if (delay.getValue() < delay.getMin())
+                                    delay.setValue(delay.getMin());
                             }
+
                             ChatLogger.print(String.format("AutoBardKit Delay set to %sms", delay.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));

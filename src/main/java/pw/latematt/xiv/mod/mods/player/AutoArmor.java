@@ -13,6 +13,7 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.ItemUtils;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 import java.util.Objects;
@@ -25,7 +26,7 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, Comma
     private final Item[] chestplates = {Items.diamond_chestplate, Items.iron_chestplate, Items.golden_chestplate, Items.chainmail_chestplate, Items.leather_chestplate};
     private final Item[] leggings = {Items.diamond_leggings, Items.iron_leggings, Items.golden_leggings, Items.chainmail_leggings, Items.leather_leggings};
     private final Item[] boots = {Items.diamond_boots, Items.iron_boots, Items.golden_boots, Items.chainmail_boots, Items.leather_boots};
-    private final Value<Long> delay = new Value<>("autoarmor_delay", 250L);
+    private final ClampedValue<Long> delay = new ClampedValue<>("autoarmor_delay", 250L, 0L, 1000L);
     private final Timer time = new Timer();
 
     public AutoArmor() {
@@ -107,12 +108,13 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, Comma
                                 delay.setValue(delay.getDefault());
                             } else {
                                 long newDelay = Long.parseLong(newDelayString);
-                                if (newDelay < 10) {
-                                    newDelay = 10;
-                                }
-
                                 delay.setValue(newDelay);
+                                if (delay.getValue() > delay.getMax())
+                                    delay.setValue(delay.getMax());
+                                else if (delay.getValue() < delay.getMin())
+                                    delay.setValue(delay.getMin());
                             }
+
                             ChatLogger.print(String.format("AutoArmor Delay set to %sms", delay.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));
