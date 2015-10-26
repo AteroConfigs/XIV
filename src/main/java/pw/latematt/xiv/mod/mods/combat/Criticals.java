@@ -71,7 +71,7 @@ public class Criticals extends Mod implements CommandHandler {
                     if (!killAura.isAttacking())
                         return;
 
-                    if (timer.hasReached(100)) {
+                    if (timer.hasReached(104)) {
                         event.setCancelled(true);
                         timer.reset();
                     }
@@ -95,11 +95,11 @@ public class Criticals extends Mod implements CommandHandler {
                         fallDist = 0.0F;
                         mc.thePlayer.fallDistance = 0.0F;
 
-//                        if (mc.thePlayer.onGround) {
-//                            mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
-//                            mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-//                            fallDist += 1.01F;
-//                        }
+                        if (mc.thePlayer.onGround) {
+                            mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
+                            mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+                            fallDist += 1.01F;
+                        }
                     } else if (fallDist > 0.0F) {
                         player.setOnGround(false);
                     }
@@ -114,6 +114,11 @@ public class Criticals extends Mod implements CommandHandler {
 
     public void setFallDistance(float fallDist) {
         this.fallDist = fallDist;
+    }
+
+    // used in speed
+    public boolean isOffsetMode() {
+        return currentMode.getValue() == Mode.OFFSET;
     }
 
     private boolean isSafe() {
@@ -186,7 +191,7 @@ public class Criticals extends Mod implements CommandHandler {
             fallDist = 0.0F;
     }
 
-    public enum Mode {
+    private enum Mode {
         OFFSET, OFF_GROUND;
 
         public String getName() {

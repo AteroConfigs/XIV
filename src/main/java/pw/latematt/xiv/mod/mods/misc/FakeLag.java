@@ -44,11 +44,7 @@ public class FakeLag extends Mod implements Listener<SendPacketEvent>, CommandHa
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
                     if (timer.hasReached(delay.getValue())) {
                         for (Packet packet : packets) {
-                            if (packet instanceof C01PacketChatMessage)
-                                mc.getNetHandler().addToSendQueue(packet);
-                            else
-                                mc.getNetHandler().getNetworkManager().sendPacket(packet);
-
+                            mc.getNetHandler().getNetworkManager().sendPacket(packet);
                             packets.remove(packet);
                         }
                         timer.reset();

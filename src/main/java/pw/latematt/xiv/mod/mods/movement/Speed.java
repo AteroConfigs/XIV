@@ -13,6 +13,7 @@ import pw.latematt.xiv.event.events.MoveEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.combat.Criticals;
+import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
 import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
@@ -65,13 +66,13 @@ public class Speed extends Mod implements CommandHandler {
                                             speed -= 0.2975D;
                                             break;
                                         case 1:
-                                            speed -= 0.5575;
+                                            speed -= 0.5575D;
                                             break;
                                         case 2:
-                                            speed -= 0.7858;
+                                            speed -= 0.7858D;
                                             break;
                                         case 3:
-                                            speed -= 0.9075;
+                                            speed -= 0.9075D;
                                             break;
                                     }
                                 }
@@ -87,10 +88,10 @@ public class Speed extends Mod implements CommandHandler {
                                     mc.thePlayer.motionX *= speed;
                                     mc.thePlayer.motionZ *= speed;
                                     mc.timer.timerSpeed = 1.15F;
-                                    Criticals crits = (Criticals) XIV.getInstance().getModManager().find("criticals");
                                     event.setY(event.getY() + 0.0001D);
-                                    if (crits.isEnabled() && crits.getFallDistance() > 0.0F) {
-                                        crits.setFallDistance(crits.getFallDistance() + 0.0001F);
+                                    Criticals criticals = (Criticals) XIV.getInstance().getModManager().find("criticals");
+                                    if (criticals != null && criticals.getFallDistance() > 0.0F) {
+                                        criticals.setFallDistance(criticals.getFallDistance() + 0.0001F);
                                     }
                                 } else {
                                     mc.thePlayer.motionX /= 1.50D;
@@ -145,7 +146,10 @@ public class Speed extends Mod implements CommandHandler {
     }
 
     private boolean isValid() {
+        KillAura killAura = (KillAura) XIV.getInstance().getModManager().find("killaura");
+        Criticals criticals = (Criticals) XIV.getInstance().getModManager().find("criticals");
         Step step = (Step) XIV.getInstance().getModManager().find("step");
+        boolean criticalsAttacking = criticals != null && criticals.isOffsetMode() && killAura != null && killAura.isAttacking();
         boolean editingPackets = step != null && step.isEditingPackets();
         boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
@@ -154,7 +158,7 @@ public class Speed extends Mod implements CommandHandler {
         return mc.thePlayer.onGround &&
                 !BlockUtils.isOnLiquid(mc.thePlayer) &&
                 !BlockUtils.isInLiquid(mc.thePlayer) &&
-                !editingPackets && moving;
+                !editingPackets && !criticalsAttacking && moving;
     }
 
     @Override
@@ -227,7 +231,7 @@ public class Speed extends Mod implements CommandHandler {
         Blocks.packed_ice.slipperiness = 0.98F;
     }
 
-    public enum Mode {
+    private enum Mode {
         NEW, OLD;
 
         public String getName() {

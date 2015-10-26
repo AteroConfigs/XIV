@@ -13,8 +13,6 @@ import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.movement.Sneak;
 import pw.latematt.xiv.utils.EntityUtils;
 
-import java.util.Objects;
-
 /**
  * @author Jack
  * @author Matthew
