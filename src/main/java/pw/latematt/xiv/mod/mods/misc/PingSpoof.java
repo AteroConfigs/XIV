@@ -23,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class PingSpoof extends Mod implements Listener<SendPacketEvent>, CommandHandler {
     private final Timer timer = new Timer();
-    private final ClampedValue<Long> delay = new ClampedValue<>("pingspoof_delay", 1000L, 1000L, 20000L);
+    private final ClampedValue<Long> delay = new ClampedValue<>("pingspoof_delay", 1000L, 100L, 20000L);
     private final List<C00PacketKeepAlive> packets = new CopyOnWriteArrayList<>();
     private final Listener motionUpdateListener;
 
@@ -43,7 +43,7 @@ public class PingSpoof extends Mod implements Listener<SendPacketEvent>, Command
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (timer.hasReached(1000)) {
+                    if (timer.hasReached(delay.getValue())) {
                         for (C00PacketKeepAlive packet : packets) {
                             mc.getNetHandler().getNetworkManager().sendPacket(packet);
                             packets.remove(packet);
@@ -59,6 +59,7 @@ public class PingSpoof extends Mod implements Listener<SendPacketEvent>, Command
     public void onEventCalled(SendPacketEvent event) {
         if (!(event.getPacket() instanceof C00PacketKeepAlive))
             return;
+
         packets.add((C00PacketKeepAlive) event.getPacket());
         event.setCancelled(true);
     }

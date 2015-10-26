@@ -49,6 +49,7 @@ public final class Blink extends Mod {
 
                 if (event.getPacket() instanceof C07PacketPlayerDigging || event.getPacket() instanceof C08PacketPlayerBlockPlacement || event.getPacket() instanceof C0BPacketEntityAction || event.getPacket() instanceof C02PacketUseEntity || event.getPacket() instanceof C0APacketAnimation) {
                     event.setCancelled(true);
+
                     packets.add(event.getPacket());
                 }
 
@@ -59,6 +60,13 @@ public final class Blink extends Mod {
         this.renderListener = new Listener<Render3DEvent>() {
             @Override
             public void onEventCalled(Render3DEvent event) {
+                if(position == null) {
+                    position = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
+                    position.copyLocationAndAnglesFrom(mc.thePlayer);
+
+                    EntityUtils.setReference(position);
+                }
+
                 double[] start = new double[]{position.posX, position.posY, position.posZ};
 
                 RenderUtils.beginGl();

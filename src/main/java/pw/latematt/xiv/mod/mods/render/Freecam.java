@@ -67,6 +67,17 @@ public class Freecam extends Mod {
         this.packetListener = new Listener<SendPacketEvent>() {
             @Override
             public void onEventCalled(SendPacketEvent event) {
+                if(entity == null) {
+                    entity = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
+                    entity.copyLocationAndAnglesFrom(mc.thePlayer);
+                    entity.rotationYawHead = mc.thePlayer.rotationYawHead;
+                    clonePlayer(entity);
+                    entity.setSneaking(mc.thePlayer.isSneaking() || XIV.getInstance().getModManager().find(Sneak.class).isEnabled());
+
+                    mc.theWorld.addEntityToWorld(-1, entity);
+                    mc.renderGlobal.loadRenderers();
+                }
+
                 if (event.getPacket() instanceof C0BPacketEntityAction) {
                     event.setCancelled(true);
                 }
