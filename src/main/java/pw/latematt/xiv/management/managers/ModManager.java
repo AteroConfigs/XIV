@@ -92,6 +92,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Step());
         contents.add(new StorageESP());
         contents.add(new Tower());
+        contents.add(new TrayIcon());
         contents.add(new Projectiles());
         contents.add(new Triggerbot());
         contents.add(new Velocity());

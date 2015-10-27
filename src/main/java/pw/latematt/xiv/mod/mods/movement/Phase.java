@@ -41,7 +41,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                     if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer)) {
                         event.setAxisAlignedBB(null);
                     }
-                } else if (mode.getValue() == Mode.SKIP || mode.getValue() == Mode.VANILLA) {
+                } else if (mode.getValue() == Mode.SKIP || mode.getValue() == Mode.VANILLA || mode.getValue() == Mode.NEW) {
                     if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && BlockUtils.isInsideBlock(mc.thePlayer)) {
                         event.setAxisAlignedBB(null);
                     }
@@ -101,9 +101,6 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
 
             boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed();
             if (mc.thePlayer.isCollidedHorizontally && !collided && mc.thePlayer.onGround && !BlockUtils.isInsideBlock(mc.thePlayer) && moving) {
-                if (!mc.thePlayer.isSneaking())
-                    mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
-
                 if (mode.getValue() == Mode.SKIP) {
                     float[] offset = new float[]{xD * 0.25F, 1.0F, zD * 0.25F};
 
@@ -119,6 +116,15 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                     }
 
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0] * 0.05F), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2] * 0.05F), mc.thePlayer.onGround));
+
+                    if (mc.thePlayer.isCollidedHorizontally)
+                        collided = true;
+                }else if (mode.getValue() == Mode.NEW) {
+                    float[] offset = new float[]{xD * 0.75F, 1.0F, zD * 0.75F};
+
+                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0] * 0.65F), mc.thePlayer.posY + 0.0001F, mc.thePlayer.posZ + (offset[2] * 0.65F), mc.thePlayer.onGround));
+
+                    mc.thePlayer.setPosition(mc.thePlayer.posX + (offset[0] * 0.5F), mc.thePlayer.posY - 0.1F, mc.thePlayer.posZ + (offset[2] * 0.5F));
 
                     if (mc.thePlayer.isCollidedHorizontally)
                         collided = true;
@@ -140,8 +146,10 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                         event.setCancelled(true);
                 }
 
-                if (!mc.thePlayer.isSneaking())
+                for(int i = 0; i < 3; i++) {
+                    mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
                     mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
+                }
             }
         }
     }
@@ -158,6 +166,10 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                         switch (mode.toLowerCase()) {
                             case "skip":
                                 this.mode.setValue(Mode.SKIP);
+                                ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
+                                break;
+                            case "new":
+                                this.mode.setValue(Mode.NEW);
                                 ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             case "vs":
@@ -217,7 +229,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     }
 
     private enum Mode {
-        SKIP, VANILLA, VANILLA_SKIP, VANILLA_CONTROL;
+        SKIP, VANILLA, VANILLA_SKIP, VANILLA_CONTROL, NEW;
 
         public String getName() {
             String prettyName = "";
