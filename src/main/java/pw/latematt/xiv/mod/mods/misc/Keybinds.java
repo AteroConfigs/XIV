@@ -1,11 +1,9 @@
 package pw.latematt.xiv.mod.mods.misc;
 
-import net.minecraft.network.Packet;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.KeyPressEvent;
-import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.MouseClickEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
@@ -15,6 +13,7 @@ import pw.latematt.xiv.mod.ModType;
  */
 public class Keybinds extends Mod implements Listener<KeyPressEvent> {
     private Listener mouseClickListener;
+
     public Keybinds() {
         super("Keybinds", ModType.MISCELLANEOUS);
 

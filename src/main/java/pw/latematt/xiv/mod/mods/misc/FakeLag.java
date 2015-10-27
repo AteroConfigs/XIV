@@ -56,12 +56,10 @@ public class FakeLag extends Mod implements Listener<SendPacketEvent>, CommandHa
 
     @Override
     public void onEventCalled(SendPacketEvent event) {
-        if(!mc.thePlayer.isDead) {
-            if(!event.isCancelled()) { // This was sending packets that weren't needed to be delayed, like chat messages (it was also sending client commands)
-                if (event.getPacket() instanceof C03PacketPlayer || event.getPacket() instanceof C07PacketPlayerDigging || event.getPacket() instanceof C08PacketPlayerBlockPlacement || event.getPacket() instanceof C0BPacketEntityAction || event.getPacket() instanceof C02PacketUseEntity || event.getPacket() instanceof C0APacketAnimation) {
-                    packets.add(event.getPacket());
-                    event.setCancelled(true);
-                }
+        if (!mc.thePlayer.isDead) {
+            if (!event.isCancelled()) {
+                packets.add(event.getPacket());
+                event.setCancelled(true);
             }
         }
     }

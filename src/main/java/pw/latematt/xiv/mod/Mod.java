@@ -40,7 +40,7 @@ public abstract class Mod {
     }
 
     public String getTag() {
-        if(XIV.getInstance().getValueManager().find("render_show_tags") != null && ((Boolean) XIV.getInstance().getValueManager().find("render_show_tags").getValue()) || XIV.getInstance().getValueManager().find("render_show_tags") == null) {
+        if (XIV.getInstance().getValueManager().find("render_show_tags") != null && ((Boolean) XIV.getInstance().getValueManager().find("render_show_tags").getValue()) || XIV.getInstance().getValueManager().find("render_show_tags") == null) {
             return tag;
         }
         return getName();

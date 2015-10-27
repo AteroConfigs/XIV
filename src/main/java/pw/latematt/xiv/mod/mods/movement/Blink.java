@@ -60,7 +60,7 @@ public final class Blink extends Mod {
         this.renderListener = new Listener<Render3DEvent>() {
             @Override
             public void onEventCalled(Render3DEvent event) {
-                if(position == null) {
+                if (position == null) {
                     position = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
                     position.copyLocationAndAnglesFrom(mc.thePlayer);
 

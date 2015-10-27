@@ -119,7 +119,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
 
                     if (mc.thePlayer.isCollidedHorizontally)
                         collided = true;
-                }else if (mode.getValue() == Mode.NEW) {
+                } else if (mode.getValue() == Mode.NEW) {
                     float[] offset = new float[]{xD * 0.75F, 1.0F, zD * 0.75F};
 
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0] * 0.65F), mc.thePlayer.posY + 0.0001F, mc.thePlayer.posZ + (offset[2] * 0.65F), mc.thePlayer.onGround));
@@ -146,7 +146,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                         event.setCancelled(true);
                 }
 
-                for(int i = 0; i < 3; i++) {
+                for (int i = 0; i < 3; i++) {
                     mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
                     mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
                 }

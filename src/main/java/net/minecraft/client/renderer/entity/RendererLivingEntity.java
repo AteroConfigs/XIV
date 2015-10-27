@@ -156,7 +156,7 @@ public abstract class RendererLivingEntity extends Render {
 
                 ESP esp = (ESP) XIV.getInstance().getModManager().find(ESP.class);
 
-                if (esp != null && esp.isEnabled() && esp.outline.getValue() && esp.isValidEntity(entity) && XIV.getInstance().getListenerManager().isEnabled()) {
+                if (esp != null && esp.isEnabled() && esp.outline.getValue() && esp.isValidEntity(entity) && !XIV.getInstance().getListenerManager().isCancelled()) {
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
                     esp.renderOne();
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);

@@ -9,8 +9,6 @@ import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.tabgui.GuiTabHandler;
 import pw.latematt.xiv.utils.RenderUtils;
 
-import java.awt.*;
-
 /**
  * @author Matthew
  */

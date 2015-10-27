@@ -69,7 +69,7 @@ public class MacroManager extends ListManager<Macro> {
 
                                     if (arguments[2].toUpperCase().equalsIgnoreCase("NONE")) {
                                         ChatLogger.print("You can't bind a macro to nothing.");
-                                    }else if (keybind > 0) {
+                                    } else if (keybind > 0) {
                                         Macro macro = new Macro(keybind, command);
                                         getContents().add(macro);
                                         XIV.getInstance().getFileManager().saveFile("macroconfig");

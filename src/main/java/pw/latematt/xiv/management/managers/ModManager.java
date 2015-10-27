@@ -14,6 +14,7 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.mods.combat.*;
 import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
 import pw.latematt.xiv.mod.mods.misc.*;
+import pw.latematt.xiv.mod.mods.misc.tray.TrayIcon;
 import pw.latematt.xiv.mod.mods.movement.*;
 import pw.latematt.xiv.mod.mods.player.*;
 import pw.latematt.xiv.mod.mods.render.*;

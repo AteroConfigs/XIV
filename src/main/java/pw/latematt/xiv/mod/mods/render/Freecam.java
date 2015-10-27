@@ -67,7 +67,7 @@ public class Freecam extends Mod {
         this.packetListener = new Listener<SendPacketEvent>() {
             @Override
             public void onEventCalled(SendPacketEvent event) {
-                if(entity == null) {
+                if (entity == null) {
                     entity = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
                     entity.copyLocationAndAnglesFrom(mc.thePlayer);
                     entity.rotationYawHead = mc.thePlayer.rotationYawHead;
