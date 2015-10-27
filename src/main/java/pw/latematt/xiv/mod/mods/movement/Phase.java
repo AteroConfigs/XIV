@@ -191,7 +191,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                                 ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: skip, vanilla, vanillaskip, vanillacontrol");
+                                ChatLogger.print("Invalid mode, valid: skip, vanilla, vanillaskip, vanillacontrol, new");
                                 break;
                         }
                         setTag(String.format("%s \2477%s", getName(), this.mode.getValue().getName()));
