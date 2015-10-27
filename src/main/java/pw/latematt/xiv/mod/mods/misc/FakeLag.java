@@ -1,7 +1,6 @@
 package pw.latematt.xiv.mod.mods.misc;
 
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.client.*;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.timer.Timer;
 import pw.latematt.xiv.XIV;

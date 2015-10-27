@@ -146,10 +146,7 @@ public class Speed extends Mod implements CommandHandler {
     }
 
     private boolean isValid() {
-        KillAura killAura = (KillAura) XIV.getInstance().getModManager().find("killaura");
-        Criticals criticals = (Criticals) XIV.getInstance().getModManager().find("criticals");
         Step step = (Step) XIV.getInstance().getModManager().find("step");
-        boolean criticalsAttacking = criticals != null && criticals.isOffsetMode() && killAura != null && killAura.isAttacking();
         boolean editingPackets = step != null && step.isEditingPackets();
         boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
@@ -158,7 +155,7 @@ public class Speed extends Mod implements CommandHandler {
         return mc.thePlayer.onGround &&
                 !BlockUtils.isOnLiquid(mc.thePlayer) &&
                 !BlockUtils.isInLiquid(mc.thePlayer) &&
-                !editingPackets && !criticalsAttacking && moving;
+                !editingPackets && moving;
     }
 
     @Override

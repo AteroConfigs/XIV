@@ -1,16 +1,15 @@
 package pw.latematt.xiv.mod.mods.combat;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.potion.Potion;
 import org.lwjgl.input.Keyboard;
-import pw.latematt.timer.Timer;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.AttackEntityEvent;
-import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
@@ -24,9 +23,8 @@ import pw.latematt.xiv.value.Value;
  */
 public class Criticals extends Mod implements CommandHandler {
     private final Value<Mode> currentMode = new Value<>("criticals_mode", Mode.OLD);
-    private final Listener sendPacketListener, attackEntityListener, motionUpdateListener;
+    private final Listener sendPacketListener, attackEntityListener;
     private float fallDist;
-    private Timer timer = new Timer();
 
     public Criticals() {
         super("Criticals", ModType.COMBAT, Keyboard.KEY_NONE, 0xFFA38EC7);
@@ -43,40 +41,20 @@ public class Criticals extends Mod implements CommandHandler {
         attackEntityListener = new Listener<AttackEntityEvent>() {
             @Override
             public void onEventCalled(AttackEntityEvent event) {
-                if (!isSafe())
-                    return;
-                if (currentMode.getValue() != Mode.NEW)
-                    return;
                 if (!mc.thePlayer.onGround)
                     return;
+                if (!isSafe())
+                    return;
+                if (!(event.getEntity() instanceof EntityLivingBase))
+                    return;
                 KillAura killAura = (KillAura) XIV.getInstance().getModManager().find("killaura");
-                if (!killAura.isAttacking())
+                if (killAura == null || !killAura.isAttacking())
+                    return;
+                if (currentMode.getValue() != Mode.NEW)
                     return;
 
                 mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.0625101, mc.thePlayer.posZ, false));
                 mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-            }
-        };
-
-        motionUpdateListener = new Listener<MotionUpdateEvent>() {
-            @Override
-            public void onEventCalled(MotionUpdateEvent event) {
-                if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (!isSafe())
-                        return;
-                    if (currentMode.getValue() != Mode.NEW)
-                        return;
-                    if (!mc.thePlayer.onGround)
-                        return;
-                    KillAura killAura = (KillAura) XIV.getInstance().getModManager().find("killaura");
-                    if (!killAura.isAttacking())
-                        return;
-
-                    if (timer.hasReached(104)) {
-                        event.setCancelled(true);
-                        timer.reset();
-                    }
-                }
             }
         };
 
@@ -174,7 +152,6 @@ public class Criticals extends Mod implements CommandHandler {
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(sendPacketListener);
         XIV.getInstance().getListenerManager().add(attackEntityListener);
-        XIV.getInstance().getListenerManager().add(motionUpdateListener);
 
         if (mc.thePlayer != null && currentMode.getValue() == Mode.OLD) {
             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
@@ -187,7 +164,6 @@ public class Criticals extends Mod implements CommandHandler {
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(sendPacketListener);
         XIV.getInstance().getListenerManager().remove(attackEntityListener);
-        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
         if (currentMode.getValue() == Mode.OLD)
             fallDist = 0.0F;
     }
