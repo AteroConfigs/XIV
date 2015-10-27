@@ -185,17 +185,31 @@ public class CommandManager extends ListManager<Command> {
                     if (arguments.length >= 2) {
                         String action = arguments[1];
                         switch (action) {
+                            case "showtags":
+                            case "st":
+                                Value<Boolean> showTags = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_show_tags");
+                                if (arguments.length >= 3) {
+                                    if (arguments[2].equalsIgnoreCase("-d")) {
+                                        showTags.setValue(showTags.getDefault());
+                                    } else {
+                                        showTags.setValue(Boolean.parseBoolean(arguments[2]));
+                                    }
+                                } else {
+                                    showTags.setValue(!showTags.getValue());
+                                }
+                                ChatLogger.print(String.format("Render mods will %s show tags.", showTags.getValue() ? "now" : "no longer"));
+                                break;
                             case "linewidth":
                             case "lw":
                                 if (arguments.length >= 3) {
-                                    Value<Float> value = (Value<Float>) XIV.getInstance().getValueManager().find("render_line_width");
+                                    Value<Float> lineWidth = (Value<Float>) XIV.getInstance().getValueManager().find("render_line_width");
                                     if (arguments[2].equalsIgnoreCase("-d")) {
-                                        value.setValue(value.getDefault());
+                                        lineWidth.setValue(lineWidth.getDefault());
                                     } else {
-                                        Float lineWidth = Float.parseFloat(arguments[2]);
-                                        value.setValue(lineWidth);
+                                        Float width = Float.parseFloat(arguments[2]);
+                                        lineWidth.setValue(width);
                                     }
-                                    ChatLogger.print(String.format("Render Line Width set to: %s", value.getValue()));
+                                    ChatLogger.print(String.format("Render Line Width set to: %s", lineWidth.getValue()));
                                 } else {
                                     ChatLogger.print("Invalid arguments, valid: linewidth <float>");
                                 }

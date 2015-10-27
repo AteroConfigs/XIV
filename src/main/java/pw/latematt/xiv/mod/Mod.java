@@ -32,7 +32,7 @@ public abstract class Mod {
         this.color = color;
         this.visible = visible;
         this.type = type;
-        tag = name;
+        this.tag = name;
     }
 
     public String getName() {
@@ -40,7 +40,10 @@ public abstract class Mod {
     }
 
     public String getTag() {
-        return tag;
+        if(XIV.getInstance().getValueManager().find("render_show_tags") != null && ((Boolean) XIV.getInstance().getValueManager().find("render_show_tags").getValue()) || XIV.getInstance().getValueManager().find("render_show_tags") == null) {
+            return tag;
+        }
+        return getName();
     }
 
     public void setTag(String tag) {

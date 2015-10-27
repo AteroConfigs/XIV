@@ -5,6 +5,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.file.XIVFile;
@@ -120,7 +121,7 @@ public class ModManager extends ListManager<Mod> {
                             .filter(modName -> mod.getName().equals(modName))
                             .forEach(modName -> {
                                 ModOptions options = modOptions.get(modName);
-                                mod.setKeybind(Keyboard.getKeyIndex(options.getKeybind()));
+                                mod.setKeybind(options.getKeybind().equals("NONE") ? Keyboard.KEY_NONE : Keyboard.getKeyIndex(options.getKeybind()) > 0 ? Keyboard.getKeyIndex(options.getKeybind()) : Mouse.getButtonIndex(options.getKeybind()) + 256);
                                 mod.setColor(options.getColor());
                                 mod.setEnabled(options.isEnabled());
                                 mod.setVisible(options.isVisible());
@@ -133,7 +134,7 @@ public class ModManager extends ListManager<Mod> {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 HashMap<String, ModOptions> modOptions = new HashMap<>();
                 for (Mod mod : XIV.getInstance().getModManager().getContents()) {
-                    modOptions.put(mod.getName(), new ModOptions(Keyboard.getKeyName(mod.getKeybind()), mod.getColor(), mod.isEnabled(), mod.isVisible()));
+                    modOptions.put(mod.getName(), new ModOptions(mod.getKeybind() >= 256 ? Mouse.getButtonName(mod.getKeybind() - 256) : Keyboard.getKeyName(mod.getKeybind()), mod.getColor(), mod.isEnabled(), mod.isVisible()));
                 }
                 Files.write(gson.toJson(modOptions).getBytes("UTF-8"), file);
             }
@@ -210,8 +211,19 @@ public class ModManager extends ListManager<Mod> {
                         if (mod != null) {
                             String newBindName = arguments[2].toUpperCase();
                             int newBind = Keyboard.getKeyIndex(newBindName);
-                            mod.setKeybind(newBind);
-                            ChatLogger.print(String.format("%s is now bound to %s", mod.getName(), Keyboard.getKeyName(newBind)));
+
+                            if (newBindName.equalsIgnoreCase("NONE")) {
+                                mod.setKeybind(Keyboard.KEY_NONE);
+                                ChatLogger.print(String.format("%s is now bound to %s", mod.getName(), Keyboard.getKeyName(mod.getKeybind())));
+                            } else if (newBind > 0) {
+                                mod.setKeybind(newBind);
+                                ChatLogger.print(String.format("%s is now bound to %s", mod.getName(), Keyboard.getKeyName(newBind)));
+                            } else {
+                                newBind = Mouse.getButtonIndex(newBindName) + 256;
+
+                                mod.setKeybind(newBind);
+                                ChatLogger.print(String.format("%s is now bound to %s", mod.getName(), Mouse.getButtonName(newBind - 256)));
+                            }
                         } else {
                             ChatLogger.print(String.format("Invalid module \"%s\"", modName));
                         }

@@ -20,6 +20,7 @@ public class RenderUtils {
     private static final Value<Double> NAMETAG_OPACITY = new Value<>("render_nametag_opacity", 0.25D);
     private static final Value<Double> NAMETAG_SIZE = new Value<>("render_nametag_size", 1.0D);
     private static final Value<Boolean> TRACER_ENTITY = new Value<>("render_tracer_entity", true);
+    private static final Value<Boolean> SHOW_TAGS = new Value<>("render_show_tags", true);
 
     public static void init() {
         ANTIALIASING.getValue();
@@ -27,6 +28,7 @@ public class RenderUtils {
         NAMETAG_OPACITY.getValue();
         NAMETAG_SIZE.getValue();
         TRACER_ENTITY.getValue();
+        SHOW_TAGS.getValue();
     }
 
     public static void beginGl() {
