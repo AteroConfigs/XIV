@@ -15,6 +15,7 @@ import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
+import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
 
@@ -22,7 +23,7 @@ import pw.latematt.xiv.value.Value;
  * @author Matthew
  */
 public class Criticals extends Mod implements CommandHandler {
-    private final Value<Mode> currentMode = new Value<>("criticals_mode", Mode.OFF_GROUND);
+    private final Value<Mode> currentMode = new Value<>("criticals_mode", Mode.OLD);
     private final Listener sendPacketListener, attackEntityListener, motionUpdateListener;
     private float fallDist;
     private Timer timer = new Timer();
@@ -44,7 +45,7 @@ public class Criticals extends Mod implements CommandHandler {
             public void onEventCalled(AttackEntityEvent event) {
                 if (!isSafe())
                     return;
-                if (currentMode.getValue() != Mode.OFFSET)
+                if (currentMode.getValue() != Mode.NEW)
                     return;
                 if (!mc.thePlayer.onGround)
                     return;
@@ -63,7 +64,7 @@ public class Criticals extends Mod implements CommandHandler {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
                     if (!isSafe())
                         return;
-                    if (currentMode.getValue() != Mode.OFFSET)
+                    if (currentMode.getValue() != Mode.NEW)
                         return;
                     if (!mc.thePlayer.onGround)
                         return;
@@ -82,7 +83,7 @@ public class Criticals extends Mod implements CommandHandler {
         sendPacketListener = new Listener<SendPacketEvent>() {
             @Override
             public void onEventCalled(SendPacketEvent event) {
-                if (currentMode.getValue() != Mode.OFF_GROUND)
+                if (currentMode.getValue() != Mode.OLD)
                     return;
 
                 if (event.getPacket() instanceof C03PacketPlayer) {
@@ -95,7 +96,7 @@ public class Criticals extends Mod implements CommandHandler {
                         fallDist = 0.0F;
                         mc.thePlayer.fallDistance = 0.0F;
 
-                        if (mc.thePlayer.onGround) {
+                        if (mc.thePlayer.onGround && !BlockUtils.isOnLiquid(mc.thePlayer) && !BlockUtils.isInLiquid(mc.thePlayer)) {
                             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
                             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
                             fallDist += 1.01F;
@@ -118,7 +119,7 @@ public class Criticals extends Mod implements CommandHandler {
 
     // used in speed
     public boolean isOffsetMode() {
-        return currentMode.getValue() == Mode.OFFSET;
+        return currentMode.getValue() == Mode.NEW;
     }
 
     private boolean isSafe() {
@@ -139,12 +140,12 @@ public class Criticals extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
-                            case "offset":
-                                currentMode.setValue(Mode.OFFSET);
+                            case "new":
+                                currentMode.setValue(Mode.NEW);
                                 ChatLogger.print(String.format("Criticals Mode set to: %s", currentMode.getValue().getName()));
                                 break;
-                            case "offground":
-                                currentMode.setValue(Mode.OFF_GROUND);
+                            case "old":
+                                currentMode.setValue(Mode.OLD);
                                 ChatLogger.print(String.format("Criticals Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "-d":
@@ -152,7 +153,7 @@ public class Criticals extends Mod implements CommandHandler {
                                 ChatLogger.print(String.format("Criticals Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: offset, offground");
+                                ChatLogger.print("Invalid mode, valid: new, old");
                                 break;
                         }
                         setTag(String.format("%s \2477%s", getName(), currentMode.getValue().getName()));
@@ -175,7 +176,7 @@ public class Criticals extends Mod implements CommandHandler {
         XIV.getInstance().getListenerManager().add(attackEntityListener);
         XIV.getInstance().getListenerManager().add(motionUpdateListener);
 
-        if (mc.thePlayer != null && currentMode.getValue() == Mode.OFF_GROUND) {
+        if (mc.thePlayer != null && currentMode.getValue() == Mode.OLD) {
             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
             fallDist += 1.01F;
@@ -187,12 +188,12 @@ public class Criticals extends Mod implements CommandHandler {
         XIV.getInstance().getListenerManager().remove(sendPacketListener);
         XIV.getInstance().getListenerManager().remove(attackEntityListener);
         XIV.getInstance().getListenerManager().remove(motionUpdateListener);
-        if (currentMode.getValue() == Mode.OFF_GROUND)
+        if (currentMode.getValue() == Mode.OLD)
             fallDist = 0.0F;
     }
 
     private enum Mode {
-        OFFSET, OFF_GROUND;
+        NEW, OLD;
 
         public String getName() {
             String prettyName = "";
