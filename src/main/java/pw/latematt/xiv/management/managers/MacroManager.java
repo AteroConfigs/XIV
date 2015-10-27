@@ -5,6 +5,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.file.XIVFile;
@@ -38,14 +39,14 @@ public class MacroManager extends ListManager<Macro> {
                 BufferedReader reader = new BufferedReader(new FileReader(file));
                 List<MacroConfig> macroConfig = gson.fromJson(reader, new TypeToken<List<MacroConfig>>() {
                 }.getType());
-                macroConfig.forEach(config -> getContents().add(new Macro(Keyboard.getKeyIndex(config.getKeybind()), config.getCommand())));
+                macroConfig.forEach(config -> getContents().add(new Macro(Keyboard.getKeyIndex(config.getKeybind()) > 0 ? Keyboard.getKeyIndex(config.getKeybind()) : Mouse.getButtonIndex(config.getKeybind()) + 256, config.getCommand())));
             }
 
             @Override
             public void save() throws IOException {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 List<MacroConfig> macroConfig = new ArrayList<>();
-                getContents().forEach(macro -> macroConfig.add(new MacroConfig(Keyboard.getKeyName(macro.getKeybind()), macro.getCommand())));
+                getContents().forEach(macro -> macroConfig.add(new MacroConfig(macro.getKeybind() >= 256 ? Mouse.getButtonName(macro.getKeybind() - 256) : Keyboard.getKeyName(macro.getKeybind()), macro.getCommand())));
                 Files.write(gson.toJson(macroConfig).getBytes("UTF-8"), file);
             }
         };
@@ -66,26 +67,52 @@ public class MacroManager extends ListManager<Macro> {
                                     int keybind = Keyboard.getKeyIndex(arguments[2].toUpperCase());
                                     String command = message.substring(String.format("%s %s %s ", arguments[0], arguments[1], arguments[2]).length(), message.length());
 
-                                    Macro macro = new Macro(keybind, command);
-                                    getContents().add(macro);
-                                    XIV.getInstance().getFileManager().saveFile("macroconfig");
-                                    ChatLogger.print(String.format("Macro \"%s\" added.", Keyboard.getKeyName(macro.getKeybind())));
+                                    if (arguments[2].toUpperCase().equalsIgnoreCase("NONE")) {
+                                        ChatLogger.print("You can't bind a macro to nothing.");
+                                    }else if (keybind > 0) {
+                                        Macro macro = new Macro(keybind, command);
+                                        getContents().add(macro);
+                                        XIV.getInstance().getFileManager().saveFile("macroconfig");
+                                        ChatLogger.print(String.format("Macro \"%s\" added.", Keyboard.getKeyName(macro.getKeybind())));
+                                    } else {
+                                        int mousebutton = Mouse.getButtonIndex(arguments[2].toUpperCase());
+
+                                        Macro macro = new Macro(mousebutton + 256, command);
+                                        getContents().add(macro);
+                                        XIV.getInstance().getFileManager().saveFile("macroconfig");
+                                        ChatLogger.print(String.format("Macro \"%s\" added.", Mouse.getButtonName(macro.getKeybind() - 256)));
+                                    }
                                 } else {
                                     ChatLogger.print("Invalid arguments, valid: macro add <keybind> <command>");
                                 }
                                 break;
+                            case "remove":
+                            case "r":
                             case "del":
                             case "d":
                                 if (arguments.length >= 3) {
                                     int keybind = Keyboard.getKeyIndex(arguments[2].toUpperCase());
 
-                                    Macro macro = getMacro(keybind);
-                                    if (Objects.nonNull(macro)) {
-                                        getContents().remove(macro);
-                                        XIV.getInstance().getFileManager().saveFile("macroconfig");
-                                        ChatLogger.print(String.format("Macro \"%s\" removed.", Keyboard.getKeyName(macro.getKeybind())));
+                                    if (keybind > 0) {
+                                        Macro macro = getMacro(keybind);
+                                        if (Objects.nonNull(macro)) {
+                                            getContents().remove(macro);
+                                            XIV.getInstance().getFileManager().saveFile("macroconfig");
+                                            ChatLogger.print(String.format("Macro \"%s\" removed.", Keyboard.getKeyName(macro.getKeybind())));
+                                        } else {
+                                            ChatLogger.print(String.format("Macro \"%s\" not found.", Keyboard.getKeyName(keybind)));
+                                        }
                                     } else {
-                                        ChatLogger.print(String.format("Macro \"%s\" not found.", Keyboard.getKeyName(keybind)));
+                                        int mousebutton = Mouse.getButtonIndex(arguments[2].toUpperCase());
+
+                                        Macro macro = getMacro(mousebutton + 256);
+                                        if (Objects.nonNull(macro)) {
+                                            getContents().remove(macro);
+                                            XIV.getInstance().getFileManager().saveFile("macroconfig");
+                                            ChatLogger.print(String.format("Macro \"%s\" removed.", Mouse.getButtonName(macro.getKeybind() - 256)));
+                                        } else {
+                                            ChatLogger.print(String.format("Macro \"%s\" not found.", Mouse.getButtonName(mousebutton)));
+                                        }
                                     }
                                 } else {
                                     ChatLogger.print("Invalid arguments, valid: macro del <keybind>");

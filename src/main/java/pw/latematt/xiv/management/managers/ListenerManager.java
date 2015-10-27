@@ -12,6 +12,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Matthew
  */
 public class ListenerManager extends ListManager<Listener> {
+    private boolean enabled = true;
+
     public ListenerManager() {
         super(new CopyOnWriteArrayList<>());
     }
@@ -32,19 +34,29 @@ public class ListenerManager extends ListManager<Listener> {
 
     @SuppressWarnings("unchecked") // rudy sucks really bad
     public void call(Event event) {
-        for (Listener listener : contents) {
-            /* thanks rudy for this method */
-            Type[] genericInterfaces = listener.getClass().getGenericInterfaces();
-            for (Type genericInterface : genericInterfaces) {
-                if (genericInterface instanceof ParameterizedType) {
-                    Type[] genericTypes = ((ParameterizedType) genericInterface).getActualTypeArguments();
-                    for (Type genericType : genericTypes) {
-                        if (genericType == event.getClass()) {
-                            listener.onEventCalled(event);
+        if(isEnabled()) {
+            for (Listener listener : contents) {
+                /* thanks rudy for this method */
+                Type[] genericInterfaces = listener.getClass().getGenericInterfaces();
+                for (Type genericInterface : genericInterfaces) {
+                    if (genericInterface instanceof ParameterizedType) {
+                        Type[] genericTypes = ((ParameterizedType) genericInterface).getActualTypeArguments();
+                        for (Type genericType : genericTypes) {
+                            if (genericType == event.getClass()) {
+                                listener.onEventCalled(event);
+                            }
                         }
                     }
                 }
             }
         }
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
