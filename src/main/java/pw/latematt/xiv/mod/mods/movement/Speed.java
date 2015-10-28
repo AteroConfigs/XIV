@@ -12,8 +12,6 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.MoveEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.mod.mods.combat.Criticals;
-import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
 import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
@@ -80,19 +78,14 @@ public class Speed extends Mod implements CommandHandler {
                                 boolean strafe = mc.thePlayer.moveStrafing != 0.0F;
                                 speed = speed + (mc.thePlayer.isSprinting() ? 0.02D : 0.40D);
 
-                                if (!strafe) {
+                                if (!strafe)
                                     speed += 0.04F;
-                                }
 
                                 if (nextTick = !nextTick) {
                                     mc.thePlayer.motionX *= speed;
                                     mc.thePlayer.motionZ *= speed;
                                     mc.timer.timerSpeed = 1.15F;
                                     event.setY(event.getY() + 0.0001D);
-                                    Criticals criticals = (Criticals) XIV.getInstance().getModManager().find("criticals");
-                                    if (criticals != null && criticals.getFallDistance() > 0.0F) {
-                                        criticals.setFallDistance(criticals.getFallDistance() + 0.0001F);
-                                    }
                                 } else {
                                     mc.thePlayer.motionX /= 1.50D;
                                     mc.thePlayer.motionZ /= 1.50D;
@@ -109,9 +102,8 @@ public class Speed extends Mod implements CommandHandler {
                             if (isValid()) {
                                 speed = 3.0D;
                                 double slow = 1.425D;
-                                if (mc.thePlayer.moveStrafing == 0.0F) {
+                                if (mc.thePlayer.moveStrafing == 0.0F)
                                     speed += 0.05D;
-                                }
 
                                 switch (++ticks) {
                                     case 1:
