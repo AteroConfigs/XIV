@@ -1,9 +1,11 @@
 package pw.latematt.xiv.mod.mods.combat.aura.mode.modes;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.potion.Potion;
 import pw.latematt.timer.Timer;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
@@ -47,6 +49,23 @@ public class Singular extends AuraMode {
             }
 
             if (!killAura.isHealing()) {
+                if (killAura.criticals.getValue() && timer.hasReached(killAura.getDelay())) {
+                    boolean canStrikeCrits = !mc.thePlayer.isInWater() &&
+                            !mc.thePlayer.isInsideOfMaterial(Material.lava) &&
+                            !mc.thePlayer.isOnLadder() &&
+                            !mc.thePlayer.isPotionActive(Potion.BLINDNESS) &&
+                            mc.thePlayer.ridingEntity == null;
+                    if (canStrikeCrits && mc.thePlayer.onGround) {
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.0625101, mc.thePlayer.posZ, false));
+                        boolean moving = mc.thePlayer.movementInput.moveForward != 0;
+                        boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+                        moving = moving && strafing || moving;
+
+                        if (!moving)
+                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+                    }
+                }
+
                 float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
                 if (killAura.silent.getValue()) {
                     event.setYaw(rotations[0]);

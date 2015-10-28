@@ -1,90 +1,52 @@
 package pw.latematt.xiv.mod.mods.combat;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.potion.Potion;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.command.Command;
-import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.AttackEntityEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
 import pw.latematt.xiv.utils.BlockUtils;
-import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.value.Value;
 
 /**
  * @author Matthew
  */
-public class Criticals extends Mod implements CommandHandler {
-    private final Value<Mode> currentMode = new Value<>("criticals_mode", Mode.OLD);
-    private final Listener sendPacketListener, attackEntityListener;
+public class Criticals extends Mod implements Listener<SendPacketEvent> {
     private float fallDist;
 
     public Criticals() {
         super("Criticals", ModType.COMBAT, Keyboard.KEY_NONE, 0xFFA38EC7);
-        setTag(String.format("%s \2477%s", getName(), currentMode.getValue().getName()));
+    }
 
-        Command.newCommand()
-                .cmd("criticals")
-                .description("Base command for the Speed mod.")
-                .aliases("crits")
-                .arguments("<action>")
-                .handler(this)
-                .build();
+    @Override
+    public void onEventCalled(SendPacketEvent event) {
+        KillAura killAura = (KillAura) XIV.getInstance().getModManager().find("killaura");
+        if (killAura == null || killAura.criticals.getValue())
+            return;
 
-        attackEntityListener = new Listener<AttackEntityEvent>() {
-            @Override
-            public void onEventCalled(AttackEntityEvent event) {
-                if (!mc.thePlayer.onGround)
-                    return;
-                if (!isSafe())
-                    return;
-                if (!(event.getEntity() instanceof EntityLivingBase))
-                    return;
-                KillAura killAura = (KillAura) XIV.getInstance().getModManager().find("killaura");
-                if (killAura == null || !killAura.isAttacking())
-                    return;
-                if (currentMode.getValue() != Mode.NEW)
-                    return;
+        if (event.getPacket() instanceof C03PacketPlayer) {
+            C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
+            if (isSafe())
+                fallDist += mc.thePlayer.fallDistance;
 
-                mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.0625101, mc.thePlayer.posZ, false));
-                mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-            }
-        };
+            if (!isSafe() || fallDist >= 3.0F) {
+                player.setOnGround(true);
+                fallDist = 0.0F;
+                mc.thePlayer.fallDistance = 0.0F;
 
-        sendPacketListener = new Listener<SendPacketEvent>() {
-            @Override
-            public void onEventCalled(SendPacketEvent event) {
-                if (currentMode.getValue() != Mode.OLD)
-                    return;
-
-                if (event.getPacket() instanceof C03PacketPlayer) {
-                    C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    if (isSafe())
-                        fallDist += mc.thePlayer.fallDistance;
-
-                    if (!isSafe() || fallDist >= 3.0F) {
-                        player.setOnGround(true);
-                        fallDist = 0.0F;
-                        mc.thePlayer.fallDistance = 0.0F;
-
-                        if (mc.thePlayer.onGround && !BlockUtils.isOnLiquid(mc.thePlayer) && !BlockUtils.isInLiquid(mc.thePlayer)) {
-                            mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
-                            mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                            fallDist += 1.01F;
-                        }
-                    } else if (fallDist > 0.0F) {
-                        player.setOnGround(false);
-                    }
+                if (mc.thePlayer.onGround && !BlockUtils.isOnLiquid(mc.thePlayer) && !BlockUtils.isInLiquid(mc.thePlayer)) {
+                    mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
+                    mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+                    fallDist += 1.01F;
                 }
+            } else if (fallDist > 0.0F) {
+                player.setOnGround(false);
             }
-        };
+        }
     }
 
     public float getFallDistance() {
@@ -93,11 +55,6 @@ public class Criticals extends Mod implements CommandHandler {
 
     public void setFallDistance(float fallDist) {
         this.fallDist = fallDist;
-    }
-
-    // used in speed
-    public boolean isOffsetMode() {
-        return currentMode.getValue() == Mode.NEW;
     }
 
     private boolean isSafe() {
@@ -109,51 +66,9 @@ public class Criticals extends Mod implements CommandHandler {
     }
 
     @Override
-    public void onCommandRan(String message) {
-        String[] arguments = message.split(" ");
-        if (arguments.length >= 2) {
-            String action = arguments[1];
-            switch (action.toLowerCase()) {
-                case "mode":
-                    if (arguments.length >= 3) {
-                        String mode = arguments[2];
-                        switch (mode.toLowerCase()) {
-                            case "new":
-                                currentMode.setValue(Mode.NEW);
-                                ChatLogger.print(String.format("Criticals Mode set to: %s", currentMode.getValue().getName()));
-                                break;
-                            case "old":
-                                currentMode.setValue(Mode.OLD);
-                                ChatLogger.print(String.format("Criticals Mode set to: %s", currentMode.getValue().getName()));
-                                break;
-                            case "-d":
-                                currentMode.setValue(currentMode.getDefault());
-                                ChatLogger.print(String.format("Criticals Mode set to: %s", currentMode.getValue().getName()));
-                                break;
-                            default:
-                                ChatLogger.print("Invalid mode, valid: new, old");
-                                break;
-                        }
-                        setTag(String.format("%s \2477%s", getName(), currentMode.getValue().getName()));
-                    } else {
-                        ChatLogger.print("Invalid arguments, valid: criticals mode <mode>");
-                    }
-                    break;
-                default:
-                    ChatLogger.print("Invalid action, valid: mode");
-                    break;
-            }
-        } else {
-            ChatLogger.print("Invalid arguments, valid: criticals <action>");
-        }
-    }
-
-    @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(sendPacketListener);
-        XIV.getInstance().getListenerManager().add(attackEntityListener);
-
-        if (mc.thePlayer != null && currentMode.getValue() == Mode.OLD) {
+        XIV.getInstance().getListenerManager().add(this);
+        if (mc.thePlayer != null) {
             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
             fallDist += 1.01F;
@@ -162,27 +77,7 @@ public class Criticals extends Mod implements CommandHandler {
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(sendPacketListener);
-        XIV.getInstance().getListenerManager().remove(attackEntityListener);
-        if (currentMode.getValue() == Mode.OLD)
-            fallDist = 0.0F;
-    }
-
-    private enum Mode {
-        NEW, OLD;
-
-        public String getName() {
-            String prettyName = "";
-            String[] actualNameSplit = name().split("_");
-            if (actualNameSplit.length > 0) {
-                for (String arg : actualNameSplit) {
-                    arg = arg.substring(0, 1).toUpperCase() + arg.substring(1, arg.length()).toLowerCase();
-                    prettyName += arg + " ";
-                }
-            } else {
-                prettyName = actualNameSplit[0].substring(0, 1).toUpperCase() + actualNameSplit[0].substring(1, actualNameSplit[0].length()).toLowerCase();
-            }
-            return prettyName.trim();
-        }
+        XIV.getInstance().getListenerManager().remove(this);
+        fallDist = 0.0F;
     }
 }

@@ -53,6 +53,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> toggleDeath = new Value<>("killaura_toggle_death", false);
     public final Value<Boolean> autoBlock = new Value<>("killaura_auto_block", false);
     public final Value<Boolean> weaponOnly = new Value<>("killaura_weapon_only", false);
+    public final Value<Boolean> criticals = new Value<>("killaura_criticals", true);
     private final Value<AuraMode> mode = new Value<>("killaura_mode", new Singular(this));
     private final Random random = new Random();
 
@@ -415,6 +416,32 @@ public class KillAura extends Mod implements CommandHandler {
                     }
                     ChatLogger.print(String.format("Kill Aura will %s automatically block for you.", (autoBlock.getValue() ? "now" : "no longer")));
                     break;
+                case "weapononly":
+                case "wo":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            weaponOnly.setValue(weaponOnly.getDefault());
+                        } else {
+                            weaponOnly.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        weaponOnly.setValue(!weaponOnly.getValue());
+                    }
+                    ChatLogger.print(String.format("Kill Aura will %s function only while holding a sword.", (autoBlock.getValue() ? "now" : "no longer")));
+                    break;
+                case "criticals":
+                case "crits":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            criticals.setValue(criticals.getDefault());
+                        } else {
+                            criticals.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        criticals.setValue(!criticals.getValue());
+                    }
+                    ChatLogger.print(String.format("Kill Aura will %s automatically strike criticals.", (criticals.getValue() ? "now" : "no longer")));
+                    break;
                 case "mode":
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
@@ -445,7 +472,7 @@ public class KillAura extends Mod implements CommandHandler {
                     }
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, randomdelay, aps, range, players, mobs, animals, invisible, team, silent, autosword, autoblock, mode");
+                    ChatLogger.print("Invalid action, valid: delay, randomdelay, aps, range, players, mobs, animals, invisible, team, silent, autosword, autoblock, weapononly, criticals, mode");
                     break;
             }
         } else {
