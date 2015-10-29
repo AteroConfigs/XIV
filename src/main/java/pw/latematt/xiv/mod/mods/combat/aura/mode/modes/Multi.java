@@ -1,10 +1,8 @@
 package pw.latematt.xiv.mod.mods.combat.aura.mode.modes;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.potion.Potion;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
 import pw.latematt.xiv.mod.mods.combat.aura.mode.AuraMode;

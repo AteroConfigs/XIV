@@ -12,7 +12,7 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.utils.ItemUtils;
+import pw.latematt.xiv.utils.InventoryUtils;
 import pw.latematt.xiv.value.ClampedValue;
 
 import java.util.Objects;
@@ -47,7 +47,7 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, Comma
             if (time.hasReached(delay.getValue())) {
                 if (mc.thePlayer.inventory.armorItemInSlot(2) == null) {
                     for (Item item : chestplates) {
-                        int slotId = ItemUtils.getSlotID(item);
+                        int slotId = InventoryUtils.getSlotID(item);
                         if (slotId != -1) {
                             selectedSlotId = slotId;
                         }
@@ -56,7 +56,7 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, Comma
 
                 if (mc.thePlayer.inventory.armorItemInSlot(1) == null) {
                     for (Item item : leggings) {
-                        int slotId = ItemUtils.getSlotID(item);
+                        int slotId = InventoryUtils.getSlotID(item);
                         if (slotId != -1) {
                             selectedSlotId = slotId;
                         }
@@ -65,7 +65,7 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, Comma
 
                 if (mc.thePlayer.inventory.armorItemInSlot(0) == null) {
                     for (Item item : boots) {
-                        int slotId = ItemUtils.getSlotID(item);
+                        int slotId = InventoryUtils.getSlotID(item);
                         if (slotId != -1) {
                             selectedSlotId = slotId;
                         }
@@ -74,7 +74,7 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, Comma
 
                 if (mc.thePlayer.inventory.armorItemInSlot(3) == null) {
                     for (Item item : helmets) {
-                        int slotId = ItemUtils.getSlotID(item);
+                        int slotId = InventoryUtils.getSlotID(item);
                         if (slotId != -1) {
                             selectedSlotId = slotId;
                         }

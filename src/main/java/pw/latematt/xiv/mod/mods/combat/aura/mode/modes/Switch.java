@@ -1,10 +1,8 @@
 package pw.latematt.xiv.mod.mods.combat.aura.mode.modes;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.potion.Potion;
 import pw.latematt.timer.Timer;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
@@ -96,7 +94,6 @@ public class Switch extends AuraMode {
     @Override
     public void onMotionPacket(C03PacketPlayer packet) {
         if (entityToAttack != null && !killAura.isHealing()) {
-            packet.setOnGround(false);
             float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
             if (killAura.silent.getValue()) {
                 packet.setYaw(rotations[0]);
