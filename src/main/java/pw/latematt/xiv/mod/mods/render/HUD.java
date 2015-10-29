@@ -51,8 +51,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
     private final Value<Boolean> coords = new Value<>("hud_coords", true);
     private final Value<Boolean> fps = new Value<>("hud_fps", true);
     private final Value<Boolean> ign = new Value<>("hud_ign", false);
-    private final Value<Boolean> potionCounter = new Value<>("hud_potion_counter", true);
-    private final Value<Boolean> soupCounter = new Value<>("hud_soup_counter", true);
     private final Value<Boolean> time = new Value<>("hud_time", true);
     private final Value<Boolean> lag = new Value<>("hud_lag", false);
     private final Value<Boolean> direction = new Value<>("hud_direction", false);
@@ -382,31 +380,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                         ign.setValue(!ign.getValue());
                     }
                     ChatLogger.print(String.format("HUD will %s display your in-game name.", (ign.getValue() ? "now" : "no longer")));
-                    break;
-                case "potioncounter":
-                case "potcounter":
-                    if (arguments.length >= 3) {
-                        if (arguments[2].equalsIgnoreCase("-d")) {
-                            potionCounter.setValue(potionCounter.getDefault());
-                        } else {
-                            potionCounter.setValue(Boolean.parseBoolean(arguments[2]));
-                        }
-                    } else {
-                        potionCounter.setValue(!potionCounter.getValue());
-                    }
-                    ChatLogger.print(String.format("HUD will %s display a Instant Health counter.", (potionCounter.getValue() ? "now" : "no longer")));
-                    break;
-                case "soupcounter":
-                    if (arguments.length >= 3) {
-                        if (arguments[2].equalsIgnoreCase("-d")) {
-                            soupCounter.setValue(soupCounter.getDefault());
-                        } else {
-                            soupCounter.setValue(Boolean.parseBoolean(arguments[2]));
-                        }
-                    } else {
-                        soupCounter.setValue(!soupCounter.getValue());
-                    }
-                    ChatLogger.print(String.format("HUD will %s display a Soup counter.", (soupCounter.getValue() ? "now" : "no longer")));
                     break;
                 case "dir":
                 case "direction":
