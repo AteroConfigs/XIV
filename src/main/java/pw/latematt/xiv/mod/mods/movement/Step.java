@@ -9,6 +9,7 @@ import pw.latematt.xiv.event.events.EntityStepEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.mod.mods.combat.Criticals;
 import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.ClampedValue;
@@ -39,6 +40,10 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                     if (editPackets) {
                         if (mc.thePlayer.posY - mc.thePlayer.lastTickPosY >= 0.80D) {
                             player.setY(player.getY() + 0.0646D);
+
+                            Criticals criticals = (Criticals) XIV.getInstance().getModManager().find("criticals");
+                            if (criticals != null && criticals.isEnabled())
+                                criticals.setFallDistance(criticals.getFallDistance() + 0.0646F);
                         }
                         editPackets = false;
                     }

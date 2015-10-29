@@ -13,12 +13,13 @@ import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.utils.InventoryUtils;
 import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 import java.util.Objects;
 
-import static pw.latematt.xiv.utils.ItemUtils.*;
+import static pw.latematt.xiv.utils.InventoryUtils.*;
 
 /**
  * @author Matthew
@@ -39,16 +40,16 @@ public class AutoHeal extends Mod implements CommandHandler {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
+                    updateTag();
                     if (mc.thePlayer.getHealth() <= health.getValue() && timer.hasReached(delay.getValue())) {
                         if (soup.getValue()) {
                             dropFirst(Items.bowl);
-                            if (!hotbarHas(Items.mushroom_stew)) {
+                            if (!hotbarHas(Items.mushroom_stew))
                                 getFromInventory(Items.mushroom_stew);
-                            }
 
                             useFirst(Items.mushroom_stew);
 
-                            if (mc.thePlayer.getHealth() <= health.getValue()) {
+                            if (mc.thePlayer.getHealth() <= health.getValue() && potion.getValue() && countInstantHealth() > 0) {
                                 if (!hotbarHasInstantHealth()) {
                                     getInstantHealthFromInventory();
                                 }
@@ -61,10 +62,9 @@ public class AutoHeal extends Mod implements CommandHandler {
                             } else {
                                 timer.reset();
                             }
-                        } else if (potion.getValue()) {
-                            if (!hotbarHasInstantHealth()) {
+                        } else if (potion.getValue() && countInstantHealth() > 0) {
+                            if (!hotbarHasInstantHealth())
                                 getInstantHealthFromInventory();
-                            }
 
                             if (hotbarHasInstantHealth()) {
                                 healing = true;
@@ -102,6 +102,19 @@ public class AutoHeal extends Mod implements CommandHandler {
                 .description("Base command for the AutoHeal mod.")
                 .arguments("<action>")
                 .handler(this).build();
+    }
+
+    private void updateTag() {
+        String tag = getName() + "\2477";
+        if (potion.getValue() && InventoryUtils.countInstantHealth() > 0) {
+            tag += " \247c" + InventoryUtils.countInstantHealth();
+        }
+
+        if (soup.getValue() && InventoryUtils.countItem(Items.mushroom_stew) > 0) {
+            tag += " \2476" + InventoryUtils.countItem(Items.mushroom_stew);
+        }
+
+        setTag(tag);
     }
 
     public boolean isHealing() {

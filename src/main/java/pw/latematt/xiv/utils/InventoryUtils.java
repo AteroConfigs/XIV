@@ -1,6 +1,7 @@
 package pw.latematt.xiv.utils;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
@@ -13,7 +14,7 @@ import net.minecraft.util.BlockPos;
 /**
  * @author Matthew
  */
-public class ItemUtils {
+public class InventoryUtils {
     private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
     /* normal stuff */
@@ -79,6 +80,18 @@ public class ItemUtils {
         return -1;
     }
 
+    public static int countItem(Item item) {
+        int counter = 0;
+        for (int index = 0; index <= 36; index++) {
+            ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
+            if (stack == null)
+                continue;
+            if (stack.getItem() == item)
+                counter++;
+        }
+        return counter;
+    }
+
     /* instanthealth stuff (used in AutoHeal) */
     public static boolean isValidHealthPotion(ItemStack stack) {
         if (stack == null)
@@ -134,5 +147,17 @@ public class ItemUtils {
                 break;
             }
         }
+    }
+
+    public static int countInstantHealth() {
+        int counter = 0;
+        for (int index = 0; index <= 36; index++) {
+            ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
+            if (stack == null)
+                continue;
+            if (isValidHealthPotion(stack))
+                counter++;
+        }
+        return counter;
     }
 }

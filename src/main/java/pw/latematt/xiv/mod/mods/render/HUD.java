@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.boss.BossStatus;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.potion.Potion;
@@ -27,6 +28,7 @@ import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.utils.InventoryUtils;
 import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
@@ -238,15 +240,14 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
     private void drawInfo(ScaledResolution scaledResolution) {
         List<String> info = new ArrayList<>();
 
-        if (coords.getValue()) {
+        if (coords.getValue())
             info.add(String.format("\2477XYZ\247r: %s %s %s", MathHelper.floor_double(mc.thePlayer.posX), MathHelper.floor_double(mc.thePlayer.posY), MathHelper.floor_double(mc.thePlayer.posZ)));
-        }
-        if (ign.getValue()) {
+
+        if (ign.getValue())
             info.add(String.format("\2477IGN\247r: %s", mc.getSession().getUsername()));
-        }
-        if (fps.getValue()) {
+
+        if (fps.getValue())
             info.add(String.format("\2477FPS\247r: %s", mc.debug.split(" fps")[0]));
-        }
 
         int y = scaledResolution.getScaledHeight() - 10;
         if (mc.ingameGUI.getChatGUI().getChatOpen())
@@ -473,7 +474,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     ChatLogger.print(String.format("HUD will %s display \"rudy sucks\".", (rudysucks.getValue() ? "now" : "no longer")));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: watermark, arraylist, organize, coords, fps, ign, lag, direction, time, potions, armor");
+                    ChatLogger.print("Invalid action, valid: watermark, arraylist, organize, coords, fps, ign, potioncounter, soupcounter, lag, direction, time, potions, armor");
                     break;
             }
         } else {

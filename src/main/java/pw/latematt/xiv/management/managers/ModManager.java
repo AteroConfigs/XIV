@@ -57,6 +57,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new AutoTool());
         contents.add(new Blink());
         contents.add(new BlockBBFixer());
+        contents.add(new ChestStealer());
         contents.add(new Commands());
         contents.add(new Criticals());
         contents.add(new DashNames());
@@ -82,6 +83,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Phase());
         contents.add(new PingSpoof());
         contents.add(new PotionSaver());
+        contents.add(new Projectiles());
         contents.add(new Regen());
         contents.add(new Search());
         contents.add(new SkinFlash());
@@ -95,7 +97,6 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new StorageESP());
         contents.add(new Tower());
         contents.add(new TrayIcon());
-        contents.add(new Projectiles());
         contents.add(new Triggerbot());
         contents.add(new Velocity());
         contents.add(new Waypoints());

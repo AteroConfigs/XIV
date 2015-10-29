@@ -12,6 +12,7 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.MoveEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.mod.mods.combat.Criticals;
 import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
@@ -86,6 +87,10 @@ public class Speed extends Mod implements CommandHandler {
                                     mc.thePlayer.motionZ *= speed;
                                     mc.timer.timerSpeed = 1.15F;
                                     event.setY(event.getY() + 0.0001D);
+
+                                    Criticals criticals = (Criticals) XIV.getInstance().getModManager().find("criticals");
+                                    if (criticals != null && criticals.isEnabled())
+                                        criticals.setFallDistance(criticals.getFallDistance() + 0.0001F);
                                 } else {
                                     mc.thePlayer.motionX /= 1.50D;
                                     mc.thePlayer.motionZ /= 1.50D;

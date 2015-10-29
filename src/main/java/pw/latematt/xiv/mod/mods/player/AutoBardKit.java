@@ -12,7 +12,7 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.utils.ItemUtils;
+import pw.latematt.xiv.utils.InventoryUtils;
 import pw.latematt.xiv.value.ClampedValue;
 
 import java.util.Objects;
@@ -46,28 +46,28 @@ public class AutoBardKit extends Mod implements Listener<MotionUpdateEvent>, Com
             int selectedSlotId = -1;
             if (time.hasReached(delay.getValue())) {
                 if (mc.thePlayer.inventory.armorItemInSlot(2) == null) {
-                    int slotId = ItemUtils.getSlotID(chestplate);
+                    int slotId = InventoryUtils.getSlotID(chestplate);
                     if (slotId != -1) {
                         selectedSlotId = slotId;
                     }
                 }
 
                 if (mc.thePlayer.inventory.armorItemInSlot(1) == null) {
-                    int slotId = ItemUtils.getSlotID(leggings);
+                    int slotId = InventoryUtils.getSlotID(leggings);
                     if (slotId != -1) {
                         selectedSlotId = slotId;
                     }
                 }
 
                 if (mc.thePlayer.inventory.armorItemInSlot(0) == null) {
-                    int slotId = ItemUtils.getSlotID(boots);
+                    int slotId = InventoryUtils.getSlotID(boots);
                     if (slotId != -1) {
                         selectedSlotId = slotId;
                     }
                 }
 
                 if (mc.thePlayer.inventory.armorItemInSlot(3) == null) {
-                    int slotId = ItemUtils.getSlotID(helmet);
+                    int slotId = InventoryUtils.getSlotID(helmet);
                     if (slotId != -1) {
                         selectedSlotId = slotId;
                     }
