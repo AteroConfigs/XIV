@@ -35,7 +35,7 @@ public class AutoLog extends Mod implements Listener<MotionUpdateEvent>, Command
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
         if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
-            if (mc.thePlayer.getHealth() <= this.health.getValue()) {
+            if (mc.thePlayer.getHealth() <= health.getValue()) {
                 mc.playerController.attackEntity(mc.thePlayer, mc.thePlayer); // Using this as an alternative method to hotbarslot -999 or w/e
                 this.toggle();
             }

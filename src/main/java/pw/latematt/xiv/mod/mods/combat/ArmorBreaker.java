@@ -19,7 +19,7 @@ import java.util.Objects;
  * @author Jack
  */
 public final class ArmorBreaker extends Mod implements Listener<AttackEntityEvent>, CommandHandler {
-    private final Value<Boolean> crits = new Value<>("armorbreaker_crits", true);
+    private final Value<Boolean> crits = new Value<>("armorbreaker_crits", false);
     private int ticks = 0;
 
     public ArmorBreaker() {

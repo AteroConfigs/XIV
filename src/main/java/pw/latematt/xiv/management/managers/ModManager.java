@@ -77,6 +77,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new NameProtect());
         contents.add(new Nametags());
         contents.add(new NoFall());
+        contents.add(new NoItems());
         contents.add(new NoPotion());
         contents.add(new NoRotationSet());
         contents.add(new NoSlowdown());
