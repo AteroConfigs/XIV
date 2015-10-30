@@ -1,5 +1,6 @@
 package pw.latematt.xiv.mod.mods.player;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.*;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
@@ -149,6 +150,10 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
         } else {
             ChatLogger.print("Invalid arguments, valid: fastuse <action>");
         }
+    }
+
+    public Value<Integer> getTicksToWait() {
+        return ticksToWait;
     }
 
     @Override

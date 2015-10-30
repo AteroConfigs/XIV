@@ -25,6 +25,6 @@ public class RenderEntityEvent extends Event {
 
     public enum State {
         PRE,
-        POST;
+        POST
     }
 }

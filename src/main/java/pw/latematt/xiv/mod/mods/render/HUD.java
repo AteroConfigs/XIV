@@ -474,7 +474,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     ChatLogger.print(String.format("HUD will %s display \"rudy sucks\".", (rudysucks.getValue() ? "now" : "no longer")));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: watermark, arraylist, organize, coords, fps, ign, potioncounter, soupcounter, lag, direction, time, potions, armor");
+                    ChatLogger.print("Invalid action, valid: watermark, arraylist, organize, coords, fps, ign, lag, direction, time, potions, armor");
                     break;
             }
         } else {

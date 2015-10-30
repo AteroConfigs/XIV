@@ -10,6 +10,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.ItemRenderEvent;
+import pw.latematt.xiv.event.events.RenderEntityEvent;
 
 public class RenderEntityItem extends Render
 {
@@ -88,6 +91,10 @@ public class RenderEntityItem extends Render
 
     public void func_177075_a(EntityItem p_177075_1_, double p_177075_2_, double p_177075_4_, double p_177075_6_, float p_177075_8_, float p_177075_9_)
     {
+        ItemRenderEvent pre = new ItemRenderEvent(ItemRenderEvent.State.PRE);
+        XIV.getInstance().getListenerManager().call(pre);
+        if (pre.isCancelled())
+            return;
         ItemStack var10 = p_177075_1_.getEntityItem();
         this.field_177079_e.setSeed(187L);
         boolean var11 = false;
@@ -140,6 +147,8 @@ public class RenderEntityItem extends Render
         {
             this.renderManager.renderEngine.getTexture(this.func_177076_a(p_177075_1_)).func_174935_a();
         }
+        ItemRenderEvent post = new ItemRenderEvent(ItemRenderEvent.State.POST);
+        XIV.getInstance().getListenerManager().call(post);
 
         super.doRender(p_177075_1_, p_177075_2_, p_177075_4_, p_177075_6_, p_177075_8_, p_177075_9_);
     }
