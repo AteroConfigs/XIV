@@ -5,17 +5,18 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.timer.Timer;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.utils.InventoryUtils;
+import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.ClampedValue;
 
 /**
  * @author Matthew
  */
-public class ChestStealer extends Mod implements Listener<MotionUpdateEvent> {
+public class ChestStealer extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     public final ClampedValue<Long> delay = new ClampedValue<>("cheststealer_delay", 125L, 0L, 1000L);
     private final Timer timer = new Timer();
 
@@ -31,10 +32,8 @@ public class ChestStealer extends Mod implements Listener<MotionUpdateEvent> {
                 if (isChestEmpty(chest) || isInventoryFull())
                     mc.thePlayer.closeScreen();
 
-                System.out.println(isChestEmpty(chest));
-                System.out.println(isInventoryFull());
-                for (int index = 0; index < chest.inventorySlots.getInventory().size(); index++) {
-                    ItemStack stack = chest.inventorySlots.getSlot(index).getStack();
+                for (int index = 0; index < chest.getLowerChestInventory().getSizeInventory(); index++) {
+                    ItemStack stack = chest.getLowerChestInventory().getStackInSlot(index);
                     if (stack == null)
                         continue;
                     if (timer.hasReached(delay.getValue())) {
@@ -46,10 +45,49 @@ public class ChestStealer extends Mod implements Listener<MotionUpdateEvent> {
         }
     }
 
+    @Override
+    public void onCommandRan(String message) {
+        String[] arguments = message.split(" ");
+        if (arguments.length >= 2) {
+            String action = arguments[1];
+            switch (action.toLowerCase()) {
+                case "delay":
+                case "d":
+                    if (arguments.length >= 3) {
+                        String newDelayString = arguments[2];
+                        try {
+                            if (arguments[2].equalsIgnoreCase("-d")) {
+                                delay.setValue(delay.getDefault());
+                            } else {
+                                long newDelay = Long.parseLong(newDelayString);
+                                delay.setValue(newDelay);
+                                if (delay.getValue() > delay.getMax())
+                                    delay.setValue(delay.getMax());
+                                else if (delay.getValue() < delay.getMin())
+                                    delay.setValue(delay.getMin());
+                            }
+
+                            ChatLogger.print(String.format("ChestStealer Delay set to %sms", delay.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newDelayString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: cheststealer delay <number>");
+                    }
+                    break;
+                default:
+                    ChatLogger.print("Invalid action, valid: delay");
+                    break;
+            }
+        } else {
+            ChatLogger.print("Invalid arguments, valid: cheststealer <action>");
+        }
+    }
+
     private boolean isChestEmpty(GuiChest chest) {
         for (int index = 0; index <= chest.getLowerChestInventory().getSizeInventory(); index++) {
             ItemStack stack = chest.getLowerChestInventory().getStackInSlot(index);
-            if (stack == null)
+            if (stack != null)
                 return false;
         }
 
