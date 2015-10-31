@@ -31,7 +31,7 @@ public final class Blink extends Mod {
 
     public Blink() {
         super("Blink", ModType.MOVEMENT, Keyboard.KEY_NONE, 11184895);
-        setTag(String.format("%s \2477%s", getName(), packets.size()));
+        setTag("" + packets.size());
 
         this.packetListener = new Listener<SendPacketEvent>() {
             @Override
@@ -53,7 +53,7 @@ public final class Blink extends Mod {
                     packets.add(event.getPacket());
                 }
 
-                setTag(String.format("%s \2477%s", getName(), packets.size()));
+                setTag("" + packets.size());
             }
         };
 

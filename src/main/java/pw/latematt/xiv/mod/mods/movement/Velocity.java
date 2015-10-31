@@ -25,7 +25,7 @@ public class Velocity extends Mod implements CommandHandler {
 
     public Velocity() {
         super("Velocity", ModType.MOVEMENT, Keyboard.KEY_BACKSLASH, 0xFF36454F, true);
-        setTag(String.format("%s \2477%s", getName(), (reducedVelocity.getValue() * 100) + "%"));
+        setTag((reducedVelocity.getValue() * 100) + "%");
 
         Command.newCommand()
                 .cmd("velocity")
@@ -103,7 +103,7 @@ public class Velocity extends Mod implements CommandHandler {
                             else if (reducedVelocity.getValue() < reducedVelocity.getMin())
                                 reducedVelocity.setValue(reducedVelocity.getMin());
 
-                            setTag(String.format("%s \2477%s", getName(), (reducedVelocity.getValue() * 100) + "%"));
+                            setTag((reducedVelocity.getValue() * 100) + "%");
                             ChatLogger.print(String.format("Velocity Percent set to %s", (reducedVelocity.getValue() * 100F) + "%"));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newVelocityString));

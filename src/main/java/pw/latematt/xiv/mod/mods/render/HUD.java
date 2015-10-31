@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.boss.BossStatus;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.potion.Potion;
@@ -28,7 +27,6 @@ import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.utils.InventoryUtils;
 import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
@@ -36,7 +34,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -194,19 +195,18 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             PotionEffect effect = (PotionEffect) o;
             String name = I18n.format(effect.getEffectName());
 
-            if (Objects.equals(effect.getPotionID(), Potion.NIGHT_VISION.getId()) && XIV.getInstance().getModManager().find(Fullbright.class).isEnabled() && ((Fullbright) XIV.getInstance().getModManager().find(Fullbright.class)).potion.getValue()) {
+            Fullbright fullbright = (Fullbright) XIV.getInstance().getModManager().find("fullbright");
+            if (fullbright.isEnabled() && fullbright.potion.getValue() && effect.getPotionID() == Potion.NIGHT_VISION.getId())
                 continue;
-            }
 
-            if (effect.getAmplifier() == 1) {
+            if (effect.getAmplifier() == 1)
                 name = name + " " + I18n.format("enchantment.level.2");
-            } else if (effect.getAmplifier() == 2) {
+            else if (effect.getAmplifier() == 2)
                 name = name + " " + I18n.format("enchantment.level.3");
-            } else if (effect.getAmplifier() == 3) {
+            else if (effect.getAmplifier() == 3)
                 name = name + " " + I18n.format("enchantment.level.4");
-            } else if (effect.getAmplifier() > 0) {
+            else if (effect.getAmplifier() > 0)
                 name = name + " " + (effect.getAmplifier() + 1);
-            }
 
             int var1 = effect.getDuration() / 20;
             int var2 = var1 / 60;
@@ -227,12 +227,14 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         int y = 2;
 
         List<Mod> mods = XIV.getInstance().getModManager().getContents().stream().filter(mod -> mod.isVisible() && mod.isEnabled()).collect(Collectors.toList());
-        if (organize.getValue()) {
+        if (organize.getValue())
             Collections.sort(mods, (mod1, mod2) -> mc.fontRendererObj.getStringWidth(mod1.getTag()) > mc.fontRendererObj.getStringWidth(mod2.getTag()) ? -1 : mc.fontRendererObj.getStringWidth(mod2.getTag()) > mc.fontRendererObj.getStringWidth(mod1.getTag()) ? 1 : 0);
-        }
 
         for (Mod mod : mods) {
-            mc.fontRendererObj.drawStringWithShadow(mod.getTag(), x - mc.fontRendererObj.getStringWidth(mod.getTag()), y, mod.getColor());
+            String name = mod.getName();
+            if (!mod.getTag().equals(""))
+                name += " \2477" + mod.getTag();
+            mc.fontRendererObj.drawStringWithShadow(name, x - mc.fontRendererObj.getStringWidth(name), y, mod.getColor());
             y += 10;
         }
     }

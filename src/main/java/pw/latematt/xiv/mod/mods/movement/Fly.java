@@ -41,17 +41,15 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
         double motionY = slowfall.getValue() ? -0.005D : 0;
 
         if (cap.getValue() && mc.thePlayer.getEntityBoundingBox().maxY < yCap || !cap.getValue()) {
-            if (mc.gameSettings.keyBindJump.getIsKeyPressed()) {
+            if (mc.gameSettings.keyBindJump.getIsKeyPressed())
                 motionY += verticalSpeed.getValue();
-            }
-            setTag(getName());
+            setTag("");
         } else {
-            setTag(String.format("%s \2477%s", getName(), "*"));
+            setTag("*");
         }
 
-        if (mc.gameSettings.keyBindSneak.getIsKeyPressed()) {
+        if (mc.gameSettings.keyBindSneak.getIsKeyPressed())
             motionY -= verticalSpeed.getValue();
-        }
 
         mc.thePlayer.motionY = motionY;
     }

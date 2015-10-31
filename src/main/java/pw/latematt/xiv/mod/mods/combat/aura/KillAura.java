@@ -97,7 +97,7 @@ public class KillAura extends Mod implements CommandHandler {
             }
         };
 
-        setTag(String.format("%s \2477%s", getName(), mode.getValue().getName()));
+        setTag(mode.getValue().getName());
     }
 
     public void attack(EntityLivingBase target) {
@@ -452,7 +452,7 @@ public class KillAura extends Mod implements CommandHandler {
                                 ChatLogger.print("Invalid mode, valid: singular, switch, multi");
                                 break;
                         }
-                        setTag(String.format("%s \2477%s", getName(), this.mode.getValue().getName()));
+                        setTag(this.mode.getValue().getName());
                     } else {
                         ChatLogger.print("Invalid arguments, valid: killaura mode <mode>");
                     }

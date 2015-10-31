@@ -110,7 +110,7 @@ public class InventoryUtils {
             if (stack == null)
                 continue;
             if (stack.getItem() == item)
-                counter++;
+                counter += stack.stackSize;
         }
         return counter;
     }
@@ -224,7 +224,7 @@ public class InventoryUtils {
             if (stack == null)
                 continue;
             if (isPotion(stack, effect, splash))
-                counter++;
+                counter += stack.stackSize;
         }
         return counter;
     }

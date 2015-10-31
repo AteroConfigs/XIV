@@ -30,7 +30,7 @@ public class Speed extends Mod implements CommandHandler {
 
     public Speed() {
         super("Speed", ModType.MOVEMENT, Keyboard.KEY_F, 0xFFDC5B18);
-        setTag(String.format("%s \2477%s", getName(), currentMode.getValue().getName()));
+        setTag(currentMode.getValue().getName());
 
         Command.newCommand()
                 .cmd("speed")
@@ -181,7 +181,7 @@ public class Speed extends Mod implements CommandHandler {
                                 ChatLogger.print("Invalid mode, valid: new, old");
                                 break;
                         }
-                        setTag(String.format("%s \2477%s", getName(), currentMode.getValue().getName()));
+                        setTag(currentMode.getValue().getName());
                     } else {
                         ChatLogger.print("Invalid arguments, valid: speed mode <mode>");
                     }

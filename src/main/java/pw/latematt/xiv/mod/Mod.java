@@ -32,7 +32,7 @@ public abstract class Mod {
         this.color = color;
         this.visible = visible;
         this.type = type;
-        this.tag = name;
+        tag = "";
     }
 
     public String getName() {

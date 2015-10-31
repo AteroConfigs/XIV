@@ -19,12 +19,12 @@ import pw.latematt.xiv.value.Value;
  */
 public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private final Value<Mode> mode = new Value<>("phase_mode", Mode.SKIP);
-    private final Listener blockAddBBListener, pushOutOfBlocksListener, sendPacketListener, cullingListener;
+    private final Listener blockAddBBListener, pushOutOfBlocksListener, cullingListener;
     private boolean collided = false;
 
     public Phase() {
         super("Phase", ModType.MOVEMENT, Keyboard.KEY_LBRACKET, 0xFF66FF99);
-        setTag(String.format("%s \2477%s", getName(), this.mode.getValue().getName()));
+        setTag(this.mode.getValue().getName());
 
         Command.newCommand()
                 .cmd("phase")
@@ -57,15 +57,6 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
             }
         };
 
-        sendPacketListener = new Listener<SendPacketEvent>() {
-            @Override
-            public void onEventCalled(SendPacketEvent event) {
-                if (event.getPacket() instanceof C03PacketPlayer) {
-                    C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                }
-            }
-        };
-
         this.pushOutOfBlocksListener = new Listener<PushOutOfBlocksEvent>() {
             @Override
             public void onEventCalled(PushOutOfBlocksEvent event) {
@@ -82,72 +73,73 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     }
 
     public void onEventCalled(MotionUpdateEvent event) {
-        if (mode.getValue() != Mode.VANILLA) {
-            if (!mc.thePlayer.isCollidedHorizontally && collided)
-                collided = false;
+        if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+            if (mode.getValue() != Mode.VANILLA) {
+                if (!mc.thePlayer.isCollidedHorizontally && collided)
+                    collided = false;
 
-            float dir = mc.thePlayer.rotationYaw;
-            if (mc.thePlayer.moveForward < 0.0F)
-                dir += 180.0F;
+                float dir = mc.thePlayer.rotationYaw;
+                if (mc.thePlayer.moveForward < 0.0F)
+                    dir += 180.0F;
 
-            if (mc.thePlayer.moveStrafing > 0.0F)
-                dir -= 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
+                if (mc.thePlayer.moveStrafing > 0.0F)
+                    dir -= 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
 
-            if (mc.thePlayer.moveStrafing < 0.0F)
-                dir += 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
+                if (mc.thePlayer.moveStrafing < 0.0F)
+                    dir += 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
 
-            float xD = (float) Math.cos((dir + 90.0F) * Math.PI / 180.0D);
-            float zD = (float) Math.sin((dir + 90.0F) * Math.PI / 180.0D);
+                float xD = (float) Math.cos((dir + 90.0F) * Math.PI / 180.0D);
+                float zD = (float) Math.sin((dir + 90.0F) * Math.PI / 180.0D);
 
-            boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed();
-            if (mc.thePlayer.isCollidedHorizontally && !collided && mc.thePlayer.onGround && !BlockUtils.isInsideBlock(mc.thePlayer) && moving) {
-                if (mode.getValue() == Mode.SKIP) {
-                    float[] offset = new float[]{xD * 0.25F, 1.0F, zD * 0.25F};
+                boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed();
+                if (mc.thePlayer.isCollidedHorizontally && !collided && mc.thePlayer.onGround && !BlockUtils.isInsideBlock(mc.thePlayer) && moving) {
+                    mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
 
-                    double[] movements = {
-                            -0.025000000372529D,
-                            -0.02857142899717604D,
-                            -0.0333333338300387D,
-                            -0.04000000059604645D};
+                    if (mode.getValue() == Mode.SKIP) {
+                        float[] offset = new float[]{xD * 0.25F, 1.0F, zD * 0.25F};
 
-                    for (int i = 0; i < movements.length; i++) {
-                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + (movements[i] * offset[1]) + 0.025F, mc.thePlayer.posZ, mc.thePlayer.onGround));
-                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + offset[0] * i, mc.thePlayer.posY, mc.thePlayer.posZ + offset[2] * i, mc.thePlayer.onGround));
+                        double[] movements = {
+                                -0.025000000372529D,
+                                -0.02857142899717604D,
+                                -0.0333333338300387D,
+                                -0.04000000059604645D};
+
+                        for (int i = 0; i < movements.length; i++) {
+                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + (movements[i] * offset[1]) + 0.025F, mc.thePlayer.posZ, mc.thePlayer.onGround));
+                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + offset[0] * i, mc.thePlayer.posY, mc.thePlayer.posZ + offset[2] * i, mc.thePlayer.onGround));
+                        }
+
+                        mc.thePlayer.setPosition(mc.thePlayer.posX + (offset[0] * 0.05F), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2] * 0.05F));
+
+                        if (mc.thePlayer.isCollidedHorizontally)
+                            collided = true;
+                    } else if (mode.getValue() == Mode.NEW) {
+                        float[] offset = new float[]{xD * 0.75F, 1.0F, zD * 0.75F};
+
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0] * 0.65F), mc.thePlayer.posY + 0.0001F, mc.thePlayer.posZ + (offset[2] * 0.65F), mc.thePlayer.onGround));
+
+                        mc.thePlayer.setPosition(mc.thePlayer.posX + (offset[0] * 0.5F), mc.thePlayer.posY - 0.1F, mc.thePlayer.posZ + (offset[2] * 0.5F));
+
+                        if (mc.thePlayer.isCollidedHorizontally)
+                            collided = true;
+                    } else if (mode.getValue() == Mode.VANILLA_SKIP) {
+                        float[] offset = new float[]{xD * 1.9F, 1.0F, zD * 1.9F};
+
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0]), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2]), mc.thePlayer.onGround));
+                    } else if (mode.getValue() == Mode.VANILLA_CONTROL) {
+                        float motionY = 0;
+
+                        if (mc.gameSettings.keyBindJump.getIsKeyPressed())
+                            motionY = 0.4F;
+                        else if (mc.gameSettings.keyBindSneak.getIsKeyPressed())
+                            motionY = -0.4F;
+
+                        mc.thePlayer.motionY = motionY;
+
+                        if (motionY == 0 && mc.thePlayer.motionX == 0 && mc.thePlayer.motionZ == 0)
+                            event.setCancelled(true);
                     }
 
-                    mc.thePlayer.setPosition(mc.thePlayer.posX + (offset[0] * 0.05F), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2] * 0.05F));
-
-                    if (mc.thePlayer.isCollidedHorizontally)
-                        collided = true;
-                } else if (mode.getValue() == Mode.NEW) {
-                    float[] offset = new float[]{xD * 0.75F, 1.0F, zD * 0.75F};
-
-                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0] * 0.65F), mc.thePlayer.posY + 0.0001F, mc.thePlayer.posZ + (offset[2] * 0.65F), mc.thePlayer.onGround));
-
-                    mc.thePlayer.setPosition(mc.thePlayer.posX + (offset[0] * 0.5F), mc.thePlayer.posY - 0.1F, mc.thePlayer.posZ + (offset[2] * 0.5F));
-
-                    if (mc.thePlayer.isCollidedHorizontally)
-                        collided = true;
-                } else if (mode.getValue() == Mode.VANILLA_SKIP) {
-                    float[] offset = new float[]{xD * 1.9F, 1.0F, zD * 1.9F};
-
-                    mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0]), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2]), mc.thePlayer.onGround));
-                } else if (mode.getValue() == Mode.VANILLA_CONTROL) {
-                    float motionY = 0;
-
-                    if (mc.gameSettings.keyBindJump.getIsKeyPressed())
-                        motionY = 0.4F;
-                    else if (mc.gameSettings.keyBindSneak.getIsKeyPressed())
-                        motionY = -0.4F;
-
-                    mc.thePlayer.motionY = motionY;
-
-                    if (motionY == 0 && mc.thePlayer.motionX == 0 && mc.thePlayer.motionZ == 0)
-                        event.setCancelled(true);
-                }
-
-                for (int i = 0; i < 3; i++) {
-                    mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
                     mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
                 }
             }
@@ -194,7 +186,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                                 ChatLogger.print("Invalid mode, valid: skip, vanilla, vanillaskip, vanillacontrol, new");
                                 break;
                         }
-                        setTag(String.format("%s \2477%s", getName(), this.mode.getValue().getName()));
+                        setTag(this.mode.getValue().getName());
                     } else {
                         ChatLogger.print("Invalid arguments, valid: phase mode <mode>");
                     }
@@ -213,7 +205,6 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
         XIV.getInstance().getListenerManager().add(this);
         XIV.getInstance().getListenerManager().add(blockAddBBListener);
         XIV.getInstance().getListenerManager().add(pushOutOfBlocksListener);
-        XIV.getInstance().getListenerManager().add(sendPacketListener);
         XIV.getInstance().getListenerManager().add(cullingListener);
     }
 
@@ -222,7 +213,6 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
         XIV.getInstance().getListenerManager().remove(this);
         XIV.getInstance().getListenerManager().remove(blockAddBBListener);
         XIV.getInstance().getListenerManager().remove(pushOutOfBlocksListener);
-        XIV.getInstance().getListenerManager().remove(sendPacketListener);
         XIV.getInstance().getListenerManager().remove(cullingListener);
 
         this.collided = false;

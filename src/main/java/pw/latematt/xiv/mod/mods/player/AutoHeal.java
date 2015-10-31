@@ -105,13 +105,16 @@ public class AutoHeal extends Mod implements CommandHandler {
     }
 
     private void updateTag() {
-        String tag = getName() + "\2477";
+        String tag = "";
         if (potion.getValue() && InventoryUtils.countPotion(Potion.INSTANT_HEALTH, true) > 0) {
-            tag += " \247c" + InventoryUtils.countPotion(Potion.INSTANT_HEALTH, true);
+            tag += "\247c" + InventoryUtils.countPotion(Potion.INSTANT_HEALTH, true);
+            if (soup.getValue() && InventoryUtils.countItem(Items.mushroom_stew) > 0) {
+                tag += " \2476" + InventoryUtils.countItem(Items.mushroom_stew);
+            }
         }
 
         if (soup.getValue() && InventoryUtils.countItem(Items.mushroom_stew) > 0) {
-            tag += " \2476" + InventoryUtils.countItem(Items.mushroom_stew);
+            tag += "\2476" + InventoryUtils.countItem(Items.mushroom_stew);
         }
 
         setTag(tag);
