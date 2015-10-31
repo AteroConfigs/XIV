@@ -74,6 +74,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Jesus());
         contents.add(new Keybinds());
         contents.add(new KillAura());
+        contents.add(new MineZ());
         contents.add(new NameProtect());
         contents.add(new Nametags());
         contents.add(new NoFall());

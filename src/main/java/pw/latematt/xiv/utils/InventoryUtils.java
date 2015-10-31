@@ -1,15 +1,17 @@
 package pw.latematt.xiv.utils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 /**
  * @author Matthew
@@ -50,6 +52,27 @@ public class InventoryUtils {
                 int oldItem = MINECRAFT.thePlayer.inventory.currentItem;
                 MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(index));
                 MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
+                MINECRAFT.thePlayer.stopUsingItem();
+                MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(oldItem));
+                break;
+            }
+        }
+    }
+
+    public static void instantUseFirst(Item item) {
+        for (int index = 0; index <= 8; index++) {
+            ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
+            if (stack == null)
+                continue;
+            if (stack.getItem() == item) {
+                int oldItem = MINECRAFT.thePlayer.inventory.currentItem;
+                MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(index));
+                MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
+                for (int x = 0; x <= 32; x++) {
+                    MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer(MINECRAFT.thePlayer.onGround));
+                }
+                MINECRAFT.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
+                MINECRAFT.thePlayer.stopUsingItem();
                 MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(oldItem));
                 break;
             }

@@ -25,7 +25,12 @@ public class Sprint extends Mod implements Listener<MotionUpdateEvent> {
             boolean sneaking = mc.thePlayer.isSneaking();
             boolean collided = mc.thePlayer.isCollidedHorizontally;
             boolean hungry = mc.thePlayer.getFoodStats().getFoodLevel() <= 6;
-            mc.thePlayer.setSprinting(moving && !sneaking && !collided && !hungry);
+
+            NoSlowdown noSlowdown = (NoSlowdown) XIV.getInstance().getModManager().find("noslowdown");
+            boolean slowdownCheck = false;
+            if (noSlowdown != null && noSlowdown.isEnabled() && noSlowdown.shouldSlowdown())
+                slowdownCheck = true;
+            mc.thePlayer.setSprinting(moving && !sneaking && !collided && !hungry && !slowdownCheck);
         }
     }
 

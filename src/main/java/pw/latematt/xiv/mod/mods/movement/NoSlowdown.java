@@ -32,14 +32,8 @@ public class NoSlowdown extends Mod implements CommandHandler {
         itemSlowdownListener = new Listener<UsingItemSlowdownEvent>() {
             @Override
             public void onEventCalled(UsingItemSlowdownEvent event) {
-                if (shotBow.getValue() && mc.thePlayer.getItemInUse() != null) {
-                    int maxUseDuration = mc.thePlayer.getItemInUse().getMaxItemUseDuration() - 2;
-                    FastUse fastUse = (FastUse) XIV.getInstance().getModManager().find("fastuse");
-                    if (fastUse != null && fastUse.isEnabled())
-                        maxUseDuration = fastUse.getTicksToWait().getValue() - 2;
-                    if (mc.thePlayer.getItemInUseDuration() > maxUseDuration)
-                        return;
-                }
+                if (shouldSlowdown())
+                    return;
 
                 event.setCancelled(true);
             }
@@ -90,6 +84,19 @@ public class NoSlowdown extends Mod implements CommandHandler {
                 .build();
 
         setEnabled(true);
+    }
+
+    public boolean shouldSlowdown() {
+        if (shotBow.getValue() && mc.thePlayer.getItemInUse() != null) {
+            int maxUseDuration = mc.thePlayer.getItemInUse().getMaxItemUseDuration();
+            FastUse fastUse = (FastUse) XIV.getInstance().getModManager().find("fastuse");
+            if (fastUse != null && fastUse.isEnabled())
+                maxUseDuration = fastUse.getTicksToWait().getValue();
+            if (mc.thePlayer.getItemInUseDuration() > maxUseDuration - 2)
+                return true;
+        }
+
+        return false;
     }
 
     @Override
