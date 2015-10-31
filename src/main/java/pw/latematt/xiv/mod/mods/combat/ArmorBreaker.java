@@ -28,8 +28,8 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
         Command.newCommand()
                 .cmd("armorbreaker")
                 .description("Base command for ArmorBreaker mod.")
-                .arguments("<crits>")
-                .aliases("ab")
+                .arguments("<action>")
+                .aliases("armorb", "abreaker", "ab")
                 .handler(this).build();
     }
 

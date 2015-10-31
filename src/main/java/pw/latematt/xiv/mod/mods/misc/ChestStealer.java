@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.timer.Timer;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
@@ -22,6 +23,13 @@ public class ChestStealer extends Mod implements Listener<MotionUpdateEvent>, Co
 
     public ChestStealer() {
         super("ChestStealer", ModType.MISCELLANEOUS, Keyboard.KEY_NONE, 0xFFE58144);
+
+        Command.newCommand()
+                .cmd("cheststealer")
+                .description("Base command for ChestStealer mod.")
+                .arguments("<action>")
+                .aliases("chests", "cstealer", "cs")
+                .handler(this).build();
     }
 
     @Override
