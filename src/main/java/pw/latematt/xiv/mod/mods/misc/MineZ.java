@@ -1,6 +1,5 @@
 package pw.latematt.xiv.mod.mods.misc;
 
-import net.minecraft.init.Items;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.timer.Timer;
@@ -17,9 +16,9 @@ import pw.latematt.xiv.utils.InventoryUtils;
  * @author Matthew
  */
 public class MineZ extends Mod {
+    private final Timer deathTimer = new Timer(), waterTimer = new Timer();
     private final Listener playerDeathListener, motionUpdateListener;
     private boolean needsToRespawn;
-    private final Timer timer = new Timer();
 
     public MineZ() {
         super("MineZ", ModType.MISCELLANEOUS, Keyboard.KEY_NONE, 0xFFBDFC2B);
@@ -27,18 +26,20 @@ public class MineZ extends Mod {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (needsToRespawn && timer.hasReached(1000)) {
+                    if (needsToRespawn && deathTimer.hasReached(1000)) {
                         mc.thePlayer.sendChatMessage("/minez spawn");
                         needsToRespawn = false;
                     }
                 } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
-                    if (mc.thePlayer.experienceLevel <= 10 &&
-                            (mc.thePlayer.onGround || BlockUtils.isOnLadder(mc.thePlayer) || BlockUtils.isInLiquid(mc.thePlayer) || BlockUtils.isOnLiquid(mc.thePlayer))) {
-                        final boolean wasSprinting = mc.thePlayer.isSprinting();
-                        mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
-                        InventoryUtils.instantUseFirst(Items.potionitem);
-                        if (wasSprinting)
-                            mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SPRINTING));
+                    if (mc.thePlayer.experienceLevel <= 10 && waterTimer.hasReached(450) && InventoryUtils.hotbarHasPotion(null, false)) {
+                        if (mc.thePlayer.onGround || BlockUtils.isOnLadder(mc.thePlayer) || BlockUtils.isInLiquid(mc.thePlayer) || BlockUtils.isOnLiquid(mc.thePlayer)) {
+                            final boolean wasSprinting = mc.thePlayer.isSprinting();
+                            mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
+                            InventoryUtils.instantUseFirstPotion(null);
+                            if (wasSprinting)
+                                mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SPRINTING));
+                            waterTimer.reset();
+                        }
                     }
                 }
             }
@@ -48,7 +49,7 @@ public class MineZ extends Mod {
             @Override
             public void onEventCalled(PlayerDeathEvent event) {
                 mc.thePlayer.respawnPlayer();
-                timer.reset();
+                deathTimer.reset();
                 needsToRespawn = true;
             }
         };

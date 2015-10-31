@@ -1,5 +1,7 @@
 package pw.latematt.xiv.mod.mods.combat;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
@@ -37,8 +39,12 @@ public final class ArmorBreaker extends Mod implements Listener<AttackEntityEven
     public void onEventCalled(AttackEntityEvent event) {
         if (Objects.isNull(mc.thePlayer.getCurrentEquippedItem()) || Objects.isNull(mc.thePlayer.inventoryContainer.getSlot(27).getStack()))
             return;
+        ItemStack currentItem = mc.thePlayer.getCurrentEquippedItem();
+        ItemStack sword = mc.thePlayer.inventoryContainer.getSlot(27).getStack();
+        if (!(currentItem.getItem() instanceof ItemSword) || !(sword.getItem() instanceof ItemSword))
+            return;
 
-        if (crits.getValue()) { // attempt at lessening flags due to crits
+        if (crits.getValue()) { // TODO: fix the nocheat flags due to crits
             Speed speed = (Speed) XIV.getInstance().getModManager().find(Speed.class);
             if (speed != null && speed.isEnabled())
                 mc.timer.timerSpeed = 1.0F;

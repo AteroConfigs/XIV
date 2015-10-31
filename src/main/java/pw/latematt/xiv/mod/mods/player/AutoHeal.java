@@ -2,6 +2,7 @@ package pw.latematt.xiv.mod.mods.player;
 
 import net.minecraft.init.Items;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.potion.Potion;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.timer.Timer;
 import pw.latematt.xiv.XIV;
@@ -49,12 +50,11 @@ public class AutoHeal extends Mod implements CommandHandler {
 
                             useFirst(Items.mushroom_stew);
 
-                            if (mc.thePlayer.getHealth() <= health.getValue() && potion.getValue() && countInstantHealth() > 0) {
-                                if (!hotbarHasInstantHealth()) {
-                                    getInstantHealthFromInventory();
-                                }
+                            if (mc.thePlayer.getHealth() <= health.getValue() && potion.getValue() && countPotion(Potion.INSTANT_HEALTH, true) > 0) {
+                                if (!hotbarHasPotion(Potion.INSTANT_HEALTH, true))
+                                    getPotionFromInventory(Potion.INSTANT_HEALTH, true);
 
-                                if (hotbarHasInstantHealth()) {
+                                if (hotbarHasPotion(Potion.INSTANT_HEALTH, true)) {
                                     healing = true;
                                     event.setYaw(-event.getYaw());
                                     event.setPitch(85);
@@ -62,11 +62,11 @@ public class AutoHeal extends Mod implements CommandHandler {
                             } else {
                                 timer.reset();
                             }
-                        } else if (potion.getValue() && countInstantHealth() > 0) {
-                            if (!hotbarHasInstantHealth())
-                                getInstantHealthFromInventory();
+                        } else if (potion.getValue() && countPotion(Potion.INSTANT_HEALTH, true) > 0) {
+                            if (!hotbarHasPotion(Potion.INSTANT_HEALTH, true))
+                                getPotionFromInventory(Potion.INSTANT_HEALTH, true);
 
-                            if (hotbarHasInstantHealth()) {
+                            if (hotbarHasPotion(Potion.INSTANT_HEALTH, true)) {
                                 healing = true;
                                 event.setYaw(-event.getYaw());
                                 event.setPitch(85);
@@ -75,7 +75,7 @@ public class AutoHeal extends Mod implements CommandHandler {
                     }
                 } else if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.POST)) {
                     if (healing) {
-                        useFirstInstantHealth();
+                        useFirstPotion(Potion.INSTANT_HEALTH, true);
                         healing = false;
                         timer.reset();
                     }
@@ -106,8 +106,8 @@ public class AutoHeal extends Mod implements CommandHandler {
 
     private void updateTag() {
         String tag = getName() + "\2477";
-        if (potion.getValue() && InventoryUtils.countInstantHealth() > 0) {
-            tag += " \247c" + InventoryUtils.countInstantHealth();
+        if (potion.getValue() && InventoryUtils.countPotion(Potion.INSTANT_HEALTH, true) > 0) {
+            tag += " \247c" + InventoryUtils.countPotion(Potion.INSTANT_HEALTH, true);
         }
 
         if (soup.getValue() && InventoryUtils.countItem(Items.mushroom_stew) > 0) {
@@ -175,7 +175,7 @@ public class AutoHeal extends Mod implements CommandHandler {
                     break;
                 case "potion":
                 case "pot":
-                    useFirstInstantHealth();
+                    useFirstPotion(Potion.INSTANT_HEALTH, true);
                     break;
                 case "soup":
                     dropFirst(Items.bowl);

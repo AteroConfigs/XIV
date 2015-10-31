@@ -115,54 +115,55 @@ public class InventoryUtils {
         return counter;
     }
 
-    /* instanthealth stuff (used in AutoHeal) */
-    public static boolean isValidHealthPotion(ItemStack stack) {
+    public static boolean isPotion(ItemStack stack, Potion potion, boolean splash) {
         if (stack == null)
             return false;
         if (!(stack.getItem() instanceof ItemPotion))
             return false;
-        ItemPotion potion = (ItemPotion) stack.getItem();
-        if (!ItemPotion.isSplash(stack.getItemDamage()))
+        ItemPotion potionItem = (ItemPotion) stack.getItem();
+        if (splash && !ItemPotion.isSplash(stack.getItemDamage()))
             return false;
-        if (potion.getEffects(stack) == null)
+        if (potionItem.getEffects(stack) == null)
+            return potion == null;
+        if (potion == null)
             return false;
-        for (Object o : potion.getEffects(stack)) {
+        for (Object o : potionItem.getEffects(stack)) {
             PotionEffect effect = (PotionEffect) o;
-            if (effect.getPotionID() == Potion.INSTANT_HEALTH.getId())
+            if (effect.getPotionID() == potion.getId())
                 return true;
         }
         return false;
     }
 
-    public static void getInstantHealthFromInventory() {
+    public static void getPotionFromInventory(Potion effect, boolean splash) {
         for (int index = 9; index <= 36; index++) {
             ItemStack stack = MINECRAFT.thePlayer.inventoryContainer.getSlot(index).getStack();
             if (stack == null)
                 continue;
-            if (isValidHealthPotion(stack)) {
+            if (isPotion(stack, effect, splash)) {
                 MINECRAFT.playerController.windowClick(0, index, 0, 1, MINECRAFT.thePlayer);
                 break;
             }
         }
     }
 
-    public static boolean hotbarHasInstantHealth() {
+    public static boolean hotbarHasPotion(Potion effect, boolean splash) {
         for (int index = 0; index <= 8; index++) {
             ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
             if (stack == null)
                 continue;
-            if (isValidHealthPotion(stack))
+            if (isPotion(stack, effect, splash))
                 return true;
         }
         return false;
     }
 
-    public static void useFirstInstantHealth() {
+    public static void useFirstPotion(Potion effect, boolean splash) {
         for (int index = 0; index <= 8; index++) {
             ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
             if (stack == null)
                 continue;
-            if (isValidHealthPotion(stack)) {
+            if (isPotion(stack, effect, splash)) {
                 int oldItem = MINECRAFT.thePlayer.inventory.currentItem;
                 MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(index));
                 MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
@@ -172,13 +173,57 @@ public class InventoryUtils {
         }
     }
 
-    public static int countInstantHealth() {
+    public static void instantUseFirstPotion(Potion effect) {
+        for (int index = 0; index <= 8; index++) {
+            ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
+            if (stack == null)
+                continue;
+            if (isPotion(stack, effect, false)) {
+                int oldItem = MINECRAFT.thePlayer.inventory.currentItem;
+                MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(index));
+                MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
+                for (int x = 0; x <= 32; x++) {
+                    MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer(MINECRAFT.thePlayer.onGround));
+                }
+                MINECRAFT.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
+                MINECRAFT.thePlayer.stopUsingItem();
+                MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(oldItem));
+                break;
+            }
+        }
+    }
+
+    public static void dropFirstPotion(Potion effect, boolean splash) {
+        for (int index = 0; index <= 8; index++) {
+            ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
+            if (stack == null)
+                continue;
+            if (isPotion(stack, effect, splash)) {
+                MINECRAFT.playerController.windowClick(0, 36 + index, 1, 4, MINECRAFT.thePlayer);
+                break;
+            }
+        }
+    }
+
+    public static int getPotionSlotID(Potion effect, boolean splash) {
+        for (int index = 0; index <= 36; index++) {
+            ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
+            if (stack == null)
+                continue;
+            if (isPotion(stack, effect, splash)) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    public static int countPotion(Potion effect, boolean splash) {
         int counter = 0;
         for (int index = 0; index <= 36; index++) {
             ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
             if (stack == null)
                 continue;
-            if (isValidHealthPotion(stack))
+            if (isPotion(stack, effect, splash))
                 counter++;
         }
         return counter;
