@@ -1,6 +1,5 @@
 package pw.latematt.xiv.mod.mods.combat.aura.mode.modes;
 
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;

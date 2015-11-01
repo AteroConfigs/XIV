@@ -2,6 +2,7 @@ package pw.latematt.xiv.mod;
 
 import net.minecraft.client.Minecraft;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.value.Value;
 
 /**
  * @author Matthew
@@ -9,8 +10,7 @@ import pw.latematt.xiv.XIV;
 public abstract class Mod {
     protected final Minecraft mc = Minecraft.getMinecraft();
     private final String name;
-    private String tag;
-    private String displayName;
+    private String displayName, tag;
     private int keybind, color;
     private boolean enabled, visible;
     private ModType type;
@@ -28,13 +28,12 @@ public abstract class Mod {
     }
 
     public Mod(String name, ModType type, int keybind, int color, boolean visible) {
-        this.name = name;
+        this.displayName = this.name = name;
         this.keybind = keybind;
         this.color = color;
         this.visible = visible;
         this.type = type;
-        tag = "";
-        displayName = "";
+        this.tag = "";
     }
 
     public String getName() {
@@ -42,18 +41,19 @@ public abstract class Mod {
     }
 
     public String getDisplayName() {
-        return displayName.length() > 0 ? displayName : name;
-    }
-
-    public String getTag() {
-        if (XIV.getInstance().getValueManager().find("render_show_tags") != null && ((Boolean) XIV.getInstance().getValueManager().find("render_show_tags").getValue()) || XIV.getInstance().getValueManager().find("render_show_tags") == null) {
-            return tag;
-        }
-        return getName();
+        Value<Boolean> showTags = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_show_tags");
+        String name = displayName;
+        if (!tag.equals("") && showTags.getValue())
+            name += " \2477" + tag;
+        return name;
     }
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getTag() {
+        return tag;
     }
 
     public void setTag(String tag) {

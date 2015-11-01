@@ -279,22 +279,15 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         int y = 2;
 
         List<Mod> mods = XIV.getInstance().getModManager().getContents().stream().filter(mod -> mod.isVisible() && mod.isEnabled()).collect(Collectors.toList());
-        Value<Boolean> showTags = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_show_tags");
         if (organize.getValue())
             Collections.sort(mods, (mod1, mod2) -> {
                 String mod1Name = mod1.getDisplayName();
-                if (!mod1.getTag().equals("") && showTags.getValue())
-                    mod1Name += " \2477" + mod1.getTag();
                 String mod2Name = mod2.getDisplayName();
-                if (!mod2.getTag().equals("") && showTags.getValue())
-                    mod2Name += " \2477" + mod2.getTag();
                 return mc.fontRendererObj.getStringWidth(mod1Name) > mc.fontRendererObj.getStringWidth(mod2Name) ? -1 : mc.fontRendererObj.getStringWidth(mod2Name) > mc.fontRendererObj.getStringWidth(mod1Name) ? 1 : 0;
             });
 
         for (Mod mod : mods) {
             String name = mod.getDisplayName();
-            if (!mod.getTag().equals("") && showTags.getValue())
-                name += " \2477" + mod.getTag();
             mc.fontRendererObj.drawStringWithShadow(name, x - mc.fontRendererObj.getStringWidth(name), y, mod.getColor());
             y += 10;
         }
