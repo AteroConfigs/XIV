@@ -6,6 +6,7 @@ import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
+import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 
 import java.lang.reflect.Field;
@@ -63,6 +64,9 @@ public class AuthThread implements Runnable {
             Session newSession = createSession(account.getUsername(), account.getPassword());
             if (newSession != null) {
                 try {
+                    if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                        account.setKeyword(newSession.getUsername());
+                    }
                     session.set(mc, newSession);
                     status = "\247aLogged in as\247r " + newSession.getUsername();
                 } catch (IllegalAccessException e) {
