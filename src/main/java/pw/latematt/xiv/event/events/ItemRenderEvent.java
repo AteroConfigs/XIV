@@ -1,5 +1,7 @@
 package pw.latematt.xiv.event.events;
 
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
 import pw.latematt.xiv.event.Cancellable;
 import pw.latematt.xiv.event.Event;
 
@@ -9,13 +11,19 @@ import pw.latematt.xiv.event.Event;
 public class ItemRenderEvent extends Event implements Cancellable {
     private boolean cancelled;
     private final State state;
+    private EntityItem item;
 
-    public ItemRenderEvent(State state) {
+    public ItemRenderEvent(State state, EntityItem item) {
         this.state = state;
+        this.item = item;
     }
 
     public State getState() {
         return state;
+    }
+
+    public EntityItem getItem() {
+        return item;
     }
 
     @Override
