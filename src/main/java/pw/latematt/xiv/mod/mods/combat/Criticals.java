@@ -21,18 +21,16 @@ import pw.latematt.xiv.value.Value;
  * @author Jack
  */
 public class Criticals extends Mod implements Listener<SendPacketEvent>, CommandHandler {
-    private final Value<Boolean> bypass = new Value<>("criticals_bypass", false);
+    private final Value<Boolean> miniJumps = new Value<>("criticals_mini_jumps", true);
     private final Listener attackEntityListener;
     private boolean next;
     private float fallDist;
 
     public Criticals() {
         super("Criticals", ModType.COMBAT, Keyboard.KEY_NONE, 0xFFA38EC7);
-
-        Command.newCommand()
-                .cmd("criticals")
+        Command.newCommand().cmd("criticals")
                 .description("Base command for Criticals mod.")
-                .arguments("<bypass>")
+                .arguments("<action>")
                 .aliases("crits")
                 .handler(this)
                 .build();
@@ -40,16 +38,13 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
         attackEntityListener = new Listener<AttackEntityEvent>() {
             @Override
             public void onEventCalled(AttackEntityEvent event) {
-                if (bypass.getValue()) {
+                if (miniJumps.getValue()) {
                     if (!BlockUtils.isOnLiquid(mc.thePlayer) && mc.thePlayer.isCollidedVertically && !BlockUtils.isInLiquid(mc.thePlayer)) {
-                        next = !next;
-                        if (next) {
+                        if ((next = !next)) {
                             mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.05, mc.thePlayer.posZ, false));
                             mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
                             mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.012511, mc.thePlayer.posZ, false));
                             mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                        } else {
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer());
                         }
                     }
                 }
@@ -59,25 +54,25 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
 
     @Override
     public void onEventCalled(SendPacketEvent event) {
-        if (!this.bypass.getValue()) {
-            if (event.getPacket() instanceof C03PacketPlayer) {
-                C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                if (isSafe())
-                    fallDist += mc.thePlayer.fallDistance;
+        if (miniJumps.getValue())
+            return;
+        if (event.getPacket() instanceof C03PacketPlayer) {
+            C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
+            if (isSafe())
+                fallDist += mc.thePlayer.fallDistance;
 
-                if (!isSafe() || fallDist >= 3.0F) {
-                    player.setOnGround(true);
-                    fallDist = 0.0F;
-                    mc.thePlayer.fallDistance = 0.0F;
+            if (!isSafe() || fallDist >= 3.0F) {
+                player.setOnGround(true);
+                fallDist = 0.0F;
+                mc.thePlayer.fallDistance = 0.0F;
 
-                    if (mc.thePlayer.onGround && !BlockUtils.isOnLiquid(mc.thePlayer) && !BlockUtils.isInLiquid(mc.thePlayer)) {
-                        mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
-                        mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                        fallDist += 1.01F;
-                    }
-                } else if (fallDist > 0.0F) {
-                    player.setOnGround(false);
+                if (mc.thePlayer.onGround && !BlockUtils.isOnLiquid(mc.thePlayer) && !BlockUtils.isInLiquid(mc.thePlayer)) {
+                    mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
+                    mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+                    fallDist += 1.01F;
                 }
+            } else if (fallDist > 0.0F) {
+                player.setOnGround(false);
             }
         }
     }
@@ -102,7 +97,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
         XIV.getInstance().getListenerManager().add(attackEntityListener);
-        if (mc.thePlayer != null) {
+        if (mc.thePlayer != null && !miniJumps.getValue()) {
             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
             fallDist += 1.01F;
@@ -123,17 +118,17 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
         if (arguments.length >= 2) {
             String action = arguments[1];
             switch (action.toLowerCase()) {
-                case "bypass":
+                case "minijumps":
                     if (arguments.length >= 3) {
                         if (arguments[2].equalsIgnoreCase("-d")) {
-                            bypass.setValue(bypass.getDefault());
+                            miniJumps.setValue(miniJumps.getDefault());
                         } else {
-                            bypass.setValue(Boolean.parseBoolean(arguments[2]));
+                            miniJumps.setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
-                        bypass.setValue(!bypass.getValue());
+                        miniJumps.setValue(!miniJumps.getValue());
                     }
-                    ChatLogger.print(String.format("Criticals will %s bypass newer nocheat.", (bypass.getValue() ? "now" : "no longer")));
+                    ChatLogger.print(String.format("Criticals will %s now perform mini jumps.", (miniJumps.getValue() ? "now" : "no longer")));
                     break;
                 default:
                     ChatLogger.print("Invalid action, valid: bypass");
