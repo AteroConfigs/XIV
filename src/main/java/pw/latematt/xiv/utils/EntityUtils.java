@@ -147,7 +147,7 @@ public class EntityUtils {
 
     public static void damagePlayer() {
         if (MINECRAFT != null && MINECRAFT.thePlayer != null && MINECRAFT.getNetHandler() != null && MINECRAFT.thePlayer.onGround) {
-            for (int i = 0; i <= 55; i++) {
+            for (int i = 0; i <= 81; i++) { // KEEP THIS AT FUCKING 81 CAUSE IT DOESNT FUCKING WORK ON HYPIXEL IF YOU DONT HAVE IT AT 81 YOU FUCKING SHIT FUCK
                 MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY + 0.055D, MINECRAFT.thePlayer.posZ, false));
                 MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY, MINECRAFT.thePlayer.posZ, false));
             }
