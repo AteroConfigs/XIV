@@ -24,7 +24,7 @@ import java.util.Objects;
  * @author Jack
  */
 
-public final class Blink extends Mod {
+public class Blink extends Mod {
     private final Listener packetListener, renderListener;
     private final List<Packet> packets = new ArrayList<>();
     private EntityOtherPlayerMP position;

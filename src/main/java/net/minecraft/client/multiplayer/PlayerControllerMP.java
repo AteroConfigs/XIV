@@ -503,12 +503,10 @@ public class PlayerControllerMP
      */
     public void attackEntity(EntityPlayer playerIn, Entity targetEntity)
     {
-        final AttackEntityEvent event = new AttackEntityEvent(targetEntity);
+        AttackEntityEvent event = new AttackEntityEvent(targetEntity);
         XIV.getInstance().getListenerManager().call(event);
-
-        if (event.isCancelled()) {
+        if (event.isCancelled())
             return;
-        }
 
         this.syncCurrentPlayItem();
         this.netClientHandler.addToSendQueue(new C02PacketUseEntity(targetEntity, C02PacketUseEntity.Action.ATTACK));

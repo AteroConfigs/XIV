@@ -11,7 +11,7 @@ import pw.latematt.xiv.mod.ModType;
 /**
  * @author Jack
  */
-public final class AntiHunger extends Mod implements Listener<SendPacketEvent> {
+public class AntiHunger extends Mod implements Listener<SendPacketEvent> {
     public AntiHunger() {
         super("AntiHunger", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFBC832F);
     }
