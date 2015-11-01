@@ -41,7 +41,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
             @Override
             public void onEventCalled(AttackEntityEvent event) {
                 if (bypass.getValue()) {
-                    if (!BlockUtils.isOnLiquid(mc.thePlayer) && mc.thePlayer.isCollidedVertically) {
+                    if (!BlockUtils.isOnLiquid(mc.thePlayer) && mc.thePlayer.isCollidedVertically && !BlockUtils.isInLiquid(mc.thePlayer))) {
                         next = !next;
                         if (next) {
                             mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.05, mc.thePlayer.posZ, false));
