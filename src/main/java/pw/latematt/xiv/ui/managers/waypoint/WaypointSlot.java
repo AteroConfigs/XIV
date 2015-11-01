@@ -2,6 +2,8 @@ package pw.latematt.xiv.ui.managers.waypoint;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.mod.mods.render.waypoints.base.Waypoint;
 
 public class WaypointSlot extends GuiSlot {
@@ -57,10 +59,15 @@ public class WaypointSlot extends GuiSlot {
 
         if (waypoint != null) {
             mc.fontRendererObj.drawStringWithShadow(waypoint.getName(), x + 1, y + 1, 0xFFDD88DD);
-            mc.fontRendererObj.drawStringWithShadow(waypoint.getX() + ", " + waypoint.getY() + ", " + waypoint.getZ(), x + 1, y + 12, 0xFFFFFFFF);
-            mc.fontRendererObj.drawStringWithShadow("Dimension: " + waypoint.getDimension(), x + 1, y + 23, 0xFFFFFFFF);
-            mc.fontRendererObj.drawStringWithShadow("Server: " + waypoint.getServer(), x + 1, y + 34, 0xFFFFFFFF);
-            mc.fontRendererObj.drawStringWithShadow("Temporary: " + waypoint.isTemporary(), x + 1, y + 45, 0xFFFFFFFF);
+
+            GL11.glPushMatrix();
+            GL11.glScaled(0.5, 0.5, 0.5);
+            mc.fontRendererObj.drawStringWithShadow(waypoint.getX() + ", " + waypoint.getY() + ", " + waypoint.getZ(), (x + 1) * 2, (y + 12) * 2, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow("Dimension: " + waypoint.getDimension(), (x + 1) * 2, (y + 18) * 2, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow("Temporary: " + waypoint.isTemporary(), (x + 1) * 2, (y + 24) * 2, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow("Server: " + waypoint.getServer(), (x + 1) * 2, (y + 30) * 2, 0xFFFFFFFF);
+            GL11.glScaled(2, 2, 2);
+            GL11.glPopMatrix();
         }
     }
 
