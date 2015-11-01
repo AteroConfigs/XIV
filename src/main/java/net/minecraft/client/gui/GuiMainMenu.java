@@ -254,6 +254,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
         if (button.id == 5)
         {
             if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                // this.mc.displayGuiScreen(new GuiManagers(this));
                 this.mc.displayGuiScreen(new GuiAltManager(this));
             } else {
                 this.mc.displayGuiScreen(new GuiLanguage(this, this.mc.gameSettings, this.mc.getLanguageManager()));

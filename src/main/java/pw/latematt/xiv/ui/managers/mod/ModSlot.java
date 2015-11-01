@@ -3,6 +3,7 @@ package pw.latematt.xiv.ui.managers.mod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.mod.Mod;
 
 public class ModSlot extends GuiSlot {
@@ -58,9 +59,13 @@ public class ModSlot extends GuiSlot {
 
         if (mod != null) {
             mc.fontRendererObj.drawStringWithShadow(mod.getName(), x + 1, y + 1, mod.getColor());
-            mc.fontRendererObj.drawStringWithShadow("State: " + mod.isEnabled(), x + 1, y + 12, 0xFFFFFFFF);
-            mc.fontRendererObj.drawStringWithShadow("Key: " + Keyboard.getKeyName(mod.getKeybind()), x + 1, y + 23, 0xFFFFFFFF);
-            mc.fontRendererObj.drawStringWithShadow("Visible: " + mod.isVisible(), x + 1, y + 34, 0xFFFFFFFF);
+            GL11.glPushMatrix();
+            GL11.glScaled(0.5, 0.5, 0.5);
+            mc.fontRendererObj.drawStringWithShadow("State: " + mod.isEnabled(), (x + 1) * 2, (y + 12) * 2, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow("Key: " + Keyboard.getKeyName(mod.getKeybind()), (x + 1) * 2, (y + 18) * 2, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow("Visible: " + mod.isVisible(), (x + 1) * 2, (y + 24) * 2, 0xFFFFFFFF);
+            GL11.glScaled(2, 2, 2);
+            GL11.glPopMatrix();
         }
     }
 

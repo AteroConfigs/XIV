@@ -105,13 +105,15 @@ public class GuiWaypointManager extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        super.keyTyped(typedChar, keyCode);
-
         if (!search.isFocused()) {
             search.setFocused(!search.isFocused());
         }
 
         search.textboxKeyTyped(typedChar, keyCode);
+
+        if(keyCode == Keyboard.KEY_ESCAPE) {
+            mc.displayGuiScreen(parent);
+        }
     }
 
     @Override
