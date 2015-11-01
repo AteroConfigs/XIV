@@ -34,13 +34,13 @@ public class GuiManagers extends GuiScreen {
                     mc.displayGuiScreen(parent);
                     break;
                 case 1:
-                    mc.displayGuiScreen(new GuiAltManager(parent));
+                    mc.displayGuiScreen(new GuiAltManager(this));
                     break;
                 case 2:
-                    mc.displayGuiScreen(new GuiModManager(parent));
+                    mc.displayGuiScreen(new GuiModManager(this));
                     break;
                 case 3:
-                    mc.displayGuiScreen(new GuiWaypointManager(parent));
+                    mc.displayGuiScreen(new GuiWaypointManager(this));
                     break;
             }
         }

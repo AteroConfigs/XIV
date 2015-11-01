@@ -199,7 +199,9 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        super.keyTyped(typedChar, keyCode);
+        if(keyCode == Keyboard.KEY_ESCAPE) {
+            mc.displayGuiScreen(parent);
+        }
 
         if (keyCode == Keyboard.KEY_TAB) {
             if (username.isFocused()) {

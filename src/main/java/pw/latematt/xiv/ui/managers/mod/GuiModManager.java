@@ -16,6 +16,7 @@ public class GuiModManager extends GuiScreen {
     private GuiScreen parent;
     private ModSlot slot;
     public GuiTextField search;
+    public GuiTextField keybind;
 
     public GuiModManager(GuiScreen parent) {
         this.parent = parent;
@@ -25,6 +26,11 @@ public class GuiModManager extends GuiScreen {
 
     public List<Mod> getMods() {
         if (search != null && search.getText().length() > 0) {
+            if(search.getText().startsWith("k:")) {
+                String text = search.getText().substring(2);
+
+                return XIV.getInstance().getModManager().getContents().stream().filter(mod -> Keyboard.getKeyName(mod.getKeybind()).toLowerCase().startsWith(text.toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
+            }
             if (search.getText().startsWith("!")) {
                 String text = search.getText().substring(1);
 
@@ -41,7 +47,7 @@ public class GuiModManager extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        this.slot = new ModSlot(this, mc, width, height, 25, height - 98, 47);
+        this.slot = new ModSlot(this, mc, width, height, 25, height - 98, 34);
         this.slot.registerScrollButtons(7, 8);
 
         this.buttonList.clear();
@@ -50,6 +56,9 @@ public class GuiModManager extends GuiScreen {
 
         this.search = new GuiTextField(3, mc.fontRendererObj, width - 182, height - 52, 150, 20);
         this.search.setVisible(true);
+
+        this.keybind = new GuiTextField(4, mc.fontRendererObj, width / 2 - 48, height - 70, 98, 20);
+        this.keybind.setVisible(true);
     }
 
     @Override
@@ -79,30 +88,43 @@ public class GuiModManager extends GuiScreen {
         if (this.slot.getMod() != null) {
             Mod mod = this.slot.getMod();
             mc.fontRendererObj.drawStringWithShadow(mod.getName(), 2, 2, mod.getColor());
+            keybind.setText(Keyboard.getKeyName(mod.getKeybind()));
+
+            ((GuiButton) this.buttonList.get(1)).displayString = "Toggle " + (slot.getMod().isEnabled() ? "Off" : "On");
 
             ((GuiButton) this.buttonList.get(1)).enabled = true;
         } else {
             ((GuiButton) this.buttonList.get(1)).enabled = false;
         }
 
-        String filters = "Custom Filters: '!'";
+        String filters = "Custom Filters: '!', 'k:'";
         mc.fontRendererObj.drawStringWithShadow(filters, width - 105 - (mc.fontRendererObj.getStringWidth(filters) / 2), height - 28, 0xFFFFFFFF);
+
+        mc.fontRendererObj.drawStringWithShadow("Keybind:", width / 2 - 48, height - 80, 0xFFFFFFFF);
 
         mc.fontRendererObj.drawStringWithShadow("Search:", width - 182, height - 62, 0xFFFFFFFF);
         search.drawTextBox();
+        keybind.drawTextBox();
 
         drawCenteredString(mc.fontRendererObj, String.format("Mods: §a%s§f/§c%s§f/§e%s§f", getMods().size(), XIV.getInstance().getModManager().getContents().size() - getMods().size(), XIV.getInstance().getModManager().getContents().size()), width / 2, 2, 0xFFFFFFFF);
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        super.keyTyped(typedChar, keyCode);
-
-        if (!search.isFocused()) {
-            search.setFocused(!search.isFocused());
-        }
-
         search.textboxKeyTyped(typedChar, keyCode);
+
+        if(keybind.isFocused()) {
+            if(slot.getMod() != null) {
+                if(keyCode == Keyboard.KEY_ESCAPE) {
+                    keyCode = Keyboard.KEY_NONE;
+                }
+                slot.getMod().setKeybind(keyCode);
+            }
+        } else {
+            if(keyCode == Keyboard.KEY_ESCAPE) {
+                mc.displayGuiScreen(parent);
+            }
+        }
     }
 
     @Override
@@ -110,6 +132,7 @@ public class GuiModManager extends GuiScreen {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
         search.mouseClicked(mouseX, mouseY, mouseButton);
+        keybind.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
@@ -117,6 +140,7 @@ public class GuiModManager extends GuiScreen {
         super.updateScreen();
 
         search.updateCursorCounter();
+        keybind.updateCursorCounter();
     }
 
     @Override

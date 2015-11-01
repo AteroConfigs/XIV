@@ -34,7 +34,7 @@ public class GuiWaypointManager extends GuiScreen {
             }
             return waypoints.getPoints().stream().filter(waypoint -> waypoint.getName().toLowerCase().contains(search.getText().toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
         } else {
-            return null;
+            return waypoints.getPoints().stream().collect(Collectors.toList());
         }
     }
 
@@ -42,7 +42,7 @@ public class GuiWaypointManager extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        this.slot = new WaypointSlot(this, mc, width, height, 25, height - 98, 58);
+        this.slot = new WaypointSlot(this, mc, width, height, 25, height - 98, 40);
         this.slot.registerScrollButtons(7, 8);
 
         this.buttonList.clear();
@@ -105,13 +105,15 @@ public class GuiWaypointManager extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        super.keyTyped(typedChar, keyCode);
-
         if (!search.isFocused()) {
             search.setFocused(!search.isFocused());
         }
 
         search.textboxKeyTyped(typedChar, keyCode);
+
+        if(keyCode == Keyboard.KEY_ESCAPE) {
+            mc.displayGuiScreen(parent);
+        }
     }
 
     @Override
