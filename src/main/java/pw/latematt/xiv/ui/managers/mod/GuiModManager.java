@@ -94,6 +94,7 @@ public class GuiModManager extends GuiScreen {
 
             ((GuiButton) this.buttonList.get(1)).enabled = true;
         } else {
+            ((GuiButton) this.buttonList.get(1)).displayString = "Toggle";
             ((GuiButton) this.buttonList.get(1)).enabled = false;
         }
 

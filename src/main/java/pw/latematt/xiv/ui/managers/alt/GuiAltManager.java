@@ -26,6 +26,19 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
 
     public List<AltAccount> getAccounts() {
         if (search != null && search.getText().length() > 0) {
+            if(search.getText().startsWith("k:")) {
+                String text = search.getText().substring(2);
+
+                List<AltAccount> accounts = new ArrayList<>();
+
+                for(AltAccount account: XIV.getInstance().getAltManager().getContents()) {
+                    if(account.getKeyword().toLowerCase().startsWith(text.toLowerCase()) && account.getKeyword().length() > 0) {
+                        accounts.add(account);
+                    }
+                }
+
+                return accounts;
+            }
             if (search.getText().startsWith("@")) {
                 String text = search.getText().substring(1);
 
@@ -186,7 +199,7 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
         mc.fontRendererObj.drawStringWithShadow("Keyword:", width - 182, height - 96, 0xFFFFFFFF);
         keyword.drawTextBox();
 
-        String filters = "Custom Filters: '!', '@empty', '@!empty'";
+        String filters = "Custom Filters: '!', '@empty', '@!empty', 'k:'";
         mc.fontRendererObj.drawStringWithShadow(filters, width - 105 - (mc.fontRendererObj.getStringWidth(filters) / 2), height - 28, 0xFFFFFFFF);
 
         mc.fontRendererObj.drawStringWithShadow("Search:", width - 182, height - 62, 0xFFFFFFFF);
