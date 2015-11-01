@@ -29,7 +29,7 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
             if(search.getText().startsWith("k:")) {
                 String text = search.getText().substring(2);
 
-                return XIV.getInstance().getAltManager().getContents().stream().filter(account -> account.getKeyword().toLowerCase().startsWith(text.toLowerCase())).filter(account -> account.getKeyword().length() > 0).collect(Collectors.toCollection(ArrayList::new));
+                return XIV.getInstance().getAltManager().getContents().stream().filter(account -> account.getKeyword().toLowerCase().contains(text.toLowerCase())).filter(account -> account.getKeyword().length() > 0).collect(Collectors.toCollection(ArrayList::new));
             }
             if (search.getText().startsWith("@")) {
                 String text = search.getText().substring(1);
