@@ -99,7 +99,7 @@ public class CommandManager extends ListManager<Command> {
                         ChatLogger.print("Invalid arguments, valid: vclip <blocks>");
                     }
                 }).build();
-        Command.newCommand().cmd("damage").description("Force damage.").aliases("dmg").handler(message -> EntityUtils.damagePlayer(1, 0.056)).build();
+        Command.newCommand().cmd("damage").description("Force damage.").aliases("dmg").handler(message -> EntityUtils.damagePlayer(1, 0.055)).build();
         Command.newCommand().cmd("say").description("Makes you send a chat message.").arguments("<message>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");

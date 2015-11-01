@@ -111,7 +111,7 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
                     if (this.slot.getSelected() != next) {
                         this.slot.setSelected(next);
 
-                        this.actionPerformed(((GuiButton) buttonList.get(1)));
+                        this.actionPerformed(buttonList.get(1));
                     } else {
                         this.actionPerformed(button);
                     }
@@ -152,30 +152,30 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         if (slot.getAlt() == null) {
-            ((GuiButton) buttonList.get(8)).enabled = false;
-            ((GuiButton) buttonList.get(4)).enabled = false;
-            ((GuiButton) buttonList.get(3)).enabled = false;
-            ((GuiButton) buttonList.get(1)).enabled = false;
+            buttonList.get(8).enabled = false;
+            buttonList.get(4).enabled = false;
+            buttonList.get(3).enabled = false;
+            buttonList.get(1).enabled = false;
         } else {
-            ((GuiButton) buttonList.get(8)).enabled = true;
-            ((GuiButton) buttonList.get(4)).enabled = true;
-            ((GuiButton) buttonList.get(3)).enabled = true;
-            ((GuiButton) buttonList.get(1)).enabled = true;
+            buttonList.get(8).enabled = true;
+            buttonList.get(4).enabled = true;
+            buttonList.get(3).enabled = true;
+            buttonList.get(1).enabled = true;
         }
 
         if (slot.getAlt() == null) {
-            ((GuiButton) buttonList.get(5)).enabled = false;
+            buttonList.get(5).enabled = false;
         } else {
             if (keyword.getText().equals("")) {
-                ((GuiButton) buttonList.get(5)).displayString = "x";
-                ((GuiButton) buttonList.get(5)).enabled = !slot.getAlt().getKeyword().equals("");
+                buttonList.get(5).displayString = "x";
+                buttonList.get(5).enabled = !slot.getAlt().getKeyword().equals("");
             } else {
-                ((GuiButton) buttonList.get(5)).displayString = "+";
-                ((GuiButton) buttonList.get(5)).enabled = true;
+                buttonList.get(5).displayString = "+";
+                buttonList.get(5).enabled = true;
             }
         }
-        ((GuiButton) buttonList.get(2)).enabled = !username.getText().equals("") && !password.getText().equals("");
-        ((GuiButton) buttonList.get(7)).enabled = !username.getText().equals("") && !password.getText().equals("") && this.slot.getAlt() != null;
+        buttonList.get(2).enabled = !username.getText().equals("") && !password.getText().equals("");
+        buttonList.get(7).enabled = !username.getText().equals("") && !password.getText().equals("") && this.slot.getAlt() != null;
 
         mc.fontRendererObj.drawStringWithShadow("Username:", 8, height - 96, 0xFFFFFFFF);
         username.drawTextBox();
@@ -192,7 +192,7 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
         mc.fontRendererObj.drawStringWithShadow("Search:", width - 182, height - 62, 0xFFFFFFFF);
         search.drawTextBox();
 
-        drawCenteredString(mc.fontRendererObj, String.format("Accounts: §a%s§f/§c%s§f/§e%s§f", getAccounts().size(), XIV.getInstance().getAltManager().getContents().size() - getAccounts().size(), XIV.getInstance().getAltManager().getContents().size()), width / 2, 2, 0xFFFFFFFF);
+        drawCenteredString(mc.fontRendererObj, String.format("Accounts: \247a%s\247f/\247c%s\247f/\247e%s\247f", getAccounts().size(), XIV.getInstance().getAltManager().getContents().size() - getAccounts().size(), XIV.getInstance().getAltManager().getContents().size()), width / 2, 2, 0xFFFFFFFF);
         drawCenteredString(mc.fontRendererObj, thread == null ? "\247aLogged in as\247r " + mc.getSession().getUsername() : thread.getStatus(), width / 2, 12, 0xFFFFFFFF);
 
     }
@@ -226,9 +226,9 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
 
         if (keyCode == Keyboard.KEY_RETURN) {
             if (keyword.isFocused()) {
-                this.actionPerformed(((GuiButton) buttonList.get(5)));
+                this.actionPerformed(buttonList.get(5));
             } else if (!username.getText().equals("") && !password.getText().equals("")) {
-                this.actionPerformed(((GuiButton) buttonList.get(2)));
+                this.actionPerformed(buttonList.get(2));
             }
         }
     }

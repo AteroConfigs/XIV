@@ -1,10 +1,9 @@
 package pw.latematt.xiv.ui.managers.alt;
 
 /**
- * Created by TehNeon on 9/27/2015.
+ * @author TehNeon
  */
 public class AltAccount {
-
     private String username;
     private String password;
     private String keyword;

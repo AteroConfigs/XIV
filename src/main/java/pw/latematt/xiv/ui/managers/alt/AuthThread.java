@@ -37,7 +37,7 @@ public class AuthThread implements Runnable {
 
     @Override
     public void run() {
-        status = "\247o\247eLogging in...";
+        status = "\247e\247kLogging in...";
         Field session = null;
         for (Field field : Minecraft.class.getDeclaredFields()) {
             if (field.getName().equalsIgnoreCase("session") || field.getType() == Session.class) {
@@ -54,7 +54,7 @@ public class AuthThread implements Runnable {
             Session newSession = new Session(account.getUsername(), "", "", "mojang");
             try {
                 session.set(mc, newSession);
-                if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+                if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
                     account.setKeyword(newSession.getUsername());
                 status = "\247aLogged in as\247r " + newSession.getUsername();
             } catch (IllegalAccessException e) {
@@ -66,7 +66,7 @@ public class AuthThread implements Runnable {
             if (newSession != null) {
                 try {
                     session.set(mc, newSession);
-                    if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
                         account.setKeyword(newSession.getUsername());
                     status = "\247aLogged in as\247r " + newSession.getUsername();
                 } catch (IllegalAccessException e) {
