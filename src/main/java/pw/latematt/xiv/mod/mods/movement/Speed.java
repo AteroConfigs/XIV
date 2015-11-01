@@ -139,21 +139,23 @@ public class Speed extends Mod implements CommandHandler {
                             }
                         }
                         break;
-                    case SANIC:
-                        boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed();
+                    case NEWER:
+                        boolean moving = mc.thePlayer.movementInput.moveForward != 0;
+                        boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+                        moving = moving && strafing || moving;
 
                         if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
                             if (!mc.gameSettings.keyBindJump.getIsKeyPressed() && moving && !mc.thePlayer.isCollidedHorizontally && mc.thePlayer.onGround) {
-                                double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? 0 + (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : 0 + (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
+                                double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
 
                                 mc.thePlayer.motionX += Math.cos(offset) * 0.25F;
                                 mc.thePlayer.motionY = 0.0175F;
                                 mc.thePlayer.motionZ += Math.sin(offset) * 0.25F;
 
-                                mc.timer.timerSpeed = 1.15F;
+                                mc.timer.timerSpeed = 1.125F;
 
                                 nextTick = true;
-                            }else{
+                            } else {
                                 mc.timer.timerSpeed = 1.0F;
                             }
                         }
@@ -171,11 +173,9 @@ public class Speed extends Mod implements CommandHandler {
     private boolean isValid() {
         Step step = (Step) XIV.getInstance().getModManager().find("step");
         boolean editingPackets = step != null && step.isEditingPackets();
-        boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
+        boolean moving = mc.thePlayer.movementInput.moveForward != 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-//        boolean moving = movingForward && strafing || movingForward;
-
-        boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed();
+        moving = moving && strafing || moving;
 
         return mc.thePlayer.onGround &&
                 !BlockUtils.isOnLiquid(mc.thePlayer) &&
@@ -193,8 +193,8 @@ public class Speed extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
-                            case "sanic":
-                                currentMode.setValue(Mode.SANIC);
+                            case "newer":
+                                currentMode.setValue(Mode.NEWER);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "new":
@@ -258,7 +258,7 @@ public class Speed extends Mod implements CommandHandler {
     }
 
     private enum Mode {
-        NEW, OLD, SANIC;
+        NEW, OLD, NEWER;
 
         public String getName() {
             String prettyName = "";
