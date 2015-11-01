@@ -132,7 +132,7 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
         XIV.getInstance().getListenerManager().add(this);
         if (Objects.nonNull(mc.thePlayer)) {
             if (doDamage.getValue() && mc.thePlayer.onGround)
-                EntityUtils.damagePlayer();
+                EntityUtils.damagePlayer(1);
 
             yCap = mc.thePlayer.getEntityBoundingBox().maxY;
         }

@@ -21,7 +21,7 @@ import pw.latematt.xiv.value.Value;
  */
 public class Criticals extends Mod implements Listener<SendPacketEvent>, CommandHandler {
     private final Value<Boolean> bypass = new Value<>("criticals_bypass", false);
-    private final Listener<AttackEntityEvent> listener;
+    private final Listener attackEntityListener;
     private boolean next;
     private float fallDist;
 
@@ -36,7 +36,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
                 .handler(this)
                 .build();
 
-        this.listener = new Listener<AttackEntityEvent>() {
+        attackEntityListener = new Listener<AttackEntityEvent>() {
             @Override
             public void onEventCalled(AttackEntityEvent event) {
                 if (bypass.getValue()) {
@@ -100,7 +100,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(this.listener);
+        XIV.getInstance().getListenerManager().add(attackEntityListener);
         if (mc.thePlayer != null) {
             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
@@ -111,7 +111,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
-        XIV.getInstance().getListenerManager().remove(this);
+        XIV.getInstance().getListenerManager().remove(attackEntityListener);
         fallDist = 0.0F;
         next = false;
     }

@@ -145,10 +145,11 @@ public class EntityUtils {
         return 1.0F;
     }
 
-    public static void damagePlayer() {
+    public static void damagePlayer(int damage) {
         if (MINECRAFT != null && MINECRAFT.thePlayer != null && MINECRAFT.getNetHandler() != null && MINECRAFT.thePlayer.onGround) {
-            for (int i = 0; i <= 81; i++) { // KEEP THIS AT FUCKING 81 CAUSE IT DOESNT FUCKING WORK ON HYPIXEL IF YOU DONT HAVE IT AT 81 YOU FUCKING SHIT FUCK
-                MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY + 0.055D, MINECRAFT.thePlayer.posZ, false));
+            double offset = 0.056;
+            for (int i = 0; i <= ((3 + damage) / offset); i++) { // TODO: teach rederpz (and myself) how math works
+                MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY + offset, MINECRAFT.thePlayer.posZ, false));
                 MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY, MINECRAFT.thePlayer.posZ, false));
             }
         }
