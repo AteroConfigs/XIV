@@ -25,7 +25,7 @@ public class Velocity extends Mod implements CommandHandler {
 
     public Velocity() {
         super("Velocity", ModType.MOVEMENT, Keyboard.KEY_BACKSLASH, 0xFF36454F, true);
-        setTag((reducedVelocity.getValue() * 100) + "%");
+        updateTag();
 
         Command.newCommand()
                 .cmd("velocity")
@@ -103,7 +103,7 @@ public class Velocity extends Mod implements CommandHandler {
                             else if (reducedVelocity.getValue() < reducedVelocity.getMin())
                                 reducedVelocity.setValue(reducedVelocity.getMin());
 
-                            setTag((reducedVelocity.getValue() * 100) + "%");
+                            updateTag();
                             ChatLogger.print(String.format("Velocity Percent set to %s", (reducedVelocity.getValue() * 100F) + "%"));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newVelocityString));
@@ -131,5 +131,15 @@ public class Velocity extends Mod implements CommandHandler {
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(readPacketListener);
         XIV.getInstance().getListenerManager().remove(liquidVelocityListener);
+    }
+
+    public void updateTag() {
+        if(reducedVelocity.getValue() == 0) {
+            setDisplayName("AntiVelocity");
+            setTag("");
+        } else {
+            setDisplayName("");
+            setTag((reducedVelocity.getValue() * 100) + "%");
+        }
     }
 }

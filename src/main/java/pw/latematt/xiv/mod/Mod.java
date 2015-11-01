@@ -10,6 +10,7 @@ public abstract class Mod {
     protected final Minecraft mc = Minecraft.getMinecraft();
     private final String name;
     private String tag;
+    private String displayName;
     private int keybind, color;
     private boolean enabled, visible;
     private ModType type;
@@ -33,10 +34,15 @@ public abstract class Mod {
         this.visible = visible;
         this.type = type;
         tag = "";
+        displayName = "";
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getDisplayName() {
+        return displayName.length() > 0 ? displayName : name;
     }
 
     public String getTag() {
@@ -44,6 +50,10 @@ public abstract class Mod {
             return tag;
         }
         return getName();
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public void setTag(String tag) {

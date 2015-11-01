@@ -18,6 +18,8 @@ public abstract class XIVFile {
         this.extension = extension;
         file = new File(XIV_DIRECTORY + File.separator + name + "." + extension);
 
+        XIV.getInstance().getLogger().info("File \"" + file.getAbsolutePath() + "\" registered as a config file.");
+
         try {
             if ((!file.exists() || file.isDirectory()) && file.createNewFile()) {
                 save();
