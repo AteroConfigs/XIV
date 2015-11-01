@@ -52,10 +52,10 @@ public class Speed extends Mod implements CommandHandler {
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    double speed;
-                    switch (currentMode.getValue()) {
-                        case NEW:
+                double speed;
+                switch (currentMode.getValue()) {
+                    case NEW:
+                        if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
                             speed = 2.37D;
                             if (isValid()) {
                                 if (mc.thePlayer.isPotionActive(Potion.SPEED)) {
@@ -102,8 +102,10 @@ public class Speed extends Mod implements CommandHandler {
                                 mc.timer.timerSpeed = 1.0F;
                                 nextTick = false;
                             }
-                            break;
-                        case OLD:
+                        }
+                        break;
+                    case OLD:
+                        if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
                             if (isValid()) {
                                 speed = 3.0D;
                                 double slow = 1.425D;
@@ -135,8 +137,32 @@ public class Speed extends Mod implements CommandHandler {
                                 mc.thePlayer.motionX *= 0.98D;
                                 mc.thePlayer.motionZ *= 0.98D;
                             }
-                            break;
-                    }
+                        }
+                        break;
+                    case SANIC:
+                        boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed();
+
+                        if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
+                            if (!mc.gameSettings.keyBindJump.getIsKeyPressed() && moving && !mc.thePlayer.isCollidedHorizontally && mc.thePlayer.onGround) {
+                                double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? 0 + (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : 0 + (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
+
+                                mc.thePlayer.motionX += Math.cos(offset) * 0.25F;
+                                mc.thePlayer.motionY = 0.0175F;
+                                mc.thePlayer.motionZ += Math.sin(offset) * 0.25F;
+
+                                mc.timer.timerSpeed = 1.15F;
+
+                                nextTick = true;
+                            }else{
+                                mc.timer.timerSpeed = 1.0F;
+                            }
+                        }
+
+                        if (nextTick && !mc.thePlayer.onGround && !mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isOnLadder()) {
+                            mc.thePlayer.motionY = -0.1F;
+                            nextTick = false;
+                        }
+                        break;
                 }
             }
         };
@@ -147,7 +173,9 @@ public class Speed extends Mod implements CommandHandler {
         boolean editingPackets = step != null && step.isEditingPackets();
         boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-        boolean moving = movingForward && strafing || movingForward;
+//        boolean moving = movingForward && strafing || movingForward;
+
+        boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed();
 
         return mc.thePlayer.onGround &&
                 !BlockUtils.isOnLiquid(mc.thePlayer) &&
@@ -165,6 +193,10 @@ public class Speed extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
+                            case "sanic":
+                                currentMode.setValue(Mode.SANIC);
+                                ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
+                                break;
                             case "new":
                                 currentMode.setValue(Mode.NEW);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
@@ -226,7 +258,7 @@ public class Speed extends Mod implements CommandHandler {
     }
 
     private enum Mode {
-        NEW, OLD;
+        NEW, OLD, SANIC;
 
         public String getName() {
             String prettyName = "";
