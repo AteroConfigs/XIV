@@ -282,7 +282,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         Value<Boolean> showTags = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_show_tags");
         if (organize.getValue())
             Collections.sort(mods, (mod1, mod2) -> {
-                String mod1Name = mod1.getDisplayNam();
+                String mod1Name = mod1.getDisplayName();
                 if (!mod1.getTag().equals("") && showTags.getValue())
                     mod1Name += " \2477" + mod1.getTag();
                 String mod2Name = mod2.getDisplayName();

@@ -135,7 +135,7 @@ public class Velocity extends Mod implements CommandHandler {
 
     public void updateTag() {
         if(reducedVelocity.getValue() == 0) {
-            setDisplayName("AntiVelocity");
+            setDisplayName("NoVelocity");
             setTag("");
         } else {
             setDisplayName("");
