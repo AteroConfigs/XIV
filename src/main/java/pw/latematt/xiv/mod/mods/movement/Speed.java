@@ -140,17 +140,21 @@ public class Speed extends Mod implements CommandHandler {
                         }
                         break;
                     case NEWER:
-                        boolean moving = mc.thePlayer.movementInput.moveForward != 0;
-                        boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-                        moving = moving && strafing || moving;
-
                         if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
-                            if (!mc.gameSettings.keyBindJump.getIsKeyPressed() && moving && !mc.thePlayer.isCollidedHorizontally && mc.thePlayer.onGround) {
+                            if (!mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isCollidedHorizontally && isValid()) {
                                 double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
 
-                                mc.thePlayer.motionX += Math.cos(offset) * 0.25F;
+                                double x = Math.cos(offset) * 0.25F;
+                                double z = Math.sin(offset) * 0.25F;
+
+                                mc.thePlayer.motionX += x;
                                 mc.thePlayer.motionY = 0.0175F;
-                                mc.thePlayer.motionZ += Math.sin(offset) * 0.25F;
+                                mc.thePlayer.motionZ += z;
+
+                                if(mc.thePlayer.movementInput.moveStrafe != 0) {
+                                    mc.thePlayer.motionX *= 0.975F;
+                                    mc.thePlayer.motionZ *= 0.975F;
+                                }
 
                                 mc.timer.timerSpeed = 1.125F;
 
