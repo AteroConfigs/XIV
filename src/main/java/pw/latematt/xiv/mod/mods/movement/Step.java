@@ -48,9 +48,9 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                                 criticals.setFallDistance(criticals.getFallDistance() + 0.0646F);
                         }
                         editPackets = false;
-                    }else if(mode.getValue() == Mode.NEW) {
+                    } else if (mode.getValue() == Mode.NEW) {
                         editPackets = false;
-                        if(mc.thePlayer.isCollidedHorizontally && mc.thePlayer.onGround) {
+                        if (mc.thePlayer.isCollidedHorizontally && mc.thePlayer.onGround) {
                             mc.thePlayer.motionY = 0.37F;
                             mc.thePlayer.isAirBorne = true;
                         }
@@ -70,7 +70,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
 
         if (mc.thePlayer.stepHeight != height.getValue() && mode.getValue() == Mode.OLD) {
             mc.thePlayer.stepHeight = height.getValue();
-        }else if(mode.getValue() == Mode.NEW){
+        } else if (mode.getValue() == Mode.NEW) {
             mc.thePlayer.stepHeight = 0.5F;
         }
 

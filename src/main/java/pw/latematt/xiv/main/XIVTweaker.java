@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @author Matthew
-*/
+ */
 public class XIVTweaker implements ITweaker {
     private List<String> arguments = new ArrayList<>();
 

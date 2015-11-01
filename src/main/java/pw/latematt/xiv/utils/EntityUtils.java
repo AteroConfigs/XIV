@@ -145,9 +145,8 @@ public class EntityUtils {
         return 1.0F;
     }
 
-    public static void damagePlayer(int damage) {
+    public static void damagePlayer(int damage, double offset) {
         if (MINECRAFT != null && MINECRAFT.thePlayer != null && MINECRAFT.getNetHandler() != null && MINECRAFT.thePlayer.onGround) {
-            double offset = 0.056;
             for (int i = 0; i <= ((3 + damage) / offset); i++) { // TODO: teach rederpz (and myself) how math works
                 MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY + offset, MINECRAFT.thePlayer.posZ, false));
                 MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY, MINECRAFT.thePlayer.posZ, false));
