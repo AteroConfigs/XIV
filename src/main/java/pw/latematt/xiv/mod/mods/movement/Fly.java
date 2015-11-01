@@ -40,6 +40,8 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
     public void onEventCalled(MotionUpdateEvent event) {
         double motionY = slowfall.getValue() ? -0.005D : 0;
 
+        mc.thePlayer.isAirBorne = false;
+
         if (cap.getValue() && mc.thePlayer.getEntityBoundingBox().maxY < yCap || !cap.getValue()) {
             if (mc.gameSettings.keyBindJump.getIsKeyPressed())
                 motionY += verticalSpeed.getValue();
