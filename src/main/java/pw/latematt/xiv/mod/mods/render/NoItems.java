@@ -10,6 +10,7 @@ import pw.latematt.xiv.mod.ModType;
  * @author Matthew
  */
 public class NoItems extends Mod implements Listener<ItemRenderEvent> {
+
     public NoItems() {
         super("NoItems", ModType.RENDER);
     }
@@ -17,6 +18,8 @@ public class NoItems extends Mod implements Listener<ItemRenderEvent> {
     @Override
     public void onEventCalled(ItemRenderEvent event) {
         event.setCancelled(true);
+
+        mc.theWorld.removeEntity(event.getItem());
     }
 
     @Override
