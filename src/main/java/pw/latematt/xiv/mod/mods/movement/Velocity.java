@@ -19,7 +19,7 @@ import pw.latematt.xiv.value.Value;
  * @author TehNeon
  */
 public class Velocity extends Mod implements CommandHandler {
-    private final ClampedValue<Float> reducedVelocity = new ClampedValue<>("velocity_reduction", 0.0F, 0.0F, 100.0F);
+    private final ClampedValue<Float> reduction = new ClampedValue<>("velocity_reduction", 0.0F, -150.0F, 150.0F);
     private final Value<Boolean> liquid = new Value<>("velocity_water", true);
     private final Listener readPacketListener, liquidVelocityListener;
 
@@ -43,9 +43,9 @@ public class Velocity extends Mod implements CommandHandler {
 
                     if (mc.thePlayer.getEntityId() == packet.getEntityID()) {
                         event.setCancelled(true);
-                        double velX = packet.getVelocityX() * reducedVelocity.getValue() / 8000;
-                        double velY = packet.getVelocityY() * reducedVelocity.getValue() / 8000;
-                        double velZ = packet.getVelocityZ() * reducedVelocity.getValue() / 8000;
+                        double velX = packet.getVelocityX() * reduction.getValue() / 8000;
+                        double velY = packet.getVelocityY() * reduction.getValue() / 8000;
+                        double velZ = packet.getVelocityZ() * reduction.getValue() / 8000;
 
                         mc.thePlayer.motionX += velX;
                         mc.thePlayer.motionY += velY;
@@ -61,9 +61,9 @@ public class Velocity extends Mod implements CommandHandler {
                 if (liquid.getValue()) {
                     Vec3 velocity = event.getVelocity();
 
-                    double velX = velocity.xCoord * reducedVelocity.getValue() / 8000;
-                    double velY = velocity.yCoord * reducedVelocity.getValue() / 8000;
-                    double velZ = velocity.zCoord * reducedVelocity.getValue() / 8000;
+                    double velX = velocity.xCoord * reduction.getValue() / 8000;
+                    double velY = velocity.yCoord * reduction.getValue() / 8000;
+                    double velZ = velocity.zCoord * reduction.getValue() / 8000;
 
                     event.setVelocity(new Vec3(velX, velY, velZ));
                 }
@@ -96,15 +96,15 @@ public class Velocity extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String newVelocityString = arguments[2];
                         try {
-                            float newPercent = arguments[2].equalsIgnoreCase("-d") ? reducedVelocity.getDefault() : Float.parseFloat(newVelocityString);
-                            reducedVelocity.setValue((newPercent / 100));
-                            if (reducedVelocity.getValue() > reducedVelocity.getMax())
-                                reducedVelocity.setValue(reducedVelocity.getMax());
-                            else if (reducedVelocity.getValue() < reducedVelocity.getMin())
-                                reducedVelocity.setValue(reducedVelocity.getMin());
+                            float newPercent = arguments[2].equalsIgnoreCase("-d") ? reduction.getDefault() : Float.parseFloat(newVelocityString);
+                            reduction.setValue((newPercent / 100));
+                            if (reduction.getValue() > reduction.getMax())
+                                reduction.setValue(reduction.getMax());
+                            else if (reduction.getValue() < reduction.getMin())
+                                reduction.setValue(reduction.getMin());
 
                             updateTag();
-                            ChatLogger.print(String.format("Velocity Percent set to %s", (reducedVelocity.getValue() * 100F) + "%"));
+                            ChatLogger.print(String.format("Velocity Percent set to %s", (reduction.getValue() * 100F) + "%"));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newVelocityString));
                         }
@@ -121,6 +121,16 @@ public class Velocity extends Mod implements CommandHandler {
         }
     }
 
+    public void updateTag() {
+        if (reduction.getValue() == 0) {
+            setDisplayName("NoVelocity");
+            setTag("");
+        } else {
+            setDisplayName(getName());
+            setTag((reduction.getValue() * 100) + "%");
+        }
+    }
+
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(readPacketListener);
@@ -131,15 +141,5 @@ public class Velocity extends Mod implements CommandHandler {
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(readPacketListener);
         XIV.getInstance().getListenerManager().remove(liquidVelocityListener);
-    }
-
-    public void updateTag() {
-        if (reducedVelocity.getValue() == 0) {
-            setDisplayName("NoVelocity");
-            setTag("");
-        } else {
-            setDisplayName(getName());
-            setTag((reducedVelocity.getValue() * 100) + "%");
-        }
     }
 }

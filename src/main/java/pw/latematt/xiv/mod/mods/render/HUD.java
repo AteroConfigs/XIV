@@ -177,12 +177,13 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             GlStateManager.pushMatrix();
             GlStateManager.enableRescaleNormal();
             GlStateManager.disableBlend();
-            RenderHelper.enableStandardItemLighting();
             for (int index = 3; index >= 0; index--) {
                 ItemStack stack = mc.thePlayer.inventory.armorInventory[index];
                 if (stack != null) {
+                    RenderHelper.enableStandardItemLighting();
                     mc.getRenderItem().renderItemAndEffectIntoGUI(stack, width + x, height);
                     mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, width + x, height);
+                    RenderHelper.disableStandardItemLighting();
 
                     GlStateManager.disableDepth();
                     GlStateManager.depthMask(false);
@@ -227,7 +228,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     x += 18;
                 }
             }
-            RenderHelper.disableStandardItemLighting();
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();
         }

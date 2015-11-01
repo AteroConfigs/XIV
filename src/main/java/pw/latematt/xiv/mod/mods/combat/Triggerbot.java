@@ -100,8 +100,6 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
             return false;
         if (!entity.isEntityAlive())
             return false;
-        if (entity.ticksExisted < 20)
-            return false;
         if (!invisible.getValue() && entity.isInvisibleToPlayer(mc.thePlayer))
             return false;
         if (!team.getValue() && entity.getTeam() != null && entity.getTeam().isSameTeam(mc.thePlayer.getTeam()))
@@ -121,7 +119,8 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
     }
 
     public Long getDelay() {
-        return randomDelay.getValue() == 0 ? delay.getValue() : Long.valueOf(delay.getValue() + random.nextInt(randomDelay.getValue().intValue()));
+        long difference = delay.getValue() - random.nextInt(randomDelay.getValue().intValue());
+        return randomDelay.getValue() == 0 ? delay.getValue() : difference;
     }
 
     @Override

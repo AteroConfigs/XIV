@@ -42,6 +42,7 @@ public class KillAura extends Mod implements CommandHandler {
     public final ClampedValue<Long> randomDelay = new ClampedValue<>("killaura_random_delay", 0L, 0L, 1000L);
     public final ClampedValue<Double> range = new ClampedValue<>("killaura_range", 3.8D, 3.0D, 6.0D);
     public final ClampedValue<Integer> fov = new ClampedValue<>("killaura_fov", 360, 0, 360);
+    public final ClampedValue<Integer> ticksToWait = new ClampedValue<>("killaura_ticks_to_wait", 20, 0, 1000);
     private final Value<Boolean> players = new Value<>("killaura_players", true);
     private final Value<Boolean> mobs = new Value<>("killaura_mobs", false);
     private final Value<Boolean> animals = new Value<>("killaura_animals", false);
@@ -53,8 +54,11 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> toggleDeath = new Value<>("killaura_toggle_death", false);
     public final Value<Boolean> autoBlock = new Value<>("killaura_auto_block", false);
     public final Value<Boolean> weaponOnly = new Value<>("killaura_weapon_only", false);
-    private final Value<AuraMode> mode = new Value<>("killaura_mode", new Singular(this));
     private final Random random = new Random();
+    private final Singular singular = new Singular(this);
+    private final Switch aSwitch = new Switch(this);
+    private final Multi multi = new Multi(this);
+    private final Value<AuraMode> mode = new Value<>("killaura_mode", singular);
 
     public KillAura() {
         super("Kill Aura", ModType.COMBAT, Keyboard.KEY_R, 0xFFC6172B);
@@ -91,9 +95,8 @@ public class KillAura extends Mod implements CommandHandler {
         playerDeathListener = new Listener<PlayerDeathEvent>() {
             @Override
             public void onEventCalled(PlayerDeathEvent event) {
-                if (toggleDeath.getValue()) {
+                if (toggleDeath.getValue())
                     toggle();
-                }
             }
         };
 
@@ -140,7 +143,7 @@ public class KillAura extends Mod implements CommandHandler {
             return false;
         if (!entity.isEntityAlive())
             return false;
-        if (entity.ticksExisted < 20)
+        if (entity.ticksExisted < ticksToWait.getValue())
             return false;
         if (EntityUtils.getReference().getDistanceToEntity(entity) > range.getValue())
             return false;
@@ -249,6 +252,26 @@ public class KillAura extends Mod implements CommandHandler {
                         ChatLogger.print("Invalid arguments, valid: killaura aps <number>");
                     }
                     break;
+                case "range":
+                case "r":
+                    if (arguments.length >= 3) {
+                        String newRangeString = arguments[2];
+                        try {
+                            double newRange = arguments[2].equalsIgnoreCase("-d") ? range.getDefault() : Double.parseDouble(newRangeString);
+                            range.setValue(newRange);
+                            if (range.getValue() > range.getMax())
+                                range.setValue(range.getMax());
+                            else if (range.getValue() < range.getMin())
+                                range.setValue(range.getMin());
+
+                            ChatLogger.print(String.format("Kill Aura Range set to %s", range.getValue()));
+                        } catch (NumberFormatException e) {
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newRangeString));
+                        }
+                    } else {
+                        ChatLogger.print("Invalid arguments, valid: killaura range <number>");
+                    }
+                    break;
                 case "fov":
                     if (arguments.length >= 3) {
                         String newFOVString = arguments[2];
@@ -268,24 +291,24 @@ public class KillAura extends Mod implements CommandHandler {
                         ChatLogger.print("Invalid arguments, valid: killaura fov <number>");
                     }
                     break;
-                case "range":
-                case "r":
+                case "tickstowait":
+                case "ticks":
                     if (arguments.length >= 3) {
-                        String newRangeString = arguments[2];
+                        String newTicksString = arguments[2];
                         try {
-                            double newRange = arguments[2].equalsIgnoreCase("-d") ? range.getDefault() : Double.parseDouble(newRangeString);
-                            range.setValue(newRange);
-                            if (range.getValue() > range.getMax())
-                                range.setValue(range.getMax());
-                            else if (range.getValue() < range.getMin())
-                                range.setValue(range.getMin());
+                            int newTicks = arguments[2].equalsIgnoreCase("-d") ? ticksToWait.getDefault() : Integer.parseInt(newTicksString);
+                            ticksToWait.setValue(newTicks);
+                            if (ticksToWait.getValue() > ticksToWait.getMax())
+                                ticksToWait.setValue(ticksToWait.getMax());
+                            else if (range.getValue() < ticksToWait.getMin())
+                                ticksToWait.setValue(ticksToWait.getMin());
 
-                            ChatLogger.print(String.format("Kill Aura Range set to %s", range.getValue()));
+                            ChatLogger.print(String.format("Kill Aura Ticks to Wait set to %s", ticksToWait.getValue()));
                         } catch (NumberFormatException e) {
-                            ChatLogger.print(String.format("\"%s\" is not a number.", newRangeString));
+                            ChatLogger.print(String.format("\"%s\" is not a number.", newTicksString));
                         }
                     } else {
-                        ChatLogger.print("Invalid arguments, valid: killaura range <number>");
+                        ChatLogger.print("Invalid arguments, valid: killaura tickstowait <number>");
                     }
                     break;
                 case "friends":
@@ -433,15 +456,15 @@ public class KillAura extends Mod implements CommandHandler {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
                             case "singular":
-                                this.mode.setValue(new Singular(this));
+                                this.mode.setValue(singular);
                                 ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
                                 break;
                             case "switch":
-                                this.mode.setValue(new Switch(this));
+                                this.mode.setValue(aSwitch);
                                 ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
                                 break;
                             case "multi":
-                                this.mode.setValue(new Multi(this));
+                                this.mode.setValue(multi);
                                 ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
                                 break;
                             case "-d":
@@ -458,7 +481,7 @@ public class KillAura extends Mod implements CommandHandler {
                     }
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, randomdelay, aps, range, players, mobs, animals, invisible, team, silent, autosword, autoblock, weapononly, mode");
+                    ChatLogger.print("Invalid action, valid: delay, randomdelay, aps, range, fov, tickstowait players, mobs, animals, invisible, team, silent, autosword, autoblock, weapononly, mode");
                     break;
             }
         } else {

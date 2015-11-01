@@ -12,7 +12,6 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.MoveEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.mod.mods.combat.Criticals;
 import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
@@ -23,7 +22,7 @@ import pw.latematt.xiv.value.Value;
  */
 public class Speed extends Mod implements CommandHandler {
     private final Value<Boolean> fastLadder = new Value<>("speed_fast_ladder", true);
-    private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.NEW);
+    private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.CASPER);
     private final Listener motionUpdateListener, moveListener;
     private boolean nextTick;
     private int ticks;
@@ -52,10 +51,40 @@ public class Speed extends Mod implements CommandHandler {
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    double speed;
-                    switch (currentMode.getValue()) {
-                        case NEW:
+                double speed;
+                switch (currentMode.getValue()) {
+                    case FAST:
+                        if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
+                            if (!mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isCollidedHorizontally && isValid()) {
+                                double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
+
+                                double x = Math.cos(offset) * 0.25F;
+                                double z = Math.sin(offset) * 0.25F;
+
+                                mc.thePlayer.motionX += x;
+                                mc.thePlayer.motionY = 0.0175F;
+                                mc.thePlayer.motionZ += z;
+
+                                if (mc.thePlayer.movementInput.moveStrafe != 0) {
+                                    mc.thePlayer.motionX *= 0.975F;
+                                    mc.thePlayer.motionZ *= 0.975F;
+                                }
+
+                                mc.timer.timerSpeed = 1.125F;
+
+                                nextTick = true;
+                            } else {
+                                mc.timer.timerSpeed = 1.0F;
+                            }
+                        }
+
+                        if (nextTick && !mc.thePlayer.onGround && !mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isOnLadder()) {
+                            mc.thePlayer.motionY = -0.1F;
+                            nextTick = false;
+                        }
+                        break;
+                    case CASPER:
+                        if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
                             speed = 2.37D;
                             if (isValid()) {
                                 if (mc.thePlayer.isPotionActive(Potion.SPEED)) {
@@ -86,11 +115,6 @@ public class Speed extends Mod implements CommandHandler {
                                     mc.thePlayer.motionX *= speed;
                                     mc.thePlayer.motionZ *= speed;
                                     mc.timer.timerSpeed = 1.15F;
-                                    event.setY(event.getY() + 0.0001D);
-
-                                    Criticals criticals = (Criticals) XIV.getInstance().getModManager().find("criticals");
-                                    if (criticals != null && criticals.isEnabled())
-                                        criticals.setFallDistance(criticals.getFallDistance() + 0.0001F);
                                 } else {
                                     mc.thePlayer.motionX /= 1.50D;
                                     mc.thePlayer.motionZ /= 1.50D;
@@ -102,8 +126,10 @@ public class Speed extends Mod implements CommandHandler {
                                 mc.timer.timerSpeed = 1.0F;
                                 nextTick = false;
                             }
-                            break;
-                        case OLD:
+                        }
+                        break;
+                    case OLD:
+                        if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
                             if (isValid()) {
                                 speed = 3.0D;
                                 double slow = 1.425D;
@@ -135,8 +161,8 @@ public class Speed extends Mod implements CommandHandler {
                                 mc.thePlayer.motionX *= 0.98D;
                                 mc.thePlayer.motionZ *= 0.98D;
                             }
-                            break;
-                    }
+                        }
+                        break;
                 }
             }
         };
@@ -145,9 +171,9 @@ public class Speed extends Mod implements CommandHandler {
     private boolean isValid() {
         Step step = (Step) XIV.getInstance().getModManager().find("step");
         boolean editingPackets = step != null && step.isEditingPackets();
-        boolean movingForward = mc.thePlayer.movementInput.moveForward > 0;
+        boolean moving = mc.thePlayer.movementInput.moveForward != 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-        boolean moving = movingForward && strafing || movingForward;
+        moving = moving && strafing || moving;
 
         return mc.thePlayer.onGround &&
                 !BlockUtils.isOnLiquid(mc.thePlayer) &&
@@ -165,8 +191,12 @@ public class Speed extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
+                            case "fast":
+                                currentMode.setValue(Mode.FAST);
+                                ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
+                                break;
                             case "new":
-                                currentMode.setValue(Mode.NEW);
+                                currentMode.setValue(Mode.CASPER);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "old":
@@ -178,7 +208,7 @@ public class Speed extends Mod implements CommandHandler {
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: new, old");
+                                ChatLogger.print("Invalid mode, valid: fast, casper, old");
                                 break;
                         }
                         setTag(currentMode.getValue().getName());
@@ -226,7 +256,7 @@ public class Speed extends Mod implements CommandHandler {
     }
 
     private enum Mode {
-        NEW, OLD;
+        FAST, CASPER, OLD;
 
         public String getName() {
             String prettyName = "";
