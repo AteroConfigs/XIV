@@ -45,9 +45,8 @@ public class AuthThread implements Runnable {
             }
         }
 
-        if (session == null) {
+        if (session == null)
             session = Minecraft.class.getDeclaredFields()[28];
-        }
 
         session.setAccessible(true);
 
@@ -55,6 +54,8 @@ public class AuthThread implements Runnable {
             Session newSession = new Session(account.getUsername(), "", "", "mojang");
             try {
                 session.set(mc, newSession);
+                if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+                    account.setKeyword(newSession.getUsername());
                 status = "\247aLogged in as\247r " + newSession.getUsername();
             } catch (IllegalAccessException e) {
                 XIV.getInstance().getLogger().warn("Failed to set session for alt login, a stacktrace has been printed.");
@@ -64,10 +65,9 @@ public class AuthThread implements Runnable {
             Session newSession = createSession(account.getUsername(), account.getPassword());
             if (newSession != null) {
                 try {
-                    if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-                        account.setKeyword(newSession.getUsername());
-                    }
                     session.set(mc, newSession);
+                    if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+                        account.setKeyword(newSession.getUsername());
                     status = "\247aLogged in as\247r " + newSession.getUsername();
                 } catch (IllegalAccessException e) {
                     XIV.getInstance().getLogger().warn("Failed to set session for alt login, a stacktrace has been printed.");
