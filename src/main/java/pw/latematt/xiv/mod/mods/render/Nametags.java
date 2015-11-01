@@ -182,7 +182,6 @@ public class Nametags extends Mod implements CommandHandler {
             int offset = var18 - (items.size() - 1) * 9 - 9;
             int xPos = 0;
             for (ItemStack stack : items) {
-                NBTTagList enchants = stack.getEnchantmentTagList();
                 GlStateManager.pushMatrix();
                 RenderHelper.enableStandardItemLighting();
                 mc.getRenderItem().zLevel = -100.0F;
@@ -202,28 +201,32 @@ public class Nametags extends Mod implements CommandHandler {
                 GlStateManager.scale(0.50F, 0.50F, 0.50F);
                 if (stack.getItem() == Items.golden_apple && stack.hasEffect()) {
                     mc.fontRendererObj.drawStringWithShadow("god", (-var18 + offset + xPos) * 2, (var17 - 20) * 2, 0xFFFF0000);
-                } else if (enchants != null) {
-                    int encY = 0;
-                    Enchantment[] important = new Enchantment[]{Enchantment.PROTECTION, Enchantment.UNBREAKING, Enchantment.SHARPNESS, Enchantment.FIRE_ASPECT, Enchantment.EFFICIENCY, Enchantment.FEATHER_FALLING, Enchantment.POWER, Enchantment.FLAME, Enchantment.PUNCH, Enchantment.FORTUNE, Enchantment.INFINITY, Enchantment.THORNS};
-                    if (enchants.tagCount() >= 6) {
-                        mc.fontRendererObj.drawStringWithShadow("god", (-var18 + offset + xPos) * 2, (var17 - 20) * 2, 0xFFFF0000);
-                    } else {
-                        for (int index = 0; index < enchants.tagCount(); ++index) {
-                            short id = enchants.getCompoundTagAt(index).getShort("id");
-                            short level = enchants.getCompoundTagAt(index).getShort("lvl");
-                            Enchantment enc = Enchantment.func_180306_c(id);
-                            if (enc != null) {
-                                for (Enchantment importantEnchantment : important) {
-                                    if (enc == importantEnchantment) {
-                                        String encName = enc.getTranslatedName(level).substring(0, 1).toLowerCase();
-                                        if (level > 99) {
-                                            encName = encName + "99+";
-                                        } else {
-                                            encName = encName + level;
+                } else {
+                    NBTTagList enchants = stack.getEnchantmentTagList();
+
+                    if (enchants != null) {
+                        int encY = 0;
+                        Enchantment[] important = new Enchantment[]{Enchantment.PROTECTION, Enchantment.UNBREAKING, Enchantment.SHARPNESS, Enchantment.FIRE_ASPECT, Enchantment.EFFICIENCY, Enchantment.FEATHER_FALLING, Enchantment.POWER, Enchantment.FLAME, Enchantment.PUNCH, Enchantment.FORTUNE, Enchantment.INFINITY, Enchantment.THORNS};
+                        if (enchants.tagCount() >= 6) {
+                            mc.fontRendererObj.drawStringWithShadow("god", (-var18 + offset + xPos) * 2, (var17 - 20) * 2, 0xFFFF0000);
+                        } else {
+                            for (int index = 0; index < enchants.tagCount(); ++index) {
+                                short id = enchants.getCompoundTagAt(index).getShort("id");
+                                short level = enchants.getCompoundTagAt(index).getShort("lvl");
+                                Enchantment enc = Enchantment.func_180306_c(id);
+                                if (enc != null) {
+                                    for (Enchantment importantEnchantment : important) {
+                                        if (enc == importantEnchantment) {
+                                            String encName = enc.getTranslatedName(level).substring(0, 1).toLowerCase();
+                                            if (level > 99) {
+                                                encName = encName + "99+";
+                                            } else {
+                                                encName = encName + level;
+                                            }
+                                            mc.fontRendererObj.drawStringWithShadow(encName, (-var18 + offset + xPos) * 2, (var17 - 20 + encY) * 2, 0xFFAAAAAA);
+                                            encY += 5;
+                                            break;
                                         }
-                                        mc.fontRendererObj.drawStringWithShadow(encName, (-var18 + offset + xPos) * 2, (var17 - 20 + encY) * 2, 0xFFAAAAAA);
-                                        encY += 5;
-                                        break;
                                     }
                                 }
                             }

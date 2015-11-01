@@ -1,12 +1,16 @@
 package pw.latematt.xiv.management.managers;
 
+import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Cancellable;
 import pw.latematt.xiv.event.Event;
 import pw.latematt.xiv.event.Listener;
+import pw.latematt.xiv.event.events.WorldBobbingEvent;
 import pw.latematt.xiv.management.ListManager;
+import pw.latematt.xiv.value.Value;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -17,6 +21,20 @@ public class ListenerManager extends ListManager<Listener> implements Cancellabl
 
     public ListenerManager() {
         super(new CopyOnWriteArrayList<>());
+    }
+
+    @Override
+    public void setup() {
+        XIV.getInstance().getLogger().info(String.format("Starting to setup %s.", getClass().getSimpleName()));
+        add(new Listener<WorldBobbingEvent>() {
+            public void onEventCalled(WorldBobbingEvent event) {
+                Value<Boolean> worldBobbing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_world_bobbing");
+                if (!Objects.isNull(worldBobbing)) {
+                    event.setCancelled(!worldBobbing.getValue());
+                }
+            }
+        });
+        XIV.getInstance().getLogger().info(String.format("Successfully setup %s.", getClass().getSimpleName()));
     }
 
     public void add(Listener listener) {

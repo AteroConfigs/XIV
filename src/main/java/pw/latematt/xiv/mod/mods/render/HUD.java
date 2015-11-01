@@ -9,8 +9,11 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.boss.BossStatus;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -156,7 +159,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         }
 
         /* NahrFont example/testing
-        if (font == null) // it will always be at this point, this must happen since the currnet thread won't have opengl context if done in the constructor.
+        if (font == null) // it will always be at this point, this must happen since the current thread won't have opengl context if done in the constructor.
             font = new NahrFont("Verdana", 18);
         font.drawString("\247gTesting Custom Colors", 2, 12, 0xFFFFFFFF, 0xFF000000);*/
 
@@ -165,18 +168,62 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
 
     private void drawArmor(ScaledResolution scaledResolution) {
         if (mc.playerController.isNotCreative()) {
-            int x = 15;
+            int x = 14;
+            int width = scaledResolution.getScaledWidth() / 2;
+            int height = scaledResolution.getScaledHeight() -
+                    (mc.thePlayer.isInsideOfMaterial(Material.water) ?
+                            mc.thePlayer.getActivePotionEffect(Potion.ABSORPTION) != null ? 75 : 65 : 55);
 
             GlStateManager.pushMatrix();
             GlStateManager.enableRescaleNormal();
             GlStateManager.disableBlend();
             RenderHelper.enableStandardItemLighting();
             for (int index = 3; index >= 0; index--) {
-                final ItemStack stack = mc.thePlayer.inventory.armorInventory[index];
+                ItemStack stack = mc.thePlayer.inventory.armorInventory[index];
                 if (stack != null) {
-                    int height = scaledResolution.getScaledHeight() - (mc.thePlayer.isInsideOfMaterial(Material.water) ? mc.thePlayer.getActivePotionEffect(Potion.ABSORPTION) != null ? 75 : 65 : 55);
-                    mc.getRenderItem().renderItemAndEffectIntoGUI(stack, scaledResolution.getScaledWidth() / 2 + x, height);
-                    mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, scaledResolution.getScaledWidth() / 2 + x, height);
+                    mc.getRenderItem().renderItemAndEffectIntoGUI(stack, width + x, height);
+                    mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, width + x, height);
+
+                    GlStateManager.disableDepth();
+                    GlStateManager.depthMask(false);
+                    GlStateManager.scale(0.50F, 0.50F, 0.50F);
+                    if (stack.getItem() == Items.golden_apple && stack.hasEffect()) {
+                        mc.fontRendererObj.drawStringWithShadow("god", (width + x) * 2, height * 2, 0xFFFF0000);
+                    } else {
+                        NBTTagList enchants = stack.getEnchantmentTagList();
+                        if (enchants != null) {
+                            int encY = 0;
+                            Enchantment[] important = new Enchantment[]{Enchantment.PROTECTION, Enchantment.UNBREAKING, Enchantment.SHARPNESS, Enchantment.FIRE_ASPECT, Enchantment.EFFICIENCY, Enchantment.FEATHER_FALLING, Enchantment.POWER, Enchantment.FLAME, Enchantment.PUNCH, Enchantment.FORTUNE, Enchantment.INFINITY, Enchantment.THORNS};
+                            if (enchants.tagCount() >= 6) {
+                                mc.fontRendererObj.drawStringWithShadow("god", (width + x) * 2, height * 2, 0xFFFF0000);
+                            } else {
+                                for (int index1 = 0; index1 < enchants.tagCount(); ++index1) {
+                                    short id = enchants.getCompoundTagAt(index1).getShort("id");
+                                    short level = enchants.getCompoundTagAt(index1).getShort("lvl");
+                                    Enchantment enc = Enchantment.func_180306_c(id);
+                                    if (enc != null) {
+                                        for (Enchantment importantEnchantment : important) {
+                                            if (enc == importantEnchantment) {
+                                                String encName = enc.getTranslatedName(level).substring(0, 1).toLowerCase();
+                                                if (level > 99) {
+                                                    encName = encName + "99+";
+                                                } else {
+                                                    encName = encName + level;
+                                                }
+                                                mc.fontRendererObj.drawStringWithShadow(encName, (width + x) * 2, (height + encY) * 2, 0xFFAAAAAA);
+                                                encY += 5;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    GlStateManager.depthMask(true);
+                    GlStateManager.enableDepth();
+                    GlStateManager.scale(2.0F, 2.0F, 2.0F);
+
                     x += 18;
                 }
             }
@@ -212,10 +259,15 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             int var2 = var1 / 60;
             var1 %= 60;
             char color = '7';
-            if (var2 == 0 && var1 <= 10)
-                color = 'c';
             if (var2 == 0 && var1 <= 5)
                 color = '4';
+            else if (var2 == 0 && var1 <= 10)
+                color = 'c';
+            else if (var2 == 0 && var1 <= 15)
+                color = '6';
+            else if (var2 == 0 && var1 <= 20)
+                color = 'e';
+
             name = String.format("%s \2477(\247%s%s\2477)", name, color, Potion.getDurationString(effect));
             mc.fontRendererObj.drawStringWithShadow(name, x - mc.fontRendererObj.getStringWidth(name), y, Potion.potionTypes[effect.getPotionID()].getLiquidColor());
             y -= 10;
@@ -230,9 +282,10 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         if (organize.getValue())
             Collections.sort(mods, (mod1, mod2) -> mc.fontRendererObj.getStringWidth(mod1.getTag()) > mc.fontRendererObj.getStringWidth(mod2.getTag()) ? -1 : mc.fontRendererObj.getStringWidth(mod2.getTag()) > mc.fontRendererObj.getStringWidth(mod1.getTag()) ? 1 : 0);
 
+        Value<Boolean> showTags = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_show_tags");
         for (Mod mod : mods) {
             String name = mod.getName();
-            if (!mod.getTag().equals(""))
+            if (!mod.getTag().equals("") && showTags.getValue())
                 name += " \2477" + mod.getTag();
             mc.fontRendererObj.drawStringWithShadow(name, x - mc.fontRendererObj.getStringWidth(name), y, mod.getColor());
             y += 10;

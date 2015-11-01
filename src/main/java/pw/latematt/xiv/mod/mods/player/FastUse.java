@@ -1,6 +1,5 @@
 package pw.latematt.xiv.mod.mods.player;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.*;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;

@@ -10,6 +10,8 @@ import pw.latematt.xiv.event.events.ReadPacketEvent;
 import pw.latematt.xiv.utils.ChatLogger;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Matthew
@@ -27,23 +29,23 @@ public class PluginFinder implements Listener<ReadPacketEvent>, CommandHandler {
             S3APacketTabComplete packet = (S3APacketTabComplete) event.getPacket();
             event.setCancelled(true);
 
-            ArrayList<String> plugins = new ArrayList<>();
+            List<String> plugins = new ArrayList<>();
             for (String cmd : packet.func_149630_c()) {
                 String[] arguments = cmd.split(":");
-                if (arguments.length > 1 && !plugins.contains(arguments[0].substring(1))) {
+                if (arguments.length > 1 && !arguments[0].substring(1).equals("") && !plugins.contains(arguments[0].substring(1))) {
                     plugins.add(arguments[0].substring(1));
                 }
             }
 
-            StringBuilder builder = new StringBuilder();
-            plugins.stream()
+            plugins = plugins.stream()
                     .filter(plugin -> !plugin.equalsIgnoreCase("minecraft"))
                     .filter(plugin -> !plugin.equalsIgnoreCase("bukkit"))
-                    .filter(plugin -> !plugin.equalsIgnoreCase("spigot"))
-                    .forEach(plugin -> builder.append(plugin).append(", "));
+                    .filter(plugin -> !plugin.equalsIgnoreCase("spigot")).collect(Collectors.toList());
 
+            StringBuilder builder = new StringBuilder("Plugins (" + plugins.size() + "): ");
+            plugins.forEach(plugin -> builder.append(plugin).append(", "));
             if (plugins.size() > 0 && !builder.toString().equals("")) {
-                ChatLogger.print("Plugins (" + plugins.size() + "): " + builder.toString().substring(0, builder.toString().length() - 2));
+                ChatLogger.print(builder.toString().substring(0, builder.toString().length() - 2));
             } else {
                 ChatLogger.print("Unable to find plugins, or the server has none.");
             }

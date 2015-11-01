@@ -9,6 +9,7 @@ import pw.latematt.xiv.event.Event;
 public class ItemRenderEvent extends Event implements Cancellable {
     private boolean cancelled;
     private final State state;
+
     public ItemRenderEvent(State state) {
         this.state = state;
     }

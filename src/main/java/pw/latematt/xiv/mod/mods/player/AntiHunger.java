@@ -4,12 +4,9 @@ import net.minecraft.network.play.client.C03PacketPlayer;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-
-import java.util.Objects;
 
 /**
  * @author Jack
@@ -23,8 +20,8 @@ public final class AntiHunger extends Mod implements Listener<SendPacketEvent> {
     public void onEventCalled(SendPacketEvent event) {
         if (event.getPacket() instanceof C03PacketPlayer) {
             C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-            if (!mc.playerController.isHittingBlock)
-                player.setOnGround(!player.isOnGround());
+            if (mc.thePlayer.posY == mc.thePlayer.lastTickPosY && !mc.playerController.isHittingBlock)
+                player.setOnGround(false);
         }
     }
 
