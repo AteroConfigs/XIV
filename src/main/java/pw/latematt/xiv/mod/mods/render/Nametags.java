@@ -81,7 +81,7 @@ public class Nametags extends Mod implements CommandHandler {
     public void drawNametags(EntityLivingBase entity, double x, double y, double z) {
         String entityName = entity.getDisplayName().getFormattedText();
 
-        if (XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
+        if (XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName()) || XIV.getInstance().getAdminManager().isAdmin(entity.getCommandSenderEntity().getName())) {
             RenderStringEvent event = new RenderStringEvent(entityName, RenderStringEvent.State.NAMETAG);
             XIV.getInstance().getListenerManager().call(event);
             entityName = event.getString();
@@ -245,6 +245,8 @@ public class Nametags extends Mod implements CommandHandler {
         int color = 0xFFFFFFFF;
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = 0xFF4DB3FF;
+        }else if (entity instanceof EntityPlayer && XIV.getInstance().getAdminManager().isAdmin(entity.getCommandSenderEntity().getName())) {
+            color = 0xFFFF00FF;
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
             color = 0xFFFFE600;
         } else if (entity.isSneaking()) {

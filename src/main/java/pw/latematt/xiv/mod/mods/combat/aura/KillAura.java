@@ -49,6 +49,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> invisible = new Value<>("killaura_invisible", false);
     private final Value<Boolean> team = new Value<>("killaura_team", true);
     private final Value<Boolean> friends = new Value<>("killaura_friends", false);
+    private final Value<Boolean> admins = new Value<>("killaura_admins", false);
     public final Value<Boolean> silent = new Value<>("killaura_silent", true);
     public final Value<Boolean> autoSword = new Value<>("killaura_auto_sword", true);
     private final Value<Boolean> toggleDeath = new Value<>("killaura_toggle_death", false);
@@ -148,6 +149,10 @@ public class KillAura extends Mod implements CommandHandler {
         if (entity instanceof EntityPlayer) {
             if (!friends.getValue() && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName()))
                 return false;
+
+            if (!admins.getValue() && XIV.getInstance().getAdminManager().isAdmin(entity.getCommandSenderEntity().getName()))
+                return false;
+
             return players.getValue();
         } else if (entity instanceof IAnimals && !(entity instanceof IMob)) {
             if (entity instanceof EntityHorse) {
@@ -316,6 +321,19 @@ public class KillAura extends Mod implements CommandHandler {
                         friends.setValue(!friends.getValue());
                     }
                     ChatLogger.print(String.format("Kill Aura will %s attack friends.", (friends.getValue() ? "now" : "no longer")));
+                    break;
+                case "admins":
+                case "admns":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            admins.setValue(admins.getDefault());
+                        } else {
+                            admins.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        admins.setValue(!admins.getValue());
+                    }
+                    ChatLogger.print(String.format("Kill Aura will %s attack admins.", (admins.getValue() ? "now" : "no longer")));
                     break;
                 case "players":
                 case "plyrs":

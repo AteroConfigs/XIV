@@ -62,7 +62,16 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
             return;
         if (Objects.equals(event.getState(), RenderStringEvent.State.NAMETAG) && !nametag.getValue())
             return;
-        event.setString(XIV.getInstance().getFriendManager().replace(event.getString(), !Objects.equals(event.getState(), RenderStringEvent.State.NAMETAG)));
+        event.setString(protect(event.getString(), !Objects.equals(event.getState(), RenderStringEvent.State.NAMETAG)));
+    }
+
+    public String protect(String string, boolean color) {
+        String newString = string;
+
+        newString = XIV.getInstance().getFriendManager().replace(newString, color);
+        newString = XIV.getInstance().getAdminManager().replace(newString, color);
+
+        return newString;
     }
 
     @Override
