@@ -247,6 +247,9 @@ public class CommandManager extends ListManager<Command> {
                     if (XIV.getInstance().getFriendManager().isFriend(mcname)) {
                         String alias = XIV.getInstance().getFriendManager().getContents().get(mcname);
                         message = message.replaceAll("(?i)" + Matcher.quoteReplacement("-" + alias), mcname);
+                    }else if (XIV.getInstance().getAdminManager().isAdmin(mcname)) {
+                        String alias = XIV.getInstance().getAdminManager().getContents().get(mcname);
+                        message = message.replaceAll("(?i)" + Matcher.quoteReplacement("-" + alias), mcname);
                     }
                 }
             }

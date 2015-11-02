@@ -30,6 +30,9 @@ public class DashNames extends Mod implements Listener<SendPacketEvent> {
                 if (XIV.getInstance().getFriendManager().isFriend(mcName)) {
                     String alias = XIV.getInstance().getFriendManager().getContents().get(mcName);
                     message.setMessage(message.getMessage().replaceAll("(?i)" + Matcher.quoteReplacement("-" + alias), mcName));
+                }else if (XIV.getInstance().getAdminManager().isAdmin(mcName)) {
+                    String alias = XIV.getInstance().getAdminManager().getContents().get(mcName);
+                    message.setMessage(message.getMessage().replaceAll("(?i)" + Matcher.quoteReplacement("-" + alias), mcName));
                 }
             }
         }

@@ -139,6 +139,8 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         float[] color = new float[]{0.0F, 0.9F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.3F, 0.7F, 1.0F};
+        } else if (entity instanceof EntityPlayer && XIV.getInstance().getAdminManager().isAdmin(entity.getCommandSenderEntity().getName())) {
+            color = new float[]{1.0F, 0.0F, 1.0F};
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
             color = new float[]{1.0F, 0.9F, 0.0F};
         } else if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).hurtTime > 0) {
@@ -157,7 +159,9 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
         float[] color = new float[]{0.0F, 0.90F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
-            color = new float[]{0.30F, 0.7F, 1.0F};
+            color = new float[]{0.3F, 0.7F, 1.0F};
+        } else if (entity instanceof EntityPlayer && XIV.getInstance().getAdminManager().isAdmin(entity.getCommandSenderEntity().getName())) {
+            color = new float[]{1.0F, 0.0F, 1.0F};
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
             color = new float[]{1.0F, 0.9F, 0.0F};
         } else if (distance <= 64.0F) {
@@ -178,6 +182,8 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         float[] color = new float[]{0.0F, 0.90F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.30F, 0.7F, 1.0F};
+        } else if (entity instanceof EntityPlayer && XIV.getInstance().getAdminManager().isAdmin(entity.getCommandSenderEntity().getName())) {
+            color = new float[]{1.0F, 0.0F, 1.0F};
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
             color = new float[]{1.0F, 0.9F, 0.0F};
         } else if (distance <= 64.0F) {
@@ -228,6 +234,8 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         float[] color = new float[]{0.0F, 0.9F, 0.0F};
         if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName())) {
             color = new float[]{0.3F, 0.7F, 1.0F};
+        } else if (entity instanceof EntityPlayer && XIV.getInstance().getAdminManager().isAdmin(entity.getCommandSenderEntity().getName())) {
+            color = new float[]{1.0F, 0.0F, 1.0F};
         } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
             color = new float[]{1.0F, 0.9F, 0.0F};
         } else if (entity.hurtTime > 0) {
