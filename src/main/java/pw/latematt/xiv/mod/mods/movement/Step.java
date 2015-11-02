@@ -1,7 +1,6 @@
 package pw.latematt.xiv.mod.mods.movement;
 
 import net.minecraft.network.play.client.C03PacketPlayer;
-import pw.latematt.timer.Timer;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
@@ -24,7 +23,6 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
     private final ClampedValue<Float> height = new ClampedValue<>("step_height", 1.0646F, 0.5F, 10.0F);
     private final Listener sendPacketListener;
     private boolean editPackets;
-    private final Timer timer = new Timer();
 
     public Step() {
         super("Step", ModType.MOVEMENT);
@@ -42,7 +40,6 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                             Criticals criticals = (Criticals) XIV.getInstance().getModManager().find("criticals");
                             if (criticals != null && criticals.isEnabled())
                                 criticals.setFallDistance(criticals.getFallDistance() + 0.0646F);
-
                         }
                         editPackets = false;
                     } else if (mode.getValue() == Mode.NEW) {
