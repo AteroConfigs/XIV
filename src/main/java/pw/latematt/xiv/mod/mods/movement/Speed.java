@@ -44,9 +44,9 @@ public class Speed extends Mod implements CommandHandler {
                 if (fastIce.getValue() && BlockUtils.isOnIce(mc.thePlayer)) {
                     Blocks.ice.slipperiness = 0.6F;
                     Blocks.packed_ice.slipperiness = 0.6F;
-                    double speed = 2.5D;
+                    double speed = 2.7D;
                     if (mc.thePlayer.isSprinting())
-                        speed += 0.22D;
+                        speed -= 0.2D;
 
                     event.setMotionX(event.getMotionX() * speed);
                     event.setMotionZ(event.getMotionZ() * speed);
