@@ -21,14 +21,7 @@ public class Speedmine extends Mod implements Listener<BreakingBlockEvent>, Comm
 
     public Speedmine() {
         super("Speedmine", ModType.WORLD, Keyboard.KEY_G, 0xFF77A24E);
-
-        Command.newCommand()
-                .cmd("speedmine")
-                .description("Base command for the Speedmine mod.")
-                .arguments("<action>")
-                .aliases("smine")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("speedmine").description("Base command for the Speedmine mod.").arguments("<action>").aliases("smine").handler(this).build();
     }
 
     @Override

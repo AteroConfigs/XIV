@@ -23,13 +23,7 @@ public class ChestStealer extends Mod implements Listener<MotionUpdateEvent>, Co
 
     public ChestStealer() {
         super("ChestStealer", ModType.MISCELLANEOUS, Keyboard.KEY_NONE, 0xFFE58144);
-
-        Command.newCommand()
-                .cmd("cheststealer")
-                .description("Base command for ChestStealer mod.")
-                .arguments("<action>")
-                .aliases("chests", "cstealer", "cs")
-                .handler(this).build();
+        Command.newCommand().cmd("cheststealer").description("Base command for ChestStealer mod.").arguments("<action>").aliases("chests", "cstealer", "cs").handler(this).build();
     }
 
     @Override

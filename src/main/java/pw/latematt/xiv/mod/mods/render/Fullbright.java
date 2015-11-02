@@ -26,16 +26,9 @@ public class Fullbright extends Mod implements Listener<LoadWorldEvent>, Command
 
     public Fullbright() {
         super("Fullbright", ModType.RENDER, Keyboard.KEY_C, 0xFFFCFDCD);
+        Command.newCommand().cmd("fullbright").description("Base command for the Fullbright mod.").arguments("<action>").aliases("bright", "b").handler(this).build();
 
-        Command.newCommand()
-                .cmd("fullbright")
-                .description("Base command for the Fullbright mod.")
-                .arguments("<action>")
-                .aliases("bright", "b")
-                .handler(this)
-                .build();
-
-        this.motionUpdateListener = new Listener<MotionUpdateEvent>() {
+        motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) { // Change this if needed, never done it on world load event but that might work
                 if (potion.getValue()) {

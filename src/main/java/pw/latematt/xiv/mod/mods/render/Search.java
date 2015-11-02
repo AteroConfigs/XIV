@@ -34,6 +34,8 @@ public class Search extends Mod implements Listener<Render3DEvent>, CommandHandl
 
     public Search() {
         super("Search", ModType.RENDER);
+        Command.newCommand().cmd("search").description("Base command for the Search mod.").arguments("<action>").handler(this).build();
+
         blockModelRenderListener = new Listener<BlockModelRenderEvent>() {
             @Override
             public void onEventCalled(BlockModelRenderEvent event) {
@@ -43,14 +45,6 @@ public class Search extends Mod implements Listener<Render3DEvent>, CommandHandl
                 }
             }
         };
-
-        Command.newCommand()
-                .cmd("search")
-                .description("Base command for the Search mod.")
-                .arguments("<action>")
-                .handler(this)
-                .build();
-
         setEnabled(true);
     }
 

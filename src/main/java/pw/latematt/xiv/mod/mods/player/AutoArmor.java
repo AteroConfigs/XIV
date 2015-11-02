@@ -30,14 +30,7 @@ public class AutoArmor extends Mod implements Listener<MotionUpdateEvent>, Comma
 
     public AutoArmor() {
         super("AutoArmor", ModType.PLAYER, Keyboard.KEY_NONE, 0xFF5976EC);
-
-        Command.newCommand()
-                .cmd("autoarmor")
-                .description("Base command for the AutoArmor mod.")
-                .aliases("aarmor", "aa")
-                .arguments("<action>")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("autoarmor").description("Base command for the AutoArmor mod.").aliases("aarmor", "aa").arguments("<action>").handler(this).build();
     }
 
     @Override

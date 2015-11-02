@@ -26,7 +26,7 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
 
     public List<AltAccount> getAccounts() {
         if (search != null && search.getText().length() > 0) {
-            if(search.getText().startsWith("k:")) {
+            if (search.getText().startsWith("k:")) {
                 String text = search.getText().substring(2);
 
                 return XIV.getInstance().getAltManager().getContents().stream().filter(account -> account.getKeyword().toLowerCase().contains(text.toLowerCase())).filter(account -> account.getKeyword().length() > 0).collect(Collectors.toCollection(ArrayList::new));
@@ -204,7 +204,7 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if(keyCode == Keyboard.KEY_ESCAPE) {
+        if (keyCode == Keyboard.KEY_ESCAPE) {
             mc.displayGuiScreen(parent);
         }
 
@@ -269,17 +269,13 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
 
     public void login(AltAccount alt) {
         thread = new AuthThread(alt);
-        new Thread(thread).start();
+        new Thread(thread, "Account Authentication Thread").start();
     }
 
     @Override
     public void confirmClicked(boolean yes, int idk) {
-        if (yes) {
+        if (yes)
             XIV.getInstance().getAltManager().remove(slot.getAlt().getUsername());
-
-            mc.displayGuiScreen(this);
-        } else {
-            mc.displayGuiScreen(this);
-        }
+        mc.displayGuiScreen(this);
     }
 }

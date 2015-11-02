@@ -29,6 +29,8 @@ public class NoSlowdown extends Mod implements CommandHandler {
 
     public NoSlowdown() {
         super("NoSlowdown", ModType.MOVEMENT, Keyboard.KEY_NONE);
+        Command.newCommand().cmd("noslowdown").aliases("nos", "noslow").description("Base command for NoSlowdown mod.").arguments("<action>").handler(this).build();
+
         itemSlowdownListener = new Listener<UsingItemSlowdownEvent>() {
             @Override
             public void onEventCalled(UsingItemSlowdownEvent event) {
@@ -39,7 +41,7 @@ public class NoSlowdown extends Mod implements CommandHandler {
             }
         };
 
-        this.soulSandSlowdownListener = new Listener<SoulSandSlowdownEvent>() {
+        soulSandSlowdownListener = new Listener<SoulSandSlowdownEvent>() {
             @Override
             public void onEventCalled(SoulSandSlowdownEvent event) {
                 event.setCancelled(true);
@@ -74,14 +76,6 @@ public class NoSlowdown extends Mod implements CommandHandler {
                 }
             }
         };
-
-        Command.newCommand()
-                .cmd("noslowdown")
-                .aliases("nos", "noslow")
-                .description("Base command for NoSlowdown mod.")
-                .arguments("<action>")
-                .handler(this)
-                .build();
 
         setEnabled(true);
     }

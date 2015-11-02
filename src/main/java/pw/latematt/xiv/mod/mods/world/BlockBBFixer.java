@@ -25,14 +25,7 @@ public class BlockBBFixer extends Mod implements Listener<BlockAddBBEvent>, Comm
 
     public BlockBBFixer() {
         super("BlockBBFixer", ModType.WORLD);
-
-        Command.newCommand()
-                .cmd("blockbbfixer")
-                .description("Base command for BlockBBFixer mod.")
-                .arguments("<action>")
-                .aliases("bbfixer", "blockfixer", "bbf")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("blockbbfixer").description("Base command for BlockBBFixer mod.").arguments("<action>").aliases("bbfixer", "blockfixer", "bbf").handler(this).build();
     }
 
     @Override

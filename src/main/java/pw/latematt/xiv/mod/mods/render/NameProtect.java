@@ -27,6 +27,8 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
 
     public NameProtect() {
         super("NameProtect", ModType.RENDER);
+        Command.newCommand().cmd("nameprotect").description("Base command for NameProtect mod.").arguments("<action>").aliases("np").handler(this).build();
+
         mouseClickListener = new Listener<MouseClickEvent>() {
             @Override
             public void onEventCalled(MouseClickEvent event) {
@@ -48,14 +50,6 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
             }
         };
         setEnabled(true);
-
-        Command.newCommand()
-                .cmd("nameprotect")
-                .description("Base command for NameProtect mod.")
-                .arguments("<action>")
-                .aliases("np")
-                .handler(this)
-                .build();
     }
 
     @Override

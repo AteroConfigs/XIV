@@ -32,14 +32,7 @@ public class AutoHead extends Mod implements Listener<MotionUpdateEvent>, Comman
 
     public AutoHead() {
         super("AutoHead", ModType.COMBAT, Keyboard.KEY_NONE, 0xFFFFAA00);
-
-        Command.newCommand()
-                .cmd("autohead")
-                .description("Base command for the AutoHead mod.")
-                .aliases("ah")
-                .arguments("<action>")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("autohead").description("Base command for the AutoHead mod.").aliases("ah").arguments("<action>").handler(this).build();
     }
 
     @Override

@@ -22,7 +22,8 @@ import pw.latematt.xiv.value.Value;
  */
 public class Speed extends Mod implements CommandHandler {
     private final Value<Boolean> fastLadder = new Value<>("speed_fast_ladder", true);
-    private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.CASPER);
+    private final Value<Boolean> fastIce = new Value<>("speed_fast_ice", true);
+    private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.CAPSAR);
     private final Listener motionUpdateListener, moveListener;
     private boolean nextTick;
     private int ticks;
@@ -30,13 +31,7 @@ public class Speed extends Mod implements CommandHandler {
     public Speed() {
         super("Speed", ModType.MOVEMENT, Keyboard.KEY_F, 0xFFDC5B18);
         setTag(currentMode.getValue().getName());
-
-        Command.newCommand()
-                .cmd("speed")
-                .description("Base command for the Speed mod.")
-                .arguments("<action>")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("speed").description("Base command for the Speed mod.").arguments("<action>").handler(this).build();
 
         moveListener = new Listener<MoveEvent>() {
             @Override
@@ -45,16 +40,26 @@ public class Speed extends Mod implements CommandHandler {
                     mc.thePlayer.motionY = 0.1D;
                     event.setMotionY(event.getMotionY() * 2.25D);
                 }
+
+                if (fastIce.getValue() && BlockUtils.isOnIce(mc.thePlayer)) {
+                    Blocks.ice.slipperiness = 0.6F;
+                    Blocks.packed_ice.slipperiness = 0.6F;
+                    event.setMotionX(event.getMotionX() * 2.75D);
+                    event.setMotionZ(event.getMotionZ() * 2.75D);
+                } else {
+                    Blocks.ice.slipperiness = 0.98F;
+                    Blocks.packed_ice.slipperiness = 0.98F;
+                }
             }
         };
 
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                double speed;
-                switch (currentMode.getValue()) {
-                    case FAST:
-                        if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
+                if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                    double speed;
+                    switch (currentMode.getValue()) {
+                        case FAST:
                             if (!mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isCollidedHorizontally && isValid()) {
                                 double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
 
@@ -76,15 +81,13 @@ public class Speed extends Mod implements CommandHandler {
                             } else {
                                 mc.timer.timerSpeed = 1.0F;
                             }
-                        }
 
-                        if (nextTick && !mc.thePlayer.onGround && !mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isOnLadder()) {
-                            mc.thePlayer.motionY = -0.1F;
-                            nextTick = false;
-                        }
-                        break;
-                    case CASPER:
-                        if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                            if (nextTick && !mc.thePlayer.onGround && !mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isOnLadder()) {
+                                mc.thePlayer.motionY = -0.1F;
+                                nextTick = false;
+                            }
+                            break;
+                        case CAPSAR:
                             speed = 2.37D;
                             if (isValid()) {
                                 if (mc.thePlayer.isPotionActive(Potion.SPEED)) {
@@ -126,10 +129,8 @@ public class Speed extends Mod implements CommandHandler {
                                 mc.timer.timerSpeed = 1.0F;
                                 nextTick = false;
                             }
-                        }
-                        break;
-                    case OLD:
-                        if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                            break;
+                        case OLD:
                             if (isValid()) {
                                 speed = 3.0D;
                                 double slow = 1.425D;
@@ -161,8 +162,8 @@ public class Speed extends Mod implements CommandHandler {
                                 mc.thePlayer.motionX *= 0.98D;
                                 mc.thePlayer.motionZ *= 0.98D;
                             }
-                        }
-                        break;
+                            break;
+                    }
                 }
             }
         };
@@ -173,11 +174,12 @@ public class Speed extends Mod implements CommandHandler {
         boolean editingPackets = step != null && step.isEditingPackets();
         boolean moving = mc.thePlayer.movementInput.moveForward != 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-        moving = moving && strafing || moving;
+        moving = moving || strafing;
 
         return mc.thePlayer.onGround &&
                 !BlockUtils.isOnLiquid(mc.thePlayer) &&
                 !BlockUtils.isInLiquid(mc.thePlayer) &&
+                !BlockUtils.isOnIce(mc.thePlayer) &&
                 !editingPackets && moving;
     }
 
@@ -195,8 +197,9 @@ public class Speed extends Mod implements CommandHandler {
                                 currentMode.setValue(Mode.FAST);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;
-                            case "new":
-                                currentMode.setValue(Mode.CASPER);
+                            case "capsar":
+                            case "capser":
+                                currentMode.setValue(Mode.CAPSAR);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "old":
@@ -229,6 +232,19 @@ public class Speed extends Mod implements CommandHandler {
                     }
                     ChatLogger.print(String.format("Speed will %s go fast on ladders.", (fastLadder.getValue() ? "now" : "no longer")));
                     break;
+                case "fastice":
+                case "fi":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            fastIce.setValue(fastIce.getDefault());
+                        } else {
+                            fastIce.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        fastIce.setValue(!fastIce.getValue());
+                    }
+                    ChatLogger.print(String.format("Speed will %s go fast on ice.", (fastIce.getValue() ? "now" : "no longer")));
+                    break;
                 default:
                     ChatLogger.print("Invalid action, valid: mode, fastladder");
                     break;
@@ -242,8 +258,6 @@ public class Speed extends Mod implements CommandHandler {
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(motionUpdateListener);
         XIV.getInstance().getListenerManager().add(moveListener);
-        Blocks.ice.slipperiness = 0.6F;
-        Blocks.packed_ice.slipperiness = 0.6F;
     }
 
     @Override
@@ -256,7 +270,7 @@ public class Speed extends Mod implements CommandHandler {
     }
 
     private enum Mode {
-        FAST, CASPER, OLD;
+        FAST, CAPSAR, OLD;
 
         public String getName() {
             String prettyName = "";

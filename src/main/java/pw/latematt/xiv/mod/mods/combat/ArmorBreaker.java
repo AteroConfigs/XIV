@@ -10,8 +10,6 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.player.AutoHeal;
 
-import java.util.Objects;
-
 /**
  * @author Jack
  */
@@ -22,12 +20,12 @@ public class ArmorBreaker extends Mod implements Listener<AttackEntityEvent> {
 
     @Override
     public void onEventCalled(AttackEntityEvent event) {
-        if (XIV.getInstance().getModManager().find(AutoHeal.class).isEnabled() && ((AutoHeal)XIV.getInstance().getModManager().find(AutoHeal.class)).isHealing()) {
+        if (XIV.getInstance().getModManager().find(AutoHeal.class).isEnabled()
+                && ((AutoHeal) XIV.getInstance().getModManager().find(AutoHeal.class)).isHealing())
             return;
-        }
 
-        if (Objects.nonNull(mc.thePlayer.getCurrentEquippedItem())) {
-            if (Objects.nonNull(mc.thePlayer.inventoryContainer.getSlot(27).getStack()) && mc.thePlayer.inventoryContainer.getSlot(27).getStack().getItem() instanceof ItemSword) {
+        if (mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
+            if (mc.thePlayer.inventoryContainer.getSlot(27).getStack() != null && mc.thePlayer.inventoryContainer.getSlot(27).getStack().getItem() instanceof ItemSword) {
                 mc.getNetHandler().addToSendQueue(new C0EPacketClickWindow(mc.thePlayer.inventoryContainer.windowId, 27, mc.thePlayer.inventory.currentItem, 2, mc.thePlayer.getCurrentEquippedItem(), mc.thePlayer.openContainer.getNextTransactionID(mc.thePlayer.inventory)));
             }
         }

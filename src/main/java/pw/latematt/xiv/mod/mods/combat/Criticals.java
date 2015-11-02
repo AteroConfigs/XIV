@@ -28,12 +28,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
 
     public Criticals() {
         super("Criticals", ModType.COMBAT, Keyboard.KEY_NONE, 0xFFA38EC7);
-        Command.newCommand().cmd("criticals")
-                .description("Base command for Criticals mod.")
-                .arguments("<action>")
-                .aliases("crits")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("criticals").description("Base command for Criticals mod.").arguments("<action>").aliases("crits").handler(this).build();
 
         attackEntityListener = new Listener<AttackEntityEvent>() {
             @Override

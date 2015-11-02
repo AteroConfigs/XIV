@@ -23,18 +23,11 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
     private final Value<Boolean> slowfall = new Value<>("fly_slowfall", true);
     private final Value<Boolean> cap = new Value<>("fly_cap", false);
     private final ClampedValue<Double> verticalSpeed = new ClampedValue<>("fly_vertical", 0.5, 0.0, 2.0);
-
     private double yCap;
 
     public Fly() {
         super("Fly", ModType.MOVEMENT, Keyboard.KEY_M, 0xFF4B97F6);
-
-        Command.newCommand()
-                .cmd("fly")
-                .aliases("flight")
-                .description("Base command for the Fly mod.")
-                .arguments("<action>")
-                .handler(this).build();
+        Command.newCommand().cmd("fly").aliases("flight").description("Base command for the Fly mod.").arguments("<action>").handler(this).build();
     }
 
     public void onEventCalled(MotionUpdateEvent event) {
@@ -132,7 +125,7 @@ public class Fly extends Mod implements Listener<MotionUpdateEvent>, CommandHand
         XIV.getInstance().getListenerManager().add(this);
         if (Objects.nonNull(mc.thePlayer)) {
             if (doDamage.getValue() && mc.thePlayer.onGround)
-                EntityUtils.damagePlayer(1, 0.055);
+                EntityUtils.damagePlayer(1);
 
             yCap = mc.thePlayer.getEntityBoundingBox().maxY;
         }

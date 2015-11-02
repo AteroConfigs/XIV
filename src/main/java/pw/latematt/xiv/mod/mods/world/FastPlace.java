@@ -19,14 +19,7 @@ public class FastPlace extends Mod implements Listener<PlacingBlockEvent>, Comma
 
     public FastPlace() {
         super("FastPlace", ModType.WORLD, Keyboard.KEY_K, 0xFFFF9933);
-
-        Command.newCommand()
-                .cmd("fastplace")
-                .description("Base command for the FastPlace mod.")
-                .arguments("<action>")
-                .aliases("fplace")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("fastplace").description("Base command for the FastPlace mod.").arguments("<action>").aliases("fplace").handler(this).build();
     }
 
     @Override

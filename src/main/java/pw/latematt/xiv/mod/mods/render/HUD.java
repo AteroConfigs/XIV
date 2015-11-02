@@ -67,6 +67,8 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
 
     public HUD() {
         super("HUD", ModType.RENDER);
+        Command.newCommand().cmd("hud").description("Base command for the HUD mod.").arguments("<action>").handler(this).build();
+
         readPacketListener = new Listener<ReadPacketEvent>() {
             @Override
             public void onEventCalled(ReadPacketEvent event) {
@@ -76,13 +78,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             }
         };
         setEnabled(true);
-
-        Command.newCommand()
-                .cmd("hud")
-                .description("Base command for the HUD mod.")
-                .arguments("<action>")
-                .handler(this)
-                .build();
 
         new XIVFile("hudconfig", "json") {
             @Override

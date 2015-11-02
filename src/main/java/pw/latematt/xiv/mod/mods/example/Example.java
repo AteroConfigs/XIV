@@ -17,13 +17,7 @@ import pw.latematt.xiv.mod.ModType;
 public class Example extends Mod implements Listener<SendPacketEvent>, CommandHandler {
     public Example() {
         super("Example", ModType.PLAYER, Keyboard.KEY_NONE, 0xFF696969);
-
-        Command.newCommand()
-                .cmd("example")
-                .description("An example command")
-                .arguments("<ex>", "[am]", "<pl>", "[e]")
-                .aliases("ex", "am", "pl", "e")
-                .handler(this).build();
+        Command.newCommand().cmd("example").description("An example command").arguments("<ex>", "[am]", "<pl>", "[e]").aliases("ex", "am", "pl", "e").handler(this).build();
     }
 
     public void onEventCalled(SendPacketEvent event) {

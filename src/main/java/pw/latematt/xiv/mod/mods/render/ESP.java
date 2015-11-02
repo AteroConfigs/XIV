@@ -44,6 +44,8 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
 
     public ESP() {
         super("ESP", ModType.RENDER, Keyboard.KEY_I);
+        Command.newCommand().cmd("esp").description("Base command for the ESP mod.").arguments("<action>").handler(this).build();
+
         renderEntityListener = new Listener<RenderEntityEvent>() {
             @Override
             public void onEventCalled(RenderEntityEvent event) {
@@ -59,13 +61,6 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
                 }
             }
         };
-
-        Command.newCommand()
-                .cmd("esp")
-                .description("Base command for the ESP mod.")
-                .arguments("<action>")
-                .handler(this)
-                .build();
     }
 
     public void onEventCalled(Render3DEvent event) {
@@ -205,7 +200,7 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glLineWidth(((Value<Float>) XIV.getInstance().getValueManager().find("render_line_width")).getValue() * 2);
+        GL11.glLineWidth(RenderUtils.getLineWidth().getValue() * 2);
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glEnable(GL11.GL_STENCIL_TEST);
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);

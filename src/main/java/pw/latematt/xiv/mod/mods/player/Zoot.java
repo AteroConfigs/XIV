@@ -26,12 +26,7 @@ public class Zoot extends Mod implements Listener<MotionUpdateEvent>, CommandHan
 
     public Zoot() {
         super("Zoot", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFD298ED);
-
-        Command.newCommand()
-                .cmd("zoot")
-                .description("Base command for the Zoot mod.")
-                .arguments("<action>")
-                .handler(this).build();
+        Command.newCommand().cmd("zoot").description("Base command for the Zoot mod.").arguments("<action>").handler(this).build();
     }
 
     @Override

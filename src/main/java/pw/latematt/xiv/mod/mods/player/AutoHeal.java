@@ -36,6 +36,7 @@ public class AutoHeal extends Mod implements CommandHandler {
 
     public AutoHeal() {
         super("AutoHeal", ModType.PLAYER, Keyboard.KEY_NONE, 0xFF85E0E0);
+        Command.newCommand().cmd("autoheal").aliases("aheal", "autoh", "ah").description("Base command for the AutoHeal mod.").arguments("<action>").handler(this).build();
 
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
@@ -95,13 +96,6 @@ public class AutoHeal extends Mod implements CommandHandler {
                 }
             }
         };
-
-        Command.newCommand()
-                .cmd("autoheal")
-                .aliases("aheal", "autoh", "ah")
-                .description("Base command for the AutoHeal mod.")
-                .arguments("<action>")
-                .handler(this).build();
     }
 
     private void updateTag() {

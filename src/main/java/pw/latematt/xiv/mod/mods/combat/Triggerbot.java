@@ -45,14 +45,7 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
 
     public Triggerbot() {
         super("Triggerbot", ModType.COMBAT, Keyboard.KEY_NONE, 0xFF287628);
-
-        Command.newCommand()
-                .cmd("triggerbot")
-                .description("Base command for Triggerbot mod.")
-                .arguments("<action>")
-                .aliases("trigbot", "trig")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("triggerbot").description("Base command for Triggerbot mod.").arguments("<action>").aliases("trigbot", "trig").handler(this).build();
     }
 
     public void onEventCalled(MotionUpdateEvent event) {

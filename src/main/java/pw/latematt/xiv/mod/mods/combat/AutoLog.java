@@ -22,14 +22,7 @@ public class AutoLog extends Mod implements Listener<MotionUpdateEvent>, Command
 
     public AutoLog() {
         super("AutoLog", ModType.COMBAT, Keyboard.KEY_NONE, 9868950);
-
-        Command.newCommand()
-                .cmd("autolog")
-                .description("Base command for the AutoLog mod.")
-                .arguments("<action>")
-                .aliases("al")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("autolog").description("Base command for the AutoLog mod.").arguments("<action>").aliases("al").handler(this).build();
     }
 
     @Override

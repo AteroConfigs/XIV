@@ -26,14 +26,7 @@ public class Velocity extends Mod implements CommandHandler {
     public Velocity() {
         super("Velocity", ModType.MOVEMENT, Keyboard.KEY_BACKSLASH, 0xFF36454F, true);
         updateTag();
-
-        Command.newCommand()
-                .cmd("velocity")
-                .aliases("vel")
-                .description("Base command for Velocity mod.")
-                .arguments("<action>")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("velocity").aliases("vel").description("Base command for Velocity mod.").arguments("<action>").handler(this).build();
 
         readPacketListener = new Listener<ReadPacketEvent>() {
             @Override

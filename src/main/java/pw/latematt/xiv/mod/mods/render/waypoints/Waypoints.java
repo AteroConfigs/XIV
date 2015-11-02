@@ -51,6 +51,7 @@ public class Waypoints extends Mod implements CommandHandler {
 
     public Waypoints() {
         super("Waypoints", ModType.RENDER);
+        Command.newCommand().cmd("waypoints").description("Base command for Waypoints mod.").arguments("<action>").aliases("points", "wp").handler(this).build();
 
         points = new CopyOnWriteArrayList<>();
         render3DListener = new Listener<Render3DEvent>() {
@@ -148,6 +149,7 @@ public class Waypoints extends Mod implements CommandHandler {
         };
 
         setEnabled(true);
+
         new XIVFile("waypoints", "json") {
             @Override
             public void load() throws IOException {
@@ -164,14 +166,6 @@ public class Waypoints extends Mod implements CommandHandler {
                 Files.write(gson.toJson(points).getBytes("UTF-8"), file);
             }
         };
-
-        Command.newCommand()
-                .cmd("waypoints")
-                .description("Base command for Waypoints mod.")
-                .arguments("<action>")
-                .aliases("points", "wp")
-                .handler(this)
-                .build();
     }
 
     private void drawBoxes(Waypoint waypoint) {
@@ -217,7 +211,7 @@ public class Waypoints extends Mod implements CommandHandler {
             z *= d;
         }
 
-        float var13 = ((float) dist / 5 <= 2 ? 2.0F : (float) dist / 5) * ((Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_size")).getValue().floatValue();
+        float var13 = ((float) dist / 5 <= 2 ? 2.0F : (float) dist / 5) * RenderUtils.getNametagSize().getValue();
         float var14 = 0.016666668F * var13;
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y + 1.5F, z);
@@ -235,7 +229,7 @@ public class Waypoints extends Mod implements CommandHandler {
         GlStateManager.func_179090_x();
         worldRenderer.startDrawingQuads();
         int var18 = mc.fontRendererObj.getStringWidth(text) / 2;
-        worldRenderer.func_178960_a(0.0F, 0.0F, 0.0F, ((Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_opacity")).getValue().floatValue());
+        worldRenderer.func_178960_a(0.0F, 0.0F, 0.0F, RenderUtils.getNametagOpacity().getValue());
         worldRenderer.addVertex(-var18 - 2, -2, 0.0D);
         worldRenderer.addVertex(-var18 - 2, 9, 0.0D);
         worldRenderer.addVertex(var18 + 2, 9, 0.0D);

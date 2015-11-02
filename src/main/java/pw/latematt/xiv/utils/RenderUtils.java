@@ -8,23 +8,52 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.opengl.GL11;
+import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
 /**
  * @author Matthew
  */
 public class RenderUtils {
-    private static final Value<Float> LINE_WIDTH = new Value<>("render_line_width", 1.0F);
-    private static final Value<Boolean> ANTIALIASING = new Value<>("render_anti_aliasing", false);
-    private static final Value<Boolean> WORLDBOBBING = new Value<>("render_world_bobbing", false);
-    private static final Value<Double> NAMETAG_OPACITY = new Value<>("render_nametag_opacity", 0.25D);
-    private static final Value<Double> NAMETAG_SIZE = new Value<>("render_nametag_size", 1.0D);
+    private static final ClampedValue<Float> LINE_WIDTH = new ClampedValue<>("render_line_width", 1.0F, 1.0F, 4.0F);
+    private static final Value<Boolean> ANTI_ALIASING = new Value<>("render_anti_aliasing", false);
+    private static final Value<Boolean> WORLD_BOBBING = new Value<>("render_world_bobbing", false);
+    private static final ClampedValue<Float> NAMETAG_OPACITY = new ClampedValue<>("render_nametag_opacity", 0.25F, 0.1F, 1.0F);
+    private static final ClampedValue<Float> NAMETAG_SIZE = new ClampedValue<>("render_nametag_size", 1.0F, 0.1F, 1.0F);
     private static final Value<Boolean> TRACER_ENTITY = new Value<>("render_tracer_entity", true);
     private static final Value<Boolean> SHOW_TAGS = new Value<>("render_show_tags", true);
 
+    public static ClampedValue<Float> getLineWidth() {
+        return LINE_WIDTH;
+    }
+
+    public static Value<Boolean> getAntiAliasing() {
+        return ANTI_ALIASING;
+    }
+
+    public static Value<Boolean> getWorldBobbing() {
+        return WORLD_BOBBING;
+    }
+
+    public static ClampedValue<Float> getNametagOpacity() {
+        return NAMETAG_OPACITY;
+    }
+
+    public static ClampedValue<Float> getNametagSize() {
+        return NAMETAG_SIZE;
+    }
+
+    public static Value<Boolean> getTracerEntity() {
+        return TRACER_ENTITY;
+    }
+
+    public static Value<Boolean> getShowTags() {
+        return SHOW_TAGS;
+    }
+
     public static void init() {
-        ANTIALIASING.getValue();
-        WORLDBOBBING.getValue();
+        ANTI_ALIASING.getValue();
+        WORLD_BOBBING.getValue();
         NAMETAG_OPACITY.getValue();
         NAMETAG_SIZE.getValue();
         TRACER_ENTITY.getValue();
@@ -40,17 +69,15 @@ public class RenderUtils {
         GlStateManager.disableDepth();
         GlStateManager.depthMask(false);
         GlStateManager.func_179090_x();
-        if (ANTIALIASING.getValue()) {
+        if (ANTI_ALIASING.getValue())
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        }
         GL11.glLineWidth(LINE_WIDTH.getValue());
     }
 
     public static void endGl() {
         GL11.glLineWidth(2.0F);
-        if (ANTIALIASING.getValue()) {
+        if (ANTI_ALIASING.getValue())
             GL11.glDisable(GL11.GL_LINE_SMOOTH);
-        }
         GlStateManager.func_179098_w();
         GlStateManager.depthMask(true);
         GlStateManager.enableDepth();

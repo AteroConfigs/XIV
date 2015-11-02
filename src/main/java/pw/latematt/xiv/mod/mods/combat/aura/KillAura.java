@@ -62,14 +62,7 @@ public class KillAura extends Mod implements CommandHandler {
 
     public KillAura() {
         super("Kill Aura", ModType.COMBAT, Keyboard.KEY_R, 0xFFC6172B);
-
-        Command.newCommand()
-                .cmd("killaura")
-                .description("Base command for the Kill Aura mod.")
-                .aliases("killa", "ka")
-                .arguments("<action>")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("killaura").description("Base command for the Kill Aura mod.").aliases("killa", "ka").arguments("<action>").handler(this).build();
 
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override

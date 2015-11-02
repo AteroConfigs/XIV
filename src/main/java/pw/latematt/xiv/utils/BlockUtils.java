@@ -17,15 +17,12 @@ public class BlockUtils {
     private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
     public static int getBestTool(BlockPos pos) {
-        final Block block = MINECRAFT.theWorld.getBlockState(pos).getBlock();
+        Block block = MINECRAFT.theWorld.getBlockState(pos).getBlock();
         int slot = 0;
         float dmg = 0.1F;
         for (int index = 36; index < 45; index++) {
-            final ItemStack itemStack = MINECRAFT.thePlayer.inventoryContainer
-                    .getSlot(index).getStack();
-            if (itemStack != null
-                    && block != null
-                    && itemStack.getItem().getStrVsBlock(itemStack, block) > dmg) {
+            ItemStack itemStack = MINECRAFT.thePlayer.inventoryContainer.getSlot(index).getStack();
+            if (itemStack != null && block != null && itemStack.getItem().getStrVsBlock(itemStack, block) > dmg) {
                 slot = index - 36;
                 dmg = itemStack.getItem().getStrVsBlock(itemStack, block);
             }
@@ -76,7 +73,7 @@ public class BlockUtils {
     public static boolean isOnIce(Entity entity) {
         if (entity == null)
             return false;
-        boolean onLiquid = false;
+        boolean onIce = false;
         final int y = (int) entity.getEntityBoundingBox().offset(0.0D, -0.01D, 0.0D).minY;
         for (int x = MathHelper.floor_double(entity.getEntityBoundingBox().minX); x < MathHelper.floor_double(entity.getEntityBoundingBox().maxX) + 1; x++) {
             for (int z = MathHelper.floor_double(entity.getEntityBoundingBox().minZ); z < MathHelper.floor_double(entity.getEntityBoundingBox().maxZ) + 1; z++) {
@@ -84,11 +81,11 @@ public class BlockUtils {
                 if (block != null && !(block instanceof BlockAir)) {
                     if (!(block instanceof BlockIce) && !(block instanceof BlockPackedIce))
                         return false;
-                    onLiquid = true;
+                    onIce = true;
                 }
             }
         }
-        return onLiquid;
+        return onIce;
     }
 
     public static boolean isOnLadder(Entity entity) {
@@ -139,9 +136,7 @@ public class BlockUtils {
         final int y = (int) entity.getEntityBoundingBox().offset(0.0D, offset, 0.0D).minY;
         for (int x = MathHelper.floor_double(entity.getEntityBoundingBox().minX); x < MathHelper.floor_double(entity.getEntityBoundingBox().maxX) + 1; x++) {
             for (int z = MathHelper.floor_double(entity.getEntityBoundingBox().minZ); z < MathHelper.floor_double(entity.getEntityBoundingBox().maxZ) + 1; z++) {
-                final Block block = MINECRAFT.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
-
-                return block;
+                return MINECRAFT.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
             }
         }
         return null;

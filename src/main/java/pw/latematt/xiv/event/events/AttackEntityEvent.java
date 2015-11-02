@@ -7,8 +7,7 @@ import pw.latematt.xiv.event.Event;
 /**
  * @author Jack
  */
-
-public final class AttackEntityEvent extends Event implements Cancellable {
+public class AttackEntityEvent extends Event implements Cancellable {
     private final Entity entity;
     private boolean cancelled;
 

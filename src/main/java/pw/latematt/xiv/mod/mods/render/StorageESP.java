@@ -41,14 +41,7 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
 
     public StorageESP() {
         super("StorageESP", ModType.RENDER);
-
-        Command.newCommand()
-                .cmd("storageesp")
-                .description("Base command for Storage ESP mod.")
-                .arguments("<action>")
-                .aliases("storage", "sesp")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("storageesp").description("Base command for Storage ESP mod.").arguments("<action>").aliases("storage", "sesp").handler(this).build();
     }
 
     @Override

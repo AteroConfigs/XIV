@@ -24,6 +24,7 @@ import pw.latematt.xiv.event.events.RenderStringEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
 import java.text.DecimalFormat;
@@ -41,6 +42,7 @@ public class Nametags extends Mod implements CommandHandler {
 
     public Nametags() {
         super("Nametags", ModType.RENDER);
+        Command.newCommand().cmd("nametags").description("Base command for the Nametags mod.").arguments("<action>").aliases("tags", "nt").handler(this).build();
 
         nametagRenderListener = new Listener<NametagRenderEvent>() {
             @Override
@@ -70,14 +72,6 @@ public class Nametags extends Mod implements CommandHandler {
             }
         };
         setEnabled(true);
-
-        Command.newCommand()
-                .cmd("nametags")
-                .description("Base command for the Nametags mod.")
-                .arguments("<action>")
-                .aliases("tags", "nt")
-                .handler(this)
-                .build();
     }
 
     private boolean isValidEntity(Entity entity) {
@@ -123,7 +117,7 @@ public class Nametags extends Mod implements CommandHandler {
             entityName = String.format("%s \247%s%s", entityName, healthColor, decimalFormat.format(health));
 
         float distance = mc.thePlayer.getDistanceToEntity(entity);
-        float var13 = (distance / 5 <= 2 ? 2.0F : distance / 5) * ((Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_size")).getValue().floatValue();
+        float var13 = (distance / 5 <= 2 ? 2.0F : distance / 5) * RenderUtils.getNametagSize().getValue();
         float var14 = 0.016666668F * var13;
         GlStateManager.pushMatrix();
         RenderHelper.enableStandardItemLighting();
@@ -157,7 +151,7 @@ public class Nametags extends Mod implements CommandHandler {
         GlStateManager.func_179090_x();
         worldRenderer.startDrawingQuads();
         int var18 = mc.fontRendererObj.getStringWidth(entityName) / 2;
-        worldRenderer.func_178960_a(0.0F, 0.0F, 0.0F, ((Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_opacity")).getValue().floatValue());
+        worldRenderer.func_178960_a(0.0F, 0.0F, 0.0F, RenderUtils.getNametagOpacity().getValue());
         worldRenderer.addVertex(-var18 - 2, -2 + var17, 0.0D);
         worldRenderer.addVertex(-var18 - 2, 9 + var17, 0.0D);
         worldRenderer.addVertex(var18 + 2, 9 + var17, 0.0D);

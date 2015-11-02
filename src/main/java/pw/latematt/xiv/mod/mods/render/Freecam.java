@@ -25,7 +25,7 @@ public class Freecam extends Mod {
     public Freecam() {
         super("Freecam", ModType.RENDER, Keyboard.KEY_V);
 
-        this.motionListener = new Listener<MotionUpdateEvent>() {
+        motionListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 mc.thePlayer.renderArmPitch += 400.0F;
@@ -37,7 +37,7 @@ public class Freecam extends Mod {
             }
         };
 
-        this.moveListener = new Listener<MoveEvent>() {
+        moveListener = new Listener<MoveEvent>() {
             @Override
             public void onEventCalled(MoveEvent event) {
                 mc.thePlayer.noClip = true;
@@ -64,7 +64,7 @@ public class Freecam extends Mod {
             }
         };
 
-        this.packetListener = new Listener<SendPacketEvent>() {
+        packetListener = new Listener<SendPacketEvent>() {
             @Override
             public void onEventCalled(SendPacketEvent event) {
                 if (entity == null) {
@@ -93,14 +93,14 @@ public class Freecam extends Mod {
             }
         };
 
-        this.pushOutOfBlocksListener = new Listener<PushOutOfBlocksEvent>() {
+        pushOutOfBlocksListener = new Listener<PushOutOfBlocksEvent>() {
             @Override
             public void onEventCalled(PushOutOfBlocksEvent event) {
                 event.setCancelled(true);
             }
         };
 
-        this.cullingListener = new Listener<CullingEvent>() {
+        cullingListener = new Listener<CullingEvent>() {
             @Override
             public void onEventCalled(CullingEvent event) {
                 event.setCancelled(true);

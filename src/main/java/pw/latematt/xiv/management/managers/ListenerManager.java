@@ -6,6 +6,7 @@ import pw.latematt.xiv.event.Event;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
 import pw.latematt.xiv.management.ListManager;
+import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
 import java.lang.reflect.ParameterizedType;
@@ -28,10 +29,7 @@ public class ListenerManager extends ListManager<Listener> implements Cancellabl
         XIV.getInstance().getLogger().info(String.format("Starting to setup %s.", getClass().getSimpleName()));
         add(new Listener<WorldBobbingEvent>() {
             public void onEventCalled(WorldBobbingEvent event) {
-                Value<Boolean> worldBobbing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_world_bobbing");
-                if (!Objects.isNull(worldBobbing)) {
-                    event.setCancelled(!worldBobbing.getValue());
-                }
+                event.setCancelled(!RenderUtils.getWorldBobbing().getValue());
             }
         });
         XIV.getInstance().getLogger().info(String.format("Successfully setup %s.", getClass().getSimpleName()));

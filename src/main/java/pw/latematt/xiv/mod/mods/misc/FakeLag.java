@@ -28,14 +28,7 @@ public class FakeLag extends Mod implements Listener<SendPacketEvent>, CommandHa
 
     public FakeLag() {
         super("FakeLag", ModType.MISCELLANEOUS, Keyboard.KEY_NONE, 0xFF0B4556);
-
-        Command.newCommand()
-                .cmd("fakelag")
-                .description("Base command for the FakeLag mod.")
-                .aliases("flag", "fl")
-                .arguments("<action>")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("fakelag").description("Base command for the FakeLag mod.").aliases("flag", "fl").arguments("<action>").handler(this).build();
 
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override

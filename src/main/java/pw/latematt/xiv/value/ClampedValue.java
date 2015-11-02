@@ -3,7 +3,7 @@ package pw.latematt.xiv.value;
 /**
  * @author TehNeon
  */
-public class ClampedValue<T> extends Value<T> {
+public final class ClampedValue<T> extends Value<T> {
     private T min;
     private T max;
     private float sliderX;

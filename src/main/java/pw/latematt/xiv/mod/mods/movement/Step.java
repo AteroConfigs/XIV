@@ -26,13 +26,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
 
     public Step() {
         super("Step", ModType.MOVEMENT);
-
-        Command.newCommand()
-                .cmd("step")
-                .description("Base command for Step mod.")
-                .arguments("<action>")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("step").description("Base command for Step mod.").arguments("<action>").handler(this).build();
 
         sendPacketListener = new Listener<SendPacketEvent>() {
             @Override

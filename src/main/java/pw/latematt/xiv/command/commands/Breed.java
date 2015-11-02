@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * @author Matthew
+ * @author Jack
  */
 public class Breed implements CommandHandler {
     private final Minecraft mc = Minecraft.getMinecraft();

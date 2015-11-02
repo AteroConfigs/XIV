@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 /**
- * @author Matthew
+ * @author Rederpz
  */
 public class History implements CommandHandler {
     @Override

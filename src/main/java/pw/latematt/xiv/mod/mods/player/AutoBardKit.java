@@ -30,14 +30,7 @@ public class AutoBardKit extends Mod implements Listener<MotionUpdateEvent>, Com
 
     public AutoBardKit() {
         super("AutoBardKit", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFE3CC4D);
-
-        Command.newCommand()
-                .cmd("autobardkit")
-                .description("Base command for the AutoBardKit mod.")
-                .aliases("abardkit", "autobk", "abk")
-                .arguments("<action>")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("autobardkit").description("Base command for the AutoBardKit mod.").aliases("abardkit", "autobk", "abk").arguments("<action>").handler(this).build();
     }
 
     @Override

@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
-import pw.latematt.xiv.mod.mods.combat.aura.mode.modes.Singular;
 
 /**
  * @author Matthew

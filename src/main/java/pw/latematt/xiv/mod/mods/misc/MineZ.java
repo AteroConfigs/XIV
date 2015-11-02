@@ -22,6 +22,7 @@ public class MineZ extends Mod {
 
     public MineZ() {
         super("MineZ", ModType.MISCELLANEOUS, Keyboard.KEY_NONE, 0xFFBDFC2B);
+
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {

@@ -30,13 +30,7 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
     public FastUse() {
         super("FastUse", ModType.PLAYER, Keyboard.KEY_NONE, 0xFFEF60A9);
 
-        Command.newCommand()
-                .cmd("fastuse")
-                .description("Base command for FastUse mod.")
-                .arguments("<action>")
-                .aliases("fuse", "fu")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("fastuse").description("Base command for FastUse mod.").arguments("<action>").aliases("fuse", "fastu", "fu").handler(this).build();
     }
 
     @Override

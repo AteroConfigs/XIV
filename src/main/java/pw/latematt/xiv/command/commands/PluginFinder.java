@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author Matthew
+ * @author Rederpz
  */
 public class PluginFinder implements Listener<ReadPacketEvent>, CommandHandler {
     @Override

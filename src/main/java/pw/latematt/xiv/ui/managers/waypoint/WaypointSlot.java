@@ -2,7 +2,6 @@ package pw.latematt.xiv.ui.managers.waypoint;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.mod.mods.render.waypoints.base.Waypoint;
 

@@ -15,7 +15,6 @@ import pw.latematt.xiv.utils.RenderUtils;
 /**
  * @author Rederpz
  */
-
 public class FillWorldEdit implements CommandHandler, Listener<Render3DEvent> {
 
     private final Minecraft mc = Minecraft.getMinecraft();

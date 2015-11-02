@@ -10,7 +10,7 @@ import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.utils.ChatLogger;
 
 /**
- * @author Matthew
+ * @author Rederpz
  */
 public class Potion implements CommandHandler {
     private final Minecraft mc = Minecraft.getMinecraft();

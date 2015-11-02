@@ -26,7 +26,7 @@ public class GuiModManager extends GuiScreen {
 
     public List<Mod> getMods() {
         if (search != null && search.getText().length() > 0) {
-            if(search.getText().startsWith("k:")) {
+            if (search.getText().startsWith("k:")) {
                 String text = search.getText().substring(2);
 
                 return XIV.getInstance().getModManager().getContents().stream().filter(mod -> Keyboard.getKeyName(mod.getKeybind()).toLowerCase().startsWith(text.toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
@@ -114,15 +114,15 @@ public class GuiModManager extends GuiScreen {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         search.textboxKeyTyped(typedChar, keyCode);
 
-        if(keybind.isFocused()) {
-            if(slot.getMod() != null) {
-                if(keyCode == Keyboard.KEY_ESCAPE) {
+        if (keybind.isFocused()) {
+            if (slot.getMod() != null) {
+                if (keyCode == Keyboard.KEY_ESCAPE) {
                     keyCode = Keyboard.KEY_NONE;
                 }
                 slot.getMod().setKeybind(keyCode);
             }
         } else {
-            if(keyCode == Keyboard.KEY_ESCAPE) {
+            if (keyCode == Keyboard.KEY_ESCAPE) {
                 mc.displayGuiScreen(parent);
             }
         }

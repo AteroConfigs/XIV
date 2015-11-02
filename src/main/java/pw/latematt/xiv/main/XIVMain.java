@@ -52,9 +52,8 @@ public class XIVMain {
         OptionSet optionSet = optionParser.parse(arguments);
         List valuesOfNonOptions = optionSet.valuesOf(nonOptions);
 
-        if (!valuesOfNonOptions.isEmpty()) {
+        if (!valuesOfNonOptions.isEmpty())
             System.out.println("Completely ignored arguments: " + valuesOfNonOptions);
-        }
 
         /* proxy support */
         String proxyHostString = (String) optionSet.valueOf(proxyHost);
@@ -98,11 +97,7 @@ public class XIVMain {
         /* game runs now */
         GameConfiguration gameConfiguration = new GameConfiguration(new GameConfiguration.UserInformation(session, userPropertiesMap, proxy), new GameConfiguration.DisplayInformation(widthInt, heightInt, fullscreen, checkGlErrors), new GameConfiguration.FolderInformation(gameDirFile, resourcePackDirFile, assetsDirFile, uuidIndex), new GameConfiguration.GameInformation(demo, versionString), new GameConfiguration.ServerInformation(serverString, portInteger.intValue()));
         Thread.currentThread().setName("Client Thread");
-        Runtime.getRuntime().addShutdownHook(new Thread("Client Shutdown Thread") {
-            public void run() {
-                Minecraft.stopIntegratedServer();
-            }
-        });
+        Runtime.getRuntime().addShutdownHook(new Thread(Minecraft::stopIntegratedServer, "Client Shutdown Thread"));
         new Minecraft(gameConfiguration).run();
     }
 

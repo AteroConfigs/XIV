@@ -2,6 +2,7 @@ package pw.latematt.xiv.mod;
 
 import net.minecraft.client.Minecraft;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.Value;
 
 /**
@@ -41,9 +42,8 @@ public abstract class Mod {
     }
 
     public String getDisplayName() {
-        Value<Boolean> showTags = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_show_tags");
         String name = displayName;
-        if (!tag.equals("") && showTags.getValue())
+        if (!tag.equals("") && RenderUtils.getShowTags().getValue())
             name += " \2477" + tag;
         return name;
     }

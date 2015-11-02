@@ -29,12 +29,7 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
     public SmoothAimbot() {
         super("SmoothAimbot", ModType.COMBAT, Keyboard.KEY_NONE);
 
-        Command.newCommand()
-                .cmd("smoothaimbot")
-                .description("Base command for the SmoothAimbot mod.")
-                .arguments("<action>")
-                .aliases("sa")
-                .handler(this).build();
+        Command.newCommand().cmd("smoothaimbot").description("Base command for the SmoothAimbot mod.").arguments("<action>").aliases("sa").handler(this).build();
     }
 
     @Override

@@ -1,9 +1,8 @@
 package pw.latematt.xiv.command.commands;
 
-import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.value.Value;
+import pw.latematt.xiv.utils.RenderUtils;
 
 /**
  * @author Matthew
@@ -18,78 +17,76 @@ public class Render implements CommandHandler {
                 case "linewidth":
                 case "lw":
                     if (arguments.length >= 3) {
-                        Value<Float> lineWidth = (Value<Float>) XIV.getInstance().getValueManager().find("render_line_width");
                         if (arguments[2].equalsIgnoreCase("-d")) {
-                            lineWidth.setValue(lineWidth.getDefault());
+                            RenderUtils.getLineWidth().setValue(RenderUtils.getLineWidth().getDefault());
                         } else {
                             Float width = Float.parseFloat(arguments[2]);
-                            lineWidth.setValue(width);
+                            RenderUtils.getLineWidth().setValue(width);
+                            if (RenderUtils.getLineWidth().getValue() > RenderUtils.getLineWidth().getMax())
+                                RenderUtils.getLineWidth().setValue(RenderUtils.getLineWidth().getMax());
+                            else if (RenderUtils.getLineWidth().getValue() < RenderUtils.getLineWidth().getMin())
+                                RenderUtils.getLineWidth().setValue(RenderUtils.getLineWidth().getMin());
                         }
-                        ChatLogger.print(String.format("Render Line Width set to: %s", lineWidth.getValue()));
+                        ChatLogger.print(String.format("Render Line Width set to: %s", RenderUtils.getLineWidth().getValue()));
                     } else {
                         ChatLogger.print("Invalid arguments, valid: linewidth <float>");
                     }
                     break;
                 case "antialiasing":
                 case "aa":
-                    Value<Boolean> antiAliasing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_anti_aliasing");
                     if (arguments.length >= 3) {
                         if (arguments[2].equalsIgnoreCase("-d")) {
-                            antiAliasing.setValue(antiAliasing.getDefault());
+                            RenderUtils.getAntiAliasing().setValue(RenderUtils.getAntiAliasing().getDefault());
                         } else {
-                            antiAliasing.setValue(Boolean.parseBoolean(arguments[2]));
+                            RenderUtils.getAntiAliasing().setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
-                        antiAliasing.setValue(!antiAliasing.getValue());
+                        RenderUtils.getAntiAliasing().setValue(!RenderUtils.getAntiAliasing().getValue());
                     }
-                    ChatLogger.print(String.format("Render mods will %s use antialiasing.", antiAliasing.getValue() ? "now" : "no longer"));
+                    ChatLogger.print(String.format("Render mods will %s use antialiasing.", RenderUtils.getAntiAliasing().getValue() ? "now" : "no longer"));
                     break;
                 case "worldbobbing":
                 case "wb":
-                    Value<Boolean> worldBobbing = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_world_bobbing");
                     if (arguments.length >= 3) {
                         if (arguments[2].equalsIgnoreCase("-d")) {
-                            worldBobbing.setValue(worldBobbing.getDefault());
+                            RenderUtils.getWorldBobbing().setValue(RenderUtils.getWorldBobbing().getDefault());
                         } else {
-                            worldBobbing.setValue(Boolean.parseBoolean(arguments[2]));
+                            RenderUtils.getWorldBobbing().setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
-                        worldBobbing.setValue(!worldBobbing.getValue());
+                        RenderUtils.getWorldBobbing().setValue(!RenderUtils.getWorldBobbing().getValue());
                     }
-                    ChatLogger.print(String.format("Render mods will %s render world bobbing.", worldBobbing.getValue() ? "now" : "no longer"));
+                    ChatLogger.print(String.format("Render mods will %s render world bobbing.", RenderUtils.getWorldBobbing().getValue() ? "now" : "no longer"));
                     break;
                 case "tracerentity":
                 case "te":
-                    Value<Boolean> tracerEntity = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_tracer_entity");
                     if (arguments.length >= 3) {
                         if (arguments[2].equalsIgnoreCase("-d")) {
-                            tracerEntity.setValue(tracerEntity.getDefault());
+                            RenderUtils.getTracerEntity().setValue(RenderUtils.getTracerEntity().getDefault());
                         } else {
-                            tracerEntity.setValue(Boolean.parseBoolean(arguments[2]));
+                            RenderUtils.getTracerEntity().setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
-                        tracerEntity.setValue(!tracerEntity.getValue());
+                        RenderUtils.getTracerEntity().setValue(!RenderUtils.getTracerEntity().getValue());
                     }
-                    ChatLogger.print(String.format("Render mods will %s start from tracer entity.", tracerEntity.getValue() ? "no longer" : "now"));
+                    ChatLogger.print(String.format("Render mods will %s start from tracer entity.", RenderUtils.getTracerEntity().getValue() ? "no longer" : "now"));
                     break;
                 case "nametagopacity":
                 case "nto":
-                    Value<Double> nametagOpacity = (Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_opacity");
                     if (arguments.length >= 3) {
                         String newNametagOpacityString = arguments[2];
                         try {
                             if (arguments[2].equalsIgnoreCase("-d")) {
-                                nametagOpacity.setValue(nametagOpacity.getDefault());
+                                RenderUtils.getNametagOpacity().setValue(RenderUtils.getNametagOpacity().getDefault());
                             } else {
-                                double newNametagOpacity = Double.parseDouble(newNametagOpacityString);
-                                if (newNametagOpacity > 1.0F) {
-                                    newNametagOpacity = 1.0F;
-                                } else if (newNametagOpacity < 0.1F) {
-                                    newNametagOpacity = 0.1F;
-                                }
-                                nametagOpacity.setValue(newNametagOpacity);
+                                float newNametagOpacity = Float.parseFloat(newNametagOpacityString);
+                                RenderUtils.getNametagOpacity().setValue(newNametagOpacity);
+                                if (RenderUtils.getNametagSize().getValue() > RenderUtils.getNametagSize().getMax())
+                                    RenderUtils.getNametagSize().setValue(RenderUtils.getNametagSize().getMax());
+                                else if (RenderUtils.getLineWidth().getValue() < RenderUtils.getNametagSize().getMin())
+                                    RenderUtils.getNametagSize().setValue(RenderUtils.getNametagSize().getMin());
                             }
-                            ChatLogger.print(String.format("Render mod nametag opacity set to %s", nametagOpacity.getValue()));
+                            ChatLogger.print(String.format("Nametag Opacity set to %s", RenderUtils.getNametagOpacity().getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newNametagOpacityString));
                         }
@@ -99,22 +96,20 @@ public class Render implements CommandHandler {
                     break;
                 case "nametagsize":
                 case "nts":
-                    Value<Double> nametagSize = (Value<Double>) XIV.getInstance().getValueManager().find("render_nametag_size");
                     if (arguments.length >= 3) {
                         String newNametagSizeString = arguments[2];
                         try {
                             if (arguments[2].equalsIgnoreCase("-d")) {
-                                nametagSize.setValue(nametagSize.getDefault());
+                                RenderUtils.getNametagSize().setValue(RenderUtils.getNametagSize().getDefault());
                             } else {
-                                double newNametagSize = Double.parseDouble(newNametagSizeString);
-                                if (newNametagSize > 10.0F) {
-                                    newNametagSize = 10.0F;
-                                } else if (newNametagSize < 0.1F) {
-                                    newNametagSize = 0.1F;
-                                }
-                                nametagSize.setValue(newNametagSize);
+                                Float newNametagSize = Float.parseFloat(newNametagSizeString);
+                                RenderUtils.getNametagSize().setValue(newNametagSize);
+                                if (RenderUtils.getNametagSize().getValue() > RenderUtils.getNametagSize().getMax())
+                                    RenderUtils.getNametagSize().setValue(RenderUtils.getNametagSize().getMax());
+                                else if (RenderUtils.getLineWidth().getValue() < RenderUtils.getNametagSize().getMin())
+                                    RenderUtils.getNametagSize().setValue(RenderUtils.getNametagSize().getMin());
                             }
-                            ChatLogger.print(String.format("Render mod nametag size set to %s", nametagSize.getValue()));
+                            ChatLogger.print(String.format("Nametag Size set to %s", RenderUtils.getNametagSize().getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newNametagSizeString));
                         }
@@ -124,17 +119,16 @@ public class Render implements CommandHandler {
                     break;
                 case "showtags":
                 case "st":
-                    Value<Boolean> showTags = (Value<Boolean>) XIV.getInstance().getValueManager().find("render_show_tags");
                     if (arguments.length >= 3) {
                         if (arguments[2].equalsIgnoreCase("-d")) {
-                            showTags.setValue(showTags.getDefault());
+                            RenderUtils.getShowTags().setValue(RenderUtils.getShowTags().getDefault());
                         } else {
-                            showTags.setValue(Boolean.parseBoolean(arguments[2]));
+                            RenderUtils.getShowTags().setValue(Boolean.parseBoolean(arguments[2]));
                         }
                     } else {
-                        showTags.setValue(!showTags.getValue());
+                        RenderUtils.getShowTags().setValue(!RenderUtils.getShowTags().getValue());
                     }
-                    ChatLogger.print(String.format("ArrayList will %s show mod tags.", showTags.getValue() ? "now" : "no longer"));
+                    ChatLogger.print(String.format("ArrayList will %s show mod tags.", RenderUtils.getShowTags().getValue() ? "now" : "no longer"));
                     break;
                 default:
                     ChatLogger.print("Invalid action, valid: linewidth, antialiasing, worldbobbing, nametagsize, nametagopacity, tracerentity, showtags");

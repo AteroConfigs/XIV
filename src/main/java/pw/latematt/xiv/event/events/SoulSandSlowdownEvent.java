@@ -7,7 +7,7 @@ import pw.latematt.xiv.event.Event;
  * @author Jack
  */
 
-public final class SoulSandSlowdownEvent extends Event implements Cancellable {
+public class SoulSandSlowdownEvent extends Event implements Cancellable {
     private boolean cancelled;
 
     @Override

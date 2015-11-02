@@ -9,8 +9,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.util.MathHelper;
-import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.value.Value;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -30,7 +28,7 @@ public class EntityUtils {
     private static Entity reference;
 
     public static Entity getReference() {
-        return reference == null ? reference = MINECRAFT.thePlayer : ((set || !((Value<Boolean>) XIV.getInstance().getValueManager().find("render_tracer_entity")).getValue()) ? MINECRAFT.thePlayer : reference);
+        return reference == null ? reference = MINECRAFT.thePlayer : ((set || !RenderUtils.getTracerEntity().getValue()) ? MINECRAFT.thePlayer : reference);
     }
 
     public static boolean isReferenceSet() {
@@ -145,7 +143,8 @@ public class EntityUtils {
         return 1.0F;
     }
 
-    public static void damagePlayer(int damage, double offset) {
+    public static void damagePlayer(int damage) {
+        double offset = 0.055;
         if (MINECRAFT != null && MINECRAFT.thePlayer != null && MINECRAFT.getNetHandler() != null && MINECRAFT.thePlayer.onGround) {
             for (int i = 0; i <= ((3 + damage) / offset); i++) { // TODO: teach rederpz (and myself) how math works
                 MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY + offset, MINECRAFT.thePlayer.posZ, false));

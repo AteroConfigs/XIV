@@ -21,14 +21,7 @@ public class FovFixer extends Mod implements Listener<FovModifierEvent>, Command
 
     public FovFixer() {
         super("FovFixer", ModType.RENDER);
-
-        Command.newCommand()
-                .cmd("fovfixer")
-                .description("Base command for the FovFixer mod.")
-                .arguments("<action>")
-                .aliases("ffix", "fov")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("fovfixer").description("Base command for the FovFixer mod.").arguments("<action>").aliases("ffix", "fov").handler(this).build();
     }
 
     @Override

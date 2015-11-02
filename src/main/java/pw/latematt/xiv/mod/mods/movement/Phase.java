@@ -28,14 +28,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     public Phase() {
         super("Phase", ModType.MOVEMENT, Keyboard.KEY_LBRACKET, 0xFF66FF99);
         setTag(this.mode.getValue().getName());
-
-        Command.newCommand()
-                .cmd("phase")
-                .description("Base command for the Phase mod.")
-                .aliases("noclip", "ph", "noc")
-                .arguments("<action>")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("phase").description("Base command for the Phase mod.").aliases("noclip", "ph", "noc").arguments("<action>").handler(this).build();
 
         blockAddBBListener = new Listener<BlockAddBBEvent>() {
             @Override
@@ -60,14 +53,14 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
             }
         };
 
-        this.pushOutOfBlocksListener = new Listener<PushOutOfBlocksEvent>() {
+        pushOutOfBlocksListener = new Listener<PushOutOfBlocksEvent>() {
             @Override
             public void onEventCalled(PushOutOfBlocksEvent event) {
                 event.setCancelled(true);
             }
         };
 
-        this.cullingListener = new Listener<CullingEvent>() {
+        cullingListener = new Listener<CullingEvent>() {
             @Override
             public void onEventCalled(CullingEvent event) {
                 event.setCancelled(true);

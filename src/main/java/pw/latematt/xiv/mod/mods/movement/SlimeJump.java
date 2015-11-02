@@ -21,14 +21,7 @@ public class SlimeJump extends Mod implements Listener<MotionUpdateEvent>, Comma
 
     public SlimeJump() {
         super("SlimeJump", ModType.MOVEMENT, Keyboard.KEY_NONE, 0xFF66FF33);
-
-        Command.newCommand()
-                .cmd("slimejump")
-                .description("Base command for SlimeJump mod.")
-                .arguments("<action>")
-                .aliases("sj")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("slimejump").description("Base command for SlimeJump mod.").arguments("<action>").aliases("sj").handler(this).build();
     }
 
     public void onEventCalled(MotionUpdateEvent event) {

@@ -30,14 +30,7 @@ public class PingSpoof extends Mod implements Listener<SendPacketEvent>, Command
 
     public PingSpoof() {
         super("PingSpoof", ModType.MISCELLANEOUS, Keyboard.KEY_NONE, 0xFF8B78E7);
-
-        Command.newCommand()
-                .cmd("pingspoof")
-                .description("Base command for the PingSpoof mod.")
-                .aliases("pspoof", "ps")
-                .arguments("<action>")
-                .handler(this)
-                .build();
+        Command.newCommand().cmd("pingspoof").description("Base command for the PingSpoof mod.").aliases("pspoof", "ps").arguments("<action>").handler(this).build();
 
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override

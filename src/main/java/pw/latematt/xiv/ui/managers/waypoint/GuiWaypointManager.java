@@ -111,7 +111,7 @@ public class GuiWaypointManager extends GuiScreen {
 
         search.textboxKeyTyped(typedChar, keyCode);
 
-        if(keyCode == Keyboard.KEY_ESCAPE) {
+        if (keyCode == Keyboard.KEY_ESCAPE) {
             mc.displayGuiScreen(parent);
         }
     }
