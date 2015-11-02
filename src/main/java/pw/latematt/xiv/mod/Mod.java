@@ -3,7 +3,6 @@ package pw.latematt.xiv.mod;
 import net.minecraft.client.Minecraft;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.utils.RenderUtils;
-import pw.latematt.xiv.value.Value;
 
 /**
  * @author Matthew

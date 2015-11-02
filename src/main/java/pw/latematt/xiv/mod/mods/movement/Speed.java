@@ -44,8 +44,12 @@ public class Speed extends Mod implements CommandHandler {
                 if (fastIce.getValue() && BlockUtils.isOnIce(mc.thePlayer)) {
                     Blocks.ice.slipperiness = 0.6F;
                     Blocks.packed_ice.slipperiness = 0.6F;
-                    event.setMotionX(event.getMotionX() * 2.75D);
-                    event.setMotionZ(event.getMotionZ() * 2.75D);
+                    double speed = 2.5D;
+                    if (mc.thePlayer.isSprinting())
+                        speed += 0.22D;
+
+                    event.setMotionX(event.getMotionX() * speed);
+                    event.setMotionZ(event.getMotionZ() * speed);
                 } else {
                     Blocks.ice.slipperiness = 0.98F;
                     Blocks.packed_ice.slipperiness = 0.98F;
@@ -246,7 +250,7 @@ public class Speed extends Mod implements CommandHandler {
                     ChatLogger.print(String.format("Speed will %s go fast on ice.", (fastIce.getValue() ? "now" : "no longer")));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: mode, fastladder");
+                    ChatLogger.print("Invalid action, valid: mode, fastladder, fastice");
                     break;
             }
         } else {

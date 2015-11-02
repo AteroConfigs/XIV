@@ -7,11 +7,9 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.utils.RenderUtils;
-import pw.latematt.xiv.value.Value;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
