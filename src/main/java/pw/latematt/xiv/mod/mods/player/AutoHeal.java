@@ -243,19 +243,22 @@ public class AutoHeal extends Mod implements CommandHandler {
                         ChatLogger.print("Invalid arguments, valid: autoheal mode <mode>");
                     }
                     break;
-                case "soup":
-                    dropFirst(Items.bowl);
-                    useFirst(Items.mushroom_stew);
-                    break;
-                case "head":
-                    useFirst(Items.skull);
-                    break;
-                case "potion":
-                case "pot":
-                    useFirstPotion(Potion.INSTANT_HEALTH, true);
-                    break;
+                case "heal":
+                    switch (mode.getValue()) {
+                        case SOUP:
+                            if (hotbarHas(Items.bowl))
+                                dropFirst(Items.bowl);
+                            useFirst(Items.mushroom_stew);
+                            break;
+                        case HEAD:
+                            useFirst(Items.skull);
+                            break;
+                        case POTION:
+                            useFirstPotion(Potion.INSTANT_HEALTH, true);
+                            break;
+                    }
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, health, mode, soup, head, potion");
+                    ChatLogger.print("Invalid action, valid: delay, health, mode, heal");
                     break;
             }
         } else {
