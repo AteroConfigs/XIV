@@ -150,10 +150,10 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
                         try {
                             long newRandomDelay = arguments[2].equalsIgnoreCase("-d") ? randomDelay.getDefault() : Long.parseLong(newRandomDelayString);
                             randomDelay.setValue(newRandomDelay);
-                            if (delay.getValue() > delay.getMax())
-                                delay.setValue(delay.getMax());
-                            else if (delay.getValue() < delay.getMin())
-                                delay.setValue(delay.getMin());
+                            if (randomDelay.getValue() > randomDelay.getMax())
+                                randomDelay.setValue(randomDelay.getMax());
+                            else if (randomDelay.getValue() < randomDelay.getMin())
+                                randomDelay.setValue(randomDelay.getMin());
 
                             ChatLogger.print(String.format("Triggerbot Random Delay set to %sms", randomDelay.getValue()));
                         } catch (NumberFormatException e) {
