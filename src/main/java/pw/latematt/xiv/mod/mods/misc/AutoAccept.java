@@ -20,8 +20,10 @@ public class AutoAccept extends Mod implements Listener<ReadPacketEvent> {
     public void onEventCalled(ReadPacketEvent event) {
         if (event.getPacket() instanceof S02PacketChat) {
             final S02PacketChat packetChat = (S02PacketChat) event.getPacket();
-            XIV.getInstance().getFriendManager().getContents().keySet().stream().filter(friend ->
-                    packetChat.func_148915_c().getFormattedText().contains(friend) && isValidMessage(packetChat.func_148915_c().getFormattedText())).forEach(friend -> mc.thePlayer.sendChatMessage("/tpaccept " + friend));
+            XIV.getInstance().getFriendManager().getContents().keySet().stream()
+                    .filter(friend -> packetChat.func_148915_c().getFormattedText().contains(friend))
+                    .filter(friend -> isValidMessage(packetChat.func_148915_c().getFormattedText()))
+                    .forEach(friend -> mc.thePlayer.sendChatMessage("/tpaccept " + friend));
         }
     }
 

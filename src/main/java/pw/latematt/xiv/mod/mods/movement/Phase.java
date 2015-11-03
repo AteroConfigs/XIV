@@ -95,13 +95,13 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                         float[] offset = new float[]{xD * 0.25F, 1.0F, zD * 0.25F};
 
                         double[] movements = {
-                                -0.025000000372529D,
-                                -0.02857142899717604D,
-                                -0.0333333338300387D,
-                                -0.04000000059604645D};
+                                0.025000000372529D,
+                                0.02857142899717604D,
+                                0.0333333338300387D,
+                                0.04000000059604645D};
 
                         for (int i = 0; i < movements.length; i++) {
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + (movements[i] * offset[1]) + 0.025F, mc.thePlayer.posZ, mc.thePlayer.onGround));
+                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY - movements[i] + 0.025F, mc.thePlayer.posZ, mc.thePlayer.onGround));
                             mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + offset[0] * i, mc.thePlayer.posY, mc.thePlayer.posZ + offset[2] * i, mc.thePlayer.onGround));
                         }
 
@@ -184,7 +184,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                                 ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: skip, vanilla, vanillaskip, vanillacontrol, new");
+                                ChatLogger.print("Invalid mode, valid: new, skip, narnia, vanilla, vanillaskip, vanillacontrol");
                                 break;
                         }
                         setTag(this.mode.getValue().getName());
@@ -220,7 +220,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     }
 
     private enum Mode {
-        SKIP, VANILLA, VANILLA_SKIP, VANILLA_CONTROL, NEW;
+        NEW, SKIP, VANILLA, VANILLA_SKIP, VANILLA_CONTROL;
 
         public String getName() {
             String prettyName = "";

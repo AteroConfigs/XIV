@@ -86,6 +86,6 @@ public class FileManager extends ListManager<XIVFile> {
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
-        }).run();
+        }, "File Visibility Thread").run();
     }
 }

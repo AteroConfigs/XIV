@@ -10,6 +10,7 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.utils.ChatLogger;
 
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -17,10 +18,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class MassMessage implements CommandHandler, Listener<MotionUpdateEvent> {
     private CopyOnWriteArrayList<String> players = new CopyOnWriteArrayList<>();
+    private final Minecraft mc = Minecraft.getMinecraft();
     private final Timer timer = new Timer();
     private String message;
     private long delay;
-    private final Minecraft mc = Minecraft.getMinecraft();
 
     @Override
     public void onCommandRan(String message) {
@@ -50,9 +51,7 @@ public class MassMessage implements CommandHandler, Listener<MotionUpdateEvent> 
                 }
             } catch (NumberFormatException e) {
                 ChatLogger.print(String.format("\"%s\" is not a number.", arguments[1]));
-            } catch (ArrayIndexOutOfBoundsException e) {
-                ChatLogger.print("Invalid arguments, valid: massmessage <delay> <message>");
-            } catch (StringIndexOutOfBoundsException e) {
+            } catch (ArrayIndexOutOfBoundsException | StringIndexOutOfBoundsException e) {
                 ChatLogger.print("Invalid arguments, valid: massmessage <delay> <message>");
             }
         } else {
@@ -68,17 +67,12 @@ public class MassMessage implements CommandHandler, Listener<MotionUpdateEvent> 
 
                 if (player != null && !players.isEmpty()) {
                     String sendMessage = message;
-
-                    if (message.contains("@")) {
-                        sendMessage = sendMessage.replaceAll("@", player);
-                    }
-                    ChatLogger.print("Sending message to " + player + ".");
-
+                    sendMessage = sendMessage.replaceAll("@p", player);
+                    sendMessage = sendMessage.replaceAll("@r", "" + new Random().nextInt(999999999));
                     mc.thePlayer.sendChatMessage(sendMessage);
 
                     players.remove(0);
                     timer.reset();
-
                     if (players.isEmpty()) {
                         ChatLogger.print("Finished mass message.");
 

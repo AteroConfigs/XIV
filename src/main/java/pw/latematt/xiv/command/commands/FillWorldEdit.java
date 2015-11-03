@@ -16,7 +16,6 @@ import pw.latematt.xiv.utils.RenderUtils;
  * @author Rederpz
  */
 public class FillWorldEdit implements CommandHandler, Listener<Render3DEvent> {
-
     private final Minecraft mc = Minecraft.getMinecraft();
     private BlockPos pos1, pos2;
 
@@ -24,16 +23,7 @@ public class FillWorldEdit implements CommandHandler, Listener<Render3DEvent> {
     public void onEventCalled(Render3DEvent event) {
         if (pos1 != null && pos2 != null) {
             RenderUtils.beginGl();
-
-            float partialTicks = event.getPartialTicks();
-            double renderPosX = mc.thePlayer.lastTickPosX + (mc.thePlayer.posX - mc.thePlayer.lastTickPosX) * partialTicks;
-            double renderPosY = mc.thePlayer.lastTickPosY + (mc.thePlayer.posY - mc.thePlayer.lastTickPosY) * partialTicks;
-            double renderPosZ = mc.thePlayer.lastTickPosZ + (mc.thePlayer.posZ - mc.thePlayer.lastTickPosZ) * partialTicks;
-
-            GlStateManager.pushMatrix();
-            drawBoxes(pos1.getX() - renderPosX, pos1.getY() - renderPosY, pos1.getZ() - renderPosZ, pos2.getX() - renderPosX, pos2.getY() - renderPosY, pos2.getZ() - renderPosZ);
-            GlStateManager.popMatrix();
-
+            drawBoxes(pos1.getX() - mc.getRenderManager().renderPosX, pos1.getY() - mc.getRenderManager().renderPosY, pos1.getZ() - mc.getRenderManager().renderPosZ, pos2.getX() - mc.getRenderManager().renderPosX, pos2.getY() - mc.getRenderManager().renderPosY, pos2.getZ() - mc.getRenderManager().renderPosZ);
             RenderUtils.endGl();
         }
     }

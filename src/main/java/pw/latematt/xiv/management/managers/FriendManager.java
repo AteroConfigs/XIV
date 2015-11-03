@@ -76,8 +76,8 @@ public class FriendManager extends MapManager<String, String> {
                                     ChatLogger.print("Invalid arguments, valid: friend add <mcname> [alias]");
                                 }
                                 break;
-                            case "r" :
-                            case "remove" :
+                            case "r":
+                            case "remove":
                             case "del":
                             case "d":
                                 if (arguments.length >= 3) {
@@ -111,9 +111,8 @@ public class FriendManager extends MapManager<String, String> {
     public String replace(String string, boolean colored) {
         for (String mcname : contents.keySet()) {
             String alias = contents.get(mcname);
-            if (colored) {
+            if (colored)
                 alias = String.format("\247g%s\247r", alias);
-            }
             string = string.replaceAll("(?i)" + Matcher.quoteReplacement(mcname), Matcher.quoteReplacement(alias));
         }
         return string;

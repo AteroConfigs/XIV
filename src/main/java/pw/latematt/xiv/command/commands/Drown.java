@@ -38,6 +38,9 @@ public class Drown implements CommandHandler {
 
     @Override
     public void onCommandRan(String message) {
+        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
+        XIV.getInstance().getListenerManager().remove(playerDeathListener);
+
         if (mc.thePlayer.isInWater()) {
             for (int i = 0; i <= mc.thePlayer.getAir(); i++) {
                 mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));

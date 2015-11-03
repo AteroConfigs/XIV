@@ -60,7 +60,6 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new ChestStealer());
         contents.add(new Commands());
         contents.add(new Criticals());
-        contents.add(new DashNames());
         contents.add(new ESP());
         contents.add(new FakeLag());
         contents.add(new FastPlace());
@@ -109,7 +108,6 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new ClickGUI());
 
         /* disabled mods
-        contents.add(new AutoHead());
         contents.add(new Instinct());
         */
 
@@ -236,16 +234,6 @@ public class ModManager extends ListManager<Mod> {
                     }
                 }).build();
         XIV.getInstance().getLogger().info(String.format("Successfully setup %s, loaded %s.", getClass().getSimpleName(), getContents().size()));
-    }
-
-    public Mod find(Class clazz) {
-        for (Mod mod : getContents()) {
-            if (mod.getClass().equals(clazz)) {
-                return mod;
-            }
-        }
-
-        return null;
     }
 
     public Mod find(String name) {

@@ -3,17 +3,14 @@ package pw.latematt.xiv.management.managers;
 import com.google.common.io.Files;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
-import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.StringUtils;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.commands.*;
 import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.mods.misc.Commands;
-import pw.latematt.xiv.mod.mods.misc.DashNames;
 import pw.latematt.xiv.mod.mods.misc.Keybinds;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
@@ -28,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
 
 /**
  * @author Matthew
@@ -239,22 +235,6 @@ public class CommandManager extends ListManager<Command> {
     }
 
     public boolean parseCommand(String message) {
-        if (mc.thePlayer != null) {
-            if (XIV.getInstance().getModManager().find(DashNames.class) != null && XIV.getInstance().getModManager().find(DashNames.class).isEnabled()) {
-                for (Object o : mc.ingameGUI.getTabList().getPlayerList()) {
-                    NetworkPlayerInfo playerInfo = (NetworkPlayerInfo) o;
-                    String mcname = StringUtils.stripControlCodes(mc.ingameGUI.getTabList().getPlayerName(playerInfo));
-                    if (XIV.getInstance().getFriendManager().isFriend(mcname)) {
-                        String alias = XIV.getInstance().getFriendManager().getContents().get(mcname);
-                        message = message.replaceAll("(?i)" + Matcher.quoteReplacement("-" + alias), mcname);
-                    }else if (XIV.getInstance().getAdminManager().isAdmin(mcname)) {
-                        String alias = XIV.getInstance().getAdminManager().getContents().get(mcname);
-                        message = message.replaceAll("(?i)" + Matcher.quoteReplacement("-" + alias), mcname);
-                    }
-                }
-            }
-        }
-
         String[] spaceSplit = message.split(" ");
         if (spaceSplit[0].startsWith(prefix)) {
             for (Command command : contents) {
@@ -276,16 +256,6 @@ public class CommandManager extends ListManager<Command> {
             return true;
         }
         return false;
-    }
-
-    public Command find(Class clazz) {
-        for (Command cmd : getContents()) {
-            if (cmd.getHandler().getClass().equals(clazz)) {
-                return cmd;
-            }
-        }
-
-        return null;
     }
 
     public Command find(String name) {

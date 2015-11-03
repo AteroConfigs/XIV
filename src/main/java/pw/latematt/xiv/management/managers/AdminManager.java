@@ -8,21 +8,21 @@ import net.minecraft.util.StringUtils;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.file.XIVFile;
-import pw.latematt.xiv.management.MapManager;
+import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.utils.ChatLogger;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.regex.Matcher;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Rederpz
  */
-public class AdminManager extends MapManager<String, String> {
+public class AdminManager extends ListManager<String> {
     public AdminManager() {
-        super(new HashMap<>());
+        super(new ArrayList<>());
     }
 
     @Override
@@ -34,12 +34,10 @@ public class AdminManager extends MapManager<String, String> {
             public void load() throws IOException {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 BufferedReader reader = new BufferedReader(new FileReader(file));
-                HashMap<String, String> admins = gson.fromJson(reader, new TypeToken<HashMap<String, String>>() {
+                List<String> admins = gson.fromJson(reader, new TypeToken<List<String>>() {
                 }.getType());
-                for (String mcname : admins.keySet()) {
-                    String alias = admins.get(mcname);
-                    XIV.getInstance().getAdminManager().add(mcname, alias);
-                }
+                for (String mcname : admins)
+                    XIV.getInstance().getAdminManager().getContents().add(mcname);
             }
 
             @Override
@@ -61,28 +59,22 @@ public class AdminManager extends MapManager<String, String> {
                         switch (action.toLowerCase()) {
                             case "add":
                             case "a":
-                                if (arguments.length == 3) {
-                                    String mcname = arguments[2];
-                                    XIV.getInstance().getAdminManager().add(mcname, mcname);
-                                    XIV.getInstance().getFileManager().saveFile("admins");
-                                    ChatLogger.print(String.format("Admin \"\2475%s\247r\" added.", mcname));
-                                } else if (arguments.length >= 4) {
-                                    String mcname = arguments[2];
-                                    String alias = arguments[3];
-                                    XIV.getInstance().getAdminManager().add(mcname, alias);
-                                    XIV.getInstance().getFileManager().saveFile("admins");
-                                    ChatLogger.print(String.format("Admin \"\2475%s\247r\" added.", alias));
-                                } else {
-                                    ChatLogger.print("Invalid arguments, valid: admin add <mcname> [alias]");
-                                }
-                                break;
-                            case "r" :
-                            case "remove" :
-                            case "del":
-                            case "d":
                                 if (arguments.length >= 3) {
                                     String mcname = arguments[2];
-                                    XIV.getInstance().getAdminManager().remove(mcname);
+                                    XIV.getInstance().getAdminManager().getContents().add(mcname);
+                                    XIV.getInstance().getFileManager().saveFile("admins");
+                                    ChatLogger.print(String.format("Admin \"\2475%s\247r\" added.", mcname));
+                                } else {
+                                    ChatLogger.print("Invalid arguments, valid: admin add <mcname>");
+                                }
+                                break;
+                            case "del":
+                            case "d":
+                            case "remove":
+                            case "r":
+                                if (arguments.length >= 3) {
+                                    String mcname = arguments[2];
+                                    XIV.getInstance().getAdminManager().getContents().remove(mcname);
                                     XIV.getInstance().getFileManager().saveFile("admins");
                                     ChatLogger.print(String.format("Admin \"%s\" removed.", mcname));
                                 } else {
@@ -100,26 +92,7 @@ public class AdminManager extends MapManager<String, String> {
         XIV.getInstance().getLogger().info(String.format("Successfully setup %s.", getClass().getSimpleName()));
     }
 
-    public void add(String mcname, String alias) {
-        contents.put(mcname, alias);
-    }
-
-    public void remove(String mcname) {
-        contents.remove(mcname);
-    }
-
-    public String replace(String string, boolean colored) {
-        for (String mcname : contents.keySet()) {
-            String alias = contents.get(mcname);
-            if (colored) {
-                alias = String.format("\2475%s\247r", alias);
-            }
-            string = string.replaceAll("(?i)" + Matcher.quoteReplacement(mcname), Matcher.quoteReplacement(alias));
-        }
-        return string;
-    }
-
     public boolean isAdmin(String mcname) {
-        return contents.containsKey(StringUtils.stripControlCodes(mcname));
+        return contents.contains(StringUtils.stripControlCodes(mcname));
     }
 }

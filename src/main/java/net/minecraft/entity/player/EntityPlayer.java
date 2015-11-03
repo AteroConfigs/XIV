@@ -1354,7 +1354,12 @@ public abstract class EntityPlayer extends EntityLivingBase
 
                     if (var14)
                     {
-                        if (var18 > 0 && !XIV.getInstance().getModManager().find(NoSlowdown.class).isEnabled())
+                        NoSlowdown noSlowdown = (NoSlowdown) XIV.getInstance().getModManager().find("noslowdown");
+                        boolean noSlowdownCheck = false;
+                        if (noSlowdown != null && noSlowdown.isEnabled())
+                            noSlowdownCheck = true;
+
+                        if (var18 > 0 && noSlowdownCheck)
                         {
                             targetEntity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)var18 * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)var18 * 0.5F));
                             this.motionX *= 0.6D;

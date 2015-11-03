@@ -24,7 +24,7 @@ public class GuiWaypointManager extends GuiScreen {
     }
 
     public List<Waypoint> getWaypoints() {
-        Waypoints waypoints = (Waypoints) XIV.getInstance().getModManager().find(Waypoints.class);
+        Waypoints waypoints = (Waypoints) XIV.getInstance().getModManager().find("waypoints");
         if (search != null && search.getText().length() > 0 && waypoints != null) {
             if (search.getText().startsWith("!")) {
                 String text = search.getText().substring(1);
@@ -33,9 +33,10 @@ public class GuiWaypointManager extends GuiScreen {
                 return waypoints.getPoints().stream().filter(waypoint -> !waypoint.getName().toLowerCase().contains(text.toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
             }
             return waypoints.getPoints().stream().filter(waypoint -> waypoint.getName().toLowerCase().contains(search.getText().toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
-        } else {
+        } else if (waypoints != null) {
             return waypoints.getPoints().stream().collect(Collectors.toList());
         }
+        return null;
     }
 
     @Override
@@ -61,7 +62,7 @@ public class GuiWaypointManager extends GuiScreen {
             if (button.id == 0) {
                 mc.displayGuiScreen(parent);
             } else {
-                Waypoints waypoints = (Waypoints) XIV.getInstance().getModManager().find(Waypoints.class);
+                Waypoints waypoints = (Waypoints) XIV.getInstance().getModManager().find("waypoints");
 
                 if (waypoints != null) {
                     waypoints.getPoints().remove(slot.getWaypoint());
@@ -85,9 +86,9 @@ public class GuiWaypointManager extends GuiScreen {
             Waypoint waypoint = this.slot.getWaypoint();
             mc.fontRendererObj.drawStringWithShadow(waypoint.getName(), 2, 2, 0xFFFFFFFF);
 
-            ((GuiButton) this.buttonList.get(1)).enabled = true;
+            this.buttonList.get(1).enabled = true;
         } else {
-            ((GuiButton) this.buttonList.get(1)).enabled = false;
+            this.buttonList.get(1).enabled = false;
         }
 
         String filters = "Custom Filters: '!'";
@@ -96,8 +97,7 @@ public class GuiWaypointManager extends GuiScreen {
         mc.fontRendererObj.drawStringWithShadow("Search:", width - 182, height - 62, 0xFFFFFFFF);
         search.drawTextBox();
 
-        Waypoints waypoints = (Waypoints) XIV.getInstance().getModManager().find(Waypoints.class);
-
+        Waypoints waypoints = (Waypoints) XIV.getInstance().getModManager().find("waypoints");
         if (waypoints != null) {
             drawCenteredString(mc.fontRendererObj, String.format("Waypoints: §a%s§f/§c%s§f/§e%s§f", getWaypoints().size(), waypoints.getPoints().size() - getWaypoints().size(), waypoints.getPoints().size()), width / 2, 2, 0xFFFFFFFF);
         }

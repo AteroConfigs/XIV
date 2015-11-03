@@ -1,6 +1,5 @@
 package pw.latematt.xiv.mod.mods.combat;
 
-import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C0EPacketClickWindow;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
@@ -20,8 +19,8 @@ public class ArmorBreaker extends Mod implements Listener<AttackEntityEvent> {
 
     @Override
     public void onEventCalled(AttackEntityEvent event) {
-        if (XIV.getInstance().getModManager().find(AutoHeal.class).isEnabled()
-                && ((AutoHeal) XIV.getInstance().getModManager().find(AutoHeal.class)).isHealing())
+        AutoHeal autoHeal = (AutoHeal) XIV.getInstance().getModManager().find("autoheal");
+        if (autoHeal != null && autoHeal.isHealing())
             return;
 
         if (mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.inventoryContainer.getSlot(27).getStack() != null) {

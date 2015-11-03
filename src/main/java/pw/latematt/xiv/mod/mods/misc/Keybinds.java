@@ -21,7 +21,7 @@ public class Keybinds extends Mod implements Listener<KeyPressEvent> {
             @Override
             public void onEventCalled(KeyPressEvent event) {
                 if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-                    if (event.getKeyCode() == Keyboard.KEY_INSERT)
+                    if (event.getKeyCode() == Keyboard.KEY_INSERT && XIV.getInstance().getModManager().find("commands") != null)
                         XIV.getInstance().getModManager().find("commands").setEnabled(true);
             }
         });

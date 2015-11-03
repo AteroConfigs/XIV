@@ -17,24 +17,23 @@ public class History implements CommandHandler {
         String[] arguments = message.split(" ");
 
         if (arguments.length >= 2) {
-            String UUID = "";
+            String uuid = "";
             try {
                 URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + arguments[1]);
                 BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-                String line = "";
+                String line;
                 while ((line = br.readLine()) != null) {
-                    UUID = line.split("\"")[3];
+                    uuid = line.split("\"")[3];
                 }
 
                 br.close();
 
-                url = new URL("https://api.mojang.com/user/profiles/" + UUID + "/names");
+                url = new URL("https://api.mojang.com/user/profiles/" + uuid + "/names");
                 br = new BufferedReader(new InputStreamReader(url.openStream()));
 
-                String originalName = "";
+                String originalName;
                 String oldNames = "";
 
-                line = "";
                 while ((line = br.readLine()) != null) {
                     originalName = line.split("\"")[3];
 
@@ -48,11 +47,10 @@ public class History implements CommandHandler {
                         }
                     }
 
-                    if (oldNames.equals("")) {
+                    if (oldNames.equals(""))
                         ChatLogger.print(arguments[1] + " hasn't changed their name");
-                    } else {
+                    else
                         ChatLogger.print(arguments[1] + "'s name history: " + originalName + ", " + oldNames + ".");
-                    }
                 }
             } catch (IOException e) {
                 ChatLogger.print("Unable to retrieve UUID of player.");
