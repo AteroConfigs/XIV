@@ -95,7 +95,8 @@ public class CommandManager extends ListManager<Command> {
                         ChatLogger.print("Invalid arguments, valid: vclip <blocks>");
                     }
                 }).build();
-        Command.newCommand().cmd("damage").description("Force damage.").aliases("dmg").handler(message -> EntityUtils.damagePlayer(1)).build();
+        Command.newCommand().cmd("damage").description("Fall hard enough to lose a half of a heart.").aliases("dmg").handler(message -> EntityUtils.damagePlayer(1)).build();
+        Command.newCommand().cmd("suicide").description("Fall to your untimely death.").aliases("kms", "bleach", "clorox").handler(message -> EntityUtils.damagePlayer(999)).build();
         Command.newCommand().cmd("say").description("Makes you send a chat message.").arguments("<message>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
@@ -205,7 +206,7 @@ public class CommandManager extends ListManager<Command> {
         Command.newCommand().cmd("screenshot").description("Take a screenshot of your minecraft.").aliases("scr", "imgur", "image", "img").handler(new Screenshot()).build();
         Command.newCommand().cmd("fillworldedit").description("Use world edit in 1.8 servers that don't have world edit.").aliases("fwe", "we", "//", "worldedit").handler(new FillWorldEdit()).build();
         Command.newCommand().cmd("pluginfinder").description("Find plugins the server has.").arguments("<action>").aliases("pl", "pf").handler(new PluginFinder()).build();
-        Command.newCommand().cmd("drown").description("Instantly drown yourself in water.").handler(new Drown()).build();
+        Command.newCommand().cmd("drown").description("Drowns you faster than usual.").handler(new Drown()).build();
 
         Command.newCommand().cmd("prefix").description("Changes your command prefix").arguments("<new prefix>")
                 .handler(message -> {
