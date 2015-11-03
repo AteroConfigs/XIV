@@ -1,5 +1,8 @@
 package pw.latematt.xiv.mod.mods.player;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.init.Items;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.potion.Potion;
@@ -13,6 +16,7 @@ import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.InventoryUtils;
 import pw.latematt.xiv.value.ClampedValue;
@@ -51,7 +55,7 @@ public class AutoHeal extends Mod implements CommandHandler {
 
                             useFirst(Items.mushroom_stew);
 
-                            if (mc.thePlayer.getHealth() <= health.getValue() && potion.getValue() && countPotion(Potion.INSTANT_HEALTH, true) > 0) {
+                            if (mc.thePlayer.getHealth() <= health.getValue() && potion.getValue() && canSafelyThrowPot()) {
                                 if (!hotbarHasPotion(Potion.INSTANT_HEALTH, true) && !hotbarIsFull())
                                     shiftClickPotion(Potion.INSTANT_HEALTH, true);
 
@@ -63,7 +67,7 @@ public class AutoHeal extends Mod implements CommandHandler {
                             } else {
                                 timer.reset();
                             }
-                        } else if (potion.getValue() && countPotion(Potion.INSTANT_HEALTH, true) > 0) {
+                        } else if (potion.getValue() && canSafelyThrowPot()) {
                             if (!hotbarHasPotion(Potion.INSTANT_HEALTH, true) && !hotbarIsFull())
                                 shiftClickPotion(Potion.INSTANT_HEALTH, true);
 
@@ -96,6 +100,20 @@ public class AutoHeal extends Mod implements CommandHandler {
                 }
             }
         };
+    }
+
+    private boolean canSafelyThrowPot() {
+        /* air and water check, to prevent wasting pots */
+        Block blockUnder = BlockUtils.getBlock(mc.thePlayer, -0.1);
+        Block block2Under = BlockUtils.getBlock(mc.thePlayer, -1.1);
+        boolean airCheck = false;
+        boolean waterCheck = false;
+        if (blockUnder instanceof BlockAir && block2Under instanceof BlockAir)
+            airCheck = true;
+        else if (blockUnder instanceof BlockLiquid && block2Under instanceof BlockLiquid)
+            waterCheck = true;
+
+        return countPotion(Potion.INSTANT_HEALTH, true) > 0 && !airCheck && !waterCheck;
     }
 
     private void updateTag() {
