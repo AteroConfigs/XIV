@@ -175,9 +175,19 @@ public class KillAura extends Mod implements CommandHandler {
         return false;
     }
 
-    // used in autoblock
     public boolean isAttacking() {
         return mode.getValue().isAttacking();
+    }
+
+    public Long getDelay() {
+        if (randomDelay.getValue() == 0)
+            return delay.getValue();
+        return delay.getValue() - random.nextInt(randomDelay.getValue().intValue());
+    }
+
+    public boolean isHealing() {
+        AutoHeal autoHeal = (AutoHeal) XIV.getInstance().getModManager().find("autoheal");
+        return autoHeal != null && autoHeal.isHealing();
     }
 
     @Override
@@ -480,15 +490,6 @@ public class KillAura extends Mod implements CommandHandler {
         } else {
             ChatLogger.print("Invalid arguments, valid: killaura <action>");
         }
-    }
-
-    public Long getDelay() {
-        return randomDelay.getValue() == 0 ? delay.getValue() : Long.valueOf(delay.getValue() - random.nextInt(randomDelay.getValue().intValue()));
-    }
-
-    public boolean isHealing() {
-        AutoHeal autoHeal = (AutoHeal) XIV.getInstance().getModManager().find("autoheal");
-        return autoHeal != null && autoHeal.isHealing();
     }
 
     @Override

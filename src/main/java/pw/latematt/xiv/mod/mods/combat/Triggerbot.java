@@ -112,8 +112,9 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
     }
 
     public Long getDelay() {
-        long difference = delay.getValue() - random.nextInt(randomDelay.getValue().intValue());
-        return randomDelay.getValue() == 0 ? delay.getValue() : difference;
+        if (randomDelay.getValue() == 0)
+            return delay.getValue();
+        return delay.getValue() - random.nextInt(randomDelay.getValue().intValue());
     }
 
     @Override
