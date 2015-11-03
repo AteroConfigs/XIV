@@ -104,7 +104,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new XIVChat());
         contents.add(new Zoot());
 
-        /* always load clickgui and trayicon after all mods */
+        /* always load clickgui after all mods */
         contents.add(new ClickGUI());
 
         /* disabled mods
