@@ -24,10 +24,8 @@ public class ArmorBreaker extends Mod implements Listener<AttackEntityEvent> {
                 && ((AutoHeal) XIV.getInstance().getModManager().find(AutoHeal.class)).isHealing())
             return;
 
-        if (mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
-            if (mc.thePlayer.inventoryContainer.getSlot(27).getStack() != null && mc.thePlayer.inventoryContainer.getSlot(27).getStack().getItem() instanceof ItemSword) {
-                mc.getNetHandler().addToSendQueue(new C0EPacketClickWindow(mc.thePlayer.inventoryContainer.windowId, 27, mc.thePlayer.inventory.currentItem, 2, mc.thePlayer.getCurrentEquippedItem(), mc.thePlayer.openContainer.getNextTransactionID(mc.thePlayer.inventory)));
-            }
+        if (mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.inventoryContainer.getSlot(27).getStack() != null) {
+            mc.getNetHandler().addToSendQueue(new C0EPacketClickWindow(mc.thePlayer.inventoryContainer.windowId, 27, mc.thePlayer.inventory.currentItem, 2, mc.thePlayer.getCurrentEquippedItem(), mc.thePlayer.openContainer.getNextTransactionID(mc.thePlayer.inventory)));
         }
     }
 

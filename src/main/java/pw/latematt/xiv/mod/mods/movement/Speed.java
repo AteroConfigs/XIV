@@ -79,7 +79,7 @@ public class Speed extends Mod implements CommandHandler {
                                     mc.thePlayer.motionZ *= 0.975F;
                                 }
 
-                                mc.timer.timerSpeed = 1.125F;
+                                mc.timer.timerSpeed = 1.11F;
 
                                 nextTick = true;
                             } else {

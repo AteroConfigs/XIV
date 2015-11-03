@@ -20,7 +20,7 @@ public class InventoryUtils {
     private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
     /* normal stuff */
-    public static void getFromInventory(Item item) {
+    public static void shiftClick(Item item) {
         for (int index = 9; index <= 36; index++) {
             ItemStack stack = MINECRAFT.thePlayer.inventoryContainer.getSlot(index).getStack();
             if (stack == null)
@@ -115,6 +115,7 @@ public class InventoryUtils {
         return counter;
     }
 
+    /* potion stuff */
     public static boolean isPotion(ItemStack stack, Potion potion, boolean splash) {
         if (stack == null)
             return false;
@@ -135,7 +136,7 @@ public class InventoryUtils {
         return false;
     }
 
-    public static void getPotionFromInventory(Potion effect, boolean splash) {
+    public static void shiftClickPotion(Potion effect, boolean splash) {
         for (int index = 9; index <= 36; index++) {
             ItemStack stack = MINECRAFT.thePlayer.inventoryContainer.getSlot(index).getStack();
             if (stack == null)
@@ -227,5 +228,15 @@ public class InventoryUtils {
                 counter += stack.stackSize;
         }
         return counter;
+    }
+
+    /* general use */
+    public static boolean hotbarIsFull() {
+        for (int index = 0; index <= 36; index++) {
+            ItemStack stack = MINECRAFT.thePlayer.inventory.getStackInSlot(index);
+            if (stack == null)
+                return false;
+        }
+        return true;
     }
 }
