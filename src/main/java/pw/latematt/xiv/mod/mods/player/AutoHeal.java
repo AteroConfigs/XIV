@@ -218,17 +218,17 @@ public class AutoHeal extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
-                            case "potion":
-                            case "pot":
-                                this.mode.setValue(Mode.POTION);
-                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
-                                break;
                             case "soup":
                                 this.mode.setValue(Mode.SOUP);
                                 ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             case "head":
                                 this.mode.setValue(Mode.HEAD);
+                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
+                                break;
+                            case "potion":
+                            case "pot":
+                                this.mode.setValue(Mode.POTION);
                                 ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             case "-d":
