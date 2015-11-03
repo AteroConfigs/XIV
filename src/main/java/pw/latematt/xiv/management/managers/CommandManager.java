@@ -3,17 +3,14 @@ package pw.latematt.xiv.management.managers;
 import com.google.common.io.Files;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
-import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.StringUtils;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.commands.*;
 import pw.latematt.xiv.file.XIVFile;
 import pw.latematt.xiv.management.ListManager;
 import pw.latematt.xiv.mod.mods.misc.Commands;
-import pw.latematt.xiv.mod.mods.misc.DashNames;
 import pw.latematt.xiv.mod.mods.misc.Keybinds;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
@@ -28,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
 
 /**
  * @author Matthew
@@ -99,7 +95,8 @@ public class CommandManager extends ListManager<Command> {
                         ChatLogger.print("Invalid arguments, valid: vclip <blocks>");
                     }
                 }).build();
-        Command.newCommand().cmd("damage").description("Force damage.").aliases("dmg").handler(message -> EntityUtils.damagePlayer(1)).build();
+        Command.newCommand().cmd("damage").description("Fall hard enough to lose a half of a heart.").aliases("dmg").handler(message -> EntityUtils.damagePlayer(1)).build();
+        Command.newCommand().cmd("suicide").description("Fall to your untimely death.").aliases("kms", "bleach", "clorox").handler(message -> EntityUtils.damagePlayer(999)).build();
         Command.newCommand().cmd("say").description("Makes you send a chat message.").arguments("<message>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");
@@ -209,7 +206,7 @@ public class CommandManager extends ListManager<Command> {
         Command.newCommand().cmd("screenshot").description("Take a screenshot of your minecraft.").aliases("scr", "imgur", "image", "img").handler(new Screenshot()).build();
         Command.newCommand().cmd("fillworldedit").description("Use world edit in 1.8 servers that don't have world edit.").aliases("fwe", "we", "//", "worldedit").handler(new FillWorldEdit()).build();
         Command.newCommand().cmd("pluginfinder").description("Find plugins the server has.").arguments("<action>").aliases("pl", "pf").handler(new PluginFinder()).build();
-        Command.newCommand().cmd("drown").description("Instantly drown yourself in water.").handler(new Drown()).build();
+        Command.newCommand().cmd("drown").description("Drowns you faster than usual.").handler(new Drown()).build();
 
         Command.newCommand().cmd("prefix").description("Changes your command prefix").arguments("<new prefix>")
                 .handler(message -> {
@@ -239,22 +236,6 @@ public class CommandManager extends ListManager<Command> {
     }
 
     public boolean parseCommand(String message) {
-        if (mc.thePlayer != null) {
-            if (XIV.getInstance().getModManager().find(DashNames.class) != null && XIV.getInstance().getModManager().find(DashNames.class).isEnabled()) {
-                for (Object o : mc.ingameGUI.getTabList().getPlayerList()) {
-                    NetworkPlayerInfo playerInfo = (NetworkPlayerInfo) o;
-                    String mcname = StringUtils.stripControlCodes(mc.ingameGUI.getTabList().getPlayerName(playerInfo));
-                    if (XIV.getInstance().getFriendManager().isFriend(mcname)) {
-                        String alias = XIV.getInstance().getFriendManager().getContents().get(mcname);
-                        message = message.replaceAll("(?i)" + Matcher.quoteReplacement("-" + alias), mcname);
-                    }else if (XIV.getInstance().getAdminManager().isAdmin(mcname)) {
-                        String alias = XIV.getInstance().getAdminManager().getContents().get(mcname);
-                        message = message.replaceAll("(?i)" + Matcher.quoteReplacement("-" + alias), mcname);
-                    }
-                }
-            }
-        }
-
         String[] spaceSplit = message.split(" ");
         if (spaceSplit[0].startsWith(prefix)) {
             for (Command command : contents) {
@@ -276,16 +257,6 @@ public class CommandManager extends ListManager<Command> {
             return true;
         }
         return false;
-    }
-
-    public Command find(Class clazz) {
-        for (Command cmd : getContents()) {
-            if (cmd.getHandler().getClass().equals(clazz)) {
-                return cmd;
-            }
-        }
-
-        return null;
     }
 
     public Command find(String name) {

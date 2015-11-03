@@ -72,7 +72,8 @@ public class Freecam extends Mod {
                     entity.copyLocationAndAnglesFrom(mc.thePlayer);
                     entity.rotationYawHead = mc.thePlayer.rotationYawHead;
                     clonePlayer(entity);
-                    entity.setSneaking(mc.thePlayer.isSneaking() || XIV.getInstance().getModManager().find(Sneak.class).isEnabled());
+                    Sneak sneak = (Sneak) XIV.getInstance().getModManager().find("sneak");
+                    entity.setSneaking(mc.thePlayer.isSneaking() || sneak != null && sneak.isEnabled());
 
                     mc.theWorld.addEntityToWorld(-1, entity);
                     mc.renderGlobal.loadRenderers();
@@ -115,7 +116,9 @@ public class Freecam extends Mod {
             entity.copyLocationAndAnglesFrom(mc.thePlayer);
             entity.rotationYawHead = mc.thePlayer.rotationYawHead;
             clonePlayer(entity);
-            entity.setSneaking(mc.thePlayer.isSneaking() || XIV.getInstance().getModManager().find(Sneak.class).isEnabled());
+
+            Sneak sneak = (Sneak) XIV.getInstance().getModManager().find("sneak");
+            entity.setSneaking(mc.thePlayer.isSneaking() || sneak != null && sneak.isEnabled());
 
             mc.theWorld.addEntityToWorld(-1, entity);
             mc.renderGlobal.loadRenderers();

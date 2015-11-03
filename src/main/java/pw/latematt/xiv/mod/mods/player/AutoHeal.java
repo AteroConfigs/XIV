@@ -48,6 +48,8 @@ public class AutoHeal extends Mod implements CommandHandler {
             public void onEventCalled(MotionUpdateEvent event) {
                 if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
                     updateTag();
+                    if (mode.getValue() == Mode.HEAD)
+                        needsToHeal = needsToHeal || teammateNeedsToHeal();
                     if (needsToHeal && timer.hasReached(delay.getValue())) {
                         switch (mode.getValue()) {
                             case SOUP:
@@ -56,6 +58,14 @@ public class AutoHeal extends Mod implements CommandHandler {
                                     shiftClick(Items.mushroom_stew);
 
                                 useFirst(Items.mushroom_stew);
+                                needsToHeal = false;
+                                timer.reset();
+                                break;
+                            case HEAD:
+                                if (!hotbarHas(Items.skull) && !hotbarIsFull())
+                                    shiftClick(Items.skull);
+
+                                useFirst(Items.skull);
                                 needsToHeal = false;
                                 timer.reset();
                                 break;
@@ -110,6 +120,10 @@ public class AutoHeal extends Mod implements CommandHandler {
         };
     }
 
+    private boolean teammateNeedsToHeal() {
+        return mc.theWorld.playerEntities.stream().filter(player -> mc.thePlayer.isOnSameTeam(player)).filter(player -> player.getHealth() <= health.getValue()).findAny().isPresent();
+    }
+
     private boolean canSafelyThrowPot() {
         /* air and water check, to prevent wasting pots */
         Block blockUnder = BlockUtils.getBlock(mc.thePlayer, -0.1);
@@ -125,16 +139,21 @@ public class AutoHeal extends Mod implements CommandHandler {
     }
 
     private void updateTag() {
-        int potions = countPotion(Potion.INSTANT_HEALTH, true);
-        int soups = countItem(Items.mushroom_stew);
         String tag = "";
 
         switch (mode.getValue()) {
             case SOUP:
+                int soups = countItem(Items.mushroom_stew);
                 if (soups > 0)
                     tag += "\2476" + soups;
                 break;
+            case HEAD:
+                int heads = countItem(Items.skull);
+                if (heads > 0)
+                    tag += "" + heads;
+                break;
             case POTION:
+                int potions = countPotion(Potion.INSTANT_HEALTH, true);
                 if (potions > 0)
                     tag += "\247c" + potions;
                 break;
@@ -208,6 +227,10 @@ public class AutoHeal extends Mod implements CommandHandler {
                                 this.mode.setValue(Mode.SOUP);
                                 ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
                                 break;
+                            case "head":
+                                this.mode.setValue(Mode.HEAD);
+                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
+                                break;
                             case "-d":
                                 this.mode.setValue(this.mode.getDefault());
                                 ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
@@ -220,16 +243,19 @@ public class AutoHeal extends Mod implements CommandHandler {
                         ChatLogger.print("Invalid arguments, valid: autoheal mode <mode>");
                     }
                     break;
-                case "potion":
-                case "pot":
-                    useFirstPotion(Potion.INSTANT_HEALTH, true);
-                    break;
                 case "soup":
                     dropFirst(Items.bowl);
                     useFirst(Items.mushroom_stew);
                     break;
+                case "head":
+                    useFirst(Items.skull);
+                    break;
+                case "potion":
+                case "pot":
+                    useFirstPotion(Potion.INSTANT_HEALTH, true);
+                    break;
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, health, mode, potion, soup");
+                    ChatLogger.print("Invalid action, valid: delay, health, mode, soup, head, potion");
                     break;
             }
         } else {
@@ -252,7 +278,7 @@ public class AutoHeal extends Mod implements CommandHandler {
     }
 
     private enum Mode {
-        POTION, SOUP;
+        SOUP, HEAD, POTION;
 
         public String getName() {
             String prettyName = "";

@@ -144,11 +144,17 @@ public class EntityUtils {
     }
 
     public static void damagePlayer(int damage) {
-        double offset = 0.055;
-        if (MINECRAFT != null && MINECRAFT.thePlayer != null && MINECRAFT.getNetHandler() != null && MINECRAFT.thePlayer.onGround) {
+        /* capping it just in case anybody has an autism attack */
+        if (damage < 1)
+            damage = 1;
+        if (damage > MathHelper.floor_double(MINECRAFT.thePlayer.getMaxHealth()))
+            damage = MathHelper.floor_double(MINECRAFT.thePlayer.getMaxHealth());
+
+        double offset = 0.0625;
+        if (MINECRAFT.thePlayer != null && MINECRAFT.getNetHandler() != null && MINECRAFT.thePlayer.onGround) {
             for (int i = 0; i <= ((3 + damage) / offset); i++) { // TODO: teach rederpz (and myself) how math works
                 MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY + offset, MINECRAFT.thePlayer.posZ, false));
-                MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY, MINECRAFT.thePlayer.posZ, false));
+                MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY, MINECRAFT.thePlayer.posZ, (i == ((3 + damage) / offset))));
             }
         }
     }
