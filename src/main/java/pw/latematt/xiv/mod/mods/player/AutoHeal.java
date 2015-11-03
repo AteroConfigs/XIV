@@ -218,17 +218,17 @@ public class AutoHeal extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
-                            case "potion":
-                            case "pot":
-                                this.mode.setValue(Mode.POTION);
-                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
-                                break;
                             case "soup":
                                 this.mode.setValue(Mode.SOUP);
                                 ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             case "head":
                                 this.mode.setValue(Mode.HEAD);
+                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
+                                break;
+                            case "potion":
+                            case "pot":
+                                this.mode.setValue(Mode.POTION);
                                 ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             case "-d":
@@ -243,19 +243,22 @@ public class AutoHeal extends Mod implements CommandHandler {
                         ChatLogger.print("Invalid arguments, valid: autoheal mode <mode>");
                     }
                     break;
-                case "soup":
-                    dropFirst(Items.bowl);
-                    useFirst(Items.mushroom_stew);
-                    break;
-                case "head":
-                    useFirst(Items.skull);
-                    break;
-                case "potion":
-                case "pot":
-                    useFirstPotion(Potion.INSTANT_HEALTH, true);
-                    break;
+                case "heal":
+                    switch (mode.getValue()) {
+                        case SOUP:
+                            if (hotbarHas(Items.bowl))
+                                dropFirst(Items.bowl);
+                            useFirst(Items.mushroom_stew);
+                            break;
+                        case HEAD:
+                            useFirst(Items.skull);
+                            break;
+                        case POTION:
+                            useFirstPotion(Potion.INSTANT_HEALTH, true);
+                            break;
+                    }
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, health, mode, soup, head, potion");
+                    ChatLogger.print("Invalid action, valid: delay, health, mode, heal");
                     break;
             }
         } else {
