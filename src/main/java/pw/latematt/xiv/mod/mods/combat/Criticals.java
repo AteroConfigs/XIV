@@ -123,7 +123,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
                     } else {
                         miniJumps.setValue(!miniJumps.getValue());
                     }
-                    ChatLogger.print(String.format("Criticals will %s now perform mini jumps.", (miniJumps.getValue() ? "now" : "no longer")));
+                    ChatLogger.print(String.format("Criticals will %s perform mini jumps.", (miniJumps.getValue() ? "now" : "no longer")));
                     break;
                 default:
                     ChatLogger.print("Invalid action, valid: minijumps");

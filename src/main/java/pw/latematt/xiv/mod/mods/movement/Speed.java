@@ -215,7 +215,7 @@ public class Speed extends Mod implements CommandHandler {
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: fast, casper, old");
+                                ChatLogger.print("Invalid mode, valid: fast, capsar, old");
                                 break;
                         }
                         setTag(currentMode.getValue().getName());
