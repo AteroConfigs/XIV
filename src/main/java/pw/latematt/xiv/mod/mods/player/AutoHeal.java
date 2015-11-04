@@ -257,6 +257,7 @@ public class AutoHeal extends Mod implements CommandHandler {
                             useFirstPotion(Potion.INSTANT_HEALTH, true);
                             break;
                     }
+                    break;
                 default:
                     ChatLogger.print("Invalid action, valid: delay, health, mode, heal");
                     break;
