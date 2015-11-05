@@ -8,7 +8,6 @@ import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
-import pw.latematt.xiv.utils.EntityUtils;
 
 /**
  * @author Jack

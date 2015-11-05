@@ -60,11 +60,12 @@ public class Speed extends Mod implements CommandHandler {
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                double speed;
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                    double speed, slow;
                     switch (currentMode.getValue()) {
                         case CAPSAR:
-                            speed = 2.37D;
+                            speed = 2.3737D;
+                            slow = 1.5D;
                             if (mc.thePlayer.isPotionActive(Potion.SPEED)) {
                                 PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
                                 switch (effect.getAmplifier()) {
@@ -93,50 +94,42 @@ public class Speed extends Mod implements CommandHandler {
                                 if (nextTick = !nextTick) {
                                     mc.thePlayer.motionX *= speed;
                                     mc.thePlayer.motionZ *= speed;
-                                    mc.timer.timerSpeed = 1.15F;
                                 } else {
-                                    mc.thePlayer.motionX /= 1.50D;
-                                    mc.thePlayer.motionZ /= 1.50D;
-                                    mc.timer.timerSpeed = 1.0F;
+                                    mc.thePlayer.motionX /= slow;
+                                    mc.thePlayer.motionZ /= slow;
                                 }
                             } else if (nextTick) {
                                 mc.thePlayer.motionX /= speed;
                                 mc.thePlayer.motionZ /= speed;
-                                mc.timer.timerSpeed = 1.0F;
                                 nextTick = false;
                             }
                             break;
                         case OLD:
                             if (isValid()) {
                                 speed = 3.0D;
-                                double slow = 1.425D;
+                                slow = 1.425D;
                                 if (mc.thePlayer.moveStrafing == 0.0F)
                                     speed += 0.05D;
 
                                 switch (++ticks) {
                                     case 1:
-                                        mc.timer.timerSpeed = 1.325F;
                                         mc.thePlayer.motionX *= speed;
                                         mc.thePlayer.motionZ *= speed;
                                         break;
                                     case 2:
-                                        mc.timer.timerSpeed = 1.0F;
                                         mc.thePlayer.motionX /= slow;
                                         mc.thePlayer.motionZ /= slow;
                                         break;
                                     case 3:
-                                        mc.timer.timerSpeed = 1.05F;
                                         break;
                                     default:
-                                        mc.timer.timerSpeed = 1.0F;
                                         ticks = 0;
                                         break;
                                 }
                             } else {
-                                ticks = 4;
-                                mc.timer.timerSpeed = 1.0F;
                                 mc.thePlayer.motionX *= 0.98D;
                                 mc.thePlayer.motionZ *= 0.98D;
+                                ticks = 4;
                             }
                             break;
                     }
@@ -158,11 +151,10 @@ public class Speed extends Mod implements CommandHandler {
                                     mc.thePlayer.motionZ *= 0.975F;
                                 }
 
-                                mc.timer.timerSpeed = 1.11F;
-
+                                mc.getTimer().timerSpeed = 1.11F;
                                 nextTick = true;
                             } else {
-                                mc.timer.timerSpeed = 1.0F;
+                                mc.getTimer().timerSpeed = 1.0F;
                             }
 
                             if (nextTick && !mc.thePlayer.onGround && !mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isOnLadder()) {
@@ -182,8 +174,10 @@ public class Speed extends Mod implements CommandHandler {
         boolean moving = mc.thePlayer.movementInput.moveForward != 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
         moving = moving || strafing;
+        double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
+        boolean groundCheck = yDifference == 0.0D;
 
-        return mc.thePlayer.posX - mc.thePlayer.lastTickPosY <= 0.80D &&
+        return groundCheck &&
                 !BlockUtils.isOnLiquid(mc.thePlayer) &&
                 !BlockUtils.isInLiquid(mc.thePlayer) &&
                 !BlockUtils.isOnIce(mc.thePlayer) &&
@@ -271,7 +265,6 @@ public class Speed extends Mod implements CommandHandler {
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(motionUpdateListener);
         XIV.getInstance().getListenerManager().remove(moveListener);
-        mc.timer.timerSpeed = 1.0F;
         Blocks.ice.slipperiness = 0.98F;
         Blocks.packed_ice.slipperiness = 0.98F;
     }

@@ -221,7 +221,10 @@ public class Minecraft implements IThreadListener, IPlayerUsage
     private CrashReport crashReporter;
     public int displayWidth;
     public int displayHeight;
-    public Timer timer = new Timer(20.0F);
+    private Timer timer = new Timer(20.0F);
+    public Timer getTimer() {
+        return timer;
+    }
 
     /** Instance of PlayerUsageSnooper. */
     private PlayerUsageSnooper usageSnooper = new PlayerUsageSnooper("client", this, MinecraftServer.getCurrentTimeMillis());

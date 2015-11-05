@@ -51,7 +51,7 @@ public class InventoryUtils {
             if (stack.getItem() == item) {
                 int oldItem = MINECRAFT.thePlayer.inventory.currentItem;
                 MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(index));
-                MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
+                MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(BlockPos.ORIGIN, 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
                 MINECRAFT.thePlayer.stopUsingItem();
                 MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(oldItem));
                 break;
@@ -67,11 +67,11 @@ public class InventoryUtils {
             if (stack.getItem() == item) {
                 int oldItem = MINECRAFT.thePlayer.inventory.currentItem;
                 MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(index));
-                MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
+                MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(BlockPos.ORIGIN, 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
                 for (int x = 0; x <= 32; x++) {
                     MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer(MINECRAFT.thePlayer.onGround));
                 }
-                MINECRAFT.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
+                MINECRAFT.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
                 MINECRAFT.thePlayer.stopUsingItem();
                 MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(oldItem));
                 break;
@@ -167,7 +167,7 @@ public class InventoryUtils {
             if (isPotion(stack, effect, splash)) {
                 int oldItem = MINECRAFT.thePlayer.inventory.currentItem;
                 MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(index));
-                MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
+                MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(BlockPos.ORIGIN, 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
                 MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(oldItem));
                 break;
             }
@@ -182,11 +182,11 @@ public class InventoryUtils {
             if (isPotion(stack, effect, false)) {
                 int oldItem = MINECRAFT.thePlayer.inventory.currentItem;
                 MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(index));
-                MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(new BlockPos(-1, -1, -1), 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
+                MINECRAFT.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(BlockPos.ORIGIN, 255, MINECRAFT.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
                 for (int x = 0; x <= 32; x++) {
                     MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer(MINECRAFT.thePlayer.onGround));
                 }
-                MINECRAFT.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
+                MINECRAFT.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
                 MINECRAFT.thePlayer.stopUsingItem();
                 MINECRAFT.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(oldItem));
                 break;
