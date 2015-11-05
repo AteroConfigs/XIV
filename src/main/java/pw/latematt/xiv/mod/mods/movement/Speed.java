@@ -60,58 +60,30 @@ public class Speed extends Mod implements CommandHandler {
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
+                double speed;
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    double speed;
                     switch (currentMode.getValue()) {
-                        case FAST:
-                            if (!mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isCollidedHorizontally && isValid()) {
-                                double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
-
-                                double x = Math.cos(offset) * 0.25F;
-                                double z = Math.sin(offset) * 0.25F;
-
-                                mc.thePlayer.motionX += x;
-                                mc.thePlayer.motionY = 0.0175F;
-                                mc.thePlayer.motionZ += z;
-
-                                if (mc.thePlayer.movementInput.moveStrafe != 0) {
-                                    mc.thePlayer.motionX *= 0.975F;
-                                    mc.thePlayer.motionZ *= 0.975F;
-                                }
-
-                                mc.timer.timerSpeed = 1.11F;
-
-                                nextTick = true;
-                            } else {
-                                mc.timer.timerSpeed = 1.0F;
-                            }
-
-                            if (nextTick && !mc.thePlayer.onGround && !mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isOnLadder()) {
-                                mc.thePlayer.motionY = -0.1F;
-                                nextTick = false;
-                            }
-                            break;
                         case CAPSAR:
                             speed = 2.37D;
-                            if (isValid()) {
-                                if (mc.thePlayer.isPotionActive(Potion.SPEED)) {
-                                    PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
-                                    switch (effect.getAmplifier()) {
-                                        case 0:
-                                            speed -= 0.2975D;
-                                            break;
-                                        case 1:
-                                            speed -= 0.5575D;
-                                            break;
-                                        case 2:
-                                            speed -= 0.7858D;
-                                            break;
-                                        case 3:
-                                            speed -= 0.9075D;
-                                            break;
-                                    }
+                            if (mc.thePlayer.isPotionActive(Potion.SPEED)) {
+                                PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
+                                switch (effect.getAmplifier()) {
+                                    case 0:
+                                        speed -= 0.2975D;
+                                        break;
+                                    case 1:
+                                        speed -= 0.5575D;
+                                        break;
+                                    case 2:
+                                        speed -= 0.7858D;
+                                        break;
+                                    case 3:
+                                        speed -= 0.9075D;
+                                        break;
                                 }
+                            }
 
+                            if (isValid()) {
                                 boolean strafe = mc.thePlayer.moveStrafing != 0.0F;
                                 speed = speed + (mc.thePlayer.isSprinting() ? 0.02D : 0.40D);
 
@@ -168,6 +140,37 @@ public class Speed extends Mod implements CommandHandler {
                             }
                             break;
                     }
+                } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
+                    switch (currentMode.getValue()) {
+                        case FAST:
+                            if (!mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isCollidedHorizontally && isValid()) {
+                                double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
+
+                                double x = Math.cos(offset) * 0.25F;
+                                double z = Math.sin(offset) * 0.25F;
+
+                                mc.thePlayer.motionX += x;
+                                mc.thePlayer.motionY = 0.0175F;
+                                mc.thePlayer.motionZ += z;
+
+                                if (mc.thePlayer.movementInput.moveStrafe != 0) {
+                                    mc.thePlayer.motionX *= 0.975F;
+                                    mc.thePlayer.motionZ *= 0.975F;
+                                }
+
+                                mc.timer.timerSpeed = 1.11F;
+
+                                nextTick = true;
+                            } else {
+                                mc.timer.timerSpeed = 1.0F;
+                            }
+
+                            if (nextTick && !mc.thePlayer.onGround && !mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isOnLadder()) {
+                                mc.thePlayer.motionY = -0.1F;
+                                nextTick = false;
+                            }
+                            break;
+                    }
                 }
             }
         };
@@ -180,7 +183,7 @@ public class Speed extends Mod implements CommandHandler {
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
         moving = moving || strafing;
 
-        return mc.thePlayer.onGround &&
+        return mc.thePlayer.posX - mc.thePlayer.lastTickPosY <= 0.80D &&
                 !BlockUtils.isOnLiquid(mc.thePlayer) &&
                 !BlockUtils.isInLiquid(mc.thePlayer) &&
                 !BlockUtils.isOnIce(mc.thePlayer) &&
