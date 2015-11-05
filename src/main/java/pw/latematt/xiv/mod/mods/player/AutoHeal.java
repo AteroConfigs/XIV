@@ -236,7 +236,7 @@ public class AutoHeal extends Mod implements CommandHandler {
                                 ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: potion, soup");
+                                ChatLogger.print("Invalid mode, valid: soup, head, potion");
                                 break;
                         }
                     } else {

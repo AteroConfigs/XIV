@@ -22,10 +22,16 @@ public class AntiDrown extends Mod implements Listener<SendPacketEvent> {
     @Override
     public void onEventCalled(SendPacketEvent event) {
         if (event.getPacket() instanceof C03PacketPlayer) {
-            if (!(mc.thePlayer.isUsingItem()) && BlockUtils.isInLiquid(EntityUtils.getReference()) && EntityUtils.getReference().isCollidedVertically && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().motionZ == 0)) {
+            if (canSave())
                 event.setCancelled(true);
-            }
         }
+    }
+
+    private boolean canSave() {
+        boolean usingItem = mc.thePlayer.isUsingItem();
+        boolean swinging = mc.thePlayer.isSwingInProgress;
+        boolean moving = mc.thePlayer.motionX != 0 || !mc.thePlayer.isCollidedVertically || mc.gameSettings.keyBindJump.getIsKeyPressed() || mc.thePlayer.motionZ != 0;
+        return BlockUtils.isInLiquid(mc.thePlayer) && !usingItem && !swinging && !moving;
     }
 
     @Override

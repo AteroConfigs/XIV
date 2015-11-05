@@ -22,9 +22,8 @@ public class PotionSaver extends Mod implements Listener<SendPacketEvent> {
         potionIncrementListener = new Listener<PotionIncrementEvent>() {
             @Override
             public void onEventCalled(PotionIncrementEvent event) {
-                if (!(mc.thePlayer.isUsingItem()) && !(mc.thePlayer.isSwingInProgress) && (EntityUtils.getReference().motionX == 0 && !(mc.gameSettings.keyBindJump.getIsKeyPressed() && EntityUtils.getReference() == mc.thePlayer || EntityUtils.getReference() != mc.thePlayer) && EntityUtils.getReference().motionZ == 0)) {
+                if (canSave())
                     event.setCancelled(true);
-                }
             }
         };
     }
@@ -32,10 +31,16 @@ public class PotionSaver extends Mod implements Listener<SendPacketEvent> {
     @Override
     public void onEventCalled(SendPacketEvent event) {
         if (event.getPacket() instanceof C03PacketPlayer) {
-            if (!(mc.thePlayer.isUsingItem()) && !(mc.thePlayer.isSwingInProgress) && (EntityUtils.getReference().motionX == 0 && EntityUtils.getReference().isCollidedVertically && !(mc.gameSettings.keyBindJump.getIsKeyPressed() && EntityUtils.getReference() == mc.thePlayer || EntityUtils.getReference() != mc.thePlayer) && EntityUtils.getReference().motionZ == 0)) {
+            if (canSave())
                 event.setCancelled(true);
-            }
         }
+    }
+
+    private boolean canSave() {
+        boolean usingItem = mc.thePlayer.isUsingItem();
+        boolean swinging = mc.thePlayer.isSwingInProgress;
+        boolean moving = mc.thePlayer.motionX != 0 || !mc.thePlayer.isCollidedVertically || mc.gameSettings.keyBindJump.getIsKeyPressed() || mc.thePlayer.motionZ != 0;
+        return !usingItem && !swinging && !moving;
     }
 
     @Override

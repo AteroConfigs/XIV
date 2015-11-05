@@ -336,7 +336,8 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                     }
                     ChatLogger.print(String.format("StorageESP will %s render boxes.", boxes.getValue() ? "now" : "no longer"));
                     break;
-                case "tracerLines":
+                case "tracerlines":
+                case "tracers":
                     if (arguments.length >= 3) {
                         if (arguments[2].equalsIgnoreCase("-d")) {
                             tracerLines.setValue(tracerLines.getDefault());
@@ -346,10 +347,10 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                     } else {
                         tracerLines.setValue(!tracerLines.getValue());
                     }
-                    ChatLogger.print(String.format("StorageESP will %s render tracerLines.", tracerLines.getValue() ? "now" : "no longer"));
+                    ChatLogger.print(String.format("StorageESP will %s render tracer lines.", tracerLines.getValue() ? "now" : "no longer"));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: chests, enderchests, furnaces, brewingstands, hoppers, droppers, dispensers, commandblocks, mobspawners, enchantmenttables, boxes, tracers");
+                    ChatLogger.print("Invalid action, valid: chests, enderchests, furnaces, brewingstands, hoppers, droppers, dispensers, commandblocks, mobspawners, enchantmenttables, boxes, tracerlines");
                     break;
             }
         } else {
