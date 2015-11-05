@@ -31,8 +31,8 @@ import static pw.latematt.xiv.utils.InventoryUtils.*;
  * @author Matthew
  */
 public class AutoHeal extends Mod implements CommandHandler {
-    private final ClampedValue<Long> delay = new ClampedValue<>("autoheal_delay", 350L, 0L, 1000L);
-    private final ClampedValue<Float> health = new ClampedValue<>("autoheal_health", 13.0F, 1.0F, 20.0F);
+    private final ClampedValue<Long> delay = new ClampedValue<>("autoheal_delay", 200L, 0L, 1000L);
+    private final ClampedValue<Float> health = new ClampedValue<>("autoheal_health", 12.0F, 1.0F, 20.0F);
     private final Value<Mode> mode = new Value<>("autoheal_mode", Mode.POTION);
     private final Listener sendPacketListener, readPacketListener, motionUpdateListener;
     private final Timer timer = new Timer();
