@@ -60,6 +60,9 @@ public class AutoLog extends Mod implements Listener<MotionUpdateEvent>, Command
                         ChatLogger.print("Invalid arguments, valid: autolog health <number>");
                     }
                     break;
+                default:
+                    ChatLogger.print("Invalid action, valid: health");
+                    break;
             }
         } else {
             ChatLogger.print("Invalid arguments, valid: autolog <action>");
