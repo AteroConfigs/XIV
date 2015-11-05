@@ -40,7 +40,7 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
                 for (int x = 0; x <= (32 - ticksToWait.getValue()); x++) {
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
                 }
-                mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new BlockPos(0, 0, 0), EnumFacing.DOWN));
+                mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
                 mc.thePlayer.stopUsingItem();
             }
         }
