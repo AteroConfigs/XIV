@@ -152,7 +152,6 @@ public class Speed extends Mod implements CommandHandler {
                                 }
 
                                 mc.getTimer().timerSpeed = 1.11F;
-
                                 nextTick = true;
                             } else {
                                 mc.getTimer().timerSpeed = 1.0F;
