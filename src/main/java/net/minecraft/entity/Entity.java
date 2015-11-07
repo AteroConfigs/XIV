@@ -9,7 +9,6 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockWall;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandResultStats;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.crash.CrashReport;
@@ -46,7 +45,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.EntityStepEvent;
-import pw.latematt.xiv.event.events.MoveEvent;
 import pw.latematt.xiv.event.events.PushOutOfBlocksEvent;
 
 public abstract class Entity implements ICommandSender
@@ -580,17 +578,6 @@ public abstract class Entity implements ICommandSender
      */
     public void moveEntity(double x, double y, double z)
     {
-        MoveEvent moveEvent;
-
-        if (Objects.equals(this, Minecraft.getMinecraft().thePlayer)) {
-            moveEvent = new MoveEvent(x, y, z);
-            XIV.getInstance().getListenerManager().call(moveEvent);
-
-            x = moveEvent.getMotionX();
-            y = moveEvent.getMotionY();
-            z = moveEvent.getMotionZ();
-        }
-
         if (this.noClip)
         {
             this.func_174826_a(this.getEntityBoundingBox().offset(x, y, z));

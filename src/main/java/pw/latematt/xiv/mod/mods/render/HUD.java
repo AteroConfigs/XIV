@@ -107,9 +107,15 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             return;
 
         ScaledResolution scaledResolution = RenderUtils.newScaledResolution();
+        GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
-        if (watermark.getValue()) {
+        if (watermark.getValue())
             mc.fontRendererObj.drawStringWithShadow("XIV", 2, 2, 0xFFEEEEEE);
+        if (rudysucks.getValue()) {
+            int y = 2;
+            if (watermark.getValue() || (watermark.getValue() && time.getValue()))
+                y += 8;
+            mc.fontRendererObj.drawStringWithShadow("\2471r\2472u\2473d\2474y \2475s\2476u\2477c\2478k\2479s", 2, y, 0xFFFFFFFF);
         }
         if (time.getValue()) {
             int x = 2;
@@ -119,12 +125,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                 x += mc.fontRendererObj.getStringWidth("rudy sucks ");
             SimpleDateFormat format = new SimpleDateFormat("h:mm a");
             mc.fontRendererObj.drawStringWithShadow(format.format(new Date()), x, 2, 0xDDDDDDDD);
-        }
-        if (rudysucks.getValue()) {
-            int y = 2;
-            if (watermark.getValue() || (watermark.getValue() && time.getValue()))
-                y += 8;
-            mc.fontRendererObj.drawStringWithShadow("\2471r\2472u\2473d\2474y \2475s\2476u\2477c\2478k\2479s", 2, y, 0xFFFFFFFF);
         }
         if (tabGui.getValue()) {
             int y = 2;
@@ -137,28 +137,19 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         }
 
         drawInfo(scaledResolution);
-        if (arraylist.getValue()) {
+        if (arraylist.getValue())
             drawArraylist(scaledResolution);
-        }
-        if (potions.getValue()) {
+        if (potions.getValue())
             drawPotions(scaledResolution);
-        }
-        if (lag.getValue()) {
+        if (lag.getValue())
             drawLag(scaledResolution);
-        }
-        if (armor.getValue()) {
+        if (armor.getValue())
             drawArmor(scaledResolution);
-        }
-        if (direction.getValue()) {
+        if (direction.getValue())
             drawDirection(scaledResolution);
-        }
-
-        /* NahrFont example/testing
-        if (font == null) // it will always be at this point, this must happen since the current thread won't have opengl context if done in the constructor.
-            font = new NahrFont("Verdana", 18);
-        font.drawString("\247gTesting Custom Colors", 2, 12, 0xFFFFFFFF, 0xFF000000);*/
 
         GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
     }
 
     private void drawArmor(ScaledResolution scaledResolution) {
