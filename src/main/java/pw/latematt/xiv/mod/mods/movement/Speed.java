@@ -132,13 +132,11 @@ public class Speed extends Mod implements CommandHandler {
                                 ticks = 4;
                             }
                             break;
-                    }
-                } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
-                    switch (currentMode.getValue()) {
                         case FAST:
+                            // I can't fix this shit but I do know that your isValid check doesn't work with this speed since it's checking yDistance == 0.0 and this speed offsets up.
                             if (!mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isCollidedHorizontally && isValid()) {
                                 double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
-
+                                
                                 double x = Math.cos(offset) * 0.25F;
                                 double z = Math.sin(offset) * 0.25F;
 
@@ -156,7 +154,6 @@ public class Speed extends Mod implements CommandHandler {
                             } else {
                                 mc.getTimer().timerSpeed = 1.0F;
                             }
-
                             if (nextTick && !mc.thePlayer.onGround && !mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isOnLadder()) {
                                 mc.thePlayer.motionY = -0.1F;
                                 nextTick = false;
@@ -181,7 +178,7 @@ public class Speed extends Mod implements CommandHandler {
                 !BlockUtils.isOnLiquid(mc.thePlayer) &&
                 !BlockUtils.isInLiquid(mc.thePlayer) &&
                 !BlockUtils.isOnIce(mc.thePlayer) &&
-                !editingPackets && moving;
+                !editingPackets && (moving || strafing);
     }
 
     @Override
@@ -194,6 +191,7 @@ public class Speed extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
+                            case "new":
                             case "fast":
                                 currentMode.setValue(Mode.FAST);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
@@ -267,6 +265,9 @@ public class Speed extends Mod implements CommandHandler {
         XIV.getInstance().getListenerManager().remove(moveListener);
         Blocks.ice.slipperiness = 0.98F;
         Blocks.packed_ice.slipperiness = 0.98F;
+
+        if(mc.getTimer() != null)
+            mc.getTimer().timerSpeed = 1.0F;
     }
 
     private enum Mode {
