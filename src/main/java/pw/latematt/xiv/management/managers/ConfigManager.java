@@ -43,27 +43,26 @@ public class ConfigManager {
                     if (arguments.length >= 2) {
                         String filename = arguments[1];
                         boolean output = true;
-                        if (arguments.length >= 3) {
+                        if (arguments.length >= 3)
                             output = Boolean.parseBoolean(arguments[2]);
-                        }
+
                         File[] files = configDir.listFiles((dir, name) -> name.equalsIgnoreCase(filename + ".cfg"));
                         if (files != null && files.length > 0) {
                             for (File config : files) {
                                 try {
-                                    if (!output) {
+                                    if (!output)
                                         ChatLogger.setEnabled(false);
-                                    }
+
                                     parseConfig(config);
                                     ChatLogger.print(String.format("Executed config file \"%s\"", config.getName()));
-                                    if (!output) {
+                                    if (!output)
                                         ChatLogger.setEnabled(true);
-                                    }
+
                                 } catch (IOException e) {
-                                    if (output) {
+                                    if (output)
                                         ChatLogger.print("Failed to parse config, a stacktrace has been printed.");
-                                    } else {
+                                    else
                                         ChatLogger.setEnabled(true);
-                                    }
                                     e.printStackTrace();
                                 }
                             }

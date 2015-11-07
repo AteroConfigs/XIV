@@ -9,7 +9,7 @@ import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
-import pw.latematt.xiv.event.events.MoveEvent;
+import pw.latematt.xiv.event.events.MotionEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
@@ -33,26 +33,30 @@ public class Speed extends Mod implements CommandHandler {
         setTag(currentMode.getValue().getName());
         Command.newCommand().cmd("speed").description("Base command for the Speed mod.").arguments("<action>").handler(this).build();
 
-        moveListener = new Listener<MoveEvent>() {
+        moveListener = new Listener<MotionEvent>() {
             @Override
-            public void onEventCalled(MoveEvent event) {
-                if (BlockUtils.isOnLadder(mc.thePlayer) && mc.thePlayer.isCollidedHorizontally && fastLadder.getValue()) {
-                    mc.thePlayer.motionY = 0.1D;
-                    event.setMotionY(event.getMotionY() * 2.25D);
-                }
+            public void onEventCalled(MotionEvent event) {
+                if (event.getState() == MotionEvent.State.PRE) {
+                    if (BlockUtils.isOnLadder(mc.thePlayer) && mc.thePlayer.isCollidedHorizontally && fastLadder.getValue()) {
+                        mc.thePlayer.motionY = 0.1D;
+                        event.setMotionY(event.getMotionY() * 2.25D);
+                    }
 
-                if (fastIce.getValue() && BlockUtils.isOnIce(mc.thePlayer)) {
-                    Blocks.ice.slipperiness = 0.6F;
-                    Blocks.packed_ice.slipperiness = 0.6F;
-                    double speed = 2.7D;
-                    if (mc.thePlayer.isSprinting())
-                        speed -= 0.2D;
+                    if (fastIce.getValue()) {
+                        Blocks.ice.slipperiness = 0.6F;
+                        Blocks.packed_ice.slipperiness = 0.6F;
+                        if (BlockUtils.isOnIce(mc.thePlayer)) {
+                            double speed = 2.7D;
+                            if (mc.thePlayer.isSprinting())
+                                speed -= 0.2D;
 
-                    event.setMotionX(event.getMotionX() * speed);
-                    event.setMotionZ(event.getMotionZ() * speed);
-                } else {
-                    Blocks.ice.slipperiness = 0.98F;
-                    Blocks.packed_ice.slipperiness = 0.98F;
+                            event.setMotionX(event.getMotionX() * speed);
+                            event.setMotionZ(event.getMotionZ() * speed);
+                        }
+                    } else {
+                        Blocks.ice.slipperiness = 0.98F;
+                        Blocks.packed_ice.slipperiness = 0.98F;
+                    }
                 }
             }
         };
@@ -62,10 +66,45 @@ public class Speed extends Mod implements CommandHandler {
             public void onEventCalled(MotionUpdateEvent event) {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
                     double speed, slow;
+                    double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
+                    boolean groundCheck = mc.thePlayer.onGround && yDifference == 0.0D;
+                    boolean strafe = mc.thePlayer.moveStrafing != 0.0F;
                     switch (currentMode.getValue()) {
+                        case FAST:
+                            if (canSpeed(mc.thePlayer.onGround)) {
+                                double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
+
+                                double x = Math.cos(offset) * 0.25F;
+                                double z = Math.sin(offset) * 0.25F;
+
+                                mc.thePlayer.motionX += x;
+                                mc.thePlayer.motionY = 0.0175F;
+                                mc.thePlayer.motionZ += z;
+
+                                if (mc.thePlayer.movementInput.moveStrafe != 0) {
+                                    mc.thePlayer.motionX *= 0.975F;
+                                    mc.thePlayer.motionZ *= 0.975F;
+                                }
+
+                                nextTick = true;
+                            }
+
+                            if (nextTick && !mc.thePlayer.onGround && !mc.thePlayer.isOnLadder()) {
+                                mc.thePlayer.motionY = -0.1F;
+                                nextTick = false;
+                            }
+                            break;
                         case CAPSAR:
-                            speed = 2.3737D;
+                            speed = 2.433D;
                             slow = 1.5D;
+                            if (!mc.thePlayer.isSprinting()) {
+                                speed += 0.4D;
+                                slow -= 0.005D;
+                            }
+                            if (strafe) {
+                                speed -= 0.04F;
+                                slow -= 0.005D;
+                            }
                             if (mc.thePlayer.isPotionActive(Potion.SPEED)) {
                                 PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
                                 switch (effect.getAmplifier()) {
@@ -84,13 +123,7 @@ public class Speed extends Mod implements CommandHandler {
                                 }
                             }
 
-                            if (isValid()) {
-                                boolean strafe = mc.thePlayer.moveStrafing != 0.0F;
-                                speed = speed + (mc.thePlayer.isSprinting() ? 0.02D : 0.40D);
-
-                                if (!strafe)
-                                    speed += 0.04F;
-
+                            if (canSpeed(groundCheck)) {
                                 if (nextTick = !nextTick) {
                                     mc.thePlayer.motionX *= speed;
                                     mc.thePlayer.motionZ *= speed;
@@ -105,12 +138,18 @@ public class Speed extends Mod implements CommandHandler {
                             }
                             break;
                         case OLD:
-                            if (isValid()) {
-                                speed = 3.0D;
-                                slow = 1.425D;
-                                if (mc.thePlayer.moveStrafing == 0.0F)
-                                    speed += 0.05D;
+                            speed = 3.0D;
+                            slow = 1.425D;
+                            if (!mc.thePlayer.isSprinting()) {
+                                speed += 0.4D;
+                                slow -= 0.005D;
+                            }
+                            if (strafe) {
+                                speed -= 0.04F;
+                                slow -= 0.005D;
+                            }
 
+                            if (canSpeed(groundCheck)) {
                                 switch (++ticks) {
                                     case 1:
                                         mc.thePlayer.motionX *= speed;
@@ -132,53 +171,29 @@ public class Speed extends Mod implements CommandHandler {
                                 ticks = 4;
                             }
                             break;
-                        case FAST:
-                            // I can't fix this shit but I do know that your isValid check doesn't work with this speed since it's checking yDistance == 0.0 and this speed offsets up.
-                            if (!mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isCollidedHorizontally && isValid()) {
-                                double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
-                                
-                                double x = Math.cos(offset) * 0.25F;
-                                double z = Math.sin(offset) * 0.25F;
-
-                                mc.thePlayer.motionX += x;
-                                mc.thePlayer.motionY = 0.0175F;
-                                mc.thePlayer.motionZ += z;
-
-                                if (mc.thePlayer.movementInput.moveStrafe != 0) {
-                                    mc.thePlayer.motionX *= 0.975F;
-                                    mc.thePlayer.motionZ *= 0.975F;
-                                }
-
-                                mc.getTimer().timerSpeed = 1.11F;
-                                nextTick = true;
-                            } else {
-                                mc.getTimer().timerSpeed = 1.0F;
-                            }
-                            if (nextTick && !mc.thePlayer.onGround && !mc.gameSettings.keyBindJump.getIsKeyPressed() && !mc.thePlayer.isOnLadder()) {
-                                mc.thePlayer.motionY = -0.1F;
-                                nextTick = false;
-                            }
-                            break;
                     }
                 }
             }
         };
     }
 
-    private boolean isValid() {
+    private boolean canSpeed(boolean groundCheck) {
         Step step = (Step) XIV.getInstance().getModManager().find("step");
         boolean editingPackets = step != null && step.isEditingPackets();
+
         boolean moving = mc.thePlayer.movementInput.moveForward != 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
         moving = moving || strafing;
-        double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
-        boolean groundCheck = yDifference == 0.0D;
 
-        return groundCheck &&
-                !BlockUtils.isOnLiquid(mc.thePlayer) &&
-                !BlockUtils.isInLiquid(mc.thePlayer) &&
-                !BlockUtils.isOnIce(mc.thePlayer) &&
-                !editingPackets && (moving || strafing);
+        boolean sneaking = mc.thePlayer.isSneaking();
+        boolean collided = mc.thePlayer.isCollidedHorizontally;
+        boolean hungry = mc.thePlayer.getFoodStats().getFoodLevel() <= 6;
+
+        boolean inLiquid = BlockUtils.isInLiquid(mc.thePlayer);
+        boolean onLiquid = BlockUtils.isOnLiquid(mc.thePlayer);
+        boolean onIce = BlockUtils.isOnIce(mc.thePlayer);
+
+        return  moving && !sneaking && !collided && !hungry && groundCheck && !inLiquid && !onLiquid && !onIce && !editingPackets;
     }
 
     @Override
@@ -265,9 +280,6 @@ public class Speed extends Mod implements CommandHandler {
         XIV.getInstance().getListenerManager().remove(moveListener);
         Blocks.ice.slipperiness = 0.98F;
         Blocks.packed_ice.slipperiness = 0.98F;
-
-        if(mc.getTimer() != null)
-            mc.getTimer().timerSpeed = 1.0F;
     }
 
     private enum Mode {

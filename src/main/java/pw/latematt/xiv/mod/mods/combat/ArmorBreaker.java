@@ -1,5 +1,7 @@
 package pw.latematt.xiv.mod.mods.combat;
 
+import net.minecraft.network.play.client.C02PacketUseEntity;
+import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.network.play.client.C0EPacketClickWindow;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;

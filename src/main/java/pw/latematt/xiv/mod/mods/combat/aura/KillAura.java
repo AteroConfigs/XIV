@@ -121,7 +121,6 @@ public class KillAura extends Mod implements CommandHandler {
         if (wasSprinting)
             mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SPRINTING));
         mc.thePlayer.setSprinting(wasSprinting);
-
     }
 
     public boolean isValidEntity(EntityLivingBase entity) {

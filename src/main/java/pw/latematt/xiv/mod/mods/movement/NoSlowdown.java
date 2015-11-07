@@ -23,20 +23,15 @@ import pw.latematt.xiv.value.Value;
 /**
  * @author Matthew
  */
-public class NoSlowdown extends Mod implements CommandHandler {
+public class NoSlowdown extends Mod {
     private final Listener itemSlowdownListener, soulSandSlowdownListener, motionUpdateListener;
-    private Value<Boolean> shotBow = new Value<>("noslowdown_shotbow", false);
 
     public NoSlowdown() {
         super("NoSlowdown", ModType.MOVEMENT, Keyboard.KEY_NONE);
-        Command.newCommand().cmd("noslowdown").aliases("nos", "noslow").description("Base command for NoSlowdown mod.").arguments("<action>").handler(this).build();
 
         itemSlowdownListener = new Listener<UsingItemSlowdownEvent>() {
             @Override
             public void onEventCalled(UsingItemSlowdownEvent event) {
-                if (shouldSlowdown())
-                    return;
-
                 event.setCancelled(true);
             }
         };
@@ -78,46 +73,6 @@ public class NoSlowdown extends Mod implements CommandHandler {
         };
 
         setEnabled(true);
-    }
-
-    public boolean shouldSlowdown() {
-        if (shotBow.getValue() && mc.thePlayer.getItemInUse() != null) {
-            int maxUseDuration = mc.thePlayer.getItemInUse().getMaxItemUseDuration();
-            FastUse fastUse = (FastUse) XIV.getInstance().getModManager().find("fastuse");
-            if (fastUse != null && fastUse.isEnabled())
-                maxUseDuration = fastUse.getTicksToWait().getValue();
-            if (mc.thePlayer.getItemInUseDuration() > maxUseDuration - 2)
-                return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public void onCommandRan(String message) {
-        String[] arguments = message.split(" ");
-        if (arguments.length >= 2) {
-            String action = arguments[1];
-            switch (action.toLowerCase()) {
-                case "shotbow":
-                    if (arguments.length >= 3) {
-                        if (arguments[2].equalsIgnoreCase("-d")) {
-                            shotBow.setValue(shotBow.getDefault());
-                        } else {
-                            shotBow.setValue(Boolean.parseBoolean(arguments[2]));
-                        }
-                    } else {
-                        shotBow.setValue(!shotBow.getValue());
-                    }
-                    ChatLogger.print(String.format("NoSlowdown will %s bypass Shotbow's anticheat.", (shotBow.getValue() ? "now" : "no longer")));
-                    break;
-                default:
-                    ChatLogger.print("Invalid action, valid: shotbow");
-                    break;
-            }
-        } else {
-            ChatLogger.print("Invalid arguments, valid: noslowdown <action>");
-        }
     }
 
     @Override

@@ -2,12 +2,11 @@ package pw.latematt.xiv;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pw.latematt.timer.TimeConverter;
 import pw.latematt.timer.Timer;
+import pw.latematt.timer.convert.TimeConverter;
 import pw.latematt.xiv.management.managers.*;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.tabgui.GuiTabHandler;
-import pw.latematt.xiv.utils.RenderUtils;
 
 /**
  * @author Matthew
@@ -89,15 +88,13 @@ public class XIV {
         return logger;
     }
 
-    /* sets up the client base (called in Main#main(p_main_0_) at line 114) */
+    /* sets up the client base (called in Minecraft#run() at line 402) */
     public void setup() {
         Timer timer = new Timer();
         logger.info("-> Begin XIV setup");
         /* call setup on all managers */
         /* the order that these are called in is important, do not change! */
         /* setup is not required with all managers */
-
-        RenderUtils.init(); // Prevents crashing with values that aren't initialized.
 
         fileManager.setup();
         commandManager.setup();
@@ -121,6 +118,6 @@ public class XIV {
             }
         });
 
-        logger.info(String.format("-> End XIV setup (Took %s seconds)", new TimeConverter().millisecondsToSeconds(timer.getDifference())));
+        logger.info(String.format("-> End XIV setup (Took %s seconds)", new TimeConverter().fromMilliseconds(timer.getDifference(), TimeConverter.SECOND)));
     }
 }

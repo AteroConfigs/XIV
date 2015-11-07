@@ -6,15 +6,17 @@ import pw.latematt.xiv.event.Event;
  * @author Jack
  */
 
-public class MoveEvent extends Event {
+public class MotionEvent extends Event {
     private double motionX;
     private double motionY;
     private double motionZ;
+    private final State state;
 
-    public MoveEvent(final double motionX, final double motionY, final double motionZ) {
+    public MotionEvent(final double motionX, final double motionY, final double motionZ, State state) {
         this.motionX = motionX;
         this.motionY = motionY;
         this.motionZ = motionZ;
+        this.state = state;
     }
 
     public double getMotionX() {
@@ -39,5 +41,13 @@ public class MoveEvent extends Event {
 
     public void setMotionZ(double motionZ) {
         this.motionZ = motionZ;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public enum State {
+        PRE, POST
     }
 }

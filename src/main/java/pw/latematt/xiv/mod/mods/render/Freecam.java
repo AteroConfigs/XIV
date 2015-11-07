@@ -37,9 +37,9 @@ public class Freecam extends Mod {
             }
         };
 
-        moveListener = new Listener<MoveEvent>() {
+        moveListener = new Listener<MotionEvent>() {
             @Override
-            public void onEventCalled(MoveEvent event) {
+            public void onEventCalled(MotionEvent event) {
                 mc.thePlayer.noClip = true;
                 double speed = 4.0D;
 

@@ -9,7 +9,7 @@ import java.awt.TrayIcon;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
+import java.net.URL;
 
 /**
  * @author Rederpz
@@ -27,7 +27,9 @@ public class XIVTray {
             e.printStackTrace();
         }
 
-        this.icon = new TrayIcon(new BufferedImage(16, 16, 1), "XIV");
+        URL iconUrl = this.getClass().getResource("/trayicon.png");
+        Toolkit tk = new JFrame().getToolkit();
+        this.icon = new TrayIcon(tk.getImage(iconUrl), "XIV");
 
         PopupMenu menu = new PopupMenu();
         this.icon.setPopupMenu(menu);
