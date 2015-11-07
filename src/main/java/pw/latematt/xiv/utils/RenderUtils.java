@@ -51,15 +51,6 @@ public class RenderUtils {
         return SHOW_TAGS;
     }
 
-    public static void init() {
-        ANTI_ALIASING.getValue();
-        WORLD_BOBBING.getValue();
-        NAMETAG_OPACITY.getValue();
-        NAMETAG_SIZE.getValue();
-        TRACER_ENTITY.getValue();
-        SHOW_TAGS.getValue();
-    }
-
     public static void beginGl() {
         GlStateManager.pushMatrix();
         RenderHelper.enableStandardItemLighting();

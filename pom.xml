@@ -197,7 +197,7 @@
 		<dependency>
 			<groupId>pw.latematt.timer</groupId>
 			<artifactId>timer</artifactId>
-			<version>1.0-STABLE</version>
+			<version>1.1</version>
 		</dependency>
 	</dependencies>
 
