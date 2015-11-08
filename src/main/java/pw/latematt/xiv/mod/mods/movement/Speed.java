@@ -194,7 +194,7 @@ public class Speed extends Mod implements CommandHandler {
 
         List<AxisAlignedBB> list = mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().expand(1.0D, 0.0D, 1.0D));
 
-        boolean blockCheck = step != null && step.isNewStep() && list.isEmpty() || step != null && !step.isNewStep();
+        boolean blockCheck = step != null && (step.isEnabled() && step.isNewStep()) && list.isEmpty() || step != null && !(step.isEnabled() && step.isNewStep());
 
         boolean moving = mc.thePlayer.movementInput.moveForward != 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
