@@ -160,7 +160,7 @@ public class EntityUtils {
         }
     }
 
-    public static void teleportToPosition(double[] startPosition, double[] endPosition, double slack) {
+    public static double[] teleportToPosition(double[] startPosition, double[] endPosition, double setOffset, double slack, boolean extendOffset, boolean onGround) {
         double startX = startPosition[0];
         double startY = startPosition[1];
         double startZ = startPosition[2];
@@ -179,11 +179,11 @@ public class EntityUtils {
                 break;
             }
 
+            double offset = extendOffset && (count & 0x1) == 0 ? setOffset + 0.15D : setOffset;
+
             double diffX = startX - endX;
             double diffY = startY - endY;
             double diffZ = startZ - endZ;
-
-            double offset = (count & 0x1) == 0 ? 0.4D : 0.25D;
 
             if (diffX < 0.0D) {
                 if (Math.abs(diffX) > offset) {
@@ -200,15 +200,15 @@ public class EntityUtils {
                 }
             }
             if (diffY < 0.0D) {
-                if (Math.abs(diffY) > 0.25D) {
-                    startY += 0.25D;
+                if (Math.abs(diffY) > offset) {
+                    startY += offset;
                 } else {
                     startY += Math.abs(diffY);
                 }
             }
             if (diffY > 0.0D) {
-                if (Math.abs(diffY) > 0.25D) {
-                    startY -= 0.25D;
+                if (Math.abs(diffY) > offset) {
+                    startY -= offset;
                 } else {
                     startY -= Math.abs(diffY);
                 }
@@ -228,8 +228,12 @@ public class EntityUtils {
                 }
             }
 
-            MINECRAFT.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(startX, startY, startZ, true));
+            MINECRAFT.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(startX, startY, startZ, onGround));
             count++;
         }
+
+        System.out.println(count);
+
+        return new double[] { startX, startY, startZ };
     }
 }

@@ -55,7 +55,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
             @Override
             public void onEventCalled(BlockReachEvent event) {
                 if(!Mouse.isButtonDown(0) && !mc.thePlayer.isSneaking() && mc.inGameHasFocus) {
-                    event.setRange(50.0F);
+                    event.setRange(35.0F);
 
                     canDraw = true;
                 }else {
@@ -157,7 +157,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
                     freecam.setEnabled(false);
                 }
 
-                EntityUtils.teleportToPosition(playerPosition, blockPosition, 0.0D);
+                EntityUtils.teleportToPosition(playerPosition, blockPosition, 0.25D, 0.0D, true, true);
                 mc.thePlayer.setPosition(blockPosition[0], blockPosition[1], blockPosition[2]);
                 delay = 5;
             }
@@ -190,6 +190,14 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
             try {
                 double distance = Double.parseDouble(distanceString);
 
+                if(distance > 25) {
+                    distance = 25;
+                }else if(distance < -25) {
+                    distance = -25;
+                }else if(distance == 0) {
+                    distance = 5;
+                }
+
                 float dir = mc.thePlayer.rotationYaw;
                 if (mc.thePlayer.moveForward < 0.0F)
                     dir += 180.0F;
@@ -208,10 +216,10 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
 
                 double[] blockPosition = new double[]{teleportPosition.getX() + 0.5F, teleportPosition.getY(), teleportPosition.getZ() + 0.5F};
 
-                EntityUtils.teleportToPosition(playerPosition, blockPosition, 0.0D);
+                EntityUtils.teleportToPosition(playerPosition, blockPosition, 0.35D, 0.0D, true, true);
                 mc.thePlayer.setPosition(blockPosition[0], blockPosition[1], blockPosition[2]);
 
-                ChatLogger.print(String.format("Teleported %s blocks forward.", distance));
+                ChatLogger.print(String.format("Teleported %s blocks %s.", distance, distance > 0 ? "forward" : "backward"));
 
                 delay = 5;
             }catch(NumberFormatException e) {

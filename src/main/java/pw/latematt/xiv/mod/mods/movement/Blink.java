@@ -37,9 +37,14 @@ public class Blink extends Mod {
             @Override
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
+                    C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
                     final boolean moving = mc.thePlayer.movementInput.moveForward != 0;
                     final boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-                    final boolean movingCheck = moving || strafing;
+
+                    double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
+                    boolean groundCheck = mc.thePlayer.onGround && yDifference == 0.0D;
+
+                    boolean movingCheck = moving || strafing || !groundCheck;
 
                     event.setCancelled(true);
                     if (movingCheck) {
