@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 
 import java.util.Iterator;
@@ -172,10 +171,10 @@ public class EntityUtils {
         double distance = Math.abs(startX - startY) + Math.abs(startY - endY) + Math.abs(startZ - endZ);
 
         int count = 0;
-        while(distance > slack) {
+        while (distance > slack) {
             distance = Math.abs(startX - endX) + Math.abs(startY - endY) + Math.abs(startZ - endZ);
 
-            if(count > 120) {
+            if (count > 120) {
                 break;
             }
 
@@ -232,8 +231,6 @@ public class EntityUtils {
             count++;
         }
 
-        System.out.println(count);
-
-        return new double[] { startX, startY, startZ };
+        return new double[]{startX, startY, startZ};
     }
 }

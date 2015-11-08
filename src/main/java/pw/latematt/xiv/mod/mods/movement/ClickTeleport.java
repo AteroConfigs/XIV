@@ -1,24 +1,14 @@
 package pw.latematt.xiv.mod.mods.movement;
 
-import com.sun.javafx.geom.Vec3d;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockPressurePlate;
 import net.minecraft.block.BlockSign;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiRepair;
-import net.minecraft.client.gui.GuiScreenBook;
-import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.XIV;
@@ -26,7 +16,6 @@ import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.BlockReachEvent;
-import pw.latematt.xiv.event.events.ClickBlockEvent;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
@@ -54,11 +43,11 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
         blockReachListener = new Listener<BlockReachEvent>() {
             @Override
             public void onEventCalled(BlockReachEvent event) {
-                if(!Mouse.isButtonDown(0) && !mc.thePlayer.isSneaking() && mc.inGameHasFocus) {
+                if (!Mouse.isButtonDown(0) && !mc.thePlayer.isSneaking() && mc.inGameHasFocus) {
                     event.setRange(35.0F);
 
                     canDraw = true;
-                }else {
+                } else {
                     canDraw = false;
                 }
             }
@@ -78,10 +67,10 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
                         RenderUtils.endGl();
 
                         canTeleport = true;
-                    }else{
+                    } else {
                         mouseOverPos = new double[]{mc.objectMouseOver.func_178782_a().getX(), mc.objectMouseOver.func_178782_a().getY(), mc.objectMouseOver.func_178782_a().getZ()};
 
-                        if(canRenderBox(mouseOverPos)) {
+                        if (canRenderBox(mouseOverPos)) {
                             Block blockBelowPos = mc.theWorld.getBlockState(new BlockPos(mouseOverPos[0], mouseOverPos[1] - 1.0F, mouseOverPos[2])).getBlock();
 
                             RenderUtils.beginGl();
@@ -89,7 +78,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
                             RenderUtils.endGl();
 
                             canTeleport = true;
-                        }else{
+                        } else {
                             canTeleport = false;
                         }
                     }
@@ -119,11 +108,8 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
     }
 
     public boolean isValidBlock(Block block) {
-        if(block instanceof BlockSign || block instanceof BlockAir || block instanceof BlockPressurePlate) {
-            return true;
-        }
+        return block instanceof BlockSign || block instanceof BlockAir || block instanceof BlockPressurePlate || !block.getMaterial().isSolid();
 
-        return !block.getMaterial().isSolid();
     }
 
     private void renderBox(Block block, BlockPos pos) {
@@ -143,17 +129,17 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
     }
 
     public void onEventCalled(MotionUpdateEvent event) {
-        if(event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-            if(canTeleport && delay == 0 && Mouse.isButtonDown(1)) {
+        if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+            if (canTeleport && delay == 0 && Mouse.isButtonDown(1)) {
 
                 this.teleportPosition = mc.objectMouseOver.func_178782_a();
 
-                double[] playerPosition = new double[] { EntityUtils.getReference().posX, EntityUtils.getReference().posY, EntityUtils.getReference().posZ };
-                double[] blockPosition = new double[] { teleportPosition.getX() + 0.5F, teleportPosition.getY() + 1.0F, teleportPosition.getZ() + 0.5F };
+                double[] playerPosition = new double[]{EntityUtils.getReference().posX, EntityUtils.getReference().posY, EntityUtils.getReference().posZ};
+                double[] blockPosition = new double[]{teleportPosition.getX() + 0.5F, teleportPosition.getY() + 1.0F, teleportPosition.getZ() + 0.5F};
 
                 Freecam freecam = (Freecam) XIV.getInstance().getModManager().find("freecam");
 
-                if(freecam != null && freecam.isEnabled()) {
+                if (freecam != null && freecam.isEnabled()) {
                     freecam.setEnabled(false);
                 }
 
@@ -190,11 +176,11 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
             try {
                 double distance = Double.parseDouble(distanceString);
 
-                if(distance > 25) {
+                if (distance > 25) {
                     distance = 25;
-                }else if(distance < -25) {
+                } else if (distance < -25) {
                     distance = -25;
-                }else if(distance == 0) {
+                } else if (distance == 0) {
                     distance = 5;
                 }
 
@@ -212,20 +198,20 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
                 float zD = (float) Math.sin((dir + 90.0F) * Math.PI / 180.0D);
 
                 double[] playerPosition = new double[]{EntityUtils.getReference().posX, EntityUtils.getReference().posY, EntityUtils.getReference().posZ};
-                this.teleportPosition = new BlockPos(playerPosition[0] + (xD * distance),playerPosition[1], playerPosition[2] + (zD * distance));
+                this.teleportPosition = new BlockPos(playerPosition[0] + (xD * distance), playerPosition[1], playerPosition[2] + (zD * distance));
 
                 double[] blockPosition = new double[]{teleportPosition.getX() + 0.5F, teleportPosition.getY(), teleportPosition.getZ() + 0.5F};
 
-                EntityUtils.teleportToPosition(playerPosition, blockPosition, 0.35D, 0.0D, true, true);
+                EntityUtils.teleportToPosition(playerPosition, blockPosition, 0.25D, 0.0D, true, true);
                 mc.thePlayer.setPosition(blockPosition[0], blockPosition[1], blockPosition[2]);
 
                 ChatLogger.print(String.format("Teleported %s blocks %s.", distance, distance > 0 ? "forward" : "backward"));
 
                 delay = 5;
-            }catch(NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 ChatLogger.print(String.format("\"%s\" is not a number.", distanceString));
             }
-        }else{
+        } else {
             ChatLogger.print("Invalid arguments, valid: forward <blocks>");
         }
     }

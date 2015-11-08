@@ -20,7 +20,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import pw.latematt.timer.Timer;
-import pw.latematt.timer.convert.TimeConverter;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;

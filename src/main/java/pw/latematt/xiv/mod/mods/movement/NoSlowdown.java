@@ -7,8 +7,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.command.Command;
-import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.SoulSandSlowdownEvent;
@@ -16,9 +14,6 @@ import pw.latematt.xiv.event.events.UsingItemSlowdownEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
-import pw.latematt.xiv.mod.mods.player.FastUse;
-import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.value.Value;
 
 /**
  * @author Matthew

@@ -8,8 +8,8 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.MotionEvent;
+import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
@@ -89,7 +89,7 @@ public class Speed extends Mod implements CommandHandler {
                                 mc.getTimer().timerSpeed = 1.05F;
 
                                 hasJumped = true;
-                            }else{
+                            } else {
                                 mc.getTimer().timerSpeed = 1.0F;
                             }
 
@@ -285,7 +285,7 @@ public class Speed extends Mod implements CommandHandler {
         XIV.getInstance().getListenerManager().remove(moveListener);
         Blocks.ice.slipperiness = 0.98F;
         Blocks.packed_ice.slipperiness = 0.98F;
-        
+
         mc.getTimer().timerSpeed = 1.0F;
     }
 

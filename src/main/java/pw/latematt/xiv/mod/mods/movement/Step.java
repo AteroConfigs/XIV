@@ -1,7 +1,6 @@
 package pw.latematt.xiv.mod.mods.movement;
 
 import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.util.BlockPos;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
@@ -13,7 +12,6 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
@@ -35,10 +33,9 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                if(event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (delay > 0) {
+                if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                    if (delay > 0)
                         delay--;
-                    }
                 }
             }
         };
@@ -52,20 +49,18 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                         if (mc.thePlayer.posY - mc.thePlayer.lastTickPosY >= 0.75D)
                             player.setY(player.getY() + 0.0646D);
                         editPackets = false;
-                    }else if (mode.getValue() == Mode.JUMP) {
+                    } else if (mode.getValue() == Mode.JUMP) {
                         if (mc.thePlayer.isCollidedHorizontally && mc.thePlayer.onGround) {
                             mc.thePlayer.motionY = 0.37F;
                             mc.thePlayer.isAirBorne = true;
                         }
                         editPackets = false;
-                    }else if (mode.getValue() == Mode.BLINK) {
-                        if(editPackets) {
+                    } else if (mode.getValue() == Mode.BLINK) {
+                        if (editPackets)
                             event.setCancelled(true);
-                        }
 
-                        if(mc.thePlayer.onGround) {
+                        if (mc.thePlayer.onGround)
                             editPackets = false;
-                        }
                     }
                 }
             }
@@ -81,40 +76,42 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
         if (event.getEntity() != mc.thePlayer)
             return;
 
-        if (mc.thePlayer.stepHeight != height.getValue() && mode.getValue() == Mode.OLD) {
-            mc.thePlayer.stepHeight = height.getValue();
-        } else if (mode.getValue() == Mode.BLINK) {
-            mc.thePlayer.stepHeight = delay == 0 ? height.getValue() : 0.5F;
-        } else if (mode.getValue() == Mode.JUMP) {
-            mc.thePlayer.stepHeight = 0.5F;
-        }
+        switch (mode.getValue()) {
+            case OLD:
+                mc.thePlayer.stepHeight = height.getValue();
 
-        editPackets = !BlockUtils.isInLiquid(mc.thePlayer);
-        event.setCancelled(!editPackets && mode.getValue() == Mode.OLD);
+                editPackets = !BlockUtils.isInLiquid(mc.thePlayer);
+                event.setCancelled(!editPackets);
+                break;
+            case BLINK:
+                mc.thePlayer.stepHeight = delay == 0 ? height.getValue() : 0.5F;
 
-        if (mode.getValue() == Mode.BLINK && delay == 0) {
-            mc.thePlayer.onGround = false;
-            mc.thePlayer.isAirBorne = true;
+                double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
+                boolean yDiffCheck = yDifference == 0.0D;
+                if (delay == 0 && !yDiffCheck) {
+                    mc.thePlayer.onGround = false;
+                    mc.thePlayer.isAirBorne = true;
+                    editPackets = true; // make speed and other stuff slow down
 
-            double y = 0.0F, offset = 0.4015F; // starting motion (like a jump?)
+                    double y = 0.0F, offset = 0.4015F; // starting motion (like a jump?)
 
-            while(y < 1.0F) {
-                mc.thePlayer.onGround = false;
-                mc.thePlayer.isAirBorne = true;
+                    while (y < 1.0F) {
+                        mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + y, mc.thePlayer.posZ, false));
+                        y += offset;
+                        offset -= (0.155F * offset); // Simulate motion (jumping)
 
-                mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + y, mc.thePlayer.posZ, false));
+                        if (offset < 0.01)
+                            offset = 0.01F; // cap motion so it doesn't freeze client or go below 0
+                    }
 
-                y += offset;
-                offset -= (0.155F * offset); // Simulate motion (jumping)
-
-                if(offset < 0.01) {
-                    offset = 0.01F; // cap motion so it doesn't freeze client or go below 0
+                    delay = 1; // attempting to prevent more packets [i set it to 0 cause fam]
                 }
-            }
+                break;
+            default:
+                mc.thePlayer.stepHeight = 0.5F;
 
-            event.setCancelled(false); // im not sure what this does
-            editPackets = true; // make speed and other stuff slow down
-            delay = 0; // attempting to prevent more packets [i set it to 0 cause fam]
+                editPackets = !BlockUtils.isInLiquid(mc.thePlayer);
+                break;
         }
     }
 
