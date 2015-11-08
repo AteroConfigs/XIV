@@ -49,7 +49,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
     public ClickTeleport() {
         super("Click Teleport", ModType.MOVEMENT, Keyboard.KEY_NONE, 0xFFFF697C);
 
-        Command.newCommand().cmd("forward").aliases("fwd").description("Teleport forward a few blocks..").arguments("<blocks>").handler(this).build();
+        Command.newCommand().cmd("forward").aliases("fwd").description("Teleport forward a few blocks.").arguments("<blocks>").handler(this).build();
 
         blockReachListener = new Listener<BlockReachEvent>() {
             @Override
