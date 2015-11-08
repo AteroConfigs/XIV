@@ -86,9 +86,11 @@ public class Speed extends Mod implements CommandHandler {
                                     mc.thePlayer.motionZ *= 0.975F;
                                 }
 
-                                mc.getTimer().timerSpeed = 1.11F;
+                                mc.getTimer().timerSpeed = 1.05F;
 
                                 hasJumped = true;
+                            }else{
+                                mc.getTimer().timerSpeed = 1.0F;
                             }
 
                             if (hasJumped && !mc.thePlayer.onGround && !mc.thePlayer.isOnLadder()) {
@@ -283,6 +285,8 @@ public class Speed extends Mod implements CommandHandler {
         XIV.getInstance().getListenerManager().remove(moveListener);
         Blocks.ice.slipperiness = 0.98F;
         Blocks.packed_ice.slipperiness = 0.98F;
+        
+        mc.getTimer().timerSpeed = 1.0F;
     }
 
     private enum Mode {
@@ -303,4 +307,3 @@ public class Speed extends Mod implements CommandHandler {
         }
     }
 }
-
