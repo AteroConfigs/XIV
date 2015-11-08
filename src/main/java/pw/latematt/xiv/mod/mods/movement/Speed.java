@@ -1,8 +1,10 @@
 package pw.latematt.xiv.mod.mods.movement;
 
+import net.minecraft.block.BlockAir;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -14,7 +16,11 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Jack
@@ -186,6 +192,10 @@ public class Speed extends Mod implements CommandHandler {
         Step step = (Step) XIV.getInstance().getModManager().find("step");
         boolean editingPackets = step != null && step.isEditingPackets();
 
+        List<AxisAlignedBB> list = mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().expand(1.0D, 0.0D, 1.0D));
+
+        boolean blockCheck = step != null && step.isNewStep() && list.isEmpty() || step != null && !step.isNewStep();
+
         boolean moving = mc.thePlayer.movementInput.moveForward != 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
 
@@ -198,7 +208,7 @@ public class Speed extends Mod implements CommandHandler {
         boolean onLiquid = BlockUtils.isOnLiquid(mc.thePlayer);
         boolean onIce = BlockUtils.isOnIce(mc.thePlayer);
 
-        return moving && !sneaking && !collided && groundCheck && !inLiquid && !onLiquid && !onIce && !editingPackets;
+        return moving && !sneaking && !collided && groundCheck && !inLiquid && !onLiquid && !onIce && !editingPackets && blockCheck;
     }
 
     @Override
@@ -211,8 +221,11 @@ public class Speed extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
-                            case "new":
+                            case "deluge":
                             case "fast":
+                            case "offset":
+                            case "minijump":
+                            case "new":
                                 currentMode.setValue(Mode.FAST);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;

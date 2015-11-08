@@ -703,7 +703,7 @@ public abstract class Entity implements ICommandSender
             this.func_174826_a(this.getEntityBoundingBox().offset(0.0D, 0.0D, z));
 
             boolean canStep = this.stepHeight > 0.0F && var54 && (var13 != x || var17 != z);
-            EntityStepEvent event = new EntityStepEvent(this, canStep);
+            EntityStepEvent event = new EntityStepEvent(this, canStep, var13, y, var17);
             XIV.getInstance().getListenerManager().call(event);
             if (canStep && !event.isCancelled())
             {
