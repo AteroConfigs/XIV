@@ -20,6 +20,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import pw.latematt.timer.Timer;
+import pw.latematt.timer.convert.TimeConverter;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
@@ -337,6 +338,9 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                 }
             }
         }
+
+        if (timer.hasReached(1000))
+            lag += " \2477" + timer.getDifference() + "ms";
 
         int y = scaledResolution.getScaledHeight() - 10;
         if (mc.ingameGUI.getChatGUI().getChatOpen())
