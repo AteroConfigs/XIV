@@ -59,6 +59,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Blink());
         contents.add(new BlockBBFixer());
         contents.add(new ChestStealer());
+        contents.add(new ClickTeleport());
         contents.add(new Commands());
         contents.add(new Criticals());
         contents.add(new ESP());

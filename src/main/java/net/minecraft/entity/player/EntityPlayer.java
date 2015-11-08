@@ -1359,7 +1359,8 @@ public abstract class EntityPlayer extends EntityLivingBase
                         if (noSlowdown != null && noSlowdown.isEnabled())
                             noSlowdownCheck = true;
 
-                        if (var18 > 0 && noSlowdownCheck)
+                        // lol whoever made this is fucking stupid, this is why speed was broken.
+                        if (var18 > 0 && !noSlowdownCheck)
                         {
                             targetEntity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)var18 * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)var18 * 0.5F));
                             this.motionX *= 0.6D;

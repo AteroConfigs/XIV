@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 
 import java.util.Iterator;
@@ -156,6 +157,79 @@ public class EntityUtils {
                 MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY + offset, MINECRAFT.thePlayer.posZ, false));
                 MINECRAFT.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(MINECRAFT.thePlayer.posX, MINECRAFT.thePlayer.posY, MINECRAFT.thePlayer.posZ, (i == ((3 + damage) / offset))));
             }
+        }
+    }
+
+    public static void teleportToPosition(double[] startPosition, double[] endPosition, double slack) {
+        double startX = startPosition[0];
+        double startY = startPosition[1];
+        double startZ = startPosition[2];
+
+        double endX = endPosition[0];
+        double endY = endPosition[1];
+        double endZ = endPosition[2];
+
+        double distance = Math.abs(startX - startY) + Math.abs(startY - endY) + Math.abs(startZ - endZ);
+
+        int count = 0;
+        while(distance > slack) {
+            distance = Math.abs(startX - endX) + Math.abs(startY - endY) + Math.abs(startZ - endZ);
+
+            if(count > 120) {
+                break;
+            }
+
+            double diffX = startX - endX;
+            double diffY = startY - endY;
+            double diffZ = startZ - endZ;
+
+            double offset = (count & 0x1) == 0 ? 0.4D : 0.25D;
+
+            if (diffX < 0.0D) {
+                if (Math.abs(diffX) > offset) {
+                    startX += offset;
+                } else {
+                    startX += Math.abs(diffX);
+                }
+            }
+            if (diffX > 0.0D) {
+                if (Math.abs(diffX) > offset) {
+                    startX -= offset;
+                } else {
+                    startX -= Math.abs(diffX);
+                }
+            }
+            if (diffY < 0.0D) {
+                if (Math.abs(diffY) > 0.25D) {
+                    startY += 0.25D;
+                } else {
+                    startY += Math.abs(diffY);
+                }
+            }
+            if (diffY > 0.0D) {
+                if (Math.abs(diffY) > 0.25D) {
+                    startY -= 0.25D;
+                } else {
+                    startY -= Math.abs(diffY);
+                }
+            }
+            if (diffZ < 0.0D) {
+                if (Math.abs(diffZ) > offset) {
+                    startZ += offset;
+                } else {
+                    startZ += Math.abs(diffZ);
+                }
+            }
+            if (diffZ > 0.0D) {
+                if (Math.abs(diffZ) > offset) {
+                    startZ -= offset;
+                } else {
+                    startZ -= Math.abs(diffZ);
+                }
+            }
+
+            MINECRAFT.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(startX, startY, startZ, true));
+            count++;
         }
     }
 }

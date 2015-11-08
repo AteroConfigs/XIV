@@ -25,7 +25,7 @@ public class Speed extends Mod implements CommandHandler {
     private final Value<Boolean> fastIce = new Value<>("speed_fast_ice", true);
     private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.CAPSAR);
     private final Listener motionUpdateListener, moveListener;
-    private boolean nextTick;
+    private boolean nextTick, hasJumped;
     private int ticks;
 
     public Speed() {
@@ -86,89 +86,96 @@ public class Speed extends Mod implements CommandHandler {
                                     mc.thePlayer.motionZ *= 0.975F;
                                 }
 
-                                nextTick = true;
+                                mc.getTimer().timerSpeed = 1.11F;
+
+                                hasJumped = true;
                             }
 
-                            if (nextTick && !mc.thePlayer.onGround && !mc.thePlayer.isOnLadder()) {
+                            if (hasJumped && !mc.thePlayer.onGround && !mc.thePlayer.isOnLadder()) {
                                 mc.thePlayer.motionY = -0.1F;
-                                nextTick = false;
+                                hasJumped = false;
                             }
+
                             break;
                         case CAPSAR:
-                            speed = 2.433D;
-                            slow = 1.5D;
-                            if (!mc.thePlayer.isSprinting()) {
-                                speed += 0.4D;
-                                slow -= 0.005D;
-                            }
-                            if (strafe) {
-                                speed -= 0.04F;
-                                slow -= 0.005D;
-                            }
-                            if (mc.thePlayer.isPotionActive(Potion.SPEED)) {
-                                PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
-                                switch (effect.getAmplifier()) {
-                                    case 0:
-                                        speed -= 0.2975D;
-                                        break;
-                                    case 1:
-                                        speed -= 0.5575D;
-                                        break;
-                                    case 2:
-                                        speed -= 0.7858D;
-                                        break;
-                                    case 3:
-                                        speed -= 0.9075D;
-                                        break;
+                            if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                                speed = 2.433D;
+                                slow = 1.5D;
+                                if (!mc.thePlayer.isSprinting()) {
+                                    speed += 0.4D;
+                                    slow -= 0.005D;
                                 }
-                            }
+                                if (strafe) {
+                                    speed -= 0.04F;
+                                    slow -= 0.005D;
+                                }
+                                if (mc.thePlayer.isPotionActive(Potion.SPEED)) {
+                                    PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
+                                    switch (effect.getAmplifier()) {
+                                        case 0:
+                                            speed -= 0.2975D;
+                                            break;
+                                        case 1:
+                                            speed -= 0.5575D;
+                                            break;
+                                        case 2:
+                                            speed -= 0.7858D;
+                                            break;
+                                        case 3:
+                                            speed -= 0.9075D;
+                                            break;
+                                    }
+                                }
 
-                            if (canSpeed(groundCheck)) {
-                                if (nextTick = !nextTick) {
-                                    mc.thePlayer.motionX *= speed;
-                                    mc.thePlayer.motionZ *= speed;
-                                } else {
-                                    mc.thePlayer.motionX /= slow;
-                                    mc.thePlayer.motionZ /= slow;
+                                if (canSpeed(groundCheck)) {
+                                    if (nextTick = !nextTick) {
+                                        mc.thePlayer.motionX *= speed;
+                                        mc.thePlayer.motionZ *= speed;
+                                    } else {
+                                        mc.thePlayer.motionX /= slow;
+                                        mc.thePlayer.motionZ /= slow;
+                                    }
+                                } else if (nextTick) {
+                                    mc.thePlayer.motionX /= speed;
+                                    mc.thePlayer.motionZ /= speed;
+                                    nextTick = false;
                                 }
-                            } else if (nextTick) {
-                                mc.thePlayer.motionX /= speed;
-                                mc.thePlayer.motionZ /= speed;
-                                nextTick = false;
                             }
                             break;
                         case OLD:
-                            speed = 3.0D;
-                            slow = 1.425D;
-                            if (!mc.thePlayer.isSprinting()) {
-                                speed += 0.4D;
-                                slow -= 0.005D;
-                            }
-                            if (strafe) {
-                                speed -= 0.04F;
-                                slow -= 0.005D;
-                            }
-
-                            if (canSpeed(groundCheck)) {
-                                switch (++ticks) {
-                                    case 1:
-                                        mc.thePlayer.motionX *= speed;
-                                        mc.thePlayer.motionZ *= speed;
-                                        break;
-                                    case 2:
-                                        mc.thePlayer.motionX /= slow;
-                                        mc.thePlayer.motionZ /= slow;
-                                        break;
-                                    case 3:
-                                        break;
-                                    default:
-                                        ticks = 0;
-                                        break;
+                            if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                                speed = 3.0D;
+                                slow = 1.425D;
+                                if (!mc.thePlayer.isSprinting()) {
+                                    speed += 0.4D;
+                                    slow -= 0.005D;
                                 }
-                            } else {
-                                mc.thePlayer.motionX *= 0.98D;
-                                mc.thePlayer.motionZ *= 0.98D;
-                                ticks = 4;
+                                if (strafe) {
+                                    speed -= 0.04F;
+                                    slow -= 0.005D;
+                                }
+
+                                if (canSpeed(groundCheck)) {
+                                    switch (++ticks) {
+                                        case 1:
+                                            mc.thePlayer.motionX *= speed;
+                                            mc.thePlayer.motionZ *= speed;
+                                            break;
+                                        case 2:
+                                            mc.thePlayer.motionX /= slow;
+                                            mc.thePlayer.motionZ /= slow;
+                                            break;
+                                        case 3:
+                                            break;
+                                        default:
+                                            ticks = 0;
+                                            break;
+                                    }
+                                } else {
+                                    mc.thePlayer.motionX *= 0.98D;
+                                    mc.thePlayer.motionZ *= 0.98D;
+                                    ticks = 4;
+                                }
                             }
                             break;
                     }
@@ -183,17 +190,17 @@ public class Speed extends Mod implements CommandHandler {
 
         boolean moving = mc.thePlayer.movementInput.moveForward != 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+
         moving = moving || strafing;
 
         boolean sneaking = mc.thePlayer.isSneaking();
         boolean collided = mc.thePlayer.isCollidedHorizontally;
-        boolean hungry = mc.thePlayer.getFoodStats().getFoodLevel() <= 6;
 
         boolean inLiquid = BlockUtils.isInLiquid(mc.thePlayer);
         boolean onLiquid = BlockUtils.isOnLiquid(mc.thePlayer);
         boolean onIce = BlockUtils.isOnIce(mc.thePlayer);
 
-        return  moving && !sneaking && !collided && !hungry && groundCheck && !inLiquid && !onLiquid && !onIce && !editingPackets;
+        return moving && !sneaking && !collided && groundCheck && !inLiquid && !onLiquid && !onIce && !editingPackets;
     }
 
     @Override

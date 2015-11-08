@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.AttackEntityEvent;
+import pw.latematt.xiv.event.events.BlockReachEvent;
 import pw.latematt.xiv.event.events.BreakingBlockEvent;
 import pw.latematt.xiv.event.events.ClickBlockEvent;
 
@@ -352,7 +353,10 @@ public class PlayerControllerMP
      */
     public float getBlockReachDistance()
     {
-        return this.currentGameType.isCreative() ? 5.0F : 4.5F;
+        BlockReachEvent reachEvent = new BlockReachEvent(this.currentGameType.isCreative() ? 5.0F : 4.5F);
+        XIV.getInstance().getListenerManager().call(reachEvent);
+
+        return reachEvent.getRange();
     }
 
     public void updateController()
