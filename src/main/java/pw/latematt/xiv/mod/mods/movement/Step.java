@@ -1,6 +1,7 @@
 package pw.latematt.xiv.mod.mods.movement;
 
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
@@ -14,6 +15,9 @@ import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Matthew
@@ -88,23 +92,27 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
 
                 double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
                 boolean yDiffCheck = yDifference == 0.0D;
-                if (delay == 0 && !yDiffCheck) {
+
+                if (delay == 0 && yDiffCheck && event.canStep()) {
                     mc.thePlayer.onGround = false;
                     mc.thePlayer.isAirBorne = true;
-                    editPackets = true; // make speed and other stuff slow down
+                    editPackets = true;
 
-                    double y = 0.0F, offset = 0.4015F; // starting motion (like a jump?)
+                    double y = 0.0F, offset = 0.4015F;
 
                     while (y < 1.0F) {
                         mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + y, mc.thePlayer.posZ, false));
-                        y += offset;
-                        offset -= (0.155F * offset); // Simulate motion (jumping)
 
-                        if (offset < 0.01)
-                            offset = 0.01F; // cap motion so it doesn't freeze client or go below 0
+                        y += offset;
+                        offset -= (0.165F * offset);
+
+                        if (offset < 0.3)
+                            offset = 0.3F;
                     }
 
-                    delay = 1; // attempting to prevent more packets [i set it to 0 cause fam]
+                    delay = 1;
+                }else{
+                    mc.thePlayer.stepHeight = 0.5F;
                 }
                 break;
             default:
@@ -127,6 +135,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                         switch (mode.toLowerCase()) {
                             case "new":
                             case "blink":
+                            case "offset":
                                 this.mode.setValue(Mode.BLINK);
                                 ChatLogger.print(String.format("Step Mode set to: %s", this.mode.getValue().getName()));
                                 break;
@@ -182,6 +191,10 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
 
     public boolean isEditingPackets() {
         return editPackets;
+    }
+
+    public boolean isNewStep() {
+        return this.mode.getValue() == Mode.BLINK;
     }
 
     @Override

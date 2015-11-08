@@ -11,10 +11,27 @@ public class EntityStepEvent extends Event implements Cancellable {
     private final Entity entity;
     private final boolean canStep;
     private boolean cancelled;
+    private double x, y, z;
 
-    public EntityStepEvent(Entity entity, boolean canStep) {
+    public EntityStepEvent(Entity entity, boolean canStep, double x, double y, double z) {
         this.entity = entity;
         this.canStep = canStep;
+
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getZ() {
+        return z;
     }
 
     public Entity getEntity() {
