@@ -1,7 +1,6 @@
 package pw.latematt.xiv.mod.mods.movement;
 
 import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.util.AxisAlignedBB;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
@@ -15,9 +14,6 @@ import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
-
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * @author Matthew
@@ -111,7 +107,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                     }
 
                     delay = 1;
-                }else{
+                } else {
                     mc.thePlayer.stepHeight = 0.5F;
                 }
                 break;

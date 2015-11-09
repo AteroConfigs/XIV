@@ -32,7 +32,7 @@ public class Regen extends Mod implements Listener<MotionUpdateEvent>, CommandHa
         sendPacketListener = new Listener<SendPacketEvent>() {
             @Override
             public void onEventCalled(SendPacketEvent event) {
-                if(event.getPacket() instanceof C03PacketPlayer && mode.getValue() == Mode.BYPASS) {
+                if (event.getPacket() instanceof C03PacketPlayer && mode.getValue() == Mode.BYPASS) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
 
                     if (mc.thePlayer.onGround || BlockUtils.isOnLadder(mc.thePlayer) || BlockUtils.isInLiquid(mc.thePlayer) || BlockUtils.isOnLiquid(mc.thePlayer)) {
@@ -56,7 +56,7 @@ public class Regen extends Mod implements Listener<MotionUpdateEvent>, CommandHa
             }
         }
     }
-    
+
     @Override
     public void onCommandRan(String message) {
         String[] arguments = message.split(" ");
@@ -106,7 +106,7 @@ public class Regen extends Mod implements Listener<MotionUpdateEvent>, CommandHa
         XIV.getInstance().getListenerManager().remove(this);
         XIV.getInstance().getListenerManager().remove(sendPacketListener);
     }
-    
+
     public enum Mode {
         BYPASS, POTION;
 

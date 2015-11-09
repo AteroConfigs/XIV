@@ -1,6 +1,5 @@
 package pw.latematt.xiv.mod.mods.movement;
 
-import net.minecraft.block.BlockAir;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -10,16 +9,15 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.MotionEvent;
+import pw.latematt.xiv.event.events.MotionFlyingEvent;
+import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
-import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.value.Value;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -30,8 +28,9 @@ public class Speed extends Mod implements CommandHandler {
     private final Value<Boolean> fastLadder = new Value<>("speed_fast_ladder", true);
     private final Value<Boolean> fastIce = new Value<>("speed_fast_ice", true);
     private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.CAPSAR);
-    private final Listener motionUpdateListener, moveListener;
-    private boolean nextTick, hasJumped;
+    private final Listener motionUpdateListener, motionListener, motionFlyingListener;
+    private boolean nextTick, hasJumped, boostCollided;
+    private double boostSpeed;
     private int ticks;
 
     public Speed() {
@@ -39,7 +38,73 @@ public class Speed extends Mod implements CommandHandler {
         setTag(currentMode.getValue().getName());
         Command.newCommand().cmd("speed").description("Base command for the Speed mod.").arguments("<action>").handler(this).build();
 
-        moveListener = new Listener<MotionEvent>() {
+        motionFlyingListener = new Listener<MotionFlyingEvent>() {
+            @Override
+            public void onEventCalled(MotionFlyingEvent event) {
+                /* credits to aris (although i'm still not sure he made it...) */
+                double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
+                boolean groundCheck = mc.thePlayer.onGround && yDifference == 0.0D;
+                if (event.getState() == MotionFlyingEvent.State.PRE && canSpeed(groundCheck) && currentMode.getValue() == Mode.BOOST) {
+                    float yaw = mc.thePlayer.rotationYaw;
+                    if (event.getForward() != 0.0F) {
+                        if (event.getStrafe() >= 0.98D) {
+                            yaw += (event.getForward() > 0.0F ? -45 : 45);
+                            event.setStrafe(0.0F);
+                        } else if (event.getStrafe() <= -0.98D) {
+                            yaw += (event.getForward() > 0.0F ? 45 : -45);
+                            event.setStrafe(0.0F);
+                        }
+
+                        if (event.getForward() == 0.98D) {
+                            event.setForward(1.0F);
+                        } else if (event.getForward() == -0.98D) {
+                            event.setForward(-1.0F);
+                        }
+                    }
+
+                    double mx = Math.cos(Math.toRadians(yaw + 90.0F));
+                    double mz = Math.sin(Math.toRadians(yaw + 90.0F));
+                    mc.thePlayer.motionX = (event.getForward() * boostSpeed * mx + event.getStrafe() * boostSpeed * mz);
+                    mc.thePlayer.motionZ = (event.getForward() * boostSpeed * mz - event.getStrafe() * boostSpeed * mx);
+                    if (mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(mc.thePlayer.motionX * 1.25D, 0.0D, mc.thePlayer.motionZ * 1.25D)).size() > 0 || mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(mc.thePlayer.motionX, -1.0D, mc.thePlayer.motionZ)).size() <= 0) {
+                        boostCollided = true;
+                        ticks = 3;
+                        boostSpeed = 0.29316D;
+
+                        float yawGay = mc.thePlayer.rotationYaw;
+                        if (event.getForward() != 0.0F) {
+                            if (event.getStrafe() >= 0.98D) {
+                                yawGay += (event.getForward() > 0.0F ? -45 : 45);
+                                event.setStrafe(0.0F);
+                            } else if (event.getStrafe() <= -0.98D) {
+                                yawGay += (event.getForward() > 0.0F ? 45 : -45);
+                                event.setStrafe(0.0F);
+                            }
+                            if (event.getForward() == 0.98D) {
+                                event.setForward(1.0F);
+                            } else if (event.getForward() == -0.98D) {
+                                event.setForward(-1.0F);
+                            }
+                        }
+                        double mxGay = Math.cos(Math.toRadians(yawGay + 90.0F));
+                        double mzGay = Math.sin(Math.toRadians(yawGay + 90.0F));
+                        mc.thePlayer.motionX = (event.getForward() * boostSpeed * mxGay + event.getStrafe() * boostSpeed * mzGay);
+                        mc.thePlayer.motionZ = (event.getForward() * boostSpeed * mzGay - event.getStrafe() * boostSpeed * mxGay);
+                    } else {
+                        boostCollided = false;
+                    }
+
+                    if (event.getForward() == 0.0F && event.getStrafe() == 0.0F) {
+                        mc.thePlayer.motionX = 0.0D;
+                        mc.thePlayer.motionZ = 0.0D;
+                    }
+
+                    event.setCancelled(true);
+                }
+            }
+        };
+
+        motionListener = new Listener<MotionEvent>() {
             @Override
             public void onEventCalled(MotionEvent event) {
                 if (event.getState() == MotionEvent.State.PRE) {
@@ -76,7 +141,40 @@ public class Speed extends Mod implements CommandHandler {
                     boolean groundCheck = mc.thePlayer.onGround && yDifference == 0.0D;
                     boolean strafe = mc.thePlayer.moveStrafing != 0.0F;
                     switch (currentMode.getValue()) {
-                        case FAST:
+                        case BOOST:
+                            /* credits to aris (although i'm still not sure he made it...) */
+                            /* credits to DoubleParallax (pretty sure he made it...)       */
+                            boostSpeed = 0.29316D;
+                            if (canSpeed(groundCheck)) {
+                                switch (++ticks) {
+                                    case 1:
+                                        boostSpeed *= 2.149999D;
+                                        break;
+                                    case 2:
+                                        double xDist = mc.thePlayer.posX - mc.thePlayer.prevPosX;
+                                        double zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ;
+                                        double lastDist = Math.sqrt(xDist * xDist + zDist * zDist);
+
+                                        double difference = 0.66D * (lastDist - 0.299D);
+                                        boostSpeed = lastDist - difference;
+                                        if (!boostCollided)
+                                            mc.thePlayer.motionY = 0.017D;
+
+                                        hasJumped = true;
+                                        break;
+                                    default:
+                                        ticks = 0;
+                                        break;
+                                }
+                            }
+
+                            if (hasJumped && !mc.thePlayer.onGround && !mc.thePlayer.isOnLadder()) {
+                                mc.thePlayer.motionY = -0.1F;
+                                hasJumped = false;
+                            }
+                            break;
+                        case BUNNYHOP:
+                            /* credits to DoubleParallax */
                             if (canSpeed(mc.thePlayer.onGround)) {
                                 double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
 
@@ -95,7 +193,7 @@ public class Speed extends Mod implements CommandHandler {
                                 mc.getTimer().timerSpeed = 1.05F;
 
                                 hasJumped = true;
-                            }else{
+                            } else {
                                 mc.getTimer().timerSpeed = 1.0F;
                             }
 
@@ -103,7 +201,6 @@ public class Speed extends Mod implements CommandHandler {
                                 mc.thePlayer.motionY = -0.1F;
                                 hasJumped = false;
                             }
-
                             break;
                         case CAPSAR:
                             speed = 2.433D;
@@ -221,12 +318,16 @@ public class Speed extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
+                            case "lithe":
+                            case "faster":
+                            case "boost":
+                                currentMode.setValue(Mode.BOOST);
+                                ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
+                                break;
                             case "deluge":
                             case "fast":
-                            case "offset":
-                            case "minijump":
-                            case "new":
-                                currentMode.setValue(Mode.FAST);
+                            case "bunnyhop":
+                                currentMode.setValue(Mode.BUNNYHOP);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "capsar":
@@ -243,7 +344,7 @@ public class Speed extends Mod implements CommandHandler {
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: fast, capsar, old");
+                                ChatLogger.print("Invalid mode, valid: boost, bunnyhop, capsar, old");
                                 break;
                         }
                         setTag(currentMode.getValue().getName());
@@ -288,22 +389,20 @@ public class Speed extends Mod implements CommandHandler {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(motionUpdateListener);
-        XIV.getInstance().getListenerManager().add(moveListener);
+        XIV.getInstance().getListenerManager().add(motionUpdateListener, motionListener, motionFlyingListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
-        XIV.getInstance().getListenerManager().remove(moveListener);
+        XIV.getInstance().getListenerManager().remove(motionUpdateListener, motionListener, motionFlyingListener);
         Blocks.ice.slipperiness = 0.98F;
         Blocks.packed_ice.slipperiness = 0.98F;
-        
+
         mc.getTimer().timerSpeed = 1.0F;
     }
 
     private enum Mode {
-        FAST, CAPSAR, OLD;
+        BOOST, BUNNYHOP, CAPSAR, OLD;
 
         public String getName() {
             String prettyName = "";
