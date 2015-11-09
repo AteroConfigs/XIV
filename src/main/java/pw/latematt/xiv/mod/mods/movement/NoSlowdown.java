@@ -72,16 +72,12 @@ public class NoSlowdown extends Mod {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(itemSlowdownListener);
-        XIV.getInstance().getListenerManager().add(motionUpdateListener);
-        XIV.getInstance().getListenerManager().add(soulSandSlowdownListener);
+        XIV.getInstance().getListenerManager().add(itemSlowdownListener, motionUpdateListener, soulSandSlowdownListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(itemSlowdownListener);
-        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
-        XIV.getInstance().getListenerManager().remove(soulSandSlowdownListener);
+        XIV.getInstance().getListenerManager().remove(itemSlowdownListener, motionUpdateListener, soulSandSlowdownListener);
         if (mc.thePlayer != null) {
             mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
         }

@@ -156,16 +156,12 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(renderListener);
-        XIV.getInstance().getListenerManager().add(blockReachListener);
+        XIV.getInstance().getListenerManager().add(this, renderListener, blockReachListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
-        XIV.getInstance().getListenerManager().remove(renderListener);
-        XIV.getInstance().getListenerManager().remove(blockReachListener);
+        XIV.getInstance().getListenerManager().remove(this, renderListener, blockReachListener);
     }
 
     @Override

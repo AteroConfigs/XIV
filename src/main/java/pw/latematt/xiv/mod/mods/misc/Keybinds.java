@@ -62,13 +62,11 @@ public class Keybinds extends Mod implements Listener<KeyPressEvent> {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(mouseClickListener);
+        XIV.getInstance().getListenerManager().add(this, mouseClickListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
-        XIV.getInstance().getListenerManager().remove(mouseClickListener);
+        XIV.getInstance().getListenerManager().remove(this, mouseClickListener);
     }
 }

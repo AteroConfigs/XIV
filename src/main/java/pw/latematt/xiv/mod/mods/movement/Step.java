@@ -195,18 +195,14 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(sendPacketListener);
-        XIV.getInstance().getListenerManager().add(motionUpdateListener);
+        XIV.getInstance().getListenerManager().add(this, sendPacketListener, motionUpdateListener);
         if (mc.thePlayer != null)
             mc.thePlayer.stepHeight = height.getValue();
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
-        XIV.getInstance().getListenerManager().remove(sendPacketListener);
-        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
+        XIV.getInstance().getListenerManager().remove(this, sendPacketListener, motionUpdateListener);
         editPackets = false;
         if (mc.thePlayer != null)
             mc.thePlayer.stepHeight = 0.5F;

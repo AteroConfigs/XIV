@@ -269,16 +269,12 @@ public class AutoHeal extends Mod implements CommandHandler {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(sendPacketListener);
-        XIV.getInstance().getListenerManager().add(readPacketListener);
-        XIV.getInstance().getListenerManager().add(motionUpdateListener);
+        XIV.getInstance().getListenerManager().add(sendPacketListener, readPacketListener, motionUpdateListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(sendPacketListener);
-        XIV.getInstance().getListenerManager().remove(readPacketListener);
-        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
+        XIV.getInstance().getListenerManager().remove(sendPacketListener, readPacketListener, motionUpdateListener);
     }
 
     private enum Mode {

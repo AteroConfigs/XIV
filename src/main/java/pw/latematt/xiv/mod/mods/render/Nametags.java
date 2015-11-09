@@ -288,13 +288,11 @@ public class Nametags extends Mod implements CommandHandler {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(nametagRenderListener);
-        XIV.getInstance().getListenerManager().add(render3DListener);
+        XIV.getInstance().getListenerManager().add(nametagRenderListener, render3DListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(nametagRenderListener);
-        XIV.getInstance().getListenerManager().remove(render3DListener);
+        XIV.getInstance().getListenerManager().remove(nametagRenderListener, render3DListener);
     }
 }

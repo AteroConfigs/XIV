@@ -97,14 +97,12 @@ public class Regen extends Mod implements Listener<MotionUpdateEvent>, CommandHa
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(sendPacketListener);
+        XIV.getInstance().getListenerManager().add(this, sendPacketListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
-        XIV.getInstance().getListenerManager().remove(sendPacketListener);
+        XIV.getInstance().getListenerManager().remove(this, sendPacketListener);
     }
 
     public enum Mode {

@@ -30,24 +30,21 @@ public class Drown implements CommandHandler {
         playerDeathListener = new Listener<PlayerDeathEvent>() {
             @Override
             public void onEventCalled(PlayerDeathEvent event) {
-                XIV.getInstance().getListenerManager().remove(motionUpdateListener);
-                XIV.getInstance().getListenerManager().remove(playerDeathListener);
+                XIV.getInstance().getListenerManager().remove(motionUpdateListener, playerDeathListener);
             }
         };
     }
 
     @Override
     public void onCommandRan(String message) {
-        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
-        XIV.getInstance().getListenerManager().remove(playerDeathListener);
+        XIV.getInstance().getListenerManager().remove(motionUpdateListener, playerDeathListener);
 
         if (mc.thePlayer.isInWater()) {
             for (int i = 0; i <= mc.thePlayer.getAir(); i++) {
                 mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
             }
 
-            XIV.getInstance().getListenerManager().add(motionUpdateListener);
-            XIV.getInstance().getListenerManager().add(playerDeathListener);
+            XIV.getInstance().getListenerManager().add(motionUpdateListener, playerDeathListener);
         }
     }
 }

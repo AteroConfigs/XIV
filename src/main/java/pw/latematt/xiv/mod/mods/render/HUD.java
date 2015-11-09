@@ -531,8 +531,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(readPacketListener);
+        XIV.getInstance().getListenerManager().add(this, readPacketListener);
         if (tabGui.getValue()) {
             XIV.getInstance().getListenerManager().add(XIV.getInstance().getTabHandler());
         }
@@ -540,8 +539,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
-        XIV.getInstance().getListenerManager().remove(readPacketListener);
+        XIV.getInstance().getListenerManager().remove(this, readPacketListener);
         if (!tabGui.getValue()) {
             XIV.getInstance().getListenerManager().remove(XIV.getInstance().getTabHandler());
         }

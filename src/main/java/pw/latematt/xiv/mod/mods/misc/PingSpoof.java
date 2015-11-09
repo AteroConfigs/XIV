@@ -98,14 +98,12 @@ public class PingSpoof extends Mod implements Listener<SendPacketEvent>, Command
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(motionUpdateListener);
+        XIV.getInstance().getListenerManager().add(this, motionUpdateListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
-        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
+        XIV.getInstance().getListenerManager().remove(this, motionUpdateListener);
         for (Packet packet : packets) {
             mc.getNetHandler().addToSendQueue(packet);
             packets.remove(packet);

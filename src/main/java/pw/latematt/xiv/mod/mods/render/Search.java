@@ -247,14 +247,12 @@ public class Search extends Mod implements Listener<Render3DEvent>, CommandHandl
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(blockModelRenderListener);
+        XIV.getInstance().getListenerManager().add(this, blockModelRenderListener);
         mc.renderGlobal.loadRenderers();
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
-        XIV.getInstance().getListenerManager().remove(blockModelRenderListener);
+        XIV.getInstance().getListenerManager().remove(this, blockModelRenderListener);
     }
 }

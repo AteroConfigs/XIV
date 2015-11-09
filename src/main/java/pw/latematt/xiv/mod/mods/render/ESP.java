@@ -412,13 +412,11 @@ public class ESP extends Mod implements Listener<Render3DEvent>, CommandHandler 
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(renderEntityListener);
+        XIV.getInstance().getListenerManager().add(this, renderEntityListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
-        XIV.getInstance().getListenerManager().remove(renderEntityListener);
+        XIV.getInstance().getListenerManager().remove(this, renderEntityListener);
     }
 }
