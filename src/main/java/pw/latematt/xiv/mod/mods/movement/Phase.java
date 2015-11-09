@@ -112,9 +112,8 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                     } else if (mode.getValue() == Mode.NEW) {
                         float[] offset = new float[]{xD * 0.75F, 1.0F, zD * 0.75F};
 
-                        mc.thePlayer.setPosition(mc.thePlayer.posX + (offset[0] * 0.5F), mc.thePlayer.posY - 0.1F, mc.thePlayer.posZ + (offset[2] * 0.5F));
-
                         mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0] * 0.65F), mc.thePlayer.posY + 0.0001F, mc.thePlayer.posZ + (offset[2] * 0.65F), mc.thePlayer.onGround));
+                        mc.thePlayer.setPosition(mc.thePlayer.posX + (offset[0] * 0.5F), mc.thePlayer.posY - 0.1F, mc.thePlayer.posZ + (offset[2] * 0.5F));
 
                         if (mc.thePlayer.isCollidedHorizontally)
                             collided = true;
