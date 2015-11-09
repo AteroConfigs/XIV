@@ -44,7 +44,7 @@ public class Speed extends Mod implements CommandHandler {
                 /* credits to aris (although i'm still not sure he made it...) */
                 double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
                 boolean groundCheck = mc.thePlayer.onGround && yDifference == 0.0D;
-                if (event.getState() == MotionFlyingEvent.State.PRE && canSpeed(groundCheck) && currentMode.getValue() == Mode.BOOST) {
+                if (event.getState() == MotionFlyingEvent.State.PRE && canSpeed(mc.thePlayer.onGround) && currentMode.getValue() == Mode.BOOST) {
                     float yaw = mc.thePlayer.rotationYaw;
                     if (event.getForward() != 0.0F) {
                         if (event.getStrafe() >= 0.98D) {
@@ -159,18 +159,11 @@ public class Speed extends Mod implements CommandHandler {
                                         boostSpeed = lastDist - difference;
                                         if (!boostCollided)
                                             mc.thePlayer.motionY = 0.017D;
-
-                                        hasJumped = true;
                                         break;
                                     default:
                                         ticks = 0;
                                         break;
                                 }
-                            }
-
-                            if (hasJumped && !mc.thePlayer.onGround && !mc.thePlayer.isOnLadder()) {
-                                mc.thePlayer.motionY = -0.1F;
-                                hasJumped = false;
                             }
                             break;
                         case BUNNYHOP:
