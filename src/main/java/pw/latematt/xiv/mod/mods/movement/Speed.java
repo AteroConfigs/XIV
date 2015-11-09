@@ -3,7 +3,6 @@ package pw.latematt.xiv.mod.mods.movement;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -42,9 +41,15 @@ public class Speed extends Mod implements CommandHandler {
             @Override
             public void onEventCalled(MotionFlyingEvent event) {
                 /* credits to aris (although i'm still not sure he made it...) */
-                double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
-                boolean groundCheck = mc.thePlayer.onGround && yDifference == 0.0D;
-                if (event.getState() == MotionFlyingEvent.State.PRE && canSpeed(mc.thePlayer.onGround) && currentMode.getValue() == Mode.BOOST) {
+                if (event.getState() == MotionFlyingEvent.State.PRE && currentMode.getValue() == Mode.BOOST && mc.thePlayer.isCollidedVertically) {
+                    if (mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(mc.thePlayer.motionX * 1.25D, 0.0D, mc.thePlayer.motionZ * 1.25D)).size() > 0 || mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(mc.thePlayer.motionX, -1.0D, mc.thePlayer.motionZ)).size() <= 0) {
+                        boostCollided = true;
+                        ticks = -2;
+                        boostSpeed = 0.29316D;
+                    } else {
+                        boostCollided = false;
+                    }
+
                     float yaw = mc.thePlayer.rotationYaw;
                     if (event.getForward() != 0.0F) {
                         if (event.getStrafe() >= 0.98D) {
@@ -66,33 +71,6 @@ public class Speed extends Mod implements CommandHandler {
                     double mz = Math.sin(Math.toRadians(yaw + 90.0F));
                     mc.thePlayer.motionX = (event.getForward() * boostSpeed * mx + event.getStrafe() * boostSpeed * mz);
                     mc.thePlayer.motionZ = (event.getForward() * boostSpeed * mz - event.getStrafe() * boostSpeed * mx);
-                    if (mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(mc.thePlayer.motionX * 1.25D, 0.0D, mc.thePlayer.motionZ * 1.25D)).size() > 0 || mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(mc.thePlayer.motionX, -1.0D, mc.thePlayer.motionZ)).size() <= 0) {
-                        boostCollided = true;
-                        ticks = 3;
-                        boostSpeed = 0.29316D;
-
-                        float yawGay = mc.thePlayer.rotationYaw;
-                        if (event.getForward() != 0.0F) {
-                            if (event.getStrafe() >= 0.98D) {
-                                yawGay += (event.getForward() > 0.0F ? -45 : 45);
-                                event.setStrafe(0.0F);
-                            } else if (event.getStrafe() <= -0.98D) {
-                                yawGay += (event.getForward() > 0.0F ? 45 : -45);
-                                event.setStrafe(0.0F);
-                            }
-                            if (event.getForward() == 0.98D) {
-                                event.setForward(1.0F);
-                            } else if (event.getForward() == -0.98D) {
-                                event.setForward(-1.0F);
-                            }
-                        }
-                        double mxGay = Math.cos(Math.toRadians(yawGay + 90.0F));
-                        double mzGay = Math.sin(Math.toRadians(yawGay + 90.0F));
-                        mc.thePlayer.motionX = (event.getForward() * boostSpeed * mxGay + event.getStrafe() * boostSpeed * mzGay);
-                        mc.thePlayer.motionZ = (event.getForward() * boostSpeed * mzGay - event.getStrafe() * boostSpeed * mxGay);
-                    } else {
-                        boostCollided = false;
-                    }
 
                     if (event.getForward() == 0.0F && event.getStrafe() == 0.0F) {
                         mc.thePlayer.motionX = 0.0D;
@@ -142,10 +120,15 @@ public class Speed extends Mod implements CommandHandler {
                     boolean strafe = mc.thePlayer.moveStrafing != 0.0F;
                     switch (currentMode.getValue()) {
                         case BOOST:
-                            /* credits to aris (although i'm still not sure he made it...) */
-                            /* credits to DoubleParallax (pretty sure he made it...)       */
-                            boostSpeed = 0.29316D;
-                            if (canSpeed(groundCheck)) {
+                            /* credits to aristhena
+                             * he actually made it.
+                             * reason behind me saying this is because i've actually never seen a speed that works quite like his does.
+                             * it's pretty unique. there could be a better way of doing it, however.
+                             * yes im going to defend aristhena for this only. THIS. ONLY. I still don't like his style.
+                            */
+                            if (!mc.thePlayer.isCollidedVertically) {
+                                boostSpeed = 0.29316D;
+                            } else if (canSpeed()) {
                                 switch (++ticks) {
                                     case 1:
                                         boostSpeed *= 2.149999D;
@@ -157,23 +140,30 @@ public class Speed extends Mod implements CommandHandler {
 
                                         double difference = 0.66D * (lastDist - 0.299D);
                                         boostSpeed = lastDist - difference;
-                                        if (!boostCollided)
-                                            mc.thePlayer.motionY = 0.017D;
+                                        if (!boostCollided) {
+                                            mc.thePlayer.motionY = 0.017F;
+                                            hasJumped = true;
+                                        }
+                                        ticks = 0;
                                         break;
                                     default:
                                         ticks = 0;
                                         break;
                                 }
+
+                                if (hasJumped && !mc.thePlayer.onGround && !mc.thePlayer.isOnLadder()) {
+                                    mc.thePlayer.motionY = -0.1F;
+                                    hasJumped = false;
+                                }
                             }
                             break;
                         case BUNNYHOP:
                             /* credits to DoubleParallax */
+                            double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
+
+                            double x = Math.cos(offset) * 0.25F;
+                            double z = Math.sin(offset) * 0.25F;
                             if (canSpeed(mc.thePlayer.onGround)) {
-                                double offset = (mc.thePlayer.rotationYaw + 90 + (mc.thePlayer.moveForward > 0 ? (mc.thePlayer.moveStrafing > 0 ? -45 : mc.thePlayer.moveStrafing < 0 ? 45 : 0) : mc.thePlayer.moveForward < 0 ? 180 + (mc.thePlayer.moveStrafing > 0 ? 45 : mc.thePlayer.moveStrafing < 0 ? -45 : 0) : (mc.thePlayer.moveStrafing > 0 ? -90 : mc.thePlayer.moveStrafing < 0 ? 90 : 0))) * Math.PI / 180;
-
-                                double x = Math.cos(offset) * 0.25F;
-                                double z = Math.sin(offset) * 0.25F;
-
                                 mc.thePlayer.motionX += x;
                                 mc.thePlayer.motionY = 0.0175F;
                                 mc.thePlayer.motionZ += z;
@@ -184,7 +174,6 @@ public class Speed extends Mod implements CommandHandler {
                                 }
 
                                 mc.getTimer().timerSpeed = 1.05F;
-
                                 hasJumped = true;
                             } else {
                                 mc.getTimer().timerSpeed = 1.0F;
@@ -278,13 +267,16 @@ public class Speed extends Mod implements CommandHandler {
         };
     }
 
+    private boolean canSpeed() {
+        return canSpeed(true);
+    }
+
     private boolean canSpeed(boolean groundCheck) {
         Step step = (Step) XIV.getInstance().getModManager().find("step");
         boolean editingPackets = step != null && step.isEditingPackets();
 
-        List<AxisAlignedBB> list = mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().expand(1.0D, 0.0D, 1.0D));
-
-        boolean blockCheck = step != null && (step.isEnabled() && step.isNewStep()) && list.isEmpty() || step != null && !(step.isEnabled() && step.isNewStep());
+        List collidingBoundingBoxes = mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().expand(0.5D, 0.0D, 0.5D));
+        boolean blockCheck = !editingPackets && collidingBoundingBoxes.isEmpty();
 
         boolean moving = mc.thePlayer.movementInput.moveForward != 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
@@ -298,7 +290,7 @@ public class Speed extends Mod implements CommandHandler {
         boolean onLiquid = BlockUtils.isOnLiquid(mc.thePlayer);
         boolean onIce = BlockUtils.isOnIce(mc.thePlayer);
 
-        return moving && !sneaking && !collided && groundCheck && !inLiquid && !onLiquid && !onIce && !editingPackets && blockCheck;
+        return moving && !sneaking && !collided && !inLiquid && !onLiquid && !onIce && groundCheck && blockCheck;
     }
 
     @Override

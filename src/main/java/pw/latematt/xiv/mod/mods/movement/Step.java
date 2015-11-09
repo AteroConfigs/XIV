@@ -22,7 +22,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
     private final Value<Mode> mode = new Value<>("step_mode", Mode.OLD);
     private final ClampedValue<Float> height = new ClampedValue<>("step_height", 1.0646F, 0.5F, 10.0F);
     private final Listener sendPacketListener, motionUpdateListener;
-    private boolean editPackets;
+    private boolean editingPackets;
 
     private int delay = 0;
 
@@ -45,22 +45,22 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    if (editPackets && mode.getValue() == Mode.OLD) {
+                    if (editingPackets && mode.getValue() == Mode.OLD) {
                         if (mc.thePlayer.posY - mc.thePlayer.lastTickPosY >= 0.75D)
                             player.setY(player.getY() + 0.0646D);
-                        editPackets = false;
+                        editingPackets = false;
                     } else if (mode.getValue() == Mode.JUMP) {
                         if (mc.thePlayer.isCollidedHorizontally && mc.thePlayer.onGround) {
                             mc.thePlayer.motionY = 0.37F;
                             mc.thePlayer.isAirBorne = true;
                         }
-                        editPackets = false;
+                        editingPackets = false;
                     } else if (mode.getValue() == Mode.BLINK) {
-                        if (editPackets)
+                        if (editingPackets)
                             event.setCancelled(true);
 
                         if (mc.thePlayer.onGround)
-                            editPackets = false;
+                            editingPackets = false;
                     }
                 }
             }
@@ -80,8 +80,8 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
             case OLD:
                 mc.thePlayer.stepHeight = height.getValue();
 
-                editPackets = !BlockUtils.isInLiquid(mc.thePlayer);
-                event.setCancelled(!editPackets);
+                editingPackets = !BlockUtils.isInLiquid(mc.thePlayer);
+                event.setCancelled(!editingPackets);
                 break;
             case BLINK:
                 mc.thePlayer.stepHeight = delay == 0 ? height.getValue() : 0.5F;
@@ -92,7 +92,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                 if (delay == 0 && yDiffCheck && event.canStep()) {
                     mc.thePlayer.onGround = false;
                     mc.thePlayer.isAirBorne = true;
-                    editPackets = true;
+                    editingPackets = true;
 
                     double y = 0.0F, offset = 0.4015F;
 
@@ -114,7 +114,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
             default:
                 mc.thePlayer.stepHeight = 0.5F;
 
-                editPackets = !BlockUtils.isInLiquid(mc.thePlayer);
+                editingPackets = !BlockUtils.isInLiquid(mc.thePlayer);
                 break;
         }
     }
@@ -186,16 +186,13 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
     }
 
     public boolean isEditingPackets() {
-        return editPackets;
-    }
-
-    public boolean isNewStep() {
-        return this.mode.getValue() == Mode.BLINK;
+        return isEnabled() && editingPackets;
     }
 
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this, sendPacketListener, motionUpdateListener);
+        editingPackets = false;
         if (mc.thePlayer != null)
             mc.thePlayer.stepHeight = height.getValue();
     }
@@ -203,7 +200,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this, sendPacketListener, motionUpdateListener);
-        editPackets = false;
+        editingPackets = false;
         if (mc.thePlayer != null)
             mc.thePlayer.stepHeight = 0.5F;
     }
