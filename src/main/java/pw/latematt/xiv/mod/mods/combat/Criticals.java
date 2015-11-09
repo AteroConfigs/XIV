@@ -90,8 +90,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(attackEntityListener);
+        XIV.getInstance().getListenerManager().add(this, attackEntityListener);
         if (mc.thePlayer != null && !miniJumps.getValue()) {
             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
@@ -101,8 +100,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
-        XIV.getInstance().getListenerManager().remove(attackEntityListener);
+        XIV.getInstance().getListenerManager().remove(this, attackEntityListener);
         fallDist = 0.0F;
         next = false;
     }

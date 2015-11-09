@@ -58,13 +58,11 @@ public class MineZ extends Mod {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(motionUpdateListener);
-        XIV.getInstance().getListenerManager().add(playerDeathListener);
+        XIV.getInstance().getListenerManager().add(motionUpdateListener, playerDeathListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
-        XIV.getInstance().getListenerManager().remove(playerDeathListener);
+        XIV.getInstance().getListenerManager().remove(motionUpdateListener, playerDeathListener);
     }
 }

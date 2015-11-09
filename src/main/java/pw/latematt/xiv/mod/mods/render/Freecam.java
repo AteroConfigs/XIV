@@ -124,11 +124,7 @@ public class Freecam extends Mod {
             mc.renderGlobal.loadRenderers();
         }
 
-        XIV.getInstance().getListenerManager().add(packetListener);
-        XIV.getInstance().getListenerManager().add(motionListener);
-        XIV.getInstance().getListenerManager().add(moveListener);
-        XIV.getInstance().getListenerManager().add(pushOutOfBlocksListener);
-        XIV.getInstance().getListenerManager().add(cullingListener);
+        XIV.getInstance().getListenerManager().add(packetListener, motionListener, moveListener, pushOutOfBlocksListener, cullingListener);
 
         EntityUtils.setReference(entity);
     }
@@ -137,11 +133,7 @@ public class Freecam extends Mod {
     public void onDisabled() {
         EntityUtils.setReference(mc.thePlayer);
 
-        XIV.getInstance().getListenerManager().remove(packetListener);
-        XIV.getInstance().getListenerManager().remove(motionListener);
-        XIV.getInstance().getListenerManager().remove(moveListener);
-        XIV.getInstance().getListenerManager().remove(pushOutOfBlocksListener);
-        XIV.getInstance().getListenerManager().remove(cullingListener);
+        XIV.getInstance().getListenerManager().remove(packetListener, motionListener, moveListener, pushOutOfBlocksListener, cullingListener);
 
         if (mc.thePlayer != null && entity != null) {
             mc.thePlayer.noClip = false;

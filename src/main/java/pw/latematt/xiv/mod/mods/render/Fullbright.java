@@ -109,8 +109,7 @@ public class Fullbright extends Mod implements Listener<LoadWorldEvent>, Command
         if (mc.theWorld != null && !potion.getValue()) {
             editTable(mc.theWorld, brightness.getValue());
         }
-        XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(motionUpdateListener);
+        XIV.getInstance().getListenerManager().add(this, motionUpdateListener);
     }
 
     @Override

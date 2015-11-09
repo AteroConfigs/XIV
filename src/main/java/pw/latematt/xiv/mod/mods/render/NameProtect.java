@@ -160,15 +160,11 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(sendPacketEvent);
-        XIV.getInstance().getListenerManager().add(mouseClickListener);
+        XIV.getInstance().getListenerManager().add(this, sendPacketEvent, mouseClickListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
-        XIV.getInstance().getListenerManager().remove(sendPacketEvent);
-        XIV.getInstance().getListenerManager().remove(mouseClickListener);
+        XIV.getInstance().getListenerManager().remove(this, sendPacketEvent, mouseClickListener);
     }
 }

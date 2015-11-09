@@ -511,16 +511,12 @@ public class KillAura extends Mod implements CommandHandler {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(motionUpdateListener);
-        XIV.getInstance().getListenerManager().add(sendPacketListener);
-        XIV.getInstance().getListenerManager().add(playerDeathListener);
+        XIV.getInstance().getListenerManager().add(motionUpdateListener, sendPacketListener, playerDeathListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
-        XIV.getInstance().getListenerManager().remove(sendPacketListener);
-        XIV.getInstance().getListenerManager().remove(playerDeathListener);
+        XIV.getInstance().getListenerManager().remove(motionUpdateListener, sendPacketListener, playerDeathListener);
         mode.getValue().onDisabled();
     }
 }

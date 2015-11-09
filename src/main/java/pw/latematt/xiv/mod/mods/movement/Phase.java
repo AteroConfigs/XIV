@@ -202,18 +202,12 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
-        XIV.getInstance().getListenerManager().add(blockAddBBListener);
-        XIV.getInstance().getListenerManager().add(pushOutOfBlocksListener);
-        XIV.getInstance().getListenerManager().add(cullingListener);
+        XIV.getInstance().getListenerManager().add(this, blockAddBBListener, pushOutOfBlocksListener, cullingListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
-        XIV.getInstance().getListenerManager().remove(blockAddBBListener);
-        XIV.getInstance().getListenerManager().remove(pushOutOfBlocksListener);
-        XIV.getInstance().getListenerManager().remove(cullingListener);
+        XIV.getInstance().getListenerManager().remove(this, blockAddBBListener, pushOutOfBlocksListener, cullingListener);
 
         this.collided = false;
     }

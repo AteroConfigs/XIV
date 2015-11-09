@@ -78,7 +78,15 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
     @Override
     public void moveFlying(float strafe, float forward, float friction) {
-        super.moveFlying(strafe, forward, friction);
+        MotionFlyingEvent motionFlyingEvent = new MotionFlyingEvent(strafe, forward, friction, MotionFlyingEvent.State.PRE);
+        XIV.getInstance().getListenerManager().call(motionFlyingEvent);
+        strafe = motionFlyingEvent.getStrafe();
+        forward = motionFlyingEvent.getForward();
+        friction = motionFlyingEvent.getFriction();
+        if (!motionFlyingEvent.isCancelled())
+            super.moveFlying(strafe, forward, friction);
+        motionFlyingEvent = new MotionFlyingEvent(strafe, forward, friction, MotionFlyingEvent.State.POST);
+        XIV.getInstance().getListenerManager().call(motionFlyingEvent);
     }
 
     @Override

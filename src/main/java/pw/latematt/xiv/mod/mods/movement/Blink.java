@@ -89,8 +89,7 @@ public class Blink extends Mod {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(packetListener);
-        XIV.getInstance().getListenerManager().add(renderListener);
+        XIV.getInstance().getListenerManager().add(packetListener, renderListener);
 
         if (Objects.nonNull(mc.thePlayer)) {
             position = new EntityOtherPlayerMP(mc.theWorld, mc.thePlayer.getGameProfile());
@@ -102,8 +101,7 @@ public class Blink extends Mod {
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this.packetListener);
-        XIV.getInstance().getListenerManager().remove(this.renderListener);
+        XIV.getInstance().getListenerManager().remove(packetListener, renderListener);
 
         if (Objects.nonNull(mc.thePlayer)) {
             EntityUtils.setReference(mc.thePlayer);

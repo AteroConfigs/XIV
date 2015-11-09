@@ -75,16 +75,12 @@ public class Jesus extends Mod {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(blockAddBBListener);
-        XIV.getInstance().getListenerManager().add(motionUpdatesListener);
-        XIV.getInstance().getListenerManager().add(sendPacketListener);
+        XIV.getInstance().getListenerManager().add(blockAddBBListener, motionUpdatesListener, sendPacketListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(blockAddBBListener);
-        XIV.getInstance().getListenerManager().remove(motionUpdatesListener);
-        XIV.getInstance().getListenerManager().remove(sendPacketListener);
+        XIV.getInstance().getListenerManager().remove(blockAddBBListener, motionUpdatesListener, sendPacketListener);
         nextTick = false;
     }
 }

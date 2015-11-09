@@ -33,18 +33,22 @@ public class ListenerManager extends ListManager<Listener> implements Cancellabl
         XIV.getInstance().getLogger().info(String.format("Successfully setup %s.", getClass().getSimpleName()));
     }
 
-    public void add(Listener listener) {
-        if (contents.contains(listener))
-            return;
+    public void add(Listener... listeners) {
+        for (Listener listener : listeners) {
+            if (contents.contains(listener))
+                return;
 
-        contents.add(listener);
+            contents.add(listener);
+        }
     }
 
-    public void remove(Listener listener) {
-        if (!contents.contains(listener))
-            return;
+    public void remove(Listener... listeners) {
+        for (Listener listener : listeners) {
+            if (!contents.contains(listener))
+                return;
 
-        contents.remove(listener);
+            contents.remove(listener);
+        }
     }
 
     @SuppressWarnings("unchecked") // rudy sucks really bad

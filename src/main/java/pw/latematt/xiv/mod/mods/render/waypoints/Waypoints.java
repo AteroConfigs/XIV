@@ -369,17 +369,11 @@ public class Waypoints extends Mod implements CommandHandler {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(render3DListener);
-        XIV.getInstance().getListenerManager().add(motionUpdateListener);
-        XIV.getInstance().getListenerManager().add(addWeatherListener);
-        XIV.getInstance().getListenerManager().add(playerDeathListener);
+        XIV.getInstance().getListenerManager().add(render3DListener, motionUpdateListener, addWeatherListener, playerDeathListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(render3DListener);
-        XIV.getInstance().getListenerManager().remove(motionUpdateListener);
-        XIV.getInstance().getListenerManager().remove(addWeatherListener);
-        XIV.getInstance().getListenerManager().remove(playerDeathListener);
+        XIV.getInstance().getListenerManager().remove(render3DListener, motionUpdateListener, addWeatherListener, playerDeathListener);
     }
 }

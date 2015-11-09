@@ -126,13 +126,11 @@ public class Velocity extends Mod implements CommandHandler {
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(readPacketListener);
-        XIV.getInstance().getListenerManager().add(liquidVelocityListener);
+        XIV.getInstance().getListenerManager().add(readPacketListener, liquidVelocityListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(readPacketListener);
-        XIV.getInstance().getListenerManager().remove(liquidVelocityListener);
+        XIV.getInstance().getListenerManager().remove(readPacketListener, liquidVelocityListener);
     }
 }
