@@ -86,7 +86,12 @@ public class Regen extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                         ChatLogger.print("Invalid arguments, valid: regen mode <mode>");
                     }
                     break;
+                default:
+                    ChatLogger.print("Invalid action, valid: mode");
+                    break;
             }
+        } else {
+            ChatLogger.print("Invalid arguments, valid: regen <action>");
         }
     }
 
