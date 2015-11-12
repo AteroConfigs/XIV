@@ -53,6 +53,12 @@ public class Jesus extends Mod {
             public void onEventCalled(MotionUpdateEvent event) {
                 if (shouldJump && BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.isInsideOfMaterial(Material.air) && !mc.thePlayer.isSneaking()) {
                     mc.thePlayer.motionY = 0.08;
+
+                    mc.thePlayer.setImmuneToFire(true);
+                }
+
+                if(BlockUtils.isOnLiquid(mc.thePlayer)) {
+                    mc.thePlayer.setImmuneToFire(true);
                 }
             }
         };
