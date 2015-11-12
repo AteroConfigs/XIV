@@ -6,6 +6,7 @@ import pw.latematt.timer.Timer;
 import pw.latematt.timer.convert.TimeConverter;
 import pw.latematt.xiv.management.managers.*;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
+import pw.latematt.xiv.ui.notifications.NotificationsHandler;
 import pw.latematt.xiv.ui.tabgui.GuiTabHandler;
 
 /**
@@ -32,6 +33,7 @@ public class XIV {
     private final MacroManager macroManager = new MacroManager();
     private final GuiClick guiClick = new GuiClick();
     private final GuiTabHandler tabHandler = new GuiTabHandler();
+    private final NotificationsHandler notificationsHandler = new NotificationsHandler();
 
     public FileManager getFileManager() {
         return fileManager;
@@ -79,6 +81,10 @@ public class XIV {
 
     public GuiTabHandler getTabHandler() {
         return tabHandler;
+    }
+
+    public NotificationsHandler getNotificationsHandler() {
+        return notificationsHandler;
     }
 
     /* logger */
