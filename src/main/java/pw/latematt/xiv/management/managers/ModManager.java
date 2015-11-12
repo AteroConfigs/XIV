@@ -70,7 +70,7 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Freecam());
         contents.add(new Fullbright());
         contents.add(new HUD());
-        contents.add(new InventoryWalk());
+        contents.add(new InventoryPlus());
         contents.add(new Jesus());
         contents.add(new Keybinds());
         contents.add(new KillAura());
