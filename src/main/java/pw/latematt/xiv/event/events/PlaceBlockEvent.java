@@ -3,12 +3,12 @@ package pw.latematt.xiv.event.events;
 import pw.latematt.xiv.event.Event;
 
 /**
- * @author Matthew
+ * @author Rederpz
  */
-public class PlacingBlockEvent extends Event {
+public class PlaceBlockEvent extends Event {
     private int placeDelay;
 
-    public PlacingBlockEvent(int placeDelay) {
+    public PlaceBlockEvent(int placeDelay) {
         this.placeDelay = placeDelay;
     }
 

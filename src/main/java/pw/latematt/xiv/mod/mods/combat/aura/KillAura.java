@@ -240,6 +240,7 @@ public class KillAura extends Mod implements CommandHandler {
                         ChatLogger.print("Invalid arguments, valid: killaura randomdelay <number>");
                     }
                     break;
+                case "attackspersecond":
                 case "aps":
                     if (arguments.length >= 3) {
                         String newApsString = arguments[2];
@@ -259,6 +260,7 @@ public class KillAura extends Mod implements CommandHandler {
                         ChatLogger.print("Invalid arguments, valid: killaura aps <number>");
                     }
                     break;
+                case "reach":
                 case "range":
                 case "r":
                     if (arguments.length >= 3) {

@@ -553,9 +553,6 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             ChatLogger.print("Invalid arguments, valid: hud <action>");
         }
 
-        new Notification("Not Important", false);
-        new Notification("Important", true);
-
         XIV.getInstance().getFileManager().saveFile("hudconfig");
     }
 

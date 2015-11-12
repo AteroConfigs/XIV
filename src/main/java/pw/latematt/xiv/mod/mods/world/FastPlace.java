@@ -5,7 +5,7 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.PlacingBlockEvent;
+import pw.latematt.xiv.event.events.PlaceBlockEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
@@ -14,7 +14,7 @@ import pw.latematt.xiv.value.ClampedValue;
 /**
  * @author Rederpz
  */
-public class FastPlace extends Mod implements Listener<PlacingBlockEvent>, CommandHandler {
+public class FastPlace extends Mod implements Listener<PlaceBlockEvent>, CommandHandler {
     private final ClampedValue<Integer> placeDelay = new ClampedValue<>("fastplace_delay", 0, 0, 4);
 
     public FastPlace() {
@@ -23,7 +23,7 @@ public class FastPlace extends Mod implements Listener<PlacingBlockEvent>, Comma
     }
 
     @Override
-    public void onEventCalled(PlacingBlockEvent event) {
+    public void onEventCalled(PlaceBlockEvent event) {
         event.setPlaceDelay(placeDelay.getValue());
     }
 
