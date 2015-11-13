@@ -62,6 +62,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
     private final Value<Boolean> armor = new Value<>("hud_armor", true);
     private final Value<Boolean> rudysucks = new Value<>("hud_rudysucks", false);
     private final Value<Boolean> tabGui = new Value<>("hud_tabgui", true);
+    private final Value<Boolean> notifications = new Value<>("hud_notifications", true);
     private final Timer timer = new Timer();
     private final Listener readPacketListener;
 
@@ -103,6 +104,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
 
     @Override
     public void onEventCalled(IngameHUDRenderEvent event) {
+        XIV.getInstance().getNotificationsHandler().tick();
         if (mc.gameSettings.showDebugInfo)
             return;
 
@@ -134,6 +136,17 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                 y += 10;
 
             XIV.getInstance().getTabHandler().drawGui(2, y);
+        }
+        if (notifications.getValue()) {
+            int x = 2;
+            int y = 2;
+            if (watermark.getValue() || rudysucks.getValue() || time.getValue())
+                y += 10;
+            if (watermark.getValue() && rudysucks.getValue())
+                y += 10;
+            if (tabGui.getValue())
+                y += XIV.getInstance().getTabHandler().getTabHeight() * ModType.values().length + 2;
+            XIV.getInstance().getNotificationsHandler().draw(x, y);
         }
 
         drawInfo(scaledResolution);
@@ -506,6 +519,19 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
 
                     ChatLogger.print(String.format("HUD will %s display a TabGUI.", (tabGui.getValue() ? "now" : "no longer")));
                     break;
+                case "notifications":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            notifications.setValue(notifications.getDefault());
+                        } else {
+                            notifications.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        notifications.setValue(!notifications.getValue());
+                    }
+
+                    ChatLogger.print(String.format("HUD will %s display Notifications.", (notifications.getValue() ? "now" : "no longer")));
+                    break;
                 case "rudysucks":
                     if (arguments.length >= 3) {
                         if (arguments[2].equalsIgnoreCase("-d")) {
@@ -519,7 +545,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
                     ChatLogger.print(String.format("HUD will %s display \"rudy sucks\".", (rudysucks.getValue() ? "now" : "no longer")));
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: watermark, arraylist, organize, coords, fps, ign, lag, direction, time, potions, armor");
+                    ChatLogger.print("Invalid action, valid: watermark, arraylist, organize, coords, fps, ign, lag, direction, time, potions, armor, tabgui, notifications");
                     break;
             }
         } else {

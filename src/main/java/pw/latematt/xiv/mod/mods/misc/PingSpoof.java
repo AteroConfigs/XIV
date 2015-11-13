@@ -23,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class PingSpoof extends Mod implements Listener<SendPacketEvent>, CommandHandler {
     private final Timer timer = new Timer();
-    private final ClampedValue<Long> delay = new ClampedValue<>("pingspoof_delay", 1000L, 100L, 20000L);
+    private final ClampedValue<Long> delay = new ClampedValue<>("pingspoof_delay", 2000L, 100L, 20000L);
     private final List<C00PacketKeepAlive> packets = new CopyOnWriteArrayList<>();
     private final Listener motionUpdateListener;
 

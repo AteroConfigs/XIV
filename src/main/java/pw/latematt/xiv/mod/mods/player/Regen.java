@@ -20,7 +20,6 @@ import pw.latematt.xiv.value.Value;
  */
 public class Regen extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private final Value<Mode> mode = new Value<>("regen_mode", Mode.POTION);
-
     private Listener sendPacketListener;
 
     public Regen() {
@@ -55,6 +54,16 @@ public class Regen extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                 }
             }
         }
+
+        if (mode.getValue() == Mode.OLD) {
+            if (mc.thePlayer.onGround || BlockUtils.isOnLadder(mc.thePlayer) || BlockUtils.isInLiquid(mc.thePlayer) || BlockUtils.isOnLiquid(mc.thePlayer)) {
+                if (mc.thePlayer.getHealth() < mc.thePlayer.getMaxHealth()) {
+                    for (int i = 0; i < mc.thePlayer.getMaxHealth() - mc.thePlayer.getHealth(); i++) {
+                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -75,6 +84,11 @@ public class Regen extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                             case "bypass":
                             case "new":
                                 mode.setValue(Mode.BYPASS);
+                                ChatLogger.print(String.format("Regen Mode set to: %s", mode.getValue().getName()));
+                                break;
+                            case "packets":
+                            case "old":
+                                mode.setValue(Mode.OLD);
                                 ChatLogger.print(String.format("Regen Mode set to: %s", mode.getValue().getName()));
                                 break;
                             default:
@@ -106,7 +120,7 @@ public class Regen extends Mod implements Listener<MotionUpdateEvent>, CommandHa
     }
 
     public enum Mode {
-        BYPASS, POTION;
+        BYPASS, POTION, OLD;
 
         public String getName() {
             String prettyName = "";

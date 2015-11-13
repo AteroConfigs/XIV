@@ -8,6 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.InventoryClosedEvent;
 
 public class ContainerPlayer extends Container
 {
@@ -87,6 +89,11 @@ public class ContainerPlayer extends Container
     public void onContainerClosed(EntityPlayer p_75134_1_)
     {
         super.onContainerClosed(p_75134_1_);
+
+        InventoryClosedEvent event = new InventoryClosedEvent(p_75134_1_);
+        XIV.getInstance().getListenerManager().call(event);
+        if (event.isCancelled())
+            return;
 
         for (int var2 = 0; var2 < 4; ++var2)
         {

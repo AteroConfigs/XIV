@@ -1564,7 +1564,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
      */
     private void rightClickMouse()
     {
-        PlacingBlockEvent event = new PlacingBlockEvent(4);
+        PlaceBlockEvent event = new PlaceBlockEvent(4);
         XIV.getInstance().getListenerManager().call(event);
 
         this.rightClickDelayTimer = event.getPlaceDelay();

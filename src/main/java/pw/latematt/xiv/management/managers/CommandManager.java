@@ -207,6 +207,7 @@ public class CommandManager extends ListManager<Command> {
         Command.newCommand().cmd("fillworldedit").description("Use world edit in 1.8 servers that don't have world edit.").aliases("fwe", "we", "//", "worldedit").handler(new FillWorldEdit()).build();
         Command.newCommand().cmd("pluginfinder").description("Find plugins the server has.").arguments("<action>").aliases("pl", "pf").handler(new PluginFinder()).build();
         Command.newCommand().cmd("drown").description("Drowns you faster than usual.").handler(new Drown()).build();
+        Command.newCommand().cmd("forward").description("Teleport forward a few blocks.").arguments("<blocks>").aliases("fwd").handler(new Forward()).build();
 
         Command.newCommand().cmd("prefix").description("Changes your command prefix").arguments("<new prefix>")
                 .handler(message -> {

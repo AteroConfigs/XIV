@@ -1068,6 +1068,10 @@ public abstract class Entity implements ICommandSender
         return this.isImmuneToFire;
     }
 
+    public void setImmuneToFire(boolean isImmuneToFire) {
+        this.isImmuneToFire = isImmuneToFire;
+    }
+
     public void fall(float distance, float damageMultiplier)
     {
         if (this.riddenByEntity != null)
