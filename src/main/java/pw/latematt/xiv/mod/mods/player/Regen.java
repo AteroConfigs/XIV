@@ -20,7 +20,6 @@ import pw.latematt.xiv.value.Value;
  */
 public class Regen extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private final Value<Mode> mode = new Value<>("regen_mode", Mode.POTION);
-
     private Listener sendPacketListener;
 
     public Regen() {

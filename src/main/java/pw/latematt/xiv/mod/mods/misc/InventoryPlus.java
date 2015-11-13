@@ -37,8 +37,10 @@ public class InventoryPlus extends Mod {
         sendPacketListener = new Listener<SendPacketEvent>() {
             @Override
             public void onEventCalled(SendPacketEvent event) {
-                if (event.getPacket() instanceof C0DPacketCloseWindow)
-                    event.setCancelled(true);
+                if (event.getPacket() instanceof C0DPacketCloseWindow) {
+                    C0DPacketCloseWindow closeWindow = (C0DPacketCloseWindow) event.getPacket();
+                    event.setCancelled(closeWindow.getWindowId() == 0);
+                }
             }
         };
 

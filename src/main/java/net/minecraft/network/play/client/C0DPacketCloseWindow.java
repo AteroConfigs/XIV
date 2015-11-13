@@ -23,6 +23,10 @@ public class C0DPacketCloseWindow implements Packet
         p_180759_1_.processCloseWindow(this);
     }
 
+    public int getWindowId() {
+        return windowId;
+    }
+
     /**
      * Reads the raw packet data from the data stream.
      */

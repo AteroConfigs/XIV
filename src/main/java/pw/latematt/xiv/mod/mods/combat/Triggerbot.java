@@ -93,6 +93,8 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
             return false;
         if (!entity.isEntityAlive())
             return false;
+        if (mc.thePlayer.getDistanceToEntity(entity) > 3.9)
+            return false;
         if (!invisible.getValue() && entity.isInvisibleToPlayer(mc.thePlayer))
             return false;
         if (!team.getValue() && entity.getTeam() != null && entity.getTeam().isSameTeam(mc.thePlayer.getTeam()))
