@@ -27,6 +27,7 @@ public class ValueSlider extends Element {
         this.valuePrettyName = valuePrettyName;
 
         amountScrolled = toFloat(value.getDefault() / value.getMax()).doubleValue();
+        sliderValue.setSliderX(sliderValue.getValue() / width);
     }
 
     @Override
@@ -44,28 +45,19 @@ public class ValueSlider extends Element {
 
                 sliderValue.setSliderX(mouseX - getX());
 
-                if(sliderValue.getSliderX() > getWidth())
+                if (sliderValue.getSliderX() > getWidth())
                     sliderValue.setSliderX(getWidth());
-                if(sliderValue.getSliderX() < 2)
+                if (sliderValue.getSliderX() < 2)
                     sliderValue.setSliderX(2);
 
-                setValue();
+                final float calculatedValue = toFloat(amountScrolled * (sliderValue.getMax() - sliderValue.getMin()));
+
+                sliderValue.setValue(calculatedValue + sliderValue.getMin());
             }
 
         } else {
             dragging = false;
         }
-    }
-
-    public void setValue() {
-        if (!dragging) {
-            return;
-        }
-
-        final float incrementValue = sliderValue.getSliderX();
-        final float calculatedValue = toFloat(amountScrolled * (sliderValue.getMax() - sliderValue.getMin()));
-
-        sliderValue.setValue(calculatedValue + sliderValue.getMin());
     }
 
     @Override

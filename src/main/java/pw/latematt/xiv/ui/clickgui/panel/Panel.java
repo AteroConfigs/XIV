@@ -1,5 +1,6 @@
 package pw.latematt.xiv.ui.clickgui.panel;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.mod.Mod;
@@ -9,6 +10,7 @@ import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
 import pw.latematt.xiv.ui.clickgui.element.elements.PanelButton;
 import pw.latematt.xiv.ui.clickgui.element.elements.ValueButton;
 import pw.latematt.xiv.ui.clickgui.element.elements.ValueSlider;
+import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
@@ -123,6 +125,16 @@ public class Panel {
         if (isDragging()) {
             this.x = mouseX + dragX;
             this.y = mouseY + dragY;
+            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                if (x < 0)
+                    x = 0;
+                if (y < 0)
+                    y = 0;
+                if(x + width > RenderUtils.newScaledResolution().getScaledWidth())
+                    x = RenderUtils.newScaledResolution().getScaledWidth() - width;
+                if(y + height > RenderUtils.newScaledResolution().getScaledHeight())
+                    y = RenderUtils.newScaledResolution().getScaledHeight() - height;
+            }
 
             if (!Mouse.isButtonDown(0)) {
                 setDragging(false);
@@ -277,8 +289,6 @@ public class Panel {
             } else {
                 prettyName = actualNameSplit[0].substring(0, 1).toUpperCase() + actualNameSplit[0].substring(1, actualNameSplit[0].length());
             }
-
-            System.out.println(value.getName() + " | " + value.getValue() + " | " + value.getDefault());
 
             if (value.getValue() instanceof Boolean) {
                 getElements().add(new ValueButton(value, prettyName, x + 2, elementY + 2, XIV.getInstance().getGuiClick().getTheme().getElementWidth(), XIV.getInstance().getGuiClick().getTheme().getElementHeight()));
