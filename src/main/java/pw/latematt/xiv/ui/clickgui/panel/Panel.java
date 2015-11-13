@@ -125,21 +125,22 @@ public class Panel {
         if (isDragging()) {
             this.x = mouseX + dragX;
             this.y = mouseY + dragY;
-            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-                if (x < 0)
-                    x = 0;
-                if (y < 0)
-                    y = 0;
-                if(x + width > RenderUtils.newScaledResolution().getScaledWidth())
-                    x = RenderUtils.newScaledResolution().getScaledWidth() - width;
-                if(y + height > RenderUtils.newScaledResolution().getScaledHeight())
-                    y = RenderUtils.newScaledResolution().getScaledHeight() - height;
-            }
 
             if (!Mouse.isButtonDown(0)) {
                 setDragging(false);
                 XIV.getInstance().getFileManager().saveFile("gui");
             }
+        }
+
+        if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && isDragging())) {
+            if (x < 0)
+                x = 1;
+            if (y < 0)
+                y = 1;
+            if(x + width > RenderUtils.newScaledResolution().getScaledWidth())
+                x = RenderUtils.newScaledResolution().getScaledWidth() - width;
+            if(y + height > RenderUtils.newScaledResolution().getScaledHeight())
+                y = RenderUtils.newScaledResolution().getScaledHeight() - height - 2;
         }
 
         XIV.getInstance().getGuiClick().getTheme().renderPanel(this);
