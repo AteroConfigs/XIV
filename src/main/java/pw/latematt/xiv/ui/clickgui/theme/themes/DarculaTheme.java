@@ -20,7 +20,7 @@ public class DarculaTheme extends ClickTheme {
     protected GuiClick gui;
 
     public DarculaTheme(GuiClick gui) {
-        super("Darcula", 12, 12, gui);
+        super("Darcula", 12, 12, gui, false);
         this.gui = gui;
     }
 

@@ -16,7 +16,7 @@ import pw.latematt.xiv.value.Value;
  * @author Matthew
  */
 public class Sprint extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
-    private Value<Boolean> shotBow = new Value<>("noslowdown_shotbow", false);
+    private Value<Boolean> shotBow = new Value<>("sprint_shotbow", false);
 
     public Sprint() {
         super("Sprint", ModType.MOVEMENT, Keyboard.KEY_B, 0xFF72B190);

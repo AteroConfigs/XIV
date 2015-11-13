@@ -181,12 +181,15 @@ public class Panel {
         }
 
         if (isOpen()) {
+
             for (Element element : elements) {
-                if(element instanceof ModButton) {
-                    ModButton butt = (ModButton) element;
-                    if(butt.open) {
-                        for (Element elem : butt.elements) {
-                            elem.mouseClicked(mouseX, mouseY, mouseButton);
+                if (XIV.getInstance().getGuiClick().getTheme().hasSubMenus()) {
+                    if (element instanceof ModButton) {
+                        ModButton butt = (ModButton) element;
+                        if (butt.open) {
+                            for (Element elem : butt.elements) {
+                                elem.mouseClicked(mouseX, mouseY, mouseButton);
+                            }
                         }
                     }
                 }
@@ -275,8 +278,17 @@ public class Panel {
                 prettyName = actualNameSplit[0].substring(0, 1).toUpperCase() + actualNameSplit[0].substring(1, actualNameSplit[0].length());
             }
 
+            System.out.println(value.getName() + " | " + value.getValue() + " | " + value.getDefault());
+
             if (value.getValue() instanceof Boolean) {
                 getElements().add(new ValueButton(value, prettyName, x + 2, elementY + 2, XIV.getInstance().getGuiClick().getTheme().getElementWidth(), XIV.getInstance().getGuiClick().getTheme().getElementHeight()));
+            }
+
+            if (value instanceof ClampedValue) {
+                if(value.getValue() instanceof Float) {
+                    ClampedValue<Float> cv = (ClampedValue<Float>) value;
+                    elements.add(new ValueSlider(cv, prettyName, x, y + 12, width, height));
+                }
             }
             elementY += XIV.getInstance().getGuiClick().getTheme().getElementHeight() + 1;
         }

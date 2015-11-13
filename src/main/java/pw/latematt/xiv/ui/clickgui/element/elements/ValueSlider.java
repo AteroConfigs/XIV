@@ -33,13 +33,22 @@ public class ValueSlider extends Element {
     public void drawElement(int mouseX, int mouseY) {
         XIV.getInstance().getGuiClick().getTheme().renderSlider(getValuePrettyName(), sliderValue.getValue(), getX(), getY(), getWidth(), getHeight(), getValue().getSliderX(), isOverElement(mouseX, mouseY), this);
 
-        if (isOverElement(mouseX, mouseY) && Mouse.isButtonDown(0)) {
+
+        if ((isOverElement(mouseX, mouseY) || dragging) && Mouse.isButtonDown(0)) {
             dragging = true;
 
             if (mouseX > getX()) {
                 double diff = mouseX - getX();
                 amountScrolled = toFloat(diff / getWidth());
                 amountScrolled = toFloat(amountScrolled < 0 ? 0 : amountScrolled > 1 ? 1 : amountScrolled);
+
+                sliderValue.setSliderX(mouseX - getX());
+
+                if(sliderValue.getSliderX() > getWidth())
+                    sliderValue.setSliderX(getWidth());
+                if(sliderValue.getSliderX() < 2)
+                    sliderValue.setSliderX(2);
+
                 setValue();
             }
 

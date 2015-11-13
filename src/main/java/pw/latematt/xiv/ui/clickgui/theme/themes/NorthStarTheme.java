@@ -18,7 +18,7 @@ public class NorthStarTheme extends ClickTheme {
     protected GuiClick gui;
 
     public NorthStarTheme(GuiClick gui) {
-        super("NorthStar", 96, 12, gui);
+        super("NorthStar", 96, 12, gui, false);
         this.gui = gui;
     }
 

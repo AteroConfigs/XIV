@@ -20,7 +20,7 @@ public class IXTheme extends ClickTheme {
     protected GuiClick gui;
 
     public IXTheme(GuiClick gui) {
-        super("IX", 96, 12, gui);
+        super("IX", 96, 12, gui, false);
         this.gui = gui;
     }
 

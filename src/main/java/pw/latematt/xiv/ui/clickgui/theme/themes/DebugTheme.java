@@ -1,8 +1,11 @@
 package pw.latematt.xiv.ui.clickgui.theme.themes;
 
+import net.minecraft.client.Minecraft;
+import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
+import pw.latematt.xiv.ui.clickgui.element.elements.ValueSlider;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.utils.NahrFont;
@@ -13,13 +16,13 @@ import java.util.Objects;
 /**
  * @author Rederpz
  */
-public class NoodleTheme extends ClickTheme {
+public class DebugTheme extends ClickTheme {
     protected NahrFont font;
 
     protected GuiClick gui;
 
-    public NoodleTheme(GuiClick gui) {
-        super("Noodle", 96, 13, gui);
+    public DebugTheme(GuiClick gui) {
+        super("Debug", 96, 13, gui, true);
         this.gui = gui;
     }
 
@@ -72,8 +75,19 @@ public class NoodleTheme extends ClickTheme {
                     float elemY = y + 1;
                     for(Element elem: butt.elements) {
                         elem.setX(x);
-                        elem.setY(elemY += elem.getHeight());
-                        elem.drawElement(2, 2);
+                        if(elem instanceof ValueSlider) {
+                            elem.setY(elemY += elem.getHeight());
+                            elemY += 1;
+                        } else {
+                            elem.setY(elemY += elem.getHeight());
+                        }
+
+                        int var141 = RenderUtils.newScaledResolution().getScaledWidth();
+                        int var151 = RenderUtils.newScaledResolution().getScaledHeight();
+                        final int var161 = Mouse.getX() * var141 / this.mc.displayWidth;
+                        final int var171 = var151 - Mouse.getY() * var151 / this.mc.displayHeight - 1;
+
+                        elem.drawElement(var161, var171);
                     }
 
                     element.setHeight(elementHeight + 1);
@@ -92,7 +106,7 @@ public class NoodleTheme extends ClickTheme {
         element.setHeight(this.getElementHeight());
 
         RenderUtils.drawBorderedRect(x, y + 1, x + element.getWidth(), y + height, 0x801E1E1E, 0xFF212121);
-        RenderUtils.drawBorderedRect(x, y + 1, x + sliderX, y + height, 0x801E1E1E, 0xFF5AACEB);
+        RenderUtils.drawGradientRect(x, y + 1, x + sliderX, y + height, 0xFF5AACEB, 0xFF1466A5);
 
         font.drawString(name, x + 2, y - 1, NahrFont.FontType.SHADOW_THIN, 0xFFFFF0F0);
         font.drawString(value + "", x + element.getWidth() - font.getStringWidth(value + "") - 2, y - 1, NahrFont.FontType.SHADOW_THIN, 0xFFFFF0F0);

@@ -19,7 +19,7 @@ public class IridiumTheme extends ClickTheme {
     protected GuiClick gui;
 
     public IridiumTheme(GuiClick gui) {
-        super("Iridium", 104, 17, gui);
+        super("Iridium", 104, 17, gui, false);
         this.gui = gui;
     }
 

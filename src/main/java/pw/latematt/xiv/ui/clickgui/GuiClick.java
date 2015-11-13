@@ -65,9 +65,9 @@ public class GuiClick extends GuiScreen {
         themes = new ArrayList<>();
         themes.add(new AvidTheme(this));
         themes.add(theme = new DarculaTheme(this));
+        themes.add(new DebugTheme(this));
         themes.add(new IridiumTheme(this));
         themes.add(new IXTheme(this));
-        themes.add(new NoodleTheme(this));
         themes.add(new NorthStarTheme(this));
         themes.add(new PringlesTheme(this));
         themes.add(new XenonTheme(this));
