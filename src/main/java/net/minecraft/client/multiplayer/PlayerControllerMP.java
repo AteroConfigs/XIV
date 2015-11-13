@@ -614,7 +614,10 @@ public class PlayerControllerMP
      */
     public boolean extendedReach()
     {
-        return this.currentGameType.isCreative();
+        BlockReachEvent event = new BlockReachEvent(this.currentGameType.isCreative() ? 5.0F : 4.5F);
+        XIV.getInstance().getListenerManager().call(event);
+
+        return event.getRange() > 4.5F;
     }
 
     /**

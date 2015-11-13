@@ -15,11 +15,11 @@ import pw.latematt.xiv.value.Value;
  * @author Matthew
  */
 public class RenderUtils {
-    private static final ClampedValue<Float> LINE_WIDTH = new ClampedValue<>("render_line_width", 1.0F, 1.0F, 4.0F);
+    private static final ClampedValue<Float> LINE_WIDTH = new ClampedValue<>("render_line_width", 1.0F, 0.5F, 4.0F);
     private static final Value<Boolean> ANTI_ALIASING = new Value<>("render_anti_aliasing", false);
     private static final Value<Boolean> WORLD_BOBBING = new Value<>("render_world_bobbing", false);
-    private static final ClampedValue<Float> NAMETAG_OPACITY = new ClampedValue<>("render_nametag_opacity", 0.25F, 0.1F, 1.0F);
-    private static final ClampedValue<Float> NAMETAG_SIZE = new ClampedValue<>("render_nametag_size", 1.0F, 0.1F, 1.0F);
+    private static final ClampedValue<Float> NAMETAG_OPACITY = new ClampedValue<>("render_nametag_opacity", 0.25F, 0.0F, 1.0F);
+    private static final ClampedValue<Float> NAMETAG_SIZE = new ClampedValue<>("render_nametag_size", 1.0F, 0.1F, 1.5F);
     private static final Value<Boolean> TRACER_ENTITY = new Value<>("render_tracer_entity", true);
     private static final Value<Boolean> SHOW_TAGS = new Value<>("render_show_tags", true);
 
