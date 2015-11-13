@@ -1,6 +1,5 @@
 package pw.latematt.xiv.ui.clickgui.theme.themes;
 
-import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
@@ -8,12 +7,8 @@ import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
 import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.utils.RenderUtils;
-import pw.latematt.xiv.value.Value;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author Rederpz
@@ -61,24 +56,28 @@ public class NoodleTheme extends ClickTheme {
         RenderUtils.drawBorderedGradientRect(x, y, x + 96, y + getElementHeight(), 0xFF000000, enabled ? 0xFF5AACEB : 0xFF232323, enabled ? 0xFF1466A5 : 0xFF212121);
 
         font.drawString(name, x + 2, y - 3, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
-        if(element instanceof ModButton) {
+        if (element instanceof ModButton) {
             ModButton butt = (ModButton) element;
 
-
-            List<Value> values = new ArrayList<>();
-
-            for(Value val: XIV.getInstance().getValueManager().getContents()) {
-                if(val.getName().toLowerCase().startsWith(butt.getMod().getName().toLowerCase())) {
-                    if(!(val.getValue() instanceof Enum)) {
-                        values.add(val);
-                    }
-                }
-            }
-
-            if(values.size() > 0) {
+            if (butt.elements.size() > 0) {
                 font.drawString(butt.open ? "-" : "+", x + element.getWidth() - 8, y - 3, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
 
-                element.setHeight(butt.open ? this.getElementHeight() * (values.size() + 1) : this.getElementHeight());
+                if (butt.open) {
+                    float elementHeight = element.getHeight();
+
+                    for (Element elem : butt.elements) {
+                        elementHeight += elem.getHeight();
+                    }
+
+                    float elemY = y + 1;
+                    for(Element elem: butt.elements) {
+                        elem.setX(x);
+                        elem.setY(elemY += elem.getHeight());
+                        elem.drawElement(2, 2);
+                    }
+
+                    element.setHeight(elementHeight + 1);
+                }
             }
         }
     }

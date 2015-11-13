@@ -182,6 +182,15 @@ public class Panel {
 
         if (isOpen()) {
             for (Element element : elements) {
+                if(element instanceof ModButton) {
+                    ModButton butt = (ModButton) element;
+                    if(butt.open) {
+                        for (Element elem : butt.elements) {
+                            elem.mouseClicked(mouseX, mouseY, mouseButton);
+                        }
+                    }
+                }
+
                 element.mouseClicked(mouseX, mouseY, mouseButton);
             }
         }
