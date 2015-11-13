@@ -99,7 +99,7 @@ public class Velocity extends Mod implements CommandHandler {
                                 reduction.setValue(reduction.getMin());
 
                             updateTag();
-                            ChatLogger.print(String.format("Velocity Percent set to %s", (reduction.getValue() * 100F) + "%"));
+                            ChatLogger.print(String.format("Velocity Percent set to %s", reduction.getValue() + "%"));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newVelocityString));
                         }
