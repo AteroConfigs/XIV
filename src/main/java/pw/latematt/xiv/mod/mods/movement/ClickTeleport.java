@@ -24,7 +24,6 @@ import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.render.Freecam;
-import pw.latematt.xiv.mod.mods.render.waypoints.base.Waypoint;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.RenderUtils;
@@ -64,7 +63,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
         sendPacketListener = new Listener<SendPacketEvent>() {
             @Override
             public void onEventCalled(SendPacketEvent event) {
-                if(event.getPacket() instanceof C08PacketPlayerBlockPlacement && (canDraw && canTeleport)) {
+                if (event.getPacket() instanceof C08PacketPlayerBlockPlacement && (canDraw && canTeleport)) {
                     event.setCancelled(true);
                 }
             }
@@ -129,19 +128,19 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
     public double getOffset(Block block) {
         double offset = 0;
 
-        if(block instanceof BlockSlab && !((BlockSlab) block).isDouble()) {
+        if (block instanceof BlockSlab && !((BlockSlab) block).isDouble()) {
             offset -= 0.5F;
-        }else if(block instanceof BlockBed) {
+        } else if (block instanceof BlockBed) {
             offset -= 0.44F;
-        }else if(block instanceof BlockCake) {
+        } else if (block instanceof BlockCake) {
             offset -= 0.5F;
-        }else if(block instanceof BlockDaylightDetector) {
+        } else if (block instanceof BlockDaylightDetector) {
             offset -= 0.625F;
-        }else if(block instanceof BlockRedstoneComparator || block instanceof BlockRedstoneRepeater) {
+        } else if (block instanceof BlockRedstoneComparator || block instanceof BlockRedstoneRepeater) {
             offset -= 0.875F;
-        }else if(block instanceof BlockChest || block == Blocks.ender_chest) {
+        } else if (block instanceof BlockChest || block == Blocks.ender_chest) {
             offset -= 0.125F;
-        }else if(isValidBlock(block)) {
+        } else if (isValidBlock(block)) {
             offset -= 1.0F;
         }
 

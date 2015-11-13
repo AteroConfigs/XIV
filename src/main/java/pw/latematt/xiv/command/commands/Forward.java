@@ -1,20 +1,12 @@
 package pw.latematt.xiv.command.commands;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C02PacketUseEntity;
-import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.util.BlockPos;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.mod.mods.movement.ClickTeleport;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
-
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author Rederpz
@@ -63,7 +55,7 @@ public class Forward implements CommandHandler {
 
                 ClickTeleport clickTP = (ClickTeleport) XIV.getInstance().getModManager().find("clickteleport");
 
-                if(clickTP != null) {
+                if (clickTP != null) {
                     clickTP.setDelay(5);
                 }
             } catch (NumberFormatException e) {

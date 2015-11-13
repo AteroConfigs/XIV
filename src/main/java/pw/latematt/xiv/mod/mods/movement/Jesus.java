@@ -57,7 +57,7 @@ public class Jesus extends Mod {
                     mc.thePlayer.setImmuneToFire(true);
                 }
 
-                if(BlockUtils.isOnLiquid(mc.thePlayer)) {
+                if (BlockUtils.isOnLiquid(mc.thePlayer)) {
                     mc.thePlayer.setImmuneToFire(true);
                 }
             }

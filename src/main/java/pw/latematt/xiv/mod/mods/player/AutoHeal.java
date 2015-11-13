@@ -47,48 +47,17 @@ public class AutoHeal extends Mod implements CommandHandler {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
-                    updateTag();
-                    if (mode.getValue() == Mode.HEAD)
-                        needsToHeal = needsToHeal || teammateNeedsToHeal();
-                    if (needsToHeal && timer.hasReached(delay.getValue())) {
-                        switch (mode.getValue()) {
-                            case SOUP:
-                                dropFirst(Items.bowl);
-                                if (!hotbarHas(Items.mushroom_stew) && !hotbarIsFull())
-                                    shiftClick(Items.mushroom_stew);
+                    updateCounter();
+                    if (needsToHeal && timer.hasReached(delay.getValue()) && mode.getValue() == Mode.POTION) {
+                        if (canSafelyThrowPot()) {
+                            if (!hotbarHasPotion(Potion.INSTANT_HEALTH, true) && !hotbarIsFull())
+                                shiftClickPotion(Potion.INSTANT_HEALTH, true);
 
-                                useFirst(Items.mushroom_stew);
-                                needsToHeal = false;
-                                timer.reset();
-                                break;
-                            case COOKIE:
-                                if (!hotbarHas(Items.cookie) && !hotbarIsFull())
-                                    shiftClick(Items.cookie);
-
-                                useFirst(Items.cookie);
-                                needsToHeal = false;
-                                timer.reset();
-                                break;
-                            case HEAD:
-                                if (!hotbarHas(Items.skull) && !hotbarIsFull())
-                                    shiftClick(Items.skull);
-
-                                useFirst(Items.skull);
-                                needsToHeal = false;
-                                timer.reset();
-                                break;
-                            case POTION:
-                                if (canSafelyThrowPot()) {
-                                    if (!hotbarHasPotion(Potion.INSTANT_HEALTH, true) && !hotbarIsFull())
-                                        shiftClickPotion(Potion.INSTANT_HEALTH, true);
-
-                                    if (hotbarHasPotion(Potion.INSTANT_HEALTH, true)) {
-                                        healing = true;
-                                        event.setYaw(-event.getYaw());
-                                        event.setPitch(85);
-                                    }
-                                }
-                                break;
+                            if (hotbarHasPotion(Potion.INSTANT_HEALTH, true)) {
+                                healing = true;
+                                event.setYaw(-event.getYaw());
+                                event.setPitch(85);
+                            }
                         }
                     }
                 } else if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.POST)) {
@@ -123,6 +92,37 @@ public class AutoHeal extends Mod implements CommandHandler {
                 if (event.getPacket() instanceof S06PacketUpdateHealth) {
                     S06PacketUpdateHealth updateHealth = (S06PacketUpdateHealth) event.getPacket();
                     needsToHeal = updateHealth.getHealth() <= health.getValue();
+                    if (mode.getValue() == Mode.HEAD)
+                        needsToHeal = needsToHeal || teammateNeedsToHeal();
+                    if (needsToHeal && timer.hasReached(delay.getValue())) {
+                        switch (mode.getValue()) {
+                            case SOUP:
+                                dropFirst(Items.bowl);
+                                if (!hotbarHas(Items.mushroom_stew) && !hotbarIsFull())
+                                    shiftClick(Items.mushroom_stew);
+
+                                useFirst(Items.mushroom_stew);
+                                needsToHeal = false;
+                                timer.reset();
+                                break;
+                            case HEAD:
+                                if (!hotbarHas(Items.skull) && !hotbarIsFull())
+                                    shiftClick(Items.skull);
+
+                                useFirst(Items.skull);
+                                needsToHeal = false;
+                                timer.reset();
+                                break;
+                            case COOKIE:
+                                if (!hotbarHas(Items.cookie) && !hotbarIsFull())
+                                    shiftClick(Items.cookie);
+
+                                useFirst(Items.cookie);
+                                needsToHeal = false;
+                                timer.reset();
+                                break;
+                        }
+                    }
                 }
             }
         };
@@ -146,33 +146,33 @@ public class AutoHeal extends Mod implements CommandHandler {
         return countPotion(Potion.INSTANT_HEALTH, true) > 0 && !airCheck && !waterCheck;
     }
 
-    private void updateTag() {
-        String tag = "";
+    private void updateCounter() {
+        String displayName = getName();
 
         switch (mode.getValue()) {
             case SOUP:
                 int soups = countItem(Items.mushroom_stew);
                 if (soups > 0)
-                    tag += "\2476" + soups;
-                break;
-            case COOKIE:
-                int cookies = countItem(Items.cookie);
-                if (cookies > 0)
-                    tag += "\2475" + cookies;
+                    displayName += " \2476" + soups;
                 break;
             case HEAD:
                 int heads = countItem(Items.skull);
                 if (heads > 0)
-                    tag += "" + heads;
+                    displayName += " \2477" + heads;
+                break;
+            case COOKIE:
+                int cookies = countItem(Items.cookie);
+                if (cookies > 0)
+                    displayName += " \2475" + cookies;
                 break;
             case POTION:
                 int potions = countPotion(Potion.INSTANT_HEALTH, true);
                 if (potions > 0)
-                    tag += "\247c" + potions;
+                    displayName += " \247c" + potions;
                 break;
         }
 
-        setTag(tag);
+        setDisplayName(displayName);
     }
 
     public boolean isHealing() {
@@ -231,16 +231,16 @@ public class AutoHeal extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
-                            case "cookie":
-                                this.mode.setValue(Mode.COOKIE);
-                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
-                                break;
                             case "soup":
                                 this.mode.setValue(Mode.SOUP);
                                 ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             case "head":
                                 this.mode.setValue(Mode.HEAD);
+                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
+                                break;
+                            case "cookie":
+                                this.mode.setValue(Mode.COOKIE);
                                 ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             case "potion":
@@ -253,7 +253,7 @@ public class AutoHeal extends Mod implements CommandHandler {
                                 ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: cookie, soup, head, potion");
+                                ChatLogger.print("Invalid mode, valid: soup, head, cookie, potion");
                                 break;
                         }
                     } else {
@@ -269,6 +269,9 @@ public class AutoHeal extends Mod implements CommandHandler {
                             break;
                         case HEAD:
                             useFirst(Items.skull);
+                            break;
+                        case COOKIE:
+                            useFirst(Items.cookie);
                             break;
                         case POTION:
                             useFirstPotion(Potion.INSTANT_HEALTH, true);
@@ -295,7 +298,7 @@ public class AutoHeal extends Mod implements CommandHandler {
     }
 
     private enum Mode {
-        SOUP, HEAD, POTION, COOKIE;
+        SOUP, HEAD, COOKIE, POTION;
 
         public String getName() {
             String prettyName = "";
