@@ -79,6 +79,7 @@ import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Project;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.event.events.BlockReachEvent;
 import pw.latematt.xiv.event.events.PotionRenderEvent;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.event.events.WorldBobbingEvent;
@@ -437,8 +438,11 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
             if (this.mc.playerController.extendedReach())
             {
-                var3 = 6.0D;
-                var5 = 6.0D;
+                BlockReachEvent event = new BlockReachEvent(mc.playerController.isInCreativeMode() ? 5.0F : 4.5F);
+                XIV.getInstance().getListenerManager().call(event);
+
+                var3 = event.getRange();
+                var5 = event.getRange();
             }
             else
             {

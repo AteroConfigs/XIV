@@ -2,6 +2,7 @@ package pw.latematt.xiv.mod.mods.movement;
 
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
@@ -24,7 +25,6 @@ import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.render.Freecam;
-import pw.latematt.xiv.mod.mods.render.waypoints.base.Waypoint;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.RenderUtils;
@@ -38,7 +38,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
     private final ClampedValue<Double> range = new ClampedValue<>("clickteleport_range", 35.0, 15.0, 120.0);
 
     private BlockPos teleportPosition;
-    private boolean canTeleport, canDraw;
+    private boolean canDraw;
     private int delay = 0;
 
     private Listener blockReachListener, renderListener, sendPacketListener;
@@ -51,7 +51,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
         blockReachListener = new Listener<BlockReachEvent>() {
             @Override
             public void onEventCalled(BlockReachEvent event) {
-                if (!Mouse.isButtonDown(0) && !mc.thePlayer.isSneaking() && mc.thePlayer.getItemInUse() == null) {
+                if ((!Mouse.isButtonDown(0) && mc.inGameHasFocus || !mc.inGameHasFocus) && !mc.thePlayer.isSneaking() && mc.thePlayer.getItemInUse() == null) {
                     event.setRange(range.getValue().floatValue() + 1);
 
                     canDraw = true;
@@ -64,7 +64,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
         sendPacketListener = new Listener<SendPacketEvent>() {
             @Override
             public void onEventCalled(SendPacketEvent event) {
-                if(event.getPacket() instanceof C08PacketPlayerBlockPlacement && (canDraw && canTeleport)) {
+                if (event.getPacket() instanceof C08PacketPlayerBlockPlacement && (canDraw)) {
                     event.setCancelled(true);
                 }
             }
@@ -74,35 +74,49 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
             @Override
             public void onEventCalled(Render3DEvent event) {
                 if (mc.objectMouseOver != null && mc.objectMouseOver.func_178782_a() != null && canDraw) {
-                    double[] mouseOverPos = new double[]{mc.objectMouseOver.func_178782_a().getX(), mc.objectMouseOver.func_178782_a().getY() + 1.0F, mc.objectMouseOver.func_178782_a().getZ()};
+                    for(float offset = 17.0F; offset > -3.0F; offset--) {
+                        double[] mouseOverPos = new double[]{mc.objectMouseOver.func_178782_a().getX(), mc.objectMouseOver.func_178782_a().getY() + offset, mc.objectMouseOver.func_178782_a().getZ()};
 
-                    if (canRenderBox(mouseOverPos)) {
-                        Block blockBelowPos = mc.theWorld.getBlockState(new BlockPos(mouseOverPos[0], mouseOverPos[1] - 1.0F, mouseOverPos[2])).getBlock();
-
-                        RenderUtils.beginGl();
-                        drawBox(blockBelowPos, new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]));
-                        drawNametags(blockBelowPos, new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]));
-                        RenderUtils.endGl();
-
-                        canTeleport = mc.inGameHasFocus;
-                    } else {
-                        mouseOverPos = new double[]{mc.objectMouseOver.func_178782_a().getX(), mc.objectMouseOver.func_178782_a().getY(), mc.objectMouseOver.func_178782_a().getZ()};
+                        BlockPos blockBelowPos = new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]);
+                        Block blockBelow = mc.theWorld.getBlockState(blockBelowPos).getBlock();
 
                         if (canRenderBox(mouseOverPos)) {
-                            Block blockBelowPos = mc.theWorld.getBlockState(new BlockPos(mouseOverPos[0], mouseOverPos[1] - 1.0F, mouseOverPos[2])).getBlock();
-
                             RenderUtils.beginGl();
-                            drawBox(blockBelowPos, new BlockPos(mouseOverPos[0], mouseOverPos[1] + 1.0F, mouseOverPos[2]));
-                            drawNametags(blockBelowPos, new BlockPos(mouseOverPos[0], mouseOverPos[1] + 1.0F, mouseOverPos[2]));
+                            drawBox(blockBelow, new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]));
+                            drawNametags(blockBelow, new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]));
                             RenderUtils.endGl();
 
-                            canTeleport = mc.inGameHasFocus;
-                        } else {
-                            canTeleport = false;
+                            if(mc.inGameHasFocus) {
+                                teleportPosition = blockBelowPos;
+                                break;
+                            }else{
+                                teleportPosition = null;
+                            }
+                        }
+                    }
+                }else if (mc.objectMouseOver != null && mc.objectMouseOver.entityHit != null) {
+                    for(float offset = 17.0F; offset > -3.0F; offset--) {
+                        double[] mouseOverPos = new double[]{mc.objectMouseOver.entityHit.getPosition().getX(), mc.objectMouseOver.entityHit.getPosition().getY() + offset, mc.objectMouseOver.entityHit.getPosition().getZ()};
+
+                        BlockPos blockBelowPos = new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]);
+                        Block blockBelow = mc.theWorld.getBlockState(blockBelowPos).getBlock();
+
+                        if (canRenderBox(mouseOverPos)) {
+                            RenderUtils.beginGl();
+                            drawBox(blockBelow, new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]));
+                            drawNametags(blockBelow, new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]));
+                            RenderUtils.endGl();
+
+                            if(mc.inGameHasFocus) {
+                                teleportPosition = blockBelowPos;
+                                break;
+                            }else{
+                                teleportPosition = null;
+                            }
                         }
                     }
                 } else {
-                    canTeleport = false;
+                    teleportPosition = null;
                 }
             }
         };
@@ -115,33 +129,40 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
         Block blockPos = mc.theWorld.getBlockState(new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2])).getBlock();
         Block blockAbovePos = mc.theWorld.getBlockState(new BlockPos(mouseOverPos[0], mouseOverPos[1] + 1.0F, mouseOverPos[2])).getBlock();
 
-        boolean validBlockBelow = !isValidBlock(blockBelowPos) && blockBelowPos.getMaterial().isSolid();
+        boolean validBlockBelow = blockBelowPos.getCollisionBoundingBox(mc.theWorld, new BlockPos(mouseOverPos[0], mouseOverPos[1] - 1.0F, mouseOverPos[2]), mc.theWorld.getBlockState(new BlockPos(mouseOverPos[0], mouseOverPos[1] - 1.0F, mouseOverPos[2]))) != null;
         boolean validBlock = isValidBlock(blockPos);
         boolean validBlockAbove = isValidBlock(blockAbovePos);
 
-        if (mc.theWorld.getBlockState(mc.objectMouseOver.func_178782_a()).getBlock().getMaterial() != Material.air && (validBlockBelow && validBlock && validBlockAbove)) {
+        if ((validBlockBelow && validBlock && validBlockAbove)) {
             canTeleport = true;
         }
 
         return canTeleport;
     }
 
-    public double getOffset(Block block) {
+    public double getOffset(Block block, BlockPos pos) {
+        IBlockState state = mc.theWorld.getBlockState(pos);
+
         double offset = 0;
 
-        if(block instanceof BlockSlab && !((BlockSlab) block).isDouble()) {
+        if (block instanceof BlockSlab && !((BlockSlab) block).isDouble()) {
             offset -= 0.5F;
-        }else if(block instanceof BlockBed) {
+        }else if (block instanceof BlockEndPortalFrame) {
+            offset -= 0.2F;
+        } else if (block instanceof BlockBed) {
             offset -= 0.44F;
-        }else if(block instanceof BlockCake) {
+        } else if (block instanceof BlockCake) {
             offset -= 0.5F;
-        }else if(block instanceof BlockDaylightDetector) {
+        } else if (block instanceof BlockDaylightDetector) {
             offset -= 0.625F;
-        }else if(block instanceof BlockRedstoneComparator || block instanceof BlockRedstoneRepeater) {
+        } else if (block instanceof BlockRedstoneComparator || block instanceof BlockRedstoneRepeater) {
             offset -= 0.875F;
-        }else if(block instanceof BlockChest || block == Blocks.ender_chest) {
+        } else if (block instanceof BlockChest || block == Blocks.ender_chest) {
             offset -= 0.125F;
-        }else if(isValidBlock(block)) {
+        } else if (block == Blocks.snow_layer) {
+            offset -= 0.875F;
+            offset += 0.125F * (((Integer) state.getValue(BlockSnow.LAYERS_PROP)).intValue() - 1);
+        } else if (isValidBlock(block)) {
             offset -= 1.0F;
         }
 
@@ -149,13 +170,13 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
     }
 
     public boolean isValidBlock(Block block) {
-        return block == Blocks.snow_layer || block instanceof BlockTripWireHook || block instanceof BlockTripWire || block instanceof BlockDaylightDetector || block instanceof BlockRedstoneComparator || block instanceof BlockRedstoneRepeater || block instanceof BlockSign || block instanceof BlockAir || block instanceof BlockPressurePlate || block instanceof BlockTallGrass || block instanceof BlockFlower || block instanceof BlockMushroom || block instanceof BlockDoublePlant || block instanceof BlockReed || block instanceof BlockSapling || block == Blocks.carrots || block == Blocks.wheat || block == Blocks.nether_wart || block == Blocks.potatoes || block == Blocks.pumpkin_stem || block == Blocks.melon_stem || block == Blocks.heavy_weighted_pressure_plate || block == Blocks.light_weighted_pressure_plate || block == Blocks.redstone_wire || block instanceof BlockTorch || block instanceof BlockRedstoneTorch || block == Blocks.lever || block instanceof BlockButton;
+        return block == Blocks.portal || block == Blocks.snow_layer || block instanceof BlockTripWireHook || block instanceof BlockTripWire || block instanceof BlockDaylightDetector || block instanceof BlockRedstoneComparator || block instanceof BlockRedstoneRepeater || block instanceof BlockSign || block instanceof BlockAir || block instanceof BlockPressurePlate || block instanceof BlockTallGrass || block instanceof BlockFlower || block instanceof BlockMushroom || block instanceof BlockDoublePlant || block instanceof BlockReed || block instanceof BlockSapling || block == Blocks.carrots || block == Blocks.wheat || block == Blocks.nether_wart || block == Blocks.potatoes || block == Blocks.pumpkin_stem || block == Blocks.melon_stem || block == Blocks.heavy_weighted_pressure_plate || block == Blocks.light_weighted_pressure_plate || block == Blocks.redstone_wire || block instanceof BlockTorch || block instanceof BlockRedstoneTorch || block == Blocks.lever || block instanceof BlockButton;
     }
 
     private void drawNametags(Block block, BlockPos pos) {
         BlockPos blockPosBelow = new BlockPos(pos.getX(), pos.getY() - 1.0F, pos.getZ());
         Block blockBelow = mc.theWorld.getBlockState(blockPosBelow).getBlock();
-        double offset = getOffset(blockBelow);
+        double offset = getOffset(blockBelow, blockPosBelow);
 
         double x = pos.getX() + 0.5F - mc.getRenderManager().renderPosX;
         double y = pos.getY() - 1.0F - mc.getRenderManager().renderPosY + offset;
@@ -174,7 +195,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
             z *= d;
         }
 
-        float var13 = ((float) dist / 5 <= 2 ? 2.0F : (float) dist / 5) * RenderUtils.getNametagSize().getValue();
+        float var13 = 2.5F + ((float) dist / 5 <= 2 ? 2.0F : (float) dist / 5) * RenderUtils.getNametagSize().getValue();
         float var14 = 0.016666668F * var13;
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y + 1.5F, z);
@@ -211,7 +232,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
         BlockPos blockPosBelow = new BlockPos(pos.getX(), pos.getY() - 1.0F, pos.getZ());
         Block blockBelow = mc.theWorld.getBlockState(blockPosBelow).getBlock();
 
-        double offset = getOffset(blockBelow);
+        double offset = getOffset(blockBelow, blockPosBelow);
 
         AxisAlignedBB box = AxisAlignedBB.fromBounds(x, y + offset, z, x + 1, y + offset + 0.06F, z + 1);
         final int color = this.getColor();
@@ -227,11 +248,9 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
 
     public void onEventCalled(MotionUpdateEvent event) {
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-            if (canTeleport && delay == 0 && Mouse.isButtonDown(1)) {
-                this.teleportPosition = mc.objectMouseOver.func_178782_a();
-
+            if (teleportPosition != null && delay == 0 && Mouse.isButtonDown(1)) {
                 double[] playerPosition = new double[]{EntityUtils.getReference().posX, EntityUtils.getReference().posY, EntityUtils.getReference().posZ};
-                double[] blockPosition = new double[]{teleportPosition.getX() + 0.5F, teleportPosition.getY() + 1.0F, teleportPosition.getZ() + 0.5F};
+                double[] blockPosition = new double[]{teleportPosition.getX() + 0.5F, teleportPosition.getY() + getOffset(mc.theWorld.getBlockState(teleportPosition).getBlock(), teleportPosition) + 1.0F, teleportPosition.getZ() + 0.5F};
 
                 Freecam freecam = (Freecam) XIV.getInstance().getModManager().find("freecam");
 
@@ -239,8 +258,11 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
                     freecam.setEnabled(false);
                 }
 
+
                 EntityUtils.teleportToPosition(playerPosition, blockPosition, 0.25D, 0.0D, true, true);
                 mc.thePlayer.setPosition(blockPosition[0], blockPosition[1], blockPosition[2]);
+
+                teleportPosition = null;
                 delay = 5;
             }
 

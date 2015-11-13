@@ -11,6 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class NotificationsHandler extends ListManager<Notification> {
     private final Minecraft mc = Minecraft.getMinecraft();
+
     public NotificationsHandler() {
         super(new CopyOnWriteArrayList<>());
     }
