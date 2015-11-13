@@ -61,6 +61,14 @@ public class AutoHeal extends Mod implements CommandHandler {
                                 needsToHeal = false;
                                 timer.reset();
                                 break;
+                            case COOKIE:
+                                if (!hotbarHas(Items.cookie) && !hotbarIsFull())
+                                    shiftClick(Items.cookie);
+
+                                useFirst(Items.cookie);
+                                needsToHeal = false;
+                                timer.reset();
+                                break;
                             case HEAD:
                                 if (!hotbarHas(Items.skull) && !hotbarIsFull())
                                     shiftClick(Items.skull);
@@ -147,6 +155,11 @@ public class AutoHeal extends Mod implements CommandHandler {
                 if (soups > 0)
                     tag += "\2476" + soups;
                 break;
+            case COOKIE:
+                int cookies = countItem(Items.cookie);
+                if (cookies > 0)
+                    tag += "\2475" + cookies;
+                break;
             case HEAD:
                 int heads = countItem(Items.skull);
                 if (heads > 0)
@@ -218,6 +231,10 @@ public class AutoHeal extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
+                            case "cookie":
+                                this.mode.setValue(Mode.COOKIE);
+                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
+                                break;
                             case "soup":
                                 this.mode.setValue(Mode.SOUP);
                                 ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
@@ -236,7 +253,7 @@ public class AutoHeal extends Mod implements CommandHandler {
                                 ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: soup, head, potion");
+                                ChatLogger.print("Invalid mode, valid: cookie, soup, head, potion");
                                 break;
                         }
                     } else {
@@ -278,7 +295,7 @@ public class AutoHeal extends Mod implements CommandHandler {
     }
 
     private enum Mode {
-        SOUP, HEAD, POTION;
+        SOUP, HEAD, POTION, COOKIE;
 
         public String getName() {
             String prettyName = "";
