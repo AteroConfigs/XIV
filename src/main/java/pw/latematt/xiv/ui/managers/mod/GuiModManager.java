@@ -52,12 +52,13 @@ public class GuiModManager extends GuiScreen {
 
         this.buttonList.clear();
         this.buttonList.add(new GuiButton(0, width / 2 - 100, height - 26, 200, 20, "Cancel"));
-        this.buttonList.add(new GuiButton(1, width / 2 - 48, height - 48, 98, 20, "Toggle"));
+        this.buttonList.add(new GuiButton(1, width / 2 - 100, height - 48, 98, 20, "Toggle"));
+        this.buttonList.add(new GuiButton(2, width / 2 + 2, height - 48, 98, 20, "Visible"));
 
         this.search = new GuiTextField(3, mc.fontRendererObj, width - 182, height - 52, 150, 20);
         this.search.setVisible(true);
 
-        this.keybind = new GuiTextField(4, mc.fontRendererObj, width / 2 - 48, height - 70, 98, 20);
+        this.keybind = new GuiTextField(4, mc.fontRendererObj, width / 2 - 48, height - 80, 98, 20);
         this.keybind.setVisible(true);
     }
 
@@ -70,6 +71,8 @@ public class GuiModManager extends GuiScreen {
                 mc.displayGuiScreen(parent);
             } else if (button.id == 1) {
                 this.slot.getMod().setEnabled(!slot.getMod().isEnabled());
+            } else if (button.id == 2) {
+                this.slot.getMod().setVisible(!slot.getMod().isVisible());
             }
         }
     }
@@ -90,18 +93,23 @@ public class GuiModManager extends GuiScreen {
             mc.fontRendererObj.drawStringWithShadow(mod.getName(), 2, 2, mod.getColor());
             keybind.setText(Keyboard.getKeyName(mod.getKeybind()));
 
-            ((GuiButton) this.buttonList.get(1)).displayString = "Toggle " + (slot.getMod().isEnabled() ? "Off" : "On");
+            ((GuiButton) this.buttonList.get(1)).displayString = (slot.getMod().isEnabled() ? "Disable" : "Enable") + " Mod";
+            ((GuiButton) this.buttonList.get(2)).displayString = (slot.getMod().isVisible() ? "Hide" : "Show") + " Mod";
 
             ((GuiButton) this.buttonList.get(1)).enabled = true;
+            ((GuiButton) this.buttonList.get(2)).enabled = true;
         } else {
             ((GuiButton) this.buttonList.get(1)).displayString = "Toggle";
             ((GuiButton) this.buttonList.get(1)).enabled = false;
+
+            ((GuiButton) this.buttonList.get(2)).displayString = "Visible";
+            ((GuiButton) this.buttonList.get(2)).enabled = false;
         }
 
         String filters = "Custom Filters: '!', 'k:'";
         mc.fontRendererObj.drawStringWithShadow(filters, width - 105 - (mc.fontRendererObj.getStringWidth(filters) / 2), height - 28, 0xFFFFFFFF);
 
-        mc.fontRendererObj.drawStringWithShadow("Keybind:", width / 2 - 48, height - 80, 0xFFFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow("Keybind:", width / 2 - 48, height - 90, 0xFFFFFFFF);
 
         mc.fontRendererObj.drawStringWithShadow("Search:", width - 182, height - 62, 0xFFFFFFFF);
         search.drawTextBox();
