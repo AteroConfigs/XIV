@@ -124,7 +124,7 @@ public class ModManager extends ListManager<Mod> {
                             .filter(modName -> mod.getName().equals(modName))
                             .forEach(modName -> {
                                 ModOptions options = modOptions.get(modName);
-                                mod.setKeybind(options.getKeybind().equals("NONE") ? Keyboard.KEY_NONE : Keyboard.getKeyIndex(options.getKeybind()) > 0 ? Keyboard.getKeyIndex(options.getKeybind()) : Mouse.getButtonIndex(options.getKeybind()) + 256);
+                                mod.setKeybind(options.getKeybind().equals(Keyboard.getKeyName(Keyboard.KEY_NONE)) ? Keyboard.KEY_NONE : Keyboard.getKeyIndex(options.getKeybind()) > 0 ? Keyboard.getKeyIndex(options.getKeybind()) : Mouse.getButtonIndex(options.getKeybind()) + 256);
                                 mod.setColor(options.getColor());
                                 mod.setEnabled(options.isEnabled());
                                 mod.setVisible(options.isVisible());
@@ -213,19 +213,16 @@ public class ModManager extends ListManager<Mod> {
 
                         if (mod != null) {
                             String newBindName = arguments[2].toUpperCase();
-                            int newBind = Keyboard.getKeyIndex(newBindName);
+                            int newBind = Mouse.getButtonIndex(newBindName);
 
-                            if (newBindName.equalsIgnoreCase("NONE")) {
-                                mod.setKeybind(Keyboard.KEY_NONE);
-                                ChatLogger.print(String.format("%s is now bound to %s", mod.getName(), Keyboard.getKeyName(mod.getKeybind())));
-                            } else if (newBind > 0) {
+                            if (newBind > -1) {
+                                mod.setKeybind(newBind + 256);
+                                ChatLogger.print(String.format("%s is now bound to %s", mod.getName(), Mouse.getButtonName(newBind)));
+                            } else {
+                                newBind = Keyboard.getKeyIndex(newBindName);
+
                                 mod.setKeybind(newBind);
                                 ChatLogger.print(String.format("%s is now bound to %s", mod.getName(), Keyboard.getKeyName(newBind)));
-                            } else {
-                                newBind = Mouse.getButtonIndex(newBindName) + 256;
-
-                                mod.setKeybind(newBind);
-                                ChatLogger.print(String.format("%s is now bound to %s", mod.getName(), Mouse.getButtonName(newBind - 256)));
                             }
                         } else {
                             ChatLogger.print(String.format("Invalid module \"%s\"", modName));

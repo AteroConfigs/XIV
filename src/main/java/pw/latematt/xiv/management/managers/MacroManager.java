@@ -64,23 +64,27 @@ public class MacroManager extends ListManager<Macro> {
                             case "add":
                             case "a":
                                 if (arguments.length >= 4) {
-                                    int keybind = Keyboard.getKeyIndex(arguments[2].toUpperCase());
                                     String command = message.substring(String.format("%s %s %s ", arguments[0], arguments[1], arguments[2]).length(), message.length());
 
-                                    if (arguments[2].toUpperCase().equalsIgnoreCase("NONE")) {
-                                        ChatLogger.print("You can't bind a macro to nothing.");
-                                    } else if (keybind > 0) {
-                                        Macro macro = new Macro(keybind, command);
-                                        getContents().add(macro);
-                                        XIV.getInstance().getFileManager().saveFile("macroconfig");
-                                        ChatLogger.print(String.format("Macro \"%s\" added.", Keyboard.getKeyName(macro.getKeybind())));
-                                    } else {
-                                        int mousebutton = Mouse.getButtonIndex(arguments[2].toUpperCase());
+                                    String newBindName = arguments[2].toUpperCase();
+                                    int newBind = Mouse.getButtonIndex(newBindName);
 
-                                        Macro macro = new Macro(mousebutton + 256, command);
+                                    if (newBind > -1) {
+                                        Macro macro = new Macro(newBind + 256, command);
                                         getContents().add(macro);
                                         XIV.getInstance().getFileManager().saveFile("macroconfig");
-                                        ChatLogger.print(String.format("Macro \"%s\" added.", Mouse.getButtonName(macro.getKeybind() - 256)));
+                                        ChatLogger.print(String.format("Macro \"%s\" added.", Mouse.getButtonName(newBind)));
+                                    } else {
+                                        newBind = Keyboard.getKeyIndex(newBindName);
+
+                                        if(newBind == Keyboard.KEY_NONE) {
+                                            ChatLogger.print("Invalid or unrecognized keybind.");
+                                        }else {
+                                            Macro macro = new Macro(newBind, command);
+                                            getContents().add(macro);
+                                            XIV.getInstance().getFileManager().saveFile("macroconfig");
+                                            ChatLogger.print(String.format("Macro \"%s\" added.", Keyboard.getKeyName(newBind)));
+                                        }
                                     }
                                 } else {
                                     ChatLogger.print("Invalid arguments, valid: macro add <keybind> <command>");
