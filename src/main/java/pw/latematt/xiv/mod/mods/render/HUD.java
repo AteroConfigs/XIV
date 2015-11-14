@@ -258,14 +258,15 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             int var2 = var1 / 60;
             var1 %= 60;
             char color = '7';
-            if (var2 == 0 && var1 <= 5)
-                color = '4';
-            else if (var2 == 0 && var1 <= 10)
-                color = 'c';
-            else if (var2 == 0 && var1 <= 15)
-                color = '6';
-            else if (var2 == 0 && var1 <= 20)
-                color = 'e';
+            if (var2 == 0)
+                if (var1 <= 5)
+                    color = '4';
+                else if (var1 <= 10)
+                    color = 'c';
+                else if (var1 <= 15)
+                    color = '6';
+                else if (var1 <= 20)
+                    color = 'e';
 
             name = String.format("%s \247%s%s", name, color, Potion.getDurationString(effect));
             mc.fontRendererObj.drawStringWithShadow(name, x - mc.fontRendererObj.getStringWidth(name), y, Potion.potionTypes[effect.getPotionID()].getLiquidColor());

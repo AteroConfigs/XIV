@@ -212,11 +212,10 @@ public class Nametags extends Mod implements CommandHandler {
                                     for (Enchantment importantEnchantment : important) {
                                         if (enc == importantEnchantment) {
                                             String encName = enc.getTranslatedName(level).substring(0, 1).toLowerCase();
-                                            if (level > 99) {
+                                            if (level > 99)
                                                 encName = encName + "99+";
-                                            } else {
+                                            else
                                                 encName = encName + level;
-                                            }
                                             mc.fontRendererObj.drawStringWithShadow(encName, (-var18 + offset + xPos) * 2, (var17 - 20 + encY) * 2, 0xFFAAAAAA);
                                             encY += 5;
                                             break;
