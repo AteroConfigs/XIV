@@ -152,41 +152,50 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
                 username.setText(current.getUsername());
                 password.setText(current.getPassword());
             } else if (button.id == 9) {
-                JFileChooser chooser = new JFileChooser();
-                chooser.setDialogTitle("XIV Alt Finder");
-                File foundFile = null;
+                Thread fileFindThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JFileChooser chooser = new JFileChooser();
+                        chooser.setDialogTitle("XIV Alt Finder");
+                        chooser.setVisible(true);
+                        chooser.setMultiSelectionEnabled(false);
 
-                int returnValue = chooser.showOpenDialog(null);
+                        File foundFile = null;
 
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    foundFile = chooser.getSelectedFile();
-                }
+                        int returnValue = chooser.showOpenDialog(null);
 
-                if (foundFile != null) {
-                    int lastSize = getAccounts().size();
+                        if (returnValue == JFileChooser.APPROVE_OPTION) {
+                            foundFile = chooser.getSelectedFile();
+                        }
 
-                    try {
-                        BufferedReader reader = new BufferedReader(new FileReader(foundFile));
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            String[] account = line.split(":");
+                        if (foundFile != null) {
+                            int lastSize = getAccounts().size();
 
-                            if (account.length > 1) {
-                                if (account.length > 2) {
-                                    XIV.getInstance().getAltManager().add(account[0], account[1], account[2]);
-                                } else {
-                                    XIV.getInstance().getAltManager().add(account[0], account[1]);
+                            try {
+                                BufferedReader reader = new BufferedReader(new FileReader(foundFile));
+                                String line;
+                                while ((line = reader.readLine()) != null) {
+                                    String[] account = line.split(":");
+
+                                    if (account.length > 1) {
+                                        if (account.length > 2) {
+                                            XIV.getInstance().getAltManager().add(account[0], account[1], account[2]);
+                                        } else {
+                                            XIV.getInstance().getAltManager().add(account[0], account[1]);
+                                        }
+                                    }
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            if (getAccounts().size() > lastSize) {
+                                slot.setSelected(lastSize);
                             }
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-
-                    if (getAccounts().size() > lastSize) {
-                        slot.setSelected(lastSize);
-                    }
-                }
+                });
+                fileFindThread.start();
             }
         }
     }
