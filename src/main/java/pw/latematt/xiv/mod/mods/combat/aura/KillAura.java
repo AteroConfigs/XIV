@@ -99,19 +99,19 @@ public class KillAura extends Mod implements CommandHandler {
 
     public void attack(EntityLivingBase target) {
         final boolean wasSprinting = mc.thePlayer.isSprinting();
-        if (autoSword.getValue()) {
+        if (autoSword.getValue())
             mc.thePlayer.inventory.currentItem = EntityUtils.getBestWeapon(target);
-            mc.playerController.updateController();
-        }
+        mc.playerController.updateController();
 
         // stop sprinting
-        mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
+        if (wasSprinting)
+            mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
 
-        mc.thePlayer.swingItem();
         int oldDamage = 0;
         if (mc.thePlayer.getCurrentEquippedItem() != null)
             oldDamage = mc.thePlayer.getCurrentEquippedItem().getItemDamage();
 
+        mc.thePlayer.swingItem();
         mc.playerController.attackEntity(mc.thePlayer, target);
 
         if (mc.thePlayer.getCurrentEquippedItem() != null)

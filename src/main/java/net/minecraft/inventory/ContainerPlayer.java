@@ -88,12 +88,11 @@ public class ContainerPlayer extends Container
      */
     public void onContainerClosed(EntityPlayer p_75134_1_)
     {
-        super.onContainerClosed(p_75134_1_);
-
         InventoryClosedEvent event = new InventoryClosedEvent(p_75134_1_);
         XIV.getInstance().getListenerManager().call(event);
         if (event.isCancelled())
             return;
+        super.onContainerClosed(p_75134_1_);
 
         for (int var2 = 0; var2 < 4; ++var2)
         {

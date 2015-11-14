@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
+import net.minecraft.potion.Potion;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.EnumChatFormatting;
@@ -21,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.NametagRenderEvent;
+import pw.latematt.xiv.event.events.PotionRenderEvent;
 import pw.latematt.xiv.event.events.RenderEntityEvent;
 import pw.latematt.xiv.mod.mods.render.ESP;
 

@@ -2262,13 +2262,7 @@ public abstract class EntityPlayer extends EntityLivingBase
         else
         {
             Team var2 = this.getTeam();
-
-            PotionRenderEvent event = new PotionRenderEvent(Potion.INVISIBILITY);
-            event.setCancelled(var2 == null || playerIn == null || playerIn.getTeam() != var2 || !var2.func_98297_h());
-
-            XIV.getInstance().getListenerManager().call(event);
-
-            return event.isCancelled();
+            return var2 == null || playerIn.getTeam() != var2 || !var2.func_98297_h();
         }
     }
 

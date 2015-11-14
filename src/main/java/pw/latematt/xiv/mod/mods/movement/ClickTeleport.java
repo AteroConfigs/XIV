@@ -51,7 +51,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
         blockReachListener = new Listener<BlockReachEvent>() {
             @Override
             public void onEventCalled(BlockReachEvent event) {
-                if ((!Mouse.isButtonDown(0) && mc.inGameHasFocus || !mc.inGameHasFocus) && !mc.thePlayer.isSneaking() && mc.thePlayer.getItemInUse() == null) {
+                if ((!Mouse.isButtonDown(0) && mc.inGameHasFocus || !mc.inGameHasFocus) && mc.thePlayer.getItemInUse() == null) {
                     event.setRange(range.getValue().floatValue() + 1);
 
                     canDraw = true;
@@ -74,7 +74,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
             @Override
             public void onEventCalled(Render3DEvent event) {
                 if (mc.objectMouseOver != null && mc.objectMouseOver.func_178782_a() != null && canDraw) {
-                    for(float offset = 17.0F; offset > -3.0F; offset--) {
+                    for(float offset = 15.0F; offset > -5.0F; offset--) {
                         double[] mouseOverPos = new double[]{mc.objectMouseOver.func_178782_a().getX(), mc.objectMouseOver.func_178782_a().getY() + offset, mc.objectMouseOver.func_178782_a().getZ()};
 
                         BlockPos blockBelowPos = new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]);
@@ -95,8 +95,8 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
                         }
                     }
                 }else if (mc.objectMouseOver != null && mc.objectMouseOver.entityHit != null) {
-                    for(float offset = 17.0F; offset > -3.0F; offset--) {
-                        double[] mouseOverPos = new double[]{mc.objectMouseOver.entityHit.getPosition().getX(), mc.objectMouseOver.entityHit.getPosition().getY() + offset, mc.objectMouseOver.entityHit.getPosition().getZ()};
+                    for(float offset = 15.0F; offset > -5.0F; offset--) {
+                        double[] mouseOverPos = new double[]{mc.objectMouseOver.entityHit.posX, mc.objectMouseOver.entityHit.posY + offset, mc.objectMouseOver.entityHit.posZ};
 
                         BlockPos blockBelowPos = new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]);
                         Block blockBelow = mc.theWorld.getBlockState(blockBelowPos).getBlock();
@@ -181,7 +181,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
         double x = pos.getX() + 0.5F - mc.getRenderManager().renderPosX;
         double y = pos.getY() - 1.0F - mc.getRenderManager().renderPosY + offset;
         double z = pos.getZ() + 0.5F - mc.getRenderManager().renderPosZ;
-        double dist = mc.thePlayer.getDistance(pos.getX(), pos.getY(), pos.getZ());
+        double dist = EntityUtils.getReference().getDistance(pos.getX(), pos.getY(), pos.getZ());
         final String text = Math.round(dist) + "m";
         double far = this.mc.gameSettings.renderDistanceChunks * 12.8D;
         double dl = Math.sqrt(x * x + z * z + y * y);

@@ -66,7 +66,7 @@ public class InventoryPlus extends Mod {
 
                 KeyBinding[] keyBindings = {
                         mc.gameSettings.keyBindForward, mc.gameSettings.keyBindBack, mc.gameSettings.keyBindLeft, mc.gameSettings.keyBindRight,
-                        mc.gameSettings.keyBindJump, mc.gameSettings.keyBindSprint, mc.gameSettings.keyBindTogglePerspective, mc.gameSettings.ofKeyBindZoom};
+                        mc.gameSettings.keyBindJump, mc.gameSettings.keyBindSprint};
 
                 for (KeyBinding keyBinding : keyBindings) {
                     KeyBinding.setKeyBindState(keyBinding.getKeyCode(), Keyboard.isKeyDown(keyBinding.getKeyCode()));

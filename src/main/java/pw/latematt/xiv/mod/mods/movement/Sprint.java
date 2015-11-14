@@ -1,11 +1,15 @@
 package pw.latematt.xiv.mod.mods.movement;
 
+import net.minecraft.item.ItemBow;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.network.play.client.C0BPacketEntityAction;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
+import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.player.FastUse;
@@ -16,7 +20,7 @@ import pw.latematt.xiv.value.Value;
  * @author Matthew
  */
 public class Sprint extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
-    private Value<Boolean> shotBow = new Value<>("sprint_shotbow", false);
+    private final Value<Boolean> shotBow = new Value<>("sprint_shotbow", false);
 
     public Sprint() {
         super("Sprint", ModType.MOVEMENT, Keyboard.KEY_B, 0xFF72B190);
@@ -40,6 +44,8 @@ public class Sprint extends Mod implements Listener<MotionUpdateEvent>, CommandH
 
     public boolean shouldSlowdown() {
         if (shotBow.getValue() && mc.thePlayer.getItemInUse() != null) {
+            if (mc.thePlayer.getItemInUse().getItem() instanceof ItemBow)
+                return true;
             int maxUseDuration = mc.thePlayer.getItemInUse().getMaxItemUseDuration();
             FastUse fastUse = (FastUse) XIV.getInstance().getModManager().find("fastuse");
             if (fastUse != null && fastUse.isEnabled())
