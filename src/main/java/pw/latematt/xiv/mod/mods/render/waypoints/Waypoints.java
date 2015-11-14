@@ -197,7 +197,7 @@ public class Waypoints extends Mod implements CommandHandler {
         double x = waypoint.getX() + 0.5F - mc.getRenderManager().renderPosX;
         double y = waypoint.getY() - mc.getRenderManager().renderPosY;
         double z = waypoint.getZ() + 0.5F - mc.getRenderManager().renderPosZ;
-        double dist = mc.thePlayer.getDistance(waypoint.getX(), waypoint.getY(), waypoint.getZ());
+        double dist = EntityUtils.getReference().getDistance(waypoint.getX(), waypoint.getY(), waypoint.getZ());
         final String text = waypoint.getName() + " \2477" + Math.round(dist) + "m\247r";
         double far = this.mc.gameSettings.renderDistanceChunks * 12.8D;
         double dl = Math.sqrt(x * x + z * z + y * y);
