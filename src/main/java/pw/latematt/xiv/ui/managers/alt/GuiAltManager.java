@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
     private GuiScreen parent;
-    private static AltSlot slot;
+    private AltSlot slot;
 
     public GuiTextField username, keyword, search;
     public GuiPasswordField password;
@@ -64,10 +64,8 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        if (this.slot == null) {
-            this.slot = new AltSlot(this, mc, width, height, 25, height - 98, 36);
-            this.slot.registerScrollButtons(7, 8);
-        }
+        this.slot = new AltSlot(this, mc, width, height, 25, height - 98, 36);
+        this.slot.registerScrollButtons(7, 8);
 
         this.buttonList.clear();
         this.buttonList.add(new GuiButton(0, width / 2 - 100, height - 26, 200, 20, "Cancel"));
