@@ -18,7 +18,7 @@ public class XenonTheme extends ClickTheme {
     protected GuiClick gui;
 
     public XenonTheme(GuiClick gui) {
-        super("Xenon", 96, 13, gui);
+        super("Xenon", 96, 13, gui, false);
         this.gui = gui;
     }
 

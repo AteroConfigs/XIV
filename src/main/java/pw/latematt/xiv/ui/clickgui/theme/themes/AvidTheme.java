@@ -19,7 +19,7 @@ public class AvidTheme extends ClickTheme {
     protected GuiClick gui;
 
     public AvidTheme(GuiClick gui) {
-        super("Avid", 12, 11, gui);
+        super("Avid", 12, 11, gui, false);
         this.gui = gui;
     }
 

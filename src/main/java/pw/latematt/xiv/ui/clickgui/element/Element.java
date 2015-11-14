@@ -1,5 +1,7 @@
 package pw.latematt.xiv.ui.clickgui.element;
 
+import pw.latematt.xiv.XIV;
+
 public abstract class Element {
 
     private float x, y, width, height;
@@ -52,6 +54,6 @@ public abstract class Element {
     public abstract void onGuiClosed();
 
     public boolean isOverElement(int mouseX, int mouseY) {
-        return mouseX > getX() && mouseY > getY() && mouseX < getX() + getWidth() && mouseY < getY() + getHeight();
+        return mouseX > getX() && mouseY > getY() && mouseX < getX() + getWidth() && mouseY < getY() + XIV.getInstance().getGuiClick().getTheme().getElementHeight();
     }
 }

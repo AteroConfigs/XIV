@@ -18,7 +18,7 @@ public class PringlesTheme extends ClickTheme {
     protected GuiClick gui;
 
     public PringlesTheme(GuiClick gui) {
-        super("Pringles", 96, 15, gui);
+        super("Pringles", 96, 15, gui, false);
         this.gui = gui;
     }
 

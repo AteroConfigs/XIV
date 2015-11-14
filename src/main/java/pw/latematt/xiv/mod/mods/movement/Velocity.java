@@ -31,6 +31,8 @@ public class Velocity extends Mod implements CommandHandler {
         readPacketListener = new Listener<ReadPacketEvent>() {
             @Override
             public void onEventCalled(ReadPacketEvent event) {
+                updateTag();
+
                 if (event.getPacket() instanceof S12PacketEntityVelocity) {
                     S12PacketEntityVelocity packet = (S12PacketEntityVelocity) event.getPacket();
 
@@ -90,14 +92,14 @@ public class Velocity extends Mod implements CommandHandler {
                         String newVelocityString = arguments[2];
                         try {
                             float newPercent = arguments[2].equalsIgnoreCase("-d") ? reduction.getDefault() : Float.parseFloat(newVelocityString);
-                            reduction.setValue((newPercent / 100));
+                            reduction.setValue((newPercent));
                             if (reduction.getValue() > reduction.getMax())
                                 reduction.setValue(reduction.getMax());
                             else if (reduction.getValue() < reduction.getMin())
                                 reduction.setValue(reduction.getMin());
 
                             updateTag();
-                            ChatLogger.print(String.format("Velocity Percent set to %s", (reduction.getValue() * 100F) + "%"));
+                            ChatLogger.print(String.format("Velocity Percent set to %s", reduction.getValue() + "%"));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newVelocityString));
                         }
@@ -120,7 +122,7 @@ public class Velocity extends Mod implements CommandHandler {
             setTag("");
         } else {
             setDisplayName(getName());
-            setTag((reduction.getValue() * 100) + "%");
+            setTag((reduction.getValue()) + "%");
         }
     }
 

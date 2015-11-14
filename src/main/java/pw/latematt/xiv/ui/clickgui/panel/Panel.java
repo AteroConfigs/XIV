@@ -1,5 +1,6 @@
 package pw.latematt.xiv.ui.clickgui.panel;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.mod.Mod;
@@ -9,6 +10,7 @@ import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
 import pw.latematt.xiv.ui.clickgui.element.elements.PanelButton;
 import pw.latematt.xiv.ui.clickgui.element.elements.ValueButton;
 import pw.latematt.xiv.ui.clickgui.element.elements.ValueSlider;
+import pw.latematt.xiv.utils.RenderUtils;
 import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
@@ -130,6 +132,17 @@ public class Panel {
             }
         }
 
+        if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && isDragging())) {
+            if (x < 0)
+                x = 1;
+            if (y < 0)
+                y = 1;
+            if(x + width > RenderUtils.newScaledResolution().getScaledWidth())
+                x = RenderUtils.newScaledResolution().getScaledWidth() - width;
+            if(y + height > RenderUtils.newScaledResolution().getScaledHeight())
+                y = RenderUtils.newScaledResolution().getScaledHeight() - height - 2;
+        }
+
         XIV.getInstance().getGuiClick().getTheme().renderPanel(this);
 
         if (isOpen()) {
@@ -181,7 +194,19 @@ public class Panel {
         }
 
         if (isOpen()) {
+
             for (Element element : elements) {
+                if (XIV.getInstance().getGuiClick().getTheme().hasSubMenus()) {
+                    if (element instanceof ModButton) {
+                        ModButton butt = (ModButton) element;
+                        if (butt.open) {
+                            for (Element elem : butt.elements) {
+                                elem.mouseClicked(mouseX, mouseY, mouseButton);
+                            }
+                        }
+                    }
+                }
+
                 element.mouseClicked(mouseX, mouseY, mouseButton);
             }
         }
@@ -268,6 +293,13 @@ public class Panel {
 
             if (value.getValue() instanceof Boolean) {
                 getElements().add(new ValueButton(value, prettyName, x + 2, elementY + 2, XIV.getInstance().getGuiClick().getTheme().getElementWidth(), XIV.getInstance().getGuiClick().getTheme().getElementHeight()));
+            }
+
+            if (value instanceof ClampedValue) {
+                if(value.getValue() instanceof Float) {
+                    ClampedValue<Float> cv = (ClampedValue<Float>) value;
+                    elements.add(new ValueSlider(cv, prettyName, x, y + 12, width, height));
+                }
             }
             elementY += XIV.getInstance().getGuiClick().getTheme().getElementHeight() + 1;
         }

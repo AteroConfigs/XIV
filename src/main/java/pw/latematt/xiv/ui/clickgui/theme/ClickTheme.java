@@ -12,11 +12,13 @@ public abstract class ClickTheme {
     protected final Minecraft mc = Minecraft.getMinecraft();
     private final String name;
     private float elementWidth, elementHeight;
+    private boolean subMenus;
 
-    public ClickTheme(String name, float elementWidth, float elementHeight, GuiClick gui) {
+    public ClickTheme(String name, float elementWidth, float elementHeight, GuiClick gui, boolean subMenus) {
         this.name = name;
         this.elementWidth = elementWidth;
         this.elementHeight = elementHeight;
+        this.subMenus = subMenus;
 
         for (Panel panel : gui.getPanels()) {
             for (Element element : panel.getElements()) {
@@ -44,6 +46,10 @@ public abstract class ClickTheme {
 
     public void setElementHeight(float elementHeight) {
         this.elementHeight = elementHeight;
+    }
+
+    public boolean hasSubMenus() {
+        return subMenus;
     }
 
     public abstract void renderPanel(Panel panel);
