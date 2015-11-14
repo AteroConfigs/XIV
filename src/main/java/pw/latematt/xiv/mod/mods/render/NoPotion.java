@@ -1,6 +1,5 @@
 package pw.latematt.xiv.mod.mods.render;
 
-import net.minecraft.potion.Potion;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
@@ -18,7 +17,7 @@ public class NoPotion extends Mod implements Listener<PotionRenderEvent> {
 
     @Override
     public void onEventCalled(PotionRenderEvent event) {
-        event.setCancelled(event.getEffect() != Potion.INVISIBILITY);
+        event.setCancelled(true);
     }
 
     @Override

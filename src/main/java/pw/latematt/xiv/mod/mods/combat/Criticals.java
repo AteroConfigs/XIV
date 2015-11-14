@@ -23,7 +23,7 @@ import pw.latematt.xiv.value.Value;
 public class Criticals extends Mod implements Listener<SendPacketEvent>, CommandHandler {
     private final Value<Boolean> miniJumps = new Value<>("criticals_mini_jumps", true);
     private final Listener attackEntityListener;
-    private boolean next;
+    private boolean nextTick;
     private float fallDist;
 
     public Criticals() {
@@ -35,7 +35,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
             public void onEventCalled(AttackEntityEvent event) {
                 if (miniJumps.getValue()) {
                     if (!BlockUtils.isOnLiquid(mc.thePlayer) && mc.thePlayer.isCollidedVertically && !BlockUtils.isInLiquid(mc.thePlayer)) {
-                        if ((next = !next)) {
+                        if (nextTick = !nextTick) {
                             mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.05, mc.thePlayer.posZ, false));
                             mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
                             mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.012511, mc.thePlayer.posZ, false));
@@ -102,7 +102,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this, attackEntityListener);
         fallDist = 0.0F;
-        next = false;
+        nextTick = false;
     }
 
     @Override
