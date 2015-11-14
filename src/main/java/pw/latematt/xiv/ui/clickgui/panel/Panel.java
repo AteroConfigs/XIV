@@ -23,6 +23,10 @@ public class Panel {
     private float dragX, dragY;
     private ArrayList<Element> elements;
 
+    public Panel(String name, ArrayList<Element> elements, float x, float y, float width, float height) {
+        this(name, elements, x, y, width, height, false);
+    }
+
     public Panel(String name, ArrayList<Element> elements, float x, float y, float width, float height, boolean showing) {
         this.x = x;
         this.y = y;
@@ -31,10 +35,6 @@ public class Panel {
         this.name = name;
         this.elements = elements;
         this.showing = showing;
-    }
-
-    public Panel(String name, ArrayList<Element> elements, float x, float y, float width, float height) {
-        this(name, elements, x, y, width, height, true);
     }
 
     public float getX() {
@@ -132,14 +132,14 @@ public class Panel {
             }
         }
 
-        if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && isDragging())) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && isDragging())) {
             if (x < 0)
                 x = 1;
             if (y < 0)
                 y = 1;
-            if(x + width > RenderUtils.newScaledResolution().getScaledWidth())
+            if (x + width > RenderUtils.newScaledResolution().getScaledWidth())
                 x = RenderUtils.newScaledResolution().getScaledWidth() - width;
-            if(y + height > RenderUtils.newScaledResolution().getScaledHeight())
+            if (y + height > RenderUtils.newScaledResolution().getScaledHeight())
                 y = RenderUtils.newScaledResolution().getScaledHeight() - height - 2;
         }
 
@@ -189,7 +189,6 @@ public class Panel {
                 XIV.getInstance().getGuiClick().getPanels().add(this);
             } else if (mouseButton == 1) {
                 open = !open;
-                XIV.getInstance().getFileManager().saveFile("gui");
             }
         }
 
@@ -296,7 +295,7 @@ public class Panel {
             }
 
             if (value instanceof ClampedValue) {
-                if(value.getValue() instanceof Float) {
+                if (value.getValue() instanceof Float) {
                     ClampedValue<Float> cv = (ClampedValue<Float>) value;
                     elements.add(new ValueSlider(cv, prettyName, x, y + 12, width, height));
                 }

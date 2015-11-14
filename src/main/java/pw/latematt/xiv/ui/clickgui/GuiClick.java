@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class GuiClick extends GuiScreen {
@@ -61,7 +60,7 @@ public class GuiClick extends GuiScreen {
 
     @Override
     public void initGui() {
-        panels = new CopyOnWriteArrayList<>();
+        panels = new ArrayList<>();
         themes = new ArrayList<>();
         themes.add(new AvidTheme(this));
         themes.add(theme = new DarculaTheme(this));
@@ -171,6 +170,7 @@ public class GuiClick extends GuiScreen {
     @Override
     public void onGuiClosed() {
         panels.stream().filter(Panel::isShowing).forEach(Panel::onGuiClosed);
+        XIV.getInstance().getFileManager().saveFile("gui");
     }
 
     public class PanelConfig {

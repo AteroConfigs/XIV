@@ -7,8 +7,8 @@ import pw.latematt.xiv.XIV;
  */
 public class Value<T> {
     private final String name;
+    private final T def;
     private T value;
-    private T def;
 
     public Value(String name, T value) {
         this.name = name;
@@ -20,12 +20,12 @@ public class Value<T> {
         return name;
     }
 
-    public T getValue() {
-        return value;
-    }
-
     public T getDefault() {
         return def;
+    }
+
+    public T getValue() {
+        return value;
     }
 
     public void setValue(T value) {

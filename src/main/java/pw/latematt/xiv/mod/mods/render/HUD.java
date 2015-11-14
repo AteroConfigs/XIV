@@ -112,7 +112,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         if (watermark.getValue())
-            mc.fontRendererObj.drawStringWithShadow("XIV", 2, 2, 0xFFEEEEEE);
+            mc.fontRendererObj.drawStringWithShadow("XIV", 2, 2, 0x80FFFFFF);
         if (rudysucks.getValue()) {
             int y = 2;
             if (watermark.getValue() || (watermark.getValue() && time.getValue()))
@@ -171,7 +171,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             int width = scaledResolution.getScaledWidth() / 2;
             int height = scaledResolution.getScaledHeight() -
                     (mc.thePlayer.isInsideOfMaterial(Material.water) ?
-                            mc.thePlayer.getActivePotionEffect(Potion.ABSORPTION) != null ? 75 : 65 : 55);
+                            mc.thePlayer.getActivePotionEffect(Potion.ABSORPTION) != null ? 55 : 65 : 55);
 
             GlStateManager.pushMatrix();
             GlStateManager.enableRescaleNormal();
@@ -267,7 +267,7 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
             else if (var2 == 0 && var1 <= 20)
                 color = 'e';
 
-            name = String.format("%s \2477(\247%s%s\2477)", name, color, Potion.getDurationString(effect));
+            name = String.format("%s \247%s%s", name, color, Potion.getDurationString(effect));
             mc.fontRendererObj.drawStringWithShadow(name, x - mc.fontRendererObj.getStringWidth(name), y, Potion.potionTypes[effect.getPotionID()].getLiquidColor());
             y -= 10;
         }
@@ -296,13 +296,13 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
         List<String> info = new ArrayList<>();
 
         if (coords.getValue())
-            info.add(String.format("\2477XYZ\247r: %s %s %s", MathHelper.floor_double(mc.thePlayer.posX), MathHelper.floor_double(mc.thePlayer.posY), MathHelper.floor_double(mc.thePlayer.posZ)));
+            info.add(String.format("\247rXYZ\2477 %s %s %s", MathHelper.floor_double(mc.thePlayer.posX), MathHelper.floor_double(mc.thePlayer.posY), MathHelper.floor_double(mc.thePlayer.posZ)));
 
         if (ign.getValue())
-            info.add(String.format("\2477IGN\247r: %s", mc.getSession().getUsername()));
+            info.add(String.format("\247rIGN\2477 %s", mc.getSession().getUsername()));
 
         if (fps.getValue())
-            info.add(String.format("\2477FPS\247r: %s", mc.debug.split(" fps")[0]));
+            info.add(String.format("\247rFPS\2477 %s", mc.debug.split(" fps")[0]));
 
         int y = scaledResolution.getScaledHeight() - 10;
         if (mc.ingameGUI.getChatGUI().getChatOpen())
@@ -353,11 +353,11 @@ public class HUD extends Mod implements Listener<IngameHUDRenderEvent>, CommandH
 
         if (timer.hasReached(1000))
             lag += " \2477" + timer.getDifference() + "ms";
-
+        int x = scaledResolution.getScaledWidth() / 2 + 93;
         int y = scaledResolution.getScaledHeight() - 10;
         if (mc.ingameGUI.getChatGUI().getChatOpen())
             y -= 13;
-        mc.fontRendererObj.drawStringWithShadow(lag, scaledResolution.getScaledWidth() / 2 + 93, y, color);
+        mc.fontRendererObj.drawStringWithShadow(lag, x, y, color);
     }
 
     @Override

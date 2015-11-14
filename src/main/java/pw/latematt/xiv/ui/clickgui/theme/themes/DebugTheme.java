@@ -1,6 +1,5 @@
 package pw.latematt.xiv.ui.clickgui.theme.themes;
 
-import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
@@ -73,9 +72,9 @@ public class DebugTheme extends ClickTheme {
                     }
 
                     float elemY = y + 1;
-                    for(Element elem: butt.elements) {
+                    for (Element elem : butt.elements) {
                         elem.setX(x);
-                        if(elem instanceof ValueSlider) {
+                        if (elem instanceof ValueSlider) {
                             elem.setY(elemY += elem.getHeight());
                             elemY += 1;
                         } else {

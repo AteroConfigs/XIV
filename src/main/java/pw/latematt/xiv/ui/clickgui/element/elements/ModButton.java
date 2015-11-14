@@ -32,7 +32,7 @@ public class ModButton extends Element {
                     String[] actualNameSplit = actualName.split("_");
                     if (actualNameSplit.length > 0) {
                         for (String arg : actualNameSplit) {
-                            if(!arg.equalsIgnoreCase(getMod().getName())) {
+                            if (!arg.equalsIgnoreCase(getMod().getName())) {
                                 arg = arg.substring(0, 1).toUpperCase() + arg.substring(1, arg.length());
                                 prettyName += arg + " ";
                             }
@@ -45,7 +45,7 @@ public class ModButton extends Element {
                         elements.add(new ValueButton(val, prettyName, x, y + 12, width, height));
                     }
                     if (val instanceof ClampedValue) {
-                        if(val.getValue() instanceof Float) {
+                        if (val.getValue() instanceof Float) {
                             ClampedValue<Float> cv = (ClampedValue<Float>) val;
                             elements.add(new ValueSlider(cv, prettyName, x, y + 12, width, height));
                         }

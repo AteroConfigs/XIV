@@ -166,7 +166,7 @@ public class EntityUtils {
     public static double[] teleportToPosition(double[] startPosition, double[] endPosition, double setOffset, double slack, boolean extendOffset, boolean onGround) {
         boolean wasSneaking = false;
 
-        if(MINECRAFT.thePlayer.isSneaking())
+        if (MINECRAFT.thePlayer.isSneaking())
             wasSneaking = true;
 
         double startX = startPosition[0];
@@ -236,7 +236,7 @@ public class EntityUtils {
                 }
             }
 
-            if(wasSneaking) {
+            if (wasSneaking) {
                 MINECRAFT.getNetHandler().addToSendQueue(new C0BPacketEntityAction(MINECRAFT.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
             }
 
@@ -244,7 +244,7 @@ public class EntityUtils {
             count++;
         }
 
-        if(wasSneaking) {
+        if (wasSneaking) {
             MINECRAFT.getNetHandler().addToSendQueue(new C0BPacketEntityAction(MINECRAFT.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
         }
 

@@ -1,6 +1,5 @@
 package pw.latematt.xiv.mod.mods.misc;
 
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C00PacketKeepAlive;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.timer.Timer;
@@ -8,44 +7,22 @@ import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.ClampedValue;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 /**
  * @author Matthew
  */
 public class PingSpoof extends Mod implements Listener<SendPacketEvent>, CommandHandler {
-    private final Timer timer = new Timer();
     private final ClampedValue<Long> delay = new ClampedValue<>("pingspoof_delay", 2000L, 100L, 20000L);
-    private final List<C00PacketKeepAlive> packets = new CopyOnWriteArrayList<>();
-    private final Listener motionUpdateListener;
-
+    private final Timer timer = new Timer();
 
     public PingSpoof() {
         super("PingSpoof", ModType.MISCELLANEOUS, Keyboard.KEY_NONE, 0xFF8B78E7);
         Command.newCommand().cmd("pingspoof").description("Base command for the PingSpoof mod.").aliases("pspoof", "ps").arguments("<action>").handler(this).build();
-
-        motionUpdateListener = new Listener<MotionUpdateEvent>() {
-            @Override
-            public void onEventCalled(MotionUpdateEvent event) {
-                if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (timer.hasReached(delay.getValue())) {
-                        for (C00PacketKeepAlive packet : packets) {
-                            mc.getNetHandler().getNetworkManager().sendPacket(packet);
-                            packets.remove(packet);
-                        }
-                        timer.reset();
-                    }
-                }
-            }
-        };
     }
 
     @Override
@@ -53,8 +30,10 @@ public class PingSpoof extends Mod implements Listener<SendPacketEvent>, Command
         if (!(event.getPacket() instanceof C00PacketKeepAlive))
             return;
 
-        packets.add((C00PacketKeepAlive) event.getPacket());
-        event.setCancelled(true);
+        if (!timer.hasReached(delay.getValue()))
+            event.setCancelled(true);
+        else
+            timer.reset();
     }
 
     @Override
@@ -98,15 +77,11 @@ public class PingSpoof extends Mod implements Listener<SendPacketEvent>, Command
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this, motionUpdateListener);
+        XIV.getInstance().getListenerManager().add(this);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this, motionUpdateListener);
-        for (Packet packet : packets) {
-            mc.getNetHandler().addToSendQueue(packet);
-            packets.remove(packet);
-        }
+        XIV.getInstance().getListenerManager().remove(this);
     }
 }

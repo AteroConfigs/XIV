@@ -27,8 +27,7 @@ public class SmoothAimbot extends Mod implements Listener<MotionUpdateEvent>, Co
     private final Value<Boolean> pitch = new Value<>("smoothaimbot_pitch", true);
 
     public SmoothAimbot() {
-        super("SmoothAimbot", ModType.COMBAT, Keyboard.KEY_NONE);
-
+        super("SmoothAimbot", ModType.COMBAT, Keyboard.KEY_NONE, 0xFFEA5A6F);
         Command.newCommand().cmd("smoothaimbot").description("Base command for the SmoothAimbot mod.").arguments("<action>").aliases("sa").handler(this).build();
     }
 

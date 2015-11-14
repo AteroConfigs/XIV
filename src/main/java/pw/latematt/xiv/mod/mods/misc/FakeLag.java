@@ -21,10 +21,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Matthew
  */
 public class FakeLag extends Mod implements Listener<SendPacketEvent>, CommandHandler {
-    private final Timer timer = new Timer();
-    private final ClampedValue<Long> delay = new ClampedValue<>("fakelag_delay", 2000L, 100L, 20000L);
+    private final ClampedValue<Long> delay = new ClampedValue<>("fakelag_delay", 1000L, 100L, 20000L);
     private final List<Packet> packets = new CopyOnWriteArrayList<>();
     private final Listener motionUpdateListener;
+    private final Timer timer = new Timer();
 
     public FakeLag() {
         super("FakeLag", ModType.MISCELLANEOUS, Keyboard.KEY_NONE, 0xFF0B4556);

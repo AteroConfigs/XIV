@@ -56,10 +56,7 @@ public class KillAura extends Mod implements CommandHandler {
     public final Value<Boolean> autoBlock = new Value<>("killaura_auto_block", false);
     public final Value<Boolean> weaponOnly = new Value<>("killaura_weapon_only", false);
     private final Random random = new Random();
-    private final Singular singular = new Singular(this);
-    private final Switch aSwitch = new Switch(this);
-    private final Multi multi = new Multi(this);
-    private final Value<AuraMode> mode = new Value<>("killaura_mode", singular);
+    private final Value<AuraMode> mode = new Value<>("killaura_mode", new Singular(this));
 
     public KillAura() {
         super("Kill Aura", ModType.COMBAT, Keyboard.KEY_R, 0xFFC6172B);
@@ -146,10 +143,9 @@ public class KillAura extends Mod implements CommandHandler {
             return false;
         // 85.136.70.107
         if (entity instanceof EntityPlayer) {
-            if (!friends.getValue() && XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName()))
+            if (!friends.getValue() && XIV.getInstance().getFriendManager().isFriend(entity.getName()))
                 return false;
-
-            if (!admins.getValue() && XIV.getInstance().getAdminManager().isAdmin(entity.getCommandSenderEntity().getName()))
+            if (!admins.getValue() && XIV.getInstance().getAdminManager().isAdmin(entity.getName()))
                 return false;
 
             return players.getValue();
@@ -478,15 +474,15 @@ public class KillAura extends Mod implements CommandHandler {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
                             case "singular":
-                                this.mode.setValue(singular);
+                                this.mode.setValue(new Singular(this));
                                 ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
                                 break;
                             case "switch":
-                                this.mode.setValue(aSwitch);
+                                this.mode.setValue(new Switch(this));
                                 ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
                                 break;
                             case "multi":
-                                this.mode.setValue(multi);
+                                this.mode.setValue(new Multi(this));
                                 ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
                                 break;
                             case "-d":
@@ -503,7 +499,7 @@ public class KillAura extends Mod implements CommandHandler {
                     }
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, randomdelay, aps, range, fov, tickstowait players, mobs, animals, invisible, team, silent, autosword, autoblock, weapononly, mode");
+                    ChatLogger.print("Invalid action, valid: delay, randomdelay, attackspersecond, range, fov, tickstowait, players, mobs, animals, invisible, team, silent, autosword, autoblock, weapononly, mode");
                     break;
             }
         } else {

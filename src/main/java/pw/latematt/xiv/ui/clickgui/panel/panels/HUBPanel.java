@@ -9,8 +9,7 @@ import java.util.ArrayList;
  */
 public class HUBPanel extends Panel {
     public HUBPanel(float x, float y) {
-        super("HUB", new ArrayList<>(), x, y, 20, 10);
-        this.setOpen(false);
+        super("HUB", new ArrayList<>(), x, y, 20, 10, true);
 
         addPanelElements();
     }

@@ -100,7 +100,7 @@ public class Triggerbot extends Mod implements Listener<MotionUpdateEvent>, Comm
         if (!team.getValue() && entity.getTeam() != null && entity.getTeam().isSameTeam(mc.thePlayer.getTeam()))
             return false;
         if (entity instanceof EntityPlayer) {
-            return players.getValue() && !XIV.getInstance().getFriendManager().isFriend(entity.getCommandSenderEntity().getName());
+            return players.getValue() && !XIV.getInstance().getFriendManager().isFriend(entity.getName());
         } else if (entity instanceof IAnimals && !(entity instanceof IMob)) {
             if (entity instanceof EntityHorse) {
                 EntityHorse horse = (EntityHorse) entity;

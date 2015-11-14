@@ -129,7 +129,7 @@ public class AutoHeal extends Mod implements CommandHandler {
     }
 
     private boolean teammateNeedsToHeal() {
-        return mc.theWorld.playerEntities.stream().filter(player -> mc.thePlayer.isOnSameTeam(player)).filter(player -> player.getHealth() <= health.getValue()).findAny().isPresent();
+        return mc.theWorld.playerEntities.stream().filter(player -> mc.thePlayer.isOnSameTeam(player) || XIV.getInstance().getFriendManager().isFriend(player.getName())).filter(player -> player.getHealth() <= health.getValue()).findAny().isPresent();
     }
 
     private boolean canSafelyThrowPot() {
@@ -295,6 +295,7 @@ public class AutoHeal extends Mod implements CommandHandler {
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(sendPacketListener, readPacketListener, motionUpdateListener);
+        healing = false;
     }
 
     private enum Mode {

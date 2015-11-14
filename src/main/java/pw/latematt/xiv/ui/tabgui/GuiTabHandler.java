@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 public class GuiTabHandler implements Listener<KeyPressEvent> {
     private final Minecraft mc = Minecraft.getMinecraft();
-    private int colourBody = 0x95000400;
+    private int colourBody = 0x950C1A26;
     private int colourBox = 0x804DB3FF;
     private int guiHeight;
     private int guiWidth;
@@ -27,7 +27,6 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
     private int selectedTab = 0;
     private int tabHeight = 12;
     private final ArrayList<GuiTab> tabs = new ArrayList<>();
-
     private int transition = 0;
 
     public void setup() {

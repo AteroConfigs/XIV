@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class ModulePanel extends Panel {
     public ModulePanel(ModType type, float x, float y) {
-        super(type.getName(), new ArrayList<>(), x, y, 20, 10, false);
+        super(type.getName(), new ArrayList<>(), x, y, 20, 10);
 
         addModuleElements(type);
     }

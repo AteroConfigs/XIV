@@ -1,7 +1,6 @@
 package pw.latematt.xiv.mod.mods.movement;
 
 import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -74,7 +73,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
             @Override
             public void onEventCalled(Render3DEvent event) {
                 if (mc.objectMouseOver != null && mc.objectMouseOver.func_178782_a() != null && canDraw) {
-                    for(float offset = 15.0F; offset > -5.0F; offset--) {
+                    for (float offset = 15.0F; offset > -5.0F; offset--) {
                         double[] mouseOverPos = new double[]{mc.objectMouseOver.func_178782_a().getX(), mc.objectMouseOver.func_178782_a().getY() + offset, mc.objectMouseOver.func_178782_a().getZ()};
 
                         BlockPos blockBelowPos = new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]);
@@ -86,16 +85,16 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
                             drawNametags(blockBelow, new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]));
                             RenderUtils.endGl();
 
-                            if(mc.inGameHasFocus) {
+                            if (mc.inGameHasFocus) {
                                 teleportPosition = blockBelowPos;
                                 break;
-                            }else{
+                            } else {
                                 teleportPosition = null;
                             }
                         }
                     }
-                }else if (mc.objectMouseOver != null && mc.objectMouseOver.entityHit != null) {
-                    for(float offset = 15.0F; offset > -5.0F; offset--) {
+                } else if (mc.objectMouseOver != null && mc.objectMouseOver.entityHit != null) {
+                    for (float offset = 15.0F; offset > -5.0F; offset--) {
                         double[] mouseOverPos = new double[]{mc.objectMouseOver.entityHit.posX, mc.objectMouseOver.entityHit.posY + offset, mc.objectMouseOver.entityHit.posZ};
 
                         BlockPos blockBelowPos = new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]);
@@ -107,10 +106,10 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
                             drawNametags(blockBelow, new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]));
                             RenderUtils.endGl();
 
-                            if(mc.inGameHasFocus) {
+                            if (mc.inGameHasFocus) {
                                 teleportPosition = blockBelowPos;
                                 break;
-                            }else{
+                            } else {
                                 teleportPosition = null;
                             }
                         }
@@ -147,7 +146,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
 
         if (block instanceof BlockSlab && !((BlockSlab) block).isDouble()) {
             offset -= 0.5F;
-        }else if (block instanceof BlockEndPortalFrame) {
+        } else if (block instanceof BlockEndPortalFrame) {
             offset -= 0.2F;
         } else if (block instanceof BlockBed) {
             offset -= 0.44F;

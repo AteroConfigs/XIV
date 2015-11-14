@@ -107,7 +107,7 @@ public class CommandManager extends ListManager<Command> {
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", damageString));
                         }
-                    }else if(arguments.length > 1) {
+                    } else if (arguments.length > 1) {
                         EntityUtils.damagePlayer(1);
                     }
                 }).build();
