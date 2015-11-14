@@ -2,8 +2,15 @@ package pw.latematt.xiv.ui.managers.alt;
 
 import net.minecraft.client.gui.*;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.Display;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.file.XIVFile;
 
+import javax.swing.*;
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
     private GuiScreen parent;
-    private AltSlot slot;
+    private static AltSlot slot;
 
     public GuiTextField username, keyword, search;
     public GuiPasswordField password;
@@ -57,8 +64,10 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        this.slot = new AltSlot(this, mc, width, height, 25, height - 98, 36);
-        this.slot.registerScrollButtons(7, 8);
+        if (this.slot == null) {
+            this.slot = new AltSlot(this, mc, width, height, 25, height - 98, 36);
+            this.slot.registerScrollButtons(7, 8);
+        }
 
         this.buttonList.clear();
         this.buttonList.add(new GuiButton(0, width / 2 - 100, height - 26, 200, 20, "Cancel"));
@@ -68,7 +77,7 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
         this.buttonList.add(new GuiButton(2, width / 2 - 100, height - 92, 98, 20, "Add"));
         this.buttonList.add(new GuiButton(3, width / 2 + 2, height - 92, 98, 20, "Remove"));
 
-        this.buttonList.add(new GuiButton(4, width / 2 - 51, height - 48, 98, 20, "Random"));
+        this.buttonList.add(new GuiButton(4, width / 2 - 100, height - 48, 98, 20, "Random"));
 
         this.buttonList.add(new GuiButton(5, width - 28, height - 86, 20, 20, "+"));
 
@@ -76,6 +85,7 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
         this.buttonList.add(new GuiButton(7, 7 + (153 / 2), height - 26, (153 / 2) - 2, 20, "Set Current"));
 
         this.buttonList.add(new GuiButton(8, width / 2 - 100, height - 70, 98, 20, "Edit"));
+        this.buttonList.add(new GuiButton(9, width / 2 + 2, height - 48, 98, 20, "Import Alts"));
 
         this.username = new GuiTextField(0, mc.fontRendererObj, 8, height - 86, 150, 20);
         this.username.setVisible(true);
@@ -141,6 +151,51 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
 
                 username.setText(current.getUsername());
                 password.setText(current.getPassword());
+            } else if (button.id == 9) {
+                Thread fileFindThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JFileChooser chooser = new JFileChooser();
+                        chooser.setDialogTitle("XIV Alt Finder");
+                        chooser.setVisible(true);
+                        chooser.setMultiSelectionEnabled(false);
+
+                        File foundFile = null;
+
+                        int returnValue = chooser.showOpenDialog(null);
+
+                        if (returnValue == JFileChooser.APPROVE_OPTION) {
+                            foundFile = chooser.getSelectedFile();
+                        }
+
+                        if (foundFile != null) {
+                            int lastSize = getAccounts().size();
+
+                            try {
+                                BufferedReader reader = new BufferedReader(new FileReader(foundFile));
+                                String line;
+                                while ((line = reader.readLine()) != null) {
+                                    String[] account = line.split(":");
+
+                                    if (account.length > 1) {
+                                        if (account.length > 2) {
+                                            XIV.getInstance().getAltManager().add(account[0], account[1], account[2]);
+                                        } else {
+                                            XIV.getInstance().getAltManager().add(account[0], account[1]);
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            if (getAccounts().size() > lastSize) {
+                                slot.setSelected(lastSize);
+                            }
+                        }
+                    }
+                });
+                fileFindThread.start();
             }
         }
     }
@@ -206,6 +261,18 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == Keyboard.KEY_ESCAPE) {
             mc.displayGuiScreen(parent);
+        } else if (keyCode == Keyboard.KEY_UP) {
+            if(this.slot.getAlt(this.slot.getSelected() - 1) != null) {
+                this.slot.setSelected(this.slot.getSelected() - 1);
+            }
+        } else if (keyCode == Keyboard.KEY_DOWN) {
+            if(this.slot.getAlt(this.slot.getSelected() + 1) != null) {
+                this.slot.setSelected(this.slot.getSelected() + 1);
+            }
+        } else if (keyCode == Keyboard.KEY_DELETE) {
+            if(this.slot.getAlt() != null) {
+                this.actionPerformed(this.buttonList.get(3));
+            }
         }
 
         if (keyCode == Keyboard.KEY_TAB) {
@@ -236,6 +303,8 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
                 this.actionPerformed(buttonList.get(5));
             } else if (!username.getText().equals("") && !password.getText().equals("")) {
                 this.actionPerformed(buttonList.get(2));
+            } else if(this.slot.getAlt() != null) {
+                this.actionPerformed(buttonList.get(1));
             }
         }
     }

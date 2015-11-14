@@ -54,6 +54,6 @@ public abstract class Element {
     public abstract void onGuiClosed();
 
     public boolean isOverElement(int mouseX, int mouseY) {
-        return mouseX > getX() && mouseY > getY() && mouseX < getX() + getWidth() && mouseY < getY() + XIV.getInstance().getGuiClick().getTheme().getElementHeight();
+        return mouseX > getX() && mouseY > getY() && mouseX < getX() + getWidth() && mouseY < getY() + getHeight();
     }
 }

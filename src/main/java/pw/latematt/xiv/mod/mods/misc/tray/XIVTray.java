@@ -59,6 +59,7 @@ public class XIVTray {
     }
 
     public void load() throws AWTException {
+        SystemTray.getSystemTray().remove(icon);
         SystemTray.getSystemTray().add(icon);
     }
 
