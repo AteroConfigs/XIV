@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C0BPacketEntityAction;
 import net.minecraft.util.MathHelper;
 
 import java.util.Iterator;
@@ -159,7 +160,15 @@ public class EntityUtils {
         }
     }
 
+    /**
+     * @author Klintos
+     */
     public static double[] teleportToPosition(double[] startPosition, double[] endPosition, double setOffset, double slack, boolean extendOffset, boolean onGround) {
+        boolean wasSneaking = false;
+
+        if(MINECRAFT.thePlayer.isSneaking())
+            wasSneaking = true;
+
         double startX = startPosition[0];
         double startY = startPosition[1];
         double startZ = startPosition[2];
@@ -227,8 +236,16 @@ public class EntityUtils {
                 }
             }
 
+            if(wasSneaking) {
+                MINECRAFT.getNetHandler().addToSendQueue(new C0BPacketEntityAction(MINECRAFT.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
+            }
+
             MINECRAFT.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(startX, startY, startZ, onGround));
             count++;
+        }
+
+        if(wasSneaking) {
+            MINECRAFT.getNetHandler().addToSendQueue(new C0BPacketEntityAction(MINECRAFT.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
         }
 
         return new double[]{startX, startY, startZ};
