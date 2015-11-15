@@ -53,6 +53,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
             return;
         if (event.getPacket() instanceof C03PacketPlayer) {
             C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
+
             if (isSafe())
                 fallDist += mc.thePlayer.fallDistance;
 

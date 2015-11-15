@@ -209,7 +209,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
         if (this.func_175160_A())
         {
             double var3 = this.posX - this.field_175172_bI;
-            double var5 = this.getEntityBoundingBox().minY - this.field_175166_bJ;
+            double var5 = this.posY - this.field_175166_bJ;
             double var7 = this.posZ - this.field_175167_bK;
             double var9 = (double)(this.rotationYaw - this.field_175164_bL);
             double var11 = (double)(this.rotationPitch - this.field_175165_bM);
@@ -220,11 +220,11 @@ public class EntityPlayerSP extends AbstractClientPlayer
             {
                 if (var13 && var14)
                 {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.posX, this.getEntityBoundingBox().minY, this.posZ, this.rotationYaw, this.rotationPitch, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch, this.onGround));
                 }
                 else if (var13)
                 {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(this.posX, this.getEntityBoundingBox().minY, this.posZ, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(this.posX, this.posY, this.posZ, this.onGround));
                 }
                 else if (var14)
                 {
@@ -246,7 +246,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
             if (var13)
             {
                 this.field_175172_bI = this.posX;
-                this.field_175166_bJ = this.getEntityBoundingBox().minY;
+                this.field_175166_bJ = this.posY;
                 this.field_175167_bK = this.posZ;
                 this.field_175168_bP = 0;
             }

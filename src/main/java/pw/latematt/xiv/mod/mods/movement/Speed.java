@@ -161,7 +161,7 @@ public class Speed extends Mod implements CommandHandler {
                                         double difference = 0.66D * (lastDist - 0.299D);
                                         boostSpeed = lastDist - difference;
                                         if (!boostCollided)
-                                            event.setY(event.getY() + 0.017F);
+                                            event.setY(event.getY() + 0.017);
                                     }
                                     if (ticks >= 2)
                                         ticks = 0;
