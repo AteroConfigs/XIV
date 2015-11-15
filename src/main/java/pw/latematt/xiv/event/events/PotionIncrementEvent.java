@@ -6,16 +6,18 @@ import pw.latematt.xiv.event.Event;
 /**
  * @author Matthew
  */
-public class PotionIncrementEvent extends Event implements Cancellable {
-    private boolean cancelled;
+public class PotionIncrementEvent extends Event {
+    private int increment;
 
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
+    public PotionIncrementEvent(int increment) {
+        this.increment = increment;
     }
 
-    @Override
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
+    public int getIncrement() {
+        return increment;
+    }
+
+    public void setIncrement(int increment) {
+        this.increment = increment;
     }
 }

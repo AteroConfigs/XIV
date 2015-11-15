@@ -31,7 +31,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
     private final Value<Boolean> fastIce = new Value<>("speed_fast_ice", true);
     private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.CAPSAR);
     private final Listener motionUpdateListener, motionListener, motionFlyingListener;
-    private boolean nextTick, hasJumped, boostCollided, isAttacking;
+    private boolean nextTick, hasJumped, boostCollided, isAttacking, shouldOffset;
     private double boostSpeed;
     private int ticks;
 
@@ -144,6 +144,8 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                    shouldOffset = false;
+
                     double speed, slow;
                     double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
                     boolean groundCheck = mc.thePlayer.onGround && yDifference == 0.0D;
@@ -174,8 +176,10 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
 
                                             double difference = 0.6825D * (lastDist - 0.299D);
                                             boostSpeed = lastDist - difference;
-                                            if (!boostCollided)
+                                            if (!boostCollided) {
                                                 event.setY(event.getY() + 0.016);
+                                                shouldOffset = true;
+                                            }
 
                                             mc.getTimer().timerSpeed = 1.05F;
                                         default:
@@ -306,16 +310,20 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
         };
     }
 
+    public boolean shouldOffset() {
+        return shouldOffset;
+    }
+
     private boolean canSpeed() {
         return canSpeed(true);
     }
 
     private boolean canSpeed(boolean groundCheck) {
         Step step = (Step) XIV.getInstance().getModManager().find("step");
-        boolean editingPackets = step != null && step.isEditingPackets();
+        boolean editingPackets = step != null && step.isEnabled() && step.isEditingPackets();
 
         List collidingBoundingBoxes = mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().expand(0.5D, 0.0D, 0.5D));
-        boolean blockCheck = !editingPackets && collidingBoundingBoxes.isEmpty();
+        boolean blockCheck = step != null && (!step.isEnabled() || step.isEnabled() && collidingBoundingBoxes.isEmpty()) && !editingPackets;
 
         boolean moving = mc.thePlayer.movementInput.moveForward != 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
@@ -421,6 +429,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
         XIV.getInstance().getListenerManager().remove(this, motionUpdateListener, motionListener, motionFlyingListener);
         Blocks.ice.slipperiness = 0.98F;
         Blocks.packed_ice.slipperiness = 0.98F;
+        shouldOffset = false;
 
         mc.getTimer().timerSpeed = 1.0F;
     }
@@ -430,10 +439,12 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
         Criticals criticals = (Criticals) XIV.getInstance().getModManager().find("criticals");
 
         if(criticals != null && criticals.isEnabled() && this.currentMode.getValue() == Mode.BOOST) {
-            boostSpeed = 0.29316D;
-            mc.getTimer().timerSpeed = 1.0F;
-            ticks = -2;
-            isAttacking = true;
+//            if(!criticals.isGay()) {
+                boostSpeed = 0.29316D;
+                mc.getTimer().timerSpeed = 1.0F;
+                ticks = -2;
+                isAttacking = true;
+//            }
         }
     }
 

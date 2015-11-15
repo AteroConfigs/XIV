@@ -159,6 +159,11 @@ public abstract class RendererLivingEntity extends Render {
                 ESP esp = (ESP) XIV.getInstance().getModManager().find("esp");
 
                 if (esp != null && esp.isEnabled() && esp.outline.getValue() && esp.isValidEntity(entity) && !XIV.getInstance().getListenerManager().isCancelled()) {
+                    GlStateManager.depthMask(true);
+                    if (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).func_175149_v()) {
+                        this.func_177093_a(entity, var17, var16, p_76986_9_, var14, var12, var20, 0.0625F);
+                    }
+
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
                     esp.renderOne();
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
@@ -168,19 +173,18 @@ public abstract class RendererLivingEntity extends Render {
                     esp.renderFour(entity);
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
                     esp.renderFive();
-
                 } else {
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
+
+                    GlStateManager.depthMask(true);
+
+                    if (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).func_175149_v()) {
+                        this.func_177093_a(entity, var17, var16, p_76986_9_, var14, var12, var20, 0.0625F);
+                    }
                 }
 
                 if (var18) {
                     this.func_177091_f();
-                }
-
-                GlStateManager.depthMask(true);
-
-                if (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).func_175149_v()) {
-                    this.func_177093_a(entity, var17, var16, p_76986_9_, var14, var12, var20, 0.0625F);
                 }
             }
 

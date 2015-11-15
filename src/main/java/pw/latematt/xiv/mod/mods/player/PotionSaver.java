@@ -22,7 +22,7 @@ public class PotionSaver extends Mod implements Listener<SendPacketEvent> {
             @Override
             public void onEventCalled(PotionIncrementEvent event) {
                 if (canSave())
-                    event.setCancelled(true);
+                    event.setIncrement(0);
             }
         };
     }
@@ -39,7 +39,8 @@ public class PotionSaver extends Mod implements Listener<SendPacketEvent> {
         boolean usingItem = mc.thePlayer.isUsingItem();
         boolean swinging = mc.thePlayer.isSwingInProgress;
         boolean moving = mc.thePlayer.motionX != 0 || !mc.thePlayer.isCollidedVertically || mc.gameSettings.keyBindJump.getIsKeyPressed() || mc.thePlayer.motionZ != 0;
-        return !usingItem && !swinging && !moving;
+        boolean hasPotions = mc.thePlayer.getActivePotionEffects().size() > 0;
+        return !usingItem && !swinging && !moving && hasPotions;
     }
 
     @Override

@@ -135,12 +135,7 @@ public class PotionEffect
                 this.performEffect(entityIn);
             }
 
-            PotionIncrementEvent event = new PotionIncrementEvent();
-            XIV.getInstance().getListenerManager().call(event);
-
-            if(!event.isCancelled()) {
-                this.deincrementDuration();
-            }
+            this.deincrementDuration();
         }
 
         return this.duration > 0;
@@ -148,7 +143,12 @@ public class PotionEffect
 
     private int deincrementDuration()
     {
-        return --this.duration;
+        PotionIncrementEvent event = new PotionIncrementEvent(1);
+        XIV.getInstance().getListenerManager().call(event);
+
+        this.duration -= event.getIncrement();
+
+        return this.duration;
     }
 
     public void performEffect(EntityLivingBase entityIn)

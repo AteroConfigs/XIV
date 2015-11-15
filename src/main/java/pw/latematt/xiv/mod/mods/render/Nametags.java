@@ -113,8 +113,11 @@ public class Nametags extends Mod implements CommandHandler {
         else
             healthColor = "4";
 
+        String healthDisplay = decimalFormat.format(Math.floor((health + (double)0.5F / 2) / 0.5F) * 0.5F);
+        String maxHealthDisplay = decimalFormat.format(Math.floor((entity.getMaxHealth() + (double)0.5F / 2) / 0.5F) * 0.5F);
+
         if (this.health.getValue())
-            entityName = String.format("%s \247%s%s", entityName, healthColor, decimalFormat.format(health));
+            entityName = String.format("%s \247%s%s", entityName, healthColor, healthDisplay);
 
         float distance = mc.thePlayer.getDistanceToEntity(entity);
         float var13 = (distance / 5 <= 2 ? 2.0F : distance / 5) * RenderUtils.getNametagSize().getValue();
@@ -158,7 +161,8 @@ public class Nametags extends Mod implements CommandHandler {
         worldRenderer.addVertex(var18 + 2, -2 + var17, 0.0D);
         tessellator.draw();
         GlStateManager.func_179098_w();
-        mc.fontRendererObj.drawStringWithShadow(entityName, -var18, var17, getNametagColor(entity));
+
+        mc.fontRendererObj.func_175065_a(entityName, -var18, var17, getNametagColor(entity), true);
         if (armor.getValue() && entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
             List<ItemStack> items = new ArrayList<>();
