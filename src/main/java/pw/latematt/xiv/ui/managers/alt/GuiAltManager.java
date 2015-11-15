@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
     private GuiScreen parent;
-    private static AltSlot slot;
+    private AltSlot slot;
 
     public GuiTextField username, keyword, search;
     public GuiPasswordField password;
