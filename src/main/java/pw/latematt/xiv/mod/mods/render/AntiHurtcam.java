@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Matthew
+ * @author Rederpz
  */
 public class AntiHurtcam extends Mod implements Listener<HurtRenderEvent> {
     public AntiHurtcam() {
