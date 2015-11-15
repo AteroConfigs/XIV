@@ -177,7 +177,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                                             double difference = 0.6825D * (lastDist - 0.299D);
                                             boostSpeed = lastDist - difference;
                                             if (!boostCollided) {
-                                                event.setY(event.getY() + 0.016);
+                                                event.setY(event.getY() + 0.017);
                                                 shouldOffset = true;
                                             }
 
