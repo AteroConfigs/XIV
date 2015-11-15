@@ -78,4 +78,12 @@ public class AltSlot extends GuiSlot {
 
         return null;
     }
+
+    public void setBounds(int width, int height, int top, int bottom, int right) {
+        this.width = width;
+        this.height = height;
+        this.top = top;
+        this.bottom = bottom;
+        this.right = right;
+    }
 }

@@ -79,10 +79,7 @@ import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Project;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.event.events.BlockReachEvent;
-import pw.latematt.xiv.event.events.PotionRenderEvent;
-import pw.latematt.xiv.event.events.Render3DEvent;
-import pw.latematt.xiv.event.events.WorldBobbingEvent;
+import pw.latematt.xiv.event.events.*;
 
 public class EntityRenderer implements IResourceManagerReloadListener
 {
@@ -628,7 +625,10 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
     private void hurtCameraEffect(float p_78482_1_)
     {
-        if (this.mc.func_175606_aa() instanceof EntityLivingBase)
+        HurtRenderEvent event = new HurtRenderEvent();
+        XIV.getInstance().getListenerManager().call(event);
+
+        if (this.mc.func_175606_aa() instanceof EntityLivingBase && !event.isCancelled())
         {
             EntityLivingBase var2 = (EntityLivingBase)this.mc.func_175606_aa();
             float var3 = (float)var2.hurtTime - p_78482_1_;

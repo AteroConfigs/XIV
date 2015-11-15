@@ -45,6 +45,7 @@ public class ModManager extends ListManager<Mod> {
 
         contents.add(new AntiDrown());
         contents.add(new AntiHunger());
+        contents.add(new AntiHurtcam());
         contents.add(new AntiSuffocate());
         contents.add(new AntiTabComplete());
         contents.add(new ArmorBreaker());
