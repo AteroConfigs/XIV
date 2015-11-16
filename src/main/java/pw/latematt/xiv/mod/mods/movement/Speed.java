@@ -47,7 +47,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                     return;
 
                 /* credits to aristhena */
-                if (event.getState() == MotionFlyingEvent.State.PRE && currentMode.getValue() == Mode.BOOST) {
+                if (event.getState() == MotionFlyingEvent.State.PRE && canSpeed(mc.thePlayer.onGround) &&  currentMode.getValue() == Mode.BOOST) {
                     event.setCancelled(true);
                     if (mc.thePlayer.isCollidedVertically) {
                         float yaw = mc.thePlayer.rotationYaw;
@@ -103,7 +103,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                             boostCollided = false;
                         }
 
-                        if (event.getForward() == 0.0F && event.getStrafe() == 0.0F) {
+                        if (event.getForward() == 0.0F && mc.thePlayer.onGround && event.getStrafe() == 0.0F) {
                             mc.thePlayer.motionX = 0.0D;
                             mc.thePlayer.motionZ = 0.0D;
                         }
@@ -148,6 +148,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
 
                     double speed, slow;
                     double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
+
                     boolean groundCheck = mc.thePlayer.onGround && yDifference == 0.0D;
                     boolean strafe = mc.thePlayer.moveStrafing != 0.0F;
                     switch (currentMode.getValue()) {
@@ -156,17 +157,17 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                             if (!mc.thePlayer.onGround)
                                 ticks = -5;
 
-                            if (canSpeed() && !isAttacking) {
+                            if (canSpeed(mc.thePlayer.onGround) && !isAttacking) {
                                 if (!mc.thePlayer.isCollidedVertically) {
                                     boostSpeed = 0.29316D;
                                     mc.getTimer().timerSpeed = 1.0F;
                                 } else {
                                     switch(ticks) {
                                         case 0:
-                                            mc.getTimer().timerSpeed = 1.05F;
+                                            mc.getTimer().timerSpeed = 1.0F;
                                             break;
                                         case 1:
-                                            boostSpeed *= 2.149999D;
+                                            boostSpeed *= 2.1499999D;
                                             mc.getTimer().timerSpeed = 1.0F;
                                             break;
                                         case 2:
@@ -174,14 +175,14 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                                             double zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ;
                                             double lastDist = Math.sqrt(xDist * xDist + zDist * zDist);
 
-                                            double difference = 0.6825D * (lastDist - 0.299D);
+                                            double difference = 0.656D * (lastDist - 0.299D);
                                             boostSpeed = lastDist - difference;
                                             if (!boostCollided) {
                                                 event.setY(event.getY() + 0.017);
                                                 shouldOffset = true;
                                             }
 
-                                            mc.getTimer().timerSpeed = 1.05F;
+                                            mc.getTimer().timerSpeed = 1.175F;
                                         default:
                                             break;
                                     }
@@ -192,7 +193,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                             } else if(!isAttacking) {
                                 boostSpeed = 0.29316D;
                                 mc.getTimer().timerSpeed = 1.0F;
-                                ticks = 0;
+                                ticks = -1;
                             }
                             ++ticks;
 
@@ -322,7 +323,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
         Step step = (Step) XIV.getInstance().getModManager().find("step");
         boolean editingPackets = step != null && step.isEnabled() && step.isEditingPackets();
 
-        List collidingBoundingBoxes = mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().expand(0.5D, 0.0D, 0.5D));
+        List collidingBoundingBoxes = mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().expand(1.0D, 0.0D, 1.0D));
         boolean blockCheck = step != null && (!step.isEnabled() || step.isEnabled() && collidingBoundingBoxes.isEmpty()) && !editingPackets;
 
         boolean moving = mc.thePlayer.movementInput.moveForward != 0;
@@ -442,7 +443,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
 //            if(!criticals.isGay()) {
                 boostSpeed = 0.29316D;
                 mc.getTimer().timerSpeed = 1.0F;
-                ticks = -2;
+                ticks = -3;
                 isAttacking = true;
 //            }
         }

@@ -8,6 +8,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
+import pw.latematt.xiv.command.Command;
+import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.BlockAddBBEvent;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
@@ -15,21 +17,26 @@ import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.BlockUtils;
+import pw.latematt.xiv.utils.ChatLogger;
+import pw.latematt.xiv.value.Value;
 
 /**
  * @author Matthew
  */
-public class Jesus extends Mod {
+public class Jesus extends Mod implements CommandHandler {
+    private final Value<Boolean> dolphin = new Value<>("jesus_dolphin", false);
+
     private final Listener blockAddBBListener, motionUpdatesListener, sendPacketListener;
     private boolean nextTick, shouldJump;
 
     public Jesus() {
         super("Jesus", ModType.MOVEMENT, Keyboard.KEY_J, 0xFF56BFE3);
+        Command.newCommand().cmd("jesus").description("Base command for the Jesus mod.").arguments("<action>").handler(this).build();
 
         blockAddBBListener = new Listener<BlockAddBBEvent>() {
             @Override
             public void onEventCalled(BlockAddBBEvent event) {
-                if (event.getBlock() instanceof BlockLiquid && event.getBlock() != null && mc.theWorld != null && mc.thePlayer != null) {
+                if (event.getBlock() instanceof BlockLiquid && event.getBlock() != null && mc.theWorld != null && mc.thePlayer != null && !dolphin.getValue()) {
                     IBlockState state = mc.theWorld.getBlockState(event.getPos());
 
                     if (state != null) {
@@ -62,7 +69,7 @@ public class Jesus extends Mod {
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    if (BlockUtils.isOnLiquid(mc.thePlayer) && shouldJump) {
+                    if (BlockUtils.isOnLiquid(mc.thePlayer) && shouldJump && !dolphin.getValue()) {
                         nextTick = !nextTick;
                         if (nextTick) {
                             player.setY(player.getY() - 0.01);
@@ -82,5 +89,33 @@ public class Jesus extends Mod {
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(blockAddBBListener, motionUpdatesListener, sendPacketListener);
         nextTick = false;
+    }
+
+    @Override
+    public void onCommandRan(String message) {
+        String[] arguments = message.split(" ");
+        if (arguments.length >= 2) {
+            String action = arguments[1];
+            switch (action.toLowerCase()) {
+                case "bob":
+                case "dolphin":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            dolphin.setValue(dolphin.getDefault());
+                        } else {
+                            dolphin.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        dolphin.setValue(!dolphin.getValue());
+                    }
+                    ChatLogger.print(String.format("Jesus will %s bob in water.", (dolphin.getValue() ? "now" : "no longer")));
+                    break;
+                default:
+                    ChatLogger.print("Invalid action, valid: dolphin");
+                    break;
+            }
+        } else {
+            ChatLogger.print("Invalid arguments, valid: jesus <action>");
+        }
     }
 }

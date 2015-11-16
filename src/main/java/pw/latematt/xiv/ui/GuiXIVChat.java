@@ -19,10 +19,25 @@ import pw.latematt.xiv.utils.RenderUtils;
 import java.util.Iterator;
 
 public class GuiXIVChat extends GuiNewChat {
+    private int x, y, dragX, dragY;
+    private boolean dragging;
+
     private NahrFont font;
 
     public GuiXIVChat(Minecraft mcIn) {
         super(mcIn);
+    }
+
+    @Override
+    public void mouseClicked(int mouseX, int mouseY, int button) {
+        // TODO: drag chat
+    }
+
+    @Override
+    public void resetScroll() {
+        super.resetScroll();
+
+        this.dragging = false;
     }
 
     @Override
@@ -79,12 +94,12 @@ public class GuiXIVChat extends GuiNewChat {
                     }
                 } else if (getChatOpen()) {
                     height = -var2 * 9;
-                    RenderUtils.drawBorderedRect(0.0F, height - 8, getChatWidth() + 3.0F, height + 4.5, 0x60000000, 0x80000000);
-                    font.drawString("Chat", 1, height - 10, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
+                    RenderUtils.drawBorderedRect(0.0F + x, height - 8 + y, getChatWidth() + 3.0F + x, height + 4.5 + y, 0x60000000, 0x80000000);
+                    font.drawString("Chat", 1 + x, height - 10 + y, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
                 }
 
                 if (height != -1) {
-                    RenderUtils.drawBorderedRect(0.0F, height + 5, getChatWidth() + 3.0F, 9.0F, 0x60000000, 0x80000000);
+                    RenderUtils.drawBorderedRect(0.0F + x, height + 5 + y, getChatWidth() + 3.0F + x, 9.0F + y, 0x60000000, 0x80000000);
                 }
                 GlStateManager.translate(1, 8, 0);
 
@@ -116,7 +131,7 @@ public class GuiXIVChat extends GuiNewChat {
                             var17 = event.getString();
 
                             GlStateManager.enableBlend();
-                            font.drawString(var17, (float) var15, (float) (var16 - 14), NahrFont.FontType.SHADOW_THIN, 16777215 + (var14 << 24), (var14 << 24));
+                            font.drawString(var17, (float) var15 + x, (float) (var16 - 14) + y, NahrFont.FontType.SHADOW_THIN, 16777215 + (var14 << 24), (var14 << 24));
                             GlStateManager.disableAlpha();
                             GlStateManager.disableBlend();
                         }
@@ -154,8 +169,8 @@ public class GuiXIVChat extends GuiNewChat {
             float var5 = this.getChatScale();
             int var6 = p_146236_1_ / var4 - 3;
             int var7 = p_146236_2_ / var4 - 27;
-            var6 = MathHelper.floor_float((float) var6 / var5);
-            var7 = MathHelper.floor_float((float) var7 / var5);
+            var6 = MathHelper.floor_float((float) var6 / var5) + x;
+            var7 = MathHelper.floor_float((float) var7 / var5) + y;
 
             if (var6 >= 0 && var7 >= 0) {
                 int var8 = Math.min(this.getLineCount(), this.field_146253_i.size());

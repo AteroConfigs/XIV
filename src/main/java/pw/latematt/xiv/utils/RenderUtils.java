@@ -2,12 +2,14 @@ package pw.latematt.xiv.utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.opengl.GL11;
+import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
@@ -77,6 +79,91 @@ public class RenderUtils {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
+    }
+
+    public static void renderOne() {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glLineWidth(RenderUtils.getLineWidth().getValue() * 2);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+        GL11.glClearStencil(0xF);
+        GL11.glStencilFunc(GL11.GL_NEVER, 1, 0xF);
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
+    }
+
+    public static void renderTwo() {
+        GL11.glStencilFunc(GL11.GL_NEVER, 0, 0xF);
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
+    }
+
+    public static void renderThree() {
+        GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xF);
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
+    }
+
+    public static void renderFour(Minecraft mc, Entity renderEntity) {
+        float[] color = new float[]{0.0F, 0.9F, 0.0F};
+
+        if(renderEntity instanceof EntityLivingBase) {
+            EntityLivingBase entity = (EntityLivingBase) renderEntity;
+
+            final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
+            if (entity instanceof EntityPlayer && XIV.getInstance().getFriendManager().isFriend(entity.getName())) {
+                color = new float[]{0.3F, 0.7F, 1.0F};
+            } else if (entity instanceof EntityPlayer && XIV.getInstance().getAdminManager().isAdmin(entity.getName())) {
+                color = new float[]{1.0F, 0.0F, 1.0F};
+            } else if (entity.isInvisibleToPlayer(mc.thePlayer)) {
+                color = new float[]{1.0F, 0.9F, 0.0F};
+            } else if (entity.hurtTime > 0) {
+                color = new float[]{1.0F, 0.66F, 0.0F};
+            } else if (distance <= 3.9F) {
+                color = new float[]{0.9F, 0.0F, 0.0F};
+            }
+        }else{
+            Entity entity = renderEntity;
+
+            final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
+            if (entity.isInvisibleToPlayer(mc.thePlayer)) {
+                color = new float[]{1.0F, 0.9F, 0.0F};
+            } else if (distance <= 3.9F) {
+                color = new float[]{0.9F, 0.0F, 0.0F};
+            }
+        }
+        GlStateManager.color(color[0], color[1], color[2], 1F);
+
+        renderFour();
+    }
+
+    public static void renderFour() {
+        GL11.glDepthMask(false);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_POLYGON_OFFSET_LINE);
+        GL11.glPolygonOffset(1.0F, -2000000F);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+    }
+
+    public static void renderFive() {
+        GL11.glPolygonOffset(1.0F, 2000000F);
+        GL11.glDisable(GL11.GL_POLYGON_OFFSET_LINE);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(true);
+        GL11.glDisable(GL11.GL_STENCIL_TEST);
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_DONT_CARE);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glPopAttrib();
     }
 
     public static void drawLines(AxisAlignedBB bb) {

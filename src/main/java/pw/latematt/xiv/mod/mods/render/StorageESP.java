@@ -2,14 +2,14 @@ package pw.latematt.xiv.mod.mods.render;
 
 import com.sun.javafx.geom.Vec3d;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.*;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import org.lwjgl.opengl.GL11;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
@@ -37,6 +37,7 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
     public final Value<Boolean> mobSpawners = new Value<>("storage_esp_mob_spawners", false);
     public final Value<Boolean> enchantmentTables = new Value<>("storage_esp_enchantment_tables", false);
     public final Value<Boolean> boxes = new Value<>("storage_esp_boxes", true);
+    public final Value<Boolean> outline = new Value<>("storage_esp_outline", false);
     public final Value<Boolean> tracerLines = new Value<>("storage_esp_tracer_lines", false);
 
     public StorageESP() {
@@ -169,9 +170,33 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
             drawBoxes(bb, color);
         }
 
+        if (outline.getValue()) {
+            drawOutline(bb, color);
+        }
+
         if (tracerLines.getValue()) {
             drawTracerLines(minX, minY, minZ, maxX, maxY, maxZ, partialTicks, color);
         }
+    }
+
+    private void drawOutline(AxisAlignedBB bb, float[] color) {
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 0.0F);
+        RenderUtils.renderOne();
+        GlStateManager.color(color[0], color[1], color[2], 0.66F);
+        RenderUtils.drawFilledBox(bb);
+        RenderUtils.renderTwo();
+        GlStateManager.color(color[0], color[1], color[2], 0.66F);
+        RenderUtils.drawFilledBox(bb);
+        RenderUtils.renderThree();
+        GlStateManager.color(color[0], color[1], color[2], 0.66F);
+        RenderUtils.drawFilledBox(bb);
+        RenderUtils.renderFour();
+        GlStateManager.color(color[0], color[1], color[2], 0.66F);
+        RenderUtils.drawFilledBox(bb);
+        RenderUtils.renderFive();
+        GlStateManager.color(color[0], color[1], color[2], 0.66F);
+        RenderUtils.drawFilledBox(bb);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 0.0F);
     }
 
     private void drawBoxes(AxisAlignedBB bb, float[] color) {
@@ -335,6 +360,18 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
                         boxes.setValue(!boxes.getValue());
                     }
                     ChatLogger.print(String.format("StorageESP will %s render boxes.", boxes.getValue() ? "now" : "no longer"));
+                    break;
+                case "outline":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            outline.setValue(outline.getDefault());
+                        } else {
+                            outline.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        outline.setValue(!outline.getValue());
+                    }
+                    ChatLogger.print(String.format("StorageESP will %s render an outline.", outline.getValue() ? "now" : "no longer"));
                     break;
                 case "tracerlines":
                 case "tracers":

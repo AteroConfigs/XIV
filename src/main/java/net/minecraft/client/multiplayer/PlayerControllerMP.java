@@ -29,10 +29,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.event.events.AttackEntityEvent;
-import pw.latematt.xiv.event.events.BlockReachEvent;
-import pw.latematt.xiv.event.events.BreakingBlockEvent;
-import pw.latematt.xiv.event.events.ClickBlockEvent;
+import pw.latematt.xiv.event.events.*;
 
 public class PlayerControllerMP
 {
@@ -279,7 +276,10 @@ public class PlayerControllerMP
      */
     public void resetBlockRemoving()
     {
-        if (this.isHittingBlock)
+        ResetDamageEvent event = new ResetDamageEvent(!isHittingBlock);
+        XIV.getInstance().getListenerManager().call(event);
+
+        if (!event.isCancelled())
         {
             this.netClientHandler.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, this.field_178895_c, EnumFacing.DOWN));
             this.isHittingBlock = false;

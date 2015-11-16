@@ -23,6 +23,7 @@ import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.combat.aura.mode.AuraMode;
 import pw.latematt.xiv.mod.mods.combat.aura.mode.modes.Multi;
+import pw.latematt.xiv.mod.mods.combat.aura.mode.modes.SemiMulti;
 import pw.latematt.xiv.mod.mods.combat.aura.mode.modes.Singular;
 import pw.latematt.xiv.mod.mods.combat.aura.mode.modes.Switch;
 import pw.latematt.xiv.mod.mods.player.AutoHeal;
@@ -485,12 +486,16 @@ public class KillAura extends Mod implements CommandHandler {
                                 this.mode.setValue(new Multi(this));
                                 ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
                                 break;
+                            case "semimulti":
+                                this.mode.setValue(new SemiMulti(this));
+                                ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
+                                break;
                             case "-d":
                                 this.mode.setValue(this.mode.getDefault());
                                 ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: singular, switch, multi");
+                                ChatLogger.print("Invalid mode, valid: singular, switch, multi, semimulti");
                                 break;
                         }
                         setTag(this.mode.getValue().getName());

@@ -25,7 +25,7 @@ public class ModButton extends Element {
         this.elements = new ArrayList<>();
 
         for (Value val : XIV.getInstance().getValueManager().getContents()) {
-            if (val.getName().toLowerCase().startsWith(getMod().getName().toLowerCase())) {
+            if (val.getName().toLowerCase().startsWith(getMod().getName().toLowerCase() + "_")) {
                 if (!(val.getValue() instanceof Enum)) {
                     String actualName = val.getName().replaceAll(mod.getName().replaceAll(" ", "_"), "");
                     String prettyName = "";
