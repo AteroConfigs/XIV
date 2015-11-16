@@ -158,6 +158,8 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
             offset -= 0.875F;
         } else if (block instanceof BlockChest || block == Blocks.ender_chest) {
             offset -= 0.125F;
+        } else if (block instanceof BlockLilyPad) {
+            offset -= 0.95F;
         } else if (block == Blocks.snow_layer) {
             offset -= 0.875F;
             offset += 0.125F * (((Integer) state.getValue(BlockSnow.LAYERS_PROP)).intValue() - 1);
