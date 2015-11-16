@@ -90,21 +90,10 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                 boolean yDiffCheck = yDifference == 0.0D;
 
                 if (delay == 0 && yDiffCheck && event.canStep()) {
-                    mc.thePlayer.onGround = false;
-                    mc.thePlayer.isAirBorne = true;
                     editingPackets = true;
 
-                    double y = 0.0F, offset = 0.4015F;
-
-                    while (y < 1.0F) {
-                        mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + y, mc.thePlayer.posZ, false));
-
-                        y += offset;
-                        offset -= (0.165F * offset);
-
-                        if (offset < 0.3)
-                            offset = 0.3F;
-                    }
+                    mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.41, mc.thePlayer.posZ, true));
+                    mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.75, mc.thePlayer.posZ, true));
 
                     delay = 1;
                 } else {

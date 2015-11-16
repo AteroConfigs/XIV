@@ -73,7 +73,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
             @Override
             public void onEventCalled(Render3DEvent event) {
                 if (mc.objectMouseOver != null && mc.objectMouseOver.func_178782_a() != null && canDraw) {
-                    for (float offset = 15.0F; offset > -5.0F; offset--) {
+                    for (float offset = -2.0F; offset < 18.0F; offset++) {
                         double[] mouseOverPos = new double[]{mc.objectMouseOver.func_178782_a().getX(), mc.objectMouseOver.func_178782_a().getY() + offset, mc.objectMouseOver.func_178782_a().getZ()};
 
                         BlockPos blockBelowPos = new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]);
@@ -94,7 +94,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
                         }
                     }
                 } else if (mc.objectMouseOver != null && mc.objectMouseOver.entityHit != null) {
-                    for (float offset = 15.0F; offset > -5.0F; offset--) {
+                    for (float offset = -2.0F; offset < 18.0F; offset++) {
                         double[] mouseOverPos = new double[]{mc.objectMouseOver.entityHit.posX, mc.objectMouseOver.entityHit.posY + offset, mc.objectMouseOver.entityHit.posZ};
 
                         BlockPos blockBelowPos = new BlockPos(mouseOverPos[0], mouseOverPos[1], mouseOverPos[2]);

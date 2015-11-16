@@ -136,7 +136,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
         {
             super.onUpdate();
 
-            MotionUpdateEvent pre = new MotionUpdateEvent(MotionUpdateEvent.State.PRE, rotationYaw, rotationPitch, posX, posY, posZ, onGround);
+            MotionUpdateEvent pre = new MotionUpdateEvent(MotionUpdateEvent.State.PRE, rotationYaw, rotationPitch, posX, posY, posZ, onGround, field_175171_bO);
             XIV.getInstance().getListenerManager().call(pre);
             if (pre.isCancelled())
                 return;
@@ -167,7 +167,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
             posY = preY;
             posZ = preZ;
             onGround = preOnGround;
-            MotionUpdateEvent post = new MotionUpdateEvent(MotionUpdateEvent.State.POST, rotationYaw, rotationPitch, posX, posY, posZ, onGround);
+            MotionUpdateEvent post = new MotionUpdateEvent(MotionUpdateEvent.State.POST, rotationYaw, rotationPitch, posX, posY, posZ, onGround, field_175171_bO);
             XIV.getInstance().getListenerManager().call(post);
         }
     }

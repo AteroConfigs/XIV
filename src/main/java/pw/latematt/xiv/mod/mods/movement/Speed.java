@@ -159,7 +159,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
 
                             if (canSpeed(mc.thePlayer.onGround) && !isAttacking) {
                                 if (!mc.thePlayer.isCollidedVertically) {
-                                    boostSpeed = 0.29316D;
+                                    boostSpeed = 0.55D;
                                     mc.getTimer().timerSpeed = 1.0F;
                                 } else {
                                     switch(ticks) {
@@ -175,14 +175,14 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                                             double zDist = mc.thePlayer.posZ - mc.thePlayer.prevPosZ;
                                             double lastDist = Math.sqrt(xDist * xDist + zDist * zDist);
 
-                                            double difference = 0.66D * (lastDist - 0.299D);
+                                            double difference = 0.656D * (lastDist - 0.299D);
                                             boostSpeed = lastDist - difference;
                                             if (!boostCollided) {
                                                 event.setY(event.getY() + 0.017);
                                                 shouldOffset = true;
                                             }
 
-                                            mc.getTimer().timerSpeed = 1.15F;
+                                            mc.getTimer().timerSpeed = 1.175F;
                                         default:
                                             break;
                                     }
@@ -191,9 +191,9 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                                         ticks = 0;
                                 }
                             } else if(!isAttacking) {
-                                boostSpeed = 0.29316D;
+                                boostSpeed = 0.55D;
                                 mc.getTimer().timerSpeed = 1.0F;
-                                ticks = 0;
+                                ticks = -1;
                             }
                             ++ticks;
 
@@ -441,9 +441,9 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
 
         if(criticals != null && criticals.isEnabled() && this.currentMode.getValue() == Mode.BOOST) {
 //            if(!criticals.isGay()) {
-                boostSpeed = 0.29316D;
+                boostSpeed = 0.55D;
                 mc.getTimer().timerSpeed = 1.0F;
-                ticks = -2;
+                ticks = -4;
                 isAttacking = true;
 //            }
         }
