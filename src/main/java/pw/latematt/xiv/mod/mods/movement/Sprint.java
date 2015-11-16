@@ -38,9 +38,10 @@ public class Sprint extends Mod implements Listener<MotionUpdateEvent>, CommandH
 
         boolean sneaking = mc.thePlayer.isSneaking();
         boolean collided = mc.thePlayer.isCollidedHorizontally;
-        boolean hungry = mc.thePlayer.getFoodStats().getFoodLevel() <= 6 && !mc.thePlayer.capabilities.isCreativeMode || mc.thePlayer.capabilities.isCreativeMode;
+        boolean hungry = mc.thePlayer.getFoodStats().getFoodLevel() <= 6;
+        boolean creative = mc.playerController.isInCreativeMode();
 
-        return moving && !sneaking && !collided && !hungry && !shouldSlowdown();
+        return moving && !sneaking && !collided && (!hungry && !creative || creative) && !shouldSlowdown();
     }
 
     public boolean shouldSlowdown() {
