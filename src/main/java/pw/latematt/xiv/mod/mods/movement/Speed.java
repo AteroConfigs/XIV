@@ -159,7 +159,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
 
                             if (canSpeed(mc.thePlayer.onGround) && !isAttacking) {
                                 if (!mc.thePlayer.isCollidedVertically) {
-                                    boostSpeed = 0.55D;
+                                    boostSpeed = 0.29316D;
                                     mc.getTimer().timerSpeed = 1.0F;
                                 } else {
                                     switch(ticks) {
@@ -167,7 +167,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                                             mc.getTimer().timerSpeed = 1.0F;
                                             break;
                                         case 1:
-                                            boostSpeed *= 2.149999D;
+                                            boostSpeed *= 2.1499999D;
                                             mc.getTimer().timerSpeed = 1.0F;
                                             break;
                                         case 2:
@@ -191,7 +191,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                                         ticks = 0;
                                 }
                             } else if(!isAttacking) {
-                                boostSpeed = 0.55D;
+                                boostSpeed = 0.29316D;
                                 mc.getTimer().timerSpeed = 1.0F;
                                 ticks = -1;
                             }
@@ -441,9 +441,9 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
 
         if(criticals != null && criticals.isEnabled() && this.currentMode.getValue() == Mode.BOOST) {
 //            if(!criticals.isGay()) {
-                boostSpeed = 0.55D;
+                boostSpeed = 0.29316D;
                 mc.getTimer().timerSpeed = 1.0F;
-                ticks = -4;
+                ticks = -3;
                 isAttacking = true;
 //            }
         }
