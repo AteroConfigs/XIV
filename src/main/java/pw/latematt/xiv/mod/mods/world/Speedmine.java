@@ -6,22 +6,37 @@ import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.BreakingBlockEvent;
+import pw.latematt.xiv.event.events.ResetDamageEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.ClampedValue;
+import pw.latematt.xiv.value.Value;
 
 /**
  * @author Jack
  * @author Matthew
+ * @author Rederpz
  */
 public class Speedmine extends Mod implements Listener<BreakingBlockEvent>, CommandHandler {
     private final ClampedValue<Double> multiplier = new ClampedValue<>("speedmine_multiplier", 1.25D, 0.75D, 5.0D);
     private final ClampedValue<Integer> hitDelay = new ClampedValue<>("speedmine_hit_delay", 0, 0, 4);
+    private final Value<Boolean> saveDamage = new Value<>("speedmine_save_damage", true);
+
+    private final Listener resetDamageListener;
 
     public Speedmine() {
         super("Speedmine", ModType.WORLD, Keyboard.KEY_G, 0xFF77A24E);
         Command.newCommand().cmd("speedmine").description("Base command for the Speedmine mod.").arguments("<action>").aliases("smine").handler(this).build();
+
+        resetDamageListener = new Listener<ResetDamageEvent>() {
+            @Override
+            public void onEventCalled(ResetDamageEvent event) {
+                if(saveDamage.getValue()) {
+                    event.setCancelled(true);
+                }
+            }
+        };
     }
 
     @Override
@@ -73,8 +88,21 @@ public class Speedmine extends Mod implements Listener<BreakingBlockEvent>, Comm
                         ChatLogger.print("Invalid arguments, valid: speedmine multiplier <number>");
                     }
                     break;
+                case "savedamage":
+                case "save":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            saveDamage.setValue(saveDamage.getDefault());
+                        } else {
+                            saveDamage.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        saveDamage.setValue(!saveDamage.getValue());
+                    }
+                    ChatLogger.print(String.format("Speedmine will %s save block removing.", saveDamage.getValue() ? "now" : "no longer"));
+                    break;
                 default:
-                    ChatLogger.print("Invalid action, valid: hitdelay, multiplier");
+                    ChatLogger.print("Invalid action, valid: hitdelay, multiplier, savedamage");
                     break;
             }
         } else {
@@ -84,11 +112,11 @@ public class Speedmine extends Mod implements Listener<BreakingBlockEvent>, Comm
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this);
+        XIV.getInstance().getListenerManager().add(this, resetDamageListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this);
+        XIV.getInstance().getListenerManager().remove(this, resetDamageListener);
     }
 }

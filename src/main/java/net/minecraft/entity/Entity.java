@@ -2340,10 +2340,6 @@ public abstract class Entity implements ICommandSender
         this.fallDistance = 0.0F;
     }
 
-    public void setInWeb(boolean inWeb) {
-        this.isInWeb = inWeb;
-    }
-
     /**
      * Gets the name of this command sender (usually username, but possibly "Rcon")
      */
