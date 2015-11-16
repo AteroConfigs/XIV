@@ -70,16 +70,17 @@ public class SemiMulti extends AuraMode {
 
                 final int[] count = {0};
                 mc.theWorld.loadedEntityList.stream()
-                        .filter(entity -> count[0] <= 5)
+                        .filter(entity -> count[0] <= 6)
                         .filter(entity -> entity instanceof EntityLivingBase)
                         .filter(entity -> killAura.isValidEntity((EntityLivingBase) entity))
                         .filter(entity -> ((EntityLivingBase) entity).hurtTime == 0 && ((EntityLivingBase) entity).deathTime == 0)
-                        .filter(entity -> EntityUtils.getAngle(EntityUtils.getEntityRotations(entityToAttack), EntityUtils.getEntityRotations(entity)) <= 5.0F)
+                        .filter(entity -> EntityUtils.getAngle(EntityUtils.getEntityRotations(entityToAttack), EntityUtils.getEntityRotations(entity)) <= 6.0F)
                         .forEach(entity -> {
                             count[0]++;
                             killAura.attack((EntityLivingBase) entity);
                         });
 
+                System.out.println(count[0]);
                 timer.reset();
             }
         }
