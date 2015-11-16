@@ -13,7 +13,7 @@ import pw.latematt.xiv.utils.RenderUtils;
 import java.util.Objects;
 
 /**
- * @author Rederpz
+ * @author TehNeon
  */
 public class DebugTheme extends ClickTheme {
     protected NahrFont font;
