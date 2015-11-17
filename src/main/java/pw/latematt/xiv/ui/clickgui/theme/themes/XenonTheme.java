@@ -63,7 +63,7 @@ public class XenonTheme extends ClickTheme {
             ModButton butt = (ModButton) element;
 
             if (butt.elements.size() > 0) {
-                font.drawString(butt.open ? "-" : "+", x + element.getWidth() - 8, y - 3, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
+                font.drawString(butt.open ? "-" : "+", x + element.getWidth() - 10, y - 2, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
 
                 if (butt.open) {
                     float elementHeight = element.getHeight();
