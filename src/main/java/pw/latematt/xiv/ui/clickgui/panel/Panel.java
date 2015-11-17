@@ -193,7 +193,6 @@ public class Panel {
         }
 
         if (isOpen()) {
-
             for (Element element : elements) {
                 if (XIV.getInstance().getGuiClick().getTheme().hasSubMenus()) {
                     if (element instanceof ModButton) {

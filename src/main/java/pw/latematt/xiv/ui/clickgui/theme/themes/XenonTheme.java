@@ -1,9 +1,13 @@
 package pw.latematt.xiv.ui.clickgui.theme.themes;
 
+import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
+import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
+import pw.latematt.xiv.ui.clickgui.element.elements.ValueSlider;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
+import pw.latematt.xiv.utils.MathUtils;
 import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.utils.RenderUtils;
 
@@ -18,7 +22,7 @@ public class XenonTheme extends ClickTheme {
     protected GuiClick gui;
 
     public XenonTheme(GuiClick gui) {
-        super("Xenon", 96, 13, gui, false);
+        super("Xenon", 96, 13, gui, true);
         this.gui = gui;
     }
 
@@ -52,9 +56,39 @@ public class XenonTheme extends ClickTheme {
         element.setWidth(this.getElementWidth());
         element.setHeight(this.getElementHeight());
 
-        RenderUtils.drawBorderedGradientRect(x, y, x + 96, y + height, 0xFF000000, enabled ? 0xFFA70400 : 0xFF232323, enabled ? 0xFF7E0001 : 0xFF212121);
+        RenderUtils.drawBorderedGradientRect(x, y, x + 96, y + getElementHeight(), 0xFF000000, enabled ? 0xFFA70400 : 0xFF232323, enabled ? 0xFF7E0001 : 0xFF212121);
 
         font.drawString(name, x + 2, y - 1, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
+        if (element instanceof ModButton) {
+            ModButton butt = (ModButton) element;
+
+            if (butt.elements.size() > 0) {
+                font.drawString(butt.open ? "-" : "+", x + element.getWidth() - 8, y - 3, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
+
+                if (butt.open) {
+                    float elementHeight = element.getHeight();
+
+                    for (Element elem : butt.elements) {
+                        elementHeight += elem.getHeight();
+                    }
+
+                    float elemY = y + 1;
+                    for (Element elem : butt.elements) {
+                        elem.setX(x);
+                        if (elem instanceof ValueSlider) {
+                            elem.setY(elemY += elem.getHeight());
+                            elemY += 1;
+                        } else {
+                            elem.setY(elemY += elem.getHeight());
+                        }
+
+                        elem.drawElement(MathUtils.getMouseX(), MathUtils.getMouseY());
+                    }
+
+                    element.setHeight(elementHeight + 1);
+                }
+            }
+        }
     }
 
     @Override
@@ -67,7 +101,7 @@ public class XenonTheme extends ClickTheme {
         element.setHeight(this.getElementHeight());
 
         RenderUtils.drawBorderedRect(x, y + 1, x + element.getWidth(), y + height, 0x801E1E1E, 0xFF212121);
-        RenderUtils.drawBorderedRect(x, y + 1, x + sliderX, y + height, 0x801E1E1E, 0xFF5AACEB);
+        RenderUtils.drawBorderedRect(x, y + 1, x + sliderX, y + height, 0xFFA70400, 0xFF7E0001);
 
         font.drawString(name, x + 2, y - 1, NahrFont.FontType.SHADOW_THIN, 0xFFFFF0F0);
         font.drawString(value + "", x + element.getWidth() - font.getStringWidth(value + "") - 2, y - 1, NahrFont.FontType.SHADOW_THIN, 0xFFFFF0F0);
