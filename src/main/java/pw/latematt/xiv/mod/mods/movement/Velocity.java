@@ -38,9 +38,9 @@ public class Velocity extends Mod implements CommandHandler {
 
                     if (mc.thePlayer.getEntityId() == packet.getEntityID()) {
                         event.setCancelled(true);
-                        double velX = packet.getVelocityX() * reduction.getValue() / 8000;
-                        double velY = packet.getVelocityY() * reduction.getValue() / 8000;
-                        double velZ = packet.getVelocityZ() * reduction.getValue() / 8000;
+                        double velX = packet.getVelocityX() * (reduction.getValue() / 100) / 8000;
+                        double velY = packet.getVelocityY() * (reduction.getValue() / 100) / 8000;
+                        double velZ = packet.getVelocityZ() * (reduction.getValue() / 100) / 8000;
 
                         mc.thePlayer.motionX += velX;
                         mc.thePlayer.motionY += velY;
