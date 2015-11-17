@@ -52,7 +52,7 @@ public class AvidTheme extends ClickTheme {
         element.setWidth(this.getElementWidth());
         element.setHeight(this.getElementHeight());
 
-        RenderUtils.drawBorderedGradientRect(x, y, x + 11, y + height, 0xFF000000, !enabled ? 0xFF6D6D6D : 0xFF08B8FF, !enabled ? 0xFF515151 : 0xFF08B8FF);
+        RenderUtils.drawBorderedGradientRect(x, y, x + 11, y + getElementHeight(), 0xFF000000, !enabled ? 0xFF6D6D6D : 0xFF08B8FF, !enabled ? 0xFF515151 : 0xFF08B8FF);
 
         font.drawString(name, x + 13, y - 3, NahrFont.FontType.NORMAL, enabled ? 0xFF08B8FF : 0xFF515151);
     }

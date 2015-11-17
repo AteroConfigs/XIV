@@ -63,6 +63,7 @@ public class GuiClick extends GuiScreen {
     public void initGui() {
         panels = new CopyOnWriteArrayList<>();
         themes = new ArrayList<>();
+
         themes.add(new AvidTheme(this));
         themes.add(theme = new DarculaTheme(this));
         themes.add(new DebugTheme(this));

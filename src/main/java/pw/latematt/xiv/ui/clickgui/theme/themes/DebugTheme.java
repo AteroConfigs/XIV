@@ -1,19 +1,19 @@
 package pw.latematt.xiv.ui.clickgui.theme.themes;
 
-import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
 import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
 import pw.latematt.xiv.ui.clickgui.element.elements.ValueSlider;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
+import pw.latematt.xiv.utils.MathUtils;
 import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.utils.RenderUtils;
 
 import java.util.Objects;
 
 /**
- * @author Rederpz
+ * @author TehNeon
  */
 public class DebugTheme extends ClickTheme {
     protected NahrFont font;
@@ -81,12 +81,7 @@ public class DebugTheme extends ClickTheme {
                             elem.setY(elemY += elem.getHeight());
                         }
 
-                        int var141 = RenderUtils.newScaledResolution().getScaledWidth();
-                        int var151 = RenderUtils.newScaledResolution().getScaledHeight();
-                        final int var161 = Mouse.getX() * var141 / this.mc.displayWidth;
-                        final int var171 = var151 - Mouse.getY() * var151 / this.mc.displayHeight - 1;
-
-                        elem.drawElement(var161, var171);
+                        elem.drawElement(MathUtils.getMouseX(), MathUtils.getMouseY());
                     }
 
                     element.setHeight(elementHeight + 1);
