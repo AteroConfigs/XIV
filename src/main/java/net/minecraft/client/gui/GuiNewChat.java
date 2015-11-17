@@ -28,6 +28,7 @@ public class GuiNewChat extends Gui
     protected int scrollPos;
     protected boolean isScrolled;
 
+    public void mouseClicked(int mouseX, int mouseY, int button) { }
 
     public GuiNewChat(Minecraft mcIn)
     {

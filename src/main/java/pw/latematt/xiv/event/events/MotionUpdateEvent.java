@@ -11,9 +11,9 @@ public class MotionUpdateEvent extends Event implements Cancellable {
     private final State currentState;
     private float yaw, pitch;
     private double x, y, z;
-    private boolean onGround;
+    private boolean onGround, wasSprinting;
 
-    public MotionUpdateEvent(State currentState, float yaw, float pitch, double x, double y, double z, boolean onGround) {
+    public MotionUpdateEvent(State currentState, float yaw, float pitch, double x, double y, double z, boolean onGround, boolean wasSprinting) {
         this.currentState = currentState;
         this.yaw = yaw;
         this.pitch = pitch;
@@ -21,6 +21,7 @@ public class MotionUpdateEvent extends Event implements Cancellable {
         this.y = y;
         this.z = z;
         this.onGround = onGround;
+        this.wasSprinting = wasSprinting;
     }
 
     public float getYaw() {
@@ -69,6 +70,10 @@ public class MotionUpdateEvent extends Event implements Cancellable {
 
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
+    }
+
+    public boolean wasSprinting() {
+        return wasSprinting;
     }
 
     public State getCurrentState() {

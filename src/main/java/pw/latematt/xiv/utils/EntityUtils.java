@@ -6,6 +6,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
@@ -26,9 +27,9 @@ public class EntityUtils {
      */
 
     private static boolean set = false;
-    private static Entity reference;
+    private static EntityPlayer reference;
 
-    public static Entity getReference() {
+    public static EntityPlayer getReference() {
         return reference == null ? reference = MINECRAFT.thePlayer : ((set || !RenderUtils.getTracerEntity().getValue()) ? MINECRAFT.thePlayer : reference);
     }
 
@@ -36,7 +37,7 @@ public class EntityUtils {
         return !set;
     }
 
-    public static void setReference(Entity ref) {
+    public static void setReference(EntityPlayer ref) {
         reference = ref;
 
         set = reference == MINECRAFT.thePlayer;

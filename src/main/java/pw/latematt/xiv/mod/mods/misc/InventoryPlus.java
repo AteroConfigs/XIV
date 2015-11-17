@@ -10,11 +10,13 @@ import net.minecraft.util.MathHelper;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
+import pw.latematt.xiv.event.events.GuiScreenEvent;
 import pw.latematt.xiv.event.events.InventoryClosedEvent;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.mod.mods.movement.Sprint;
 
 /**
  * @author Matthew
@@ -51,6 +53,10 @@ public class InventoryPlus extends Mod {
                     return;
                 if (mc.currentScreen instanceof GuiChat)
                     return;
+
+                if(event.wasSprinting()) {
+                    mc.thePlayer.setSprinting(true);
+                }
 
                 if (Keyboard.isKeyDown(Keyboard.KEY_UP))
                     mc.thePlayer.rotationPitch = MathHelper.clamp_float(mc.thePlayer.rotationPitch - 4, -90.0F, 90.0F);

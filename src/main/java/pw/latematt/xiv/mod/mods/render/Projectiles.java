@@ -12,6 +12,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Cylinder;
 import org.lwjgl.util.glu.GLU;
 import pw.latematt.xiv.XIV;
@@ -19,6 +20,7 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
+import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.RenderUtils;
 
 import java.util.ArrayList;
@@ -99,6 +101,8 @@ public class Projectiles extends Mod implements Listener<Render3DEvent> {
         WorldRenderer renderer = tessellator.getWorldRenderer();
         renderer.startDrawing(3);
 
+        renderer.addVertex(posX - renderPosX, posY - renderPosY, posZ - renderPosZ);
+
         float size = (float) (item instanceof ItemBow ? 0.3D : 0.25D);
         boolean hasLanded = false;
         Entity landingOnEntity = null;
@@ -142,38 +146,39 @@ public class Projectiles extends Mod implements Listener<Render3DEvent> {
         tessellator.draw();
 
         if (landingPosition != null && landingPosition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            if (landingOnEntity != null) {
-                double x = landingOnEntity.lastTickPosX + (landingOnEntity.posX - landingOnEntity.lastTickPosX) * event.getPartialTicks() - mc.getRenderManager().renderPosX;
-                double y = landingOnEntity.lastTickPosY + (landingOnEntity.posY - landingOnEntity.lastTickPosY) * event.getPartialTicks() - mc.getRenderManager().renderPosY;
-                double z = landingOnEntity.lastTickPosZ + (landingOnEntity.posZ - landingOnEntity.lastTickPosZ) * event.getPartialTicks() - mc.getRenderManager().renderPosZ;
+            GlStateManager.translate(posX - renderPosX, posY - renderPosY, posZ - renderPosZ);
 
-                AxisAlignedBB box = AxisAlignedBB.fromBounds(x - landingOnEntity.width, y, z - landingOnEntity.width, x + landingOnEntity.width, y + landingOnEntity.height + 0.2D, z + landingOnEntity.width);
-                if (landingOnEntity instanceof EntityLivingBase) {
-                    box = AxisAlignedBB.fromBounds(x - landingOnEntity.width + 0.2D, y, z - landingOnEntity.width + 0.2D, x + landingOnEntity.width - 0.2D, y + landingOnEntity.height + (landingOnEntity.isSneaking() ? 0.02D : 0.2D), z + landingOnEntity.width - 0.2D);
-                }
+            int side = landingPosition.field_178784_b.getIndex();
 
-                RenderUtils.drawLines(box);
-                RenderGlobal.drawOutlinedBoundingBox(box, -1);
-            } else {
-                GlStateManager.translate(posX - renderPosX, posY - renderPosY, posZ - renderPosZ);
-
-                int side = landingPosition.field_178784_b.getIndex();
-
-                if (side == 2) {
-                    GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
-                } else if (side == 3) {
-                    GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
-                } else if (side == 4) {
-                    GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
-                } else if (side == 5) {
-                    GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
-                }
-
-                Cylinder c = new Cylinder();
-                GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
-                c.setDrawStyle(GLU.GLU_LINE);
-                c.draw(0.6F, 0.3F, 0.0F, 4, 1);
+            if (side == 2) {
+                GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+            } else if (side == 3) {
+                GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+            } else if (side == 4) {
+                GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
+            } else if (side == 5) {
+                GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
             }
+
+            Cylinder c = new Cylinder();
+            GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+            c.setDrawStyle(GLU.GLU_LINE);
+
+            if(landingOnEntity != null) {
+                GlStateManager.color(0.0F, 0.0F, 0.0F, 1.0F);
+                GL11.glLineWidth(RenderUtils.getLineWidth().getValue() + 2.5F);
+                c.draw(0.6F, 0.3F, 0.0F, 4, 1);
+                GL11.glLineWidth(RenderUtils.getLineWidth().getValue() + 0.0F);
+
+                if (power > 0.6F) {
+                    GlStateManager.color(0.0F, 1.0F, 0.0F, 1.0F);
+                } else if (power > 0.3F) {
+                    GlStateManager.color(0.8F, 0.5F, 0.0F, 1.0F);
+                } else {
+                    GlStateManager.color(1.0F, 0.0F, 0.0F, 1.0F);
+                }
+            }
+            c.draw(0.6F, 0.3F, 0.0F, 4, 1);
         }
         RenderUtils.endGl();
     }

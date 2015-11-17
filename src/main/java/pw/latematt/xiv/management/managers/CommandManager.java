@@ -111,7 +111,7 @@ public class CommandManager extends ListManager<Command> {
                         EntityUtils.damagePlayer(1);
                     }
                 }).build();
-        Command.newCommand().cmd("suicide").description("Fall to your untimely death.").aliases("kms", "bleach", "clorox").handler(message -> EntityUtils.damagePlayer(999)).build();
+        Command.newCommand().cmd("suicide").description("Fall to your untimely death.").aliases("kms", "bleach", "clorox", "anodise").handler(message -> EntityUtils.damagePlayer(999)).build();
         Command.newCommand().cmd("say").description("Makes you send a chat message.").arguments("<message>")
                 .handler(message -> {
                     String[] arguments = message.split(" ");

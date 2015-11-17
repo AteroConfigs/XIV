@@ -25,6 +25,7 @@ import pw.latematt.xiv.event.events.NametagRenderEvent;
 import pw.latematt.xiv.event.events.PotionRenderEvent;
 import pw.latematt.xiv.event.events.RenderEntityEvent;
 import pw.latematt.xiv.mod.mods.render.ESP;
+import pw.latematt.xiv.utils.RenderUtils;
 
 import java.nio.FloatBuffer;
 import java.util.Iterator;
@@ -165,14 +166,14 @@ public abstract class RendererLivingEntity extends Render {
                     }
 
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
-                    esp.renderOne();
+                    RenderUtils.renderOne();
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
-                    esp.renderTwo();
+                    RenderUtils.renderTwo();
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
-                    esp.renderThree();
-                    esp.renderFour(entity);
+                    RenderUtils.renderThree();
+                    RenderUtils.renderFour(Minecraft.getMinecraft(), entity);
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
-                    esp.renderFive();
+                    RenderUtils.renderFive();
                 } else {
                     this.renderModel(entity, var17, var16, var14, var12, var20, 0.0625F);
 
