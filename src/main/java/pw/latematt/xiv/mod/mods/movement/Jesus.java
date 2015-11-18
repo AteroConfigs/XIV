@@ -1,5 +1,6 @@
 package pw.latematt.xiv.mod.mods.movement;
 
+import net.minecraft.block.BlockLilyPad;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -22,9 +23,10 @@ import pw.latematt.xiv.value.Value;
 
 /**
  * @author Matthew
+ * @author Friendly (the nigger jew)
  */
 public class Jesus extends Mod implements CommandHandler {
-    private final Value<Boolean> dolphin = new Value<>("jesus_dolphin", false);
+    private final Value<Mode> currentMode = new Value<>("jesus_mode", Mode.OLD);
 
     private final Listener blockAddBBListener, motionUpdatesListener, sendPacketListener;
     private boolean nextTick, shouldJump;
@@ -36,20 +38,43 @@ public class Jesus extends Mod implements CommandHandler {
         blockAddBBListener = new Listener<BlockAddBBEvent>() {
             @Override
             public void onEventCalled(BlockAddBBEvent event) {
-                if (event.getBlock() instanceof BlockLiquid && event.getBlock() != null && mc.theWorld != null && mc.thePlayer != null && !dolphin.getValue()) {
+                if (event.getBlock() instanceof BlockLiquid && event.getBlock() != null && mc.theWorld != null && mc.thePlayer != null) {
                     IBlockState state = mc.theWorld.getBlockState(event.getPos());
 
-                    if (state != null) {
-                        float blockHeight = BlockLiquid.getLiquidHeightPercent(event.getBlock().getMetaFromState(state));
+                    switch(currentMode.getValue()) {
+                        case NEW:
+                            if (state != null) {
+                                float blockHeight = BlockLiquid.getLiquidHeightPercent(event.getBlock().getMetaFromState(state));
 
-                        shouldJump = blockHeight < 0.55F;
-                    } else {
-                        shouldJump = false;
-                    }
+                                shouldJump = blockHeight < 0.66F;
+                            } else {
+                                shouldJump = false;
+                            }
 
-                    if (shouldJump && event.getEntity() == mc.thePlayer && !BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.fallDistance <= 3.0F && !mc.thePlayer.isSneaking()) {
-                        BlockPos pos = event.getPos();
-                        event.setAxisAlignedBB(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
+                            if (shouldJump && event.getEntity() == mc.thePlayer && !(BlockUtils.getBlock(mc.thePlayer, 0.2) instanceof BlockLiquid) && mc.thePlayer.fallDistance <= 3.0F && !mc.thePlayer.isSneaking()) {
+                                BlockPos pos = event.getPos();
+                                event.setAxisAlignedBB(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 0.805F, pos.getZ() + 1));
+                            }
+                            break;
+                        case OLD:
+                            if (state != null) {
+                                float blockHeight = BlockLiquid.getLiquidHeightPercent(event.getBlock().getMetaFromState(state));
+
+                                shouldJump = blockHeight < 0.55F;
+                            } else {
+                                shouldJump = false;
+                            }
+
+                            if (shouldJump && event.getEntity() == mc.thePlayer && !BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.fallDistance <= 3.0F && !mc.thePlayer.isSneaking()) {
+                                BlockPos pos = event.getPos();
+                                event.setAxisAlignedBB(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
+                            }
+                            break;
+                        case DOLPHIN:
+                            shouldJump = true;
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
@@ -58,8 +83,24 @@ public class Jesus extends Mod implements CommandHandler {
         motionUpdatesListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                if (shouldJump && BlockUtils.isInLiquid(mc.thePlayer) && mc.thePlayer.isInsideOfMaterial(Material.air) && !mc.thePlayer.isSneaking()) {
-                    mc.thePlayer.motionY = 0.08;
+                if (shouldJump && mc.thePlayer.isInsideOfMaterial(Material.air) && !mc.thePlayer.isSneaking()) {
+                    switch(currentMode.getValue()) {
+                        case NEW:
+                            if(BlockUtils.getBlock(mc.thePlayer, 0.2) instanceof BlockLiquid) {
+                                mc.thePlayer.motionY = 0.08;
+                            }
+                            break;
+                        case OLD:
+                            if(BlockUtils.isInLiquid(mc.thePlayer)) {
+                                mc.thePlayer.motionY = 0.08;
+                            }
+                            break;
+                        case DOLPHIN:
+                            if(mc.thePlayer.isInWater()) {
+                                mc.thePlayer.motionY = 0.05;
+                            }
+                            break;
+                    }
                 }
             }
         };
@@ -69,7 +110,7 @@ public class Jesus extends Mod implements CommandHandler {
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    if (BlockUtils.isOnLiquid(mc.thePlayer) && shouldJump && !dolphin.getValue()) {
+                    if (BlockUtils.isOnLiquid(mc.thePlayer) && shouldJump && currentMode.getValue() != Mode.DOLPHIN) {
                         nextTick = !nextTick;
                         if (nextTick) {
                             player.setY(player.getY() - 0.01);
@@ -97,25 +138,59 @@ public class Jesus extends Mod implements CommandHandler {
         if (arguments.length >= 2) {
             String action = arguments[1];
             switch (action.toLowerCase()) {
-                case "bob":
-                case "dolphin":
+                case "mode":
                     if (arguments.length >= 3) {
-                        if (arguments[2].equalsIgnoreCase("-d")) {
-                            dolphin.setValue(dolphin.getDefault());
-                        } else {
-                            dolphin.setValue(Boolean.parseBoolean(arguments[2]));
+                        String mode = arguments[2];
+                        switch (mode.toLowerCase()) {
+                            case "new":
+                            case "bypass":
+                                currentMode.setValue(Mode.NEW);
+                                ChatLogger.print(String.format("Jesus Mode set to: %s", currentMode.getValue().getName()));
+                                break;
+                            case "old":
+                                currentMode.setValue(Mode.OLD);
+                                ChatLogger.print(String.format("Jesus Mode set to: %s", currentMode.getValue().getName()));
+                                break;
+                            case "dolphin":
+                            case "jump":
+                            case "legit":
+                                currentMode.setValue(Mode.DOLPHIN);
+                                ChatLogger.print(String.format("Jesus Mode set to: %s", currentMode.getValue().getName()));
+                                break;
+                            case "-d":
+                                currentMode.setValue(currentMode.getDefault());
+                                ChatLogger.print(String.format("Jesus Mode set to: %s", currentMode.getValue().getName()));
+                                break;
+                            default:
+                                ChatLogger.print("Invalid mode, valid: new, old, dolphin");
+                                break;
                         }
+                        setTag(currentMode.getValue().getName());
                     } else {
-                        dolphin.setValue(!dolphin.getValue());
+                        ChatLogger.print("Invalid arguments, valid: jesus mode <mode>");
                     }
-                    ChatLogger.print(String.format("Jesus will %s bob in water.", (dolphin.getValue() ? "now" : "no longer")));
-                    break;
-                default:
-                    ChatLogger.print("Invalid action, valid: dolphin");
                     break;
             }
         } else {
             ChatLogger.print("Invalid arguments, valid: jesus <action>");
+        }
+    }
+
+    public enum Mode {
+        NEW, OLD, DOLPHIN;
+
+        public String getName() {
+            String prettyName = "";
+            String[] actualNameSplit = name().split("_");
+            if (actualNameSplit.length > 0) {
+                for (String arg : actualNameSplit) {
+                    arg = arg.substring(0, 1).toUpperCase() + arg.substring(1, arg.length()).toLowerCase();
+                    prettyName += arg + " ";
+                }
+            } else {
+                prettyName = actualNameSplit[0].substring(0, 1).toUpperCase() + actualNameSplit[0].substring(1, actualNameSplit[0].length()).toLowerCase();
+            }
+            return prettyName.trim();
         }
     }
 }

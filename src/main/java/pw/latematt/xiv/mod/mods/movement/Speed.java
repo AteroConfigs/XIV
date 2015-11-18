@@ -323,7 +323,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
         Step step = (Step) XIV.getInstance().getModManager().find("step");
         boolean editingPackets = step != null && step.isEnabled() && step.isEditingPackets();
 
-        List collidingBoundingBoxes = mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().expand(1.0D, 0.0D, 1.0D));
+        List collidingBoundingBoxes = mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().expand(0.5D, 0.0D, 0.5D));
         boolean blockCheck = step != null && (!step.isEnabled() || step.isEnabled() && collidingBoundingBoxes.isEmpty()) && !editingPackets;
 
         boolean moving = mc.thePlayer.movementInput.moveForward != 0;
