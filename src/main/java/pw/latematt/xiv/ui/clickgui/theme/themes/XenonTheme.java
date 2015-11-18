@@ -69,7 +69,7 @@ public class XenonTheme extends ClickTheme {
                     float elementHeight = element.getHeight();
 
                     for (Element elem : butt.elements) {
-                        elementHeight += elem.getHeight();
+                        elementHeight += elem.getHeight() + 1;
                     }
 
                     float elemY = y + 1;
@@ -77,9 +77,10 @@ public class XenonTheme extends ClickTheme {
                         elem.setX(x);
                         if (elem instanceof ValueSlider) {
                             elem.setY(elemY += elem.getHeight());
-                            elemY += 1;
+                            elemY += 2;
                         } else {
                             elem.setY(elemY += elem.getHeight());
+                            elemY += 1;
                         }
 
                         elem.drawElement(MathUtils.getMouseX(), MathUtils.getMouseY());
@@ -100,8 +101,8 @@ public class XenonTheme extends ClickTheme {
         element.setWidth(96);
         element.setHeight(this.getElementHeight());
 
-        RenderUtils.drawBorderedRect(x, y + 1, x + element.getWidth(), y + height, 0x801E1E1E, 0xFF212121);
-        RenderUtils.drawBorderedRect(x, y + 1, x + sliderX, y + height, 0xFFA70400, 0xFF7E0001);
+        RenderUtils.drawBorderedGradientRect(x, y + 1, x + element.getWidth(), y + height, 0xFF000000, 0xFF232323, 0xFF212121);
+        RenderUtils.drawBorderedGradientRect(x, y + 1, x + sliderX, y + height, 0xFF000000, 0xFFA70400, 0xFF7E0001);
 
         font.drawString(name, x + 2, y - 1, NahrFont.FontType.SHADOW_THIN, 0xFFFFF0F0);
         font.drawString(value + "", x + element.getWidth() - font.getStringWidth(value + "") - 2, y - 1, NahrFont.FontType.SHADOW_THIN, 0xFFFFF0F0);
