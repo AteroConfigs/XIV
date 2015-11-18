@@ -69,7 +69,7 @@ public class XenonTheme extends ClickTheme {
                     float elementHeight = element.getHeight();
 
                     for (Element elem : butt.elements) {
-                        elementHeight += elem.getHeight();
+                        elementHeight += elem.getHeight() + 1;
                     }
 
                     float elemY = y + 1;
@@ -77,9 +77,10 @@ public class XenonTheme extends ClickTheme {
                         elem.setX(x);
                         if (elem instanceof ValueSlider) {
                             elem.setY(elemY += elem.getHeight());
-                            elemY += 1;
+                            elemY += 2;
                         } else {
                             elem.setY(elemY += elem.getHeight());
+                            elemY += 1;
                         }
 
                         elem.drawElement(MathUtils.getMouseX(), MathUtils.getMouseY());
