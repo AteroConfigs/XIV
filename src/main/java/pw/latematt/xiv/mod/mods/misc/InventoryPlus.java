@@ -54,10 +54,6 @@ public class InventoryPlus extends Mod {
                 if (mc.currentScreen instanceof GuiChat)
                     return;
 
-                if(event.wasSprinting()) {
-                    mc.thePlayer.setSprinting(true);
-                }
-
                 if (Keyboard.isKeyDown(Keyboard.KEY_UP))
                     mc.thePlayer.rotationPitch = MathHelper.clamp_float(mc.thePlayer.rotationPitch - 4, -90.0F, 90.0F);
                 if (Keyboard.isKeyDown(Keyboard.KEY_DOWN))

@@ -100,8 +100,8 @@ public class XenonTheme extends ClickTheme {
         element.setWidth(96);
         element.setHeight(this.getElementHeight());
 
-        RenderUtils.drawBorderedRect(x, y + 1, x + element.getWidth(), y + height, 0x801E1E1E, 0xFF212121);
-        RenderUtils.drawBorderedRect(x, y + 1, x + sliderX, y + height, 0xFFA70400, 0xFF7E0001);
+        RenderUtils.drawBorderedGradientRect(x, y + 1, x + element.getWidth(), y + height, 0xFF000000, 0xFF232323, 0xFF212121);
+        RenderUtils.drawBorderedGradientRect(x, y + 1, x + sliderX, y + height, 0xFF000000, 0xFFA70400, 0xFF7E0001);
 
         font.drawString(name, x + 2, y - 1, NahrFont.FontType.SHADOW_THIN, 0xFFFFF0F0);
         font.drawString(value + "", x + element.getWidth() - font.getStringWidth(value + "") - 2, y - 1, NahrFont.FontType.SHADOW_THIN, 0xFFFFF0F0);
