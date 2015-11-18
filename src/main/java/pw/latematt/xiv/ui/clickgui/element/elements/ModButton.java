@@ -67,7 +67,7 @@ public class ModButton extends Element {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (isOverElement(mouseX, mouseY)) {
+        if (mouseX > getX() && mouseY > getY() && mouseX < getX() + getWidth() && mouseY < getY() + XIV.getInstance().getGuiClick().getTheme().getElementHeight()) {
             if (mouseButton == 0) {
                 mc.getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(new ResourceLocation("gui.button.press"), 1.0F));
                 mod.toggle();

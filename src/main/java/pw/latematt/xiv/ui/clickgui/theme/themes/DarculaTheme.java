@@ -60,7 +60,7 @@ public class DarculaTheme extends ClickTheme {
         int endColor = enabled ? 0xFF263649 : 0xFF44494B;
         int borderColor = overElement && Mouse.isButtonDown(0) ? 0xFF4E78A2 : 0xFF555A61;
 
-        RenderUtils.drawBorderedGradientRect(x, y + 1, x + width, y + height - 1, borderColor, startColor, endColor);
+        RenderUtils.drawBorderedGradientRect(x, y + 1, x + width, y + getElementHeight() - 1, borderColor, startColor, endColor);
         modFont.drawString(name, x + width + 2.5F, y - 2, NahrFont.FontType.EMBOSS_BOTTOM, 0xFFBBBBBB);
     }
 

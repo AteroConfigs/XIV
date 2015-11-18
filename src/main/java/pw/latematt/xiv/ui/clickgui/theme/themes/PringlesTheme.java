@@ -2,8 +2,11 @@ package pw.latematt.xiv.ui.clickgui.theme.themes;
 
 import pw.latematt.xiv.ui.clickgui.GuiClick;
 import pw.latematt.xiv.ui.clickgui.element.Element;
+import pw.latematt.xiv.ui.clickgui.element.elements.ModButton;
+import pw.latematt.xiv.ui.clickgui.element.elements.ValueSlider;
 import pw.latematt.xiv.ui.clickgui.panel.Panel;
 import pw.latematt.xiv.ui.clickgui.theme.ClickTheme;
+import pw.latematt.xiv.utils.MathUtils;
 import pw.latematt.xiv.utils.NahrFont;
 import pw.latematt.xiv.utils.RenderUtils;
 
@@ -18,7 +21,7 @@ public class PringlesTheme extends ClickTheme {
     protected GuiClick gui;
 
     public PringlesTheme(GuiClick gui) {
-        super("Pringles", 96, 15, gui, false);
+        super("Pringles", 96, 15, gui, true);
         this.gui = gui;
     }
 
@@ -51,9 +54,40 @@ public class PringlesTheme extends ClickTheme {
         element.setWidth(this.getElementWidth());
         element.setHeight(this.getElementHeight());
 
-        RenderUtils.drawBorderedRect(x, y, x + 96, y + height, 0xFF000000, enabled ? 0x330066FF : 0x00000000);
+        RenderUtils.drawBorderedRect(x, y, x + 96, y + getElementHeight(), 0xFF000000, enabled ? 0x330066FF : 0x00000000);
 
         font.drawString(name, x + 2, y, NahrFont.FontType.SHADOW_THIN, enabled ? 0xFF4279B2 : 0xFFFFFFFF);
+
+        if (element instanceof ModButton) {
+            ModButton butt = (ModButton) element;
+
+            if (butt.elements.size() > 0) {
+                font.drawString(butt.open ? "-" : "+", x + element.getWidth() - 10, y, NahrFont.FontType.NORMAL, 0xFFFFFFFF);
+
+                if (butt.open) {
+                    float elementHeight = element.getHeight();
+
+                    for (Element elem : butt.elements) {
+                        elementHeight += elem.getHeight();
+                    }
+
+                    float elemY = y + 1;
+                    for (Element elem : butt.elements) {
+                        elem.setX(x);
+                        if (elem instanceof ValueSlider) {
+                            elem.setY(elemY += elem.getHeight());
+                            elemY += 1;
+                        } else {
+                            elem.setY(elemY += elem.getHeight());
+                        }
+
+                        elem.drawElement(MathUtils.getMouseX(), MathUtils.getMouseY());
+                    }
+
+                    element.setHeight(elementHeight + 1);
+                }
+            }
+        }
     }
 
     @Override
