@@ -2,4 +2,5 @@ before_script:
   - mvn clean package
 
 perform-maven-testing:
-  - mvn test
+  script:
+    - mvn test
