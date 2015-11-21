@@ -2,12 +2,9 @@ package pw.latematt.xiv.ui.managers.alt;
 
 import net.minecraft.client.gui.*;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.Display;
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.file.XIVFile;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -260,15 +257,15 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
         if (keyCode == Keyboard.KEY_ESCAPE) {
             mc.displayGuiScreen(parent);
         } else if (keyCode == Keyboard.KEY_UP) {
-            if(this.slot.getAlt(this.slot.getSelected() - 1) != null) {
+            if (this.slot.getAlt(this.slot.getSelected() - 1) != null) {
                 this.slot.setSelected(this.slot.getSelected() - 1);
             }
         } else if (keyCode == Keyboard.KEY_DOWN) {
-            if(this.slot.getAlt(this.slot.getSelected() + 1) != null) {
+            if (this.slot.getAlt(this.slot.getSelected() + 1) != null) {
                 this.slot.setSelected(this.slot.getSelected() + 1);
             }
         } else if (keyCode == Keyboard.KEY_DELETE) {
-            if(this.slot.getAlt() != null) {
+            if (this.slot.getAlt() != null) {
                 this.actionPerformed(this.buttonList.get(3));
             }
         }
@@ -301,7 +298,7 @@ public class GuiAltManager extends GuiScreen implements GuiYesNoCallback {
                 this.actionPerformed(buttonList.get(5));
             } else if (!username.getText().equals("") && !password.getText().equals("")) {
                 this.actionPerformed(buttonList.get(2));
-            } else if(this.slot.getAlt() != null) {
+            } else if (this.slot.getAlt() != null) {
                 this.actionPerformed(buttonList.get(1));
             }
         }

@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.*;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
@@ -113,7 +112,7 @@ public class RenderUtils {
     public static void renderFour(Minecraft mc, Entity renderEntity) {
         float[] color = new float[]{0.0F, 0.9F, 0.0F};
 
-        if(renderEntity instanceof EntityLivingBase) {
+        if (renderEntity instanceof EntityLivingBase) {
             EntityLivingBase entity = (EntityLivingBase) renderEntity;
 
             final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
@@ -128,7 +127,7 @@ public class RenderUtils {
             } else if (distance <= 3.9F) {
                 color = new float[]{0.9F, 0.0F, 0.0F};
             }
-        }else{
+        } else {
             Entity entity = renderEntity;
 
             final float distance = EntityUtils.getReference().getDistanceToEntity(entity);

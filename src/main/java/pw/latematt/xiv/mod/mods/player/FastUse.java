@@ -36,7 +36,7 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
     @Override
     public void onEventCalled(MotionUpdateEvent event) {
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-            if (isUsable(mc.thePlayer.getCurrentEquippedItem()) && mc.thePlayer.getItemInUseDuration() >= ticksToWait.getValue() && mc.thePlayer.onGround) {
+            if (isUsable(mc.thePlayer.getItemInUse()) && mc.thePlayer.getItemInUseDuration() >= ticksToWait.getValue() && mc.thePlayer.onGround) {
                 for (int x = 0; x <= (32 - ticksToWait.getValue()); x++) {
                     mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
                 }
@@ -48,8 +48,6 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
 
     private boolean isUsable(ItemStack stack) {
         if (stack == null)
-            return false;
-        if (!mc.thePlayer.isUsingItem())
             return false;
         if (stack.getItem() instanceof ItemBow)
             return bow.getValue();

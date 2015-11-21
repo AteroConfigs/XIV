@@ -1,15 +1,10 @@
 package pw.latematt.xiv.mod.mods.render;
 
-import net.minecraft.entity.item.EntityItem;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.HurtRenderEvent;
-import pw.latematt.xiv.event.events.ItemRenderEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Rederpz

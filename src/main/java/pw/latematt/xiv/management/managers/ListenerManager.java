@@ -36,7 +36,7 @@ public class ListenerManager extends ListManager<Listener> implements Cancellabl
     public void add(Listener... listeners) {
         for (Listener listener : listeners) {
             if (contents.contains(listener))
-                return;
+                continue;
 
             contents.add(listener);
         }
@@ -45,7 +45,7 @@ public class ListenerManager extends ListManager<Listener> implements Cancellabl
     public void remove(Listener... listeners) {
         for (Listener listener : listeners) {
             if (!contents.contains(listener))
-                return;
+                continue;
 
             contents.remove(listener);
         }
@@ -63,9 +63,8 @@ public class ListenerManager extends ListManager<Listener> implements Cancellabl
                 if (genericInterface instanceof ParameterizedType) {
                     Type[] genericTypes = ((ParameterizedType) genericInterface).getActualTypeArguments();
                     for (Type genericType : genericTypes) {
-                        if (genericType == event.getClass()) {
+                        if (genericType == event.getClass())
                             listener.onEventCalled(event);
-                        }
                     }
                 }
             }

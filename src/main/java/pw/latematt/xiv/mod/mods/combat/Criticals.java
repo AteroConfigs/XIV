@@ -12,7 +12,6 @@ import pw.latematt.xiv.event.events.AttackEntityEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.mod.mods.movement.Speed;
 import pw.latematt.xiv.utils.BlockUtils;
 import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.Value;
@@ -24,11 +23,12 @@ import pw.latematt.xiv.value.Value;
 public class Criticals extends Mod implements Listener<SendPacketEvent>, CommandHandler {
     private final Value<Mode> currentMode = new Value<>("criticals_mode", Mode.MINIJUMPS);
     private final Listener attackEntityListener;
-    private boolean nextTick;
+    private boolean nextAttack;
     private float fallDist;
 
     public Criticals() {
         super("Criticals", ModType.COMBAT, Keyboard.KEY_NONE, 0xFFA38EC7);
+        setTag(currentMode.getValue().getName());
         Command.newCommand().cmd("criticals").description("Base command for Criticals mod.").arguments("<action>").aliases("crits").handler(this).build();
 
         attackEntityListener = new Listener<AttackEntityEvent>() {
@@ -36,23 +36,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
             public void onEventCalled(AttackEntityEvent event) {
                 if (currentMode.getValue() == Mode.MINIJUMPS) {
                     if (!BlockUtils.isOnLiquid(mc.thePlayer) && mc.thePlayer.isCollidedVertically && !BlockUtils.isInLiquid(mc.thePlayer)) {
-                        if (nextTick = !nextTick) {
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.05, mc.thePlayer.posZ, false));
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.012511, mc.thePlayer.posZ, false));
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                        }
-                    }
-                }else if (currentMode.getValue() == Mode.PACKETS) {
-                    if (!BlockUtils.isOnLiquid(mc.thePlayer) && mc.thePlayer.isCollidedVertically && !BlockUtils.isInLiquid(mc.thePlayer)) {
-                        Speed speed = (Speed) XIV.getInstance().getModManager().find("speed");
-
-                        if(speed.shouldOffset()) {
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.0795, mc.thePlayer.posZ, false));
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.017, mc.thePlayer.posZ, false));
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.017011D, mc.thePlayer.posZ, false));
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.017, mc.thePlayer.posZ, false));
-                        }else {
+                        if (nextAttack = !nextAttack) {
                             mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.05, mc.thePlayer.posZ, false));
                             mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
                             mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.012511, mc.thePlayer.posZ, false));
@@ -66,11 +50,10 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
 
     @Override
     public void onEventCalled(SendPacketEvent event) {
-        if (this.currentMode.getValue() != Mode.OFFGROUND)
+        if (this.currentMode.getValue() != Mode.FLOAT)
             return;
         if (event.getPacket() instanceof C03PacketPlayer) {
             C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-
             if (isSafe())
                 fallDist += mc.thePlayer.fallDistance;
 
@@ -106,14 +89,10 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
                 mc.thePlayer.ridingEntity == null;
     }
 
-    public boolean isGay() {
-        return currentMode.getValue() == Mode.PACKETS;
-    }
-
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this, attackEntityListener);
-        if (mc.thePlayer != null && currentMode.getValue() == Mode.OFFGROUND) {
+        if (mc.thePlayer != null && currentMode.getValue() == Mode.FLOAT) {
             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.01, mc.thePlayer.posZ, false));
             mc.getNetHandler().getNetworkManager().sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
             fallDist += 1.01F;
@@ -124,7 +103,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this, attackEntityListener);
         fallDist = 0.0F;
-        nextTick = false;
+        nextAttack = false;
     }
 
     @Override
@@ -137,18 +116,13 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
+                            case "float":
+                            case "offground":
+                                currentMode.setValue(Mode.FLOAT);
+                                ChatLogger.print(String.format("Criticals Mode set to: %s", currentMode.getValue().getName()));
+                                break;
                             case "minijumps":
                                 currentMode.setValue(Mode.MINIJUMPS);
-                                ChatLogger.print(String.format("Criticals Mode set to: %s", currentMode.getValue().getName()));
-                                break;
-                            case "packets":
-                            case "gay":
-                                currentMode.setValue(Mode.PACKETS);
-                                ChatLogger.print(String.format("Criticals Mode set to: %s", currentMode.getValue().getName()));
-                                break;
-                            case "old":
-                            case "offground":
-                                currentMode.setValue(Mode.OFFGROUND);
                                 ChatLogger.print(String.format("Criticals Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "-d":
@@ -156,9 +130,10 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
                                 ChatLogger.print(String.format("Criticals Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: minijumps, packets, offground");
+                                ChatLogger.print("Invalid mode, valid: float, minijumps");
                                 break;
                         }
+                        setTag(currentMode.getValue().getName());
                     } else {
                         ChatLogger.print("Invalid arguments, valid: criticals mode <mode>");
                     }
@@ -173,7 +148,7 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
     }
 
     public enum Mode {
-        OFFGROUND, MINIJUMPS, PACKETS;
+        FLOAT, MINIJUMPS;
 
         public String getName() {
             String prettyName = "";

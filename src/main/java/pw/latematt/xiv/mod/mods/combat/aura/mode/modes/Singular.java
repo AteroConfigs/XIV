@@ -73,6 +73,8 @@ public class Singular extends AuraMode {
 
     @Override
     public void onMotionPacket(C03PacketPlayer packet) {
+        if (!packet.isRotating())
+            return;
         if (entityToAttack != null && !killAura.isHealing()) {
             float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
             packet.setYaw(rotations[0]);

@@ -32,7 +32,7 @@ public class Speedmine extends Mod implements Listener<BreakingBlockEvent>, Comm
         resetDamageListener = new Listener<ResetDamageEvent>() {
             @Override
             public void onEventCalled(ResetDamageEvent event) {
-                if(saveDamage.getValue()) {
+                if (saveDamage.getValue()) {
                     event.setCancelled(true);
                 }
             }

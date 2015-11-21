@@ -113,8 +113,8 @@ public class Nametags extends Mod implements CommandHandler {
         else
             healthColor = "4";
 
-        String healthDisplay = decimalFormat.format(Math.floor((health + (double)0.5F / 2) / 0.5F) * 0.5F);
-        String maxHealthDisplay = decimalFormat.format(Math.floor((entity.getMaxHealth() + (double)0.5F / 2) / 0.5F) * 0.5F);
+        String healthDisplay = decimalFormat.format(Math.floor((health + (double) 0.5F / 2) / 0.5F) * 0.5F);
+        String maxHealthDisplay = decimalFormat.format(Math.floor((entity.getMaxHealth() + (double) 0.5F / 2) / 0.5F) * 0.5F);
 
         if (this.health.getValue())
             entityName = String.format("%s \247%s%s", entityName, healthColor, healthDisplay);
