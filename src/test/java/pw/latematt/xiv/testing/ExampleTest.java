@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This is a template on how to perform tests with Maven, which adds integrity to Gitlab CI (which I added)
+ * This is a template on how to perform tests with Maven
  *
  * @author Matthew
  */
