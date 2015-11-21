@@ -1,0 +1,2 @@
+before_script:
+  - mvn clean package
