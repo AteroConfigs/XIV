@@ -4,7 +4,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
 import pw.latematt.xiv.command.CommandHandler;
@@ -26,12 +25,12 @@ import java.util.List;
  * @author Jack
  * @author Rederpz
  */
-public class Speed extends Mod implements CommandHandler, Listener<AttackEntityEvent> {
+public class Speed extends Mod implements CommandHandler {
     private final Value<Boolean> fastLadder = new Value<>("speed_fast_ladder", true);
     private final Value<Boolean> fastIce = new Value<>("speed_fast_ice", true);
     private final Value<Mode> currentMode = new Value<>("speed_mode", Mode.CAPSAR);
-    private final Listener motionUpdateListener, motionListener, motionFlyingListener;
-    private boolean nextTick, hasJumped, boostCollided, isAttacking, shouldOffset;
+    private final Listener attackEntityListener, motionFlyingListener, motionListener, motionUpdateListener;
+    private boolean nextTick, hasJumped, boostCollided;
     private double boostSpeed;
     private int ticks;
 
@@ -40,14 +39,24 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
         setTag(currentMode.getValue().getName());
         Command.newCommand().cmd("speed").description("Base command for the Speed mod.").arguments("<action>").handler(this).build();
 
+        attackEntityListener = new Listener<AttackEntityEvent>() {
+            @Override
+            public void onEventCalled(AttackEntityEvent event) {
+                Criticals criticals = (Criticals) XIV.getInstance().getModManager().find("criticals");
+
+                if (criticals != null && criticals.isEnabled() && currentMode.getValue() == Mode.BOOST) {
+                    boostSpeed = 0.29316D;
+                    mc.getTimer().timerSpeed = 1.0F;
+                    ticks = -5;
+                }
+            }
+        };
+
         motionFlyingListener = new Listener<MotionFlyingEvent>() {
             @Override
             public void onEventCalled(MotionFlyingEvent event) {
-                if(isAttacking)
-                    return;
-
                 /* credits to aristhena */
-                if (event.getState() == MotionFlyingEvent.State.PRE && canSpeed(mc.thePlayer.onGround) &&  currentMode.getValue() == Mode.BOOST) {
+                if (event.getState() == MotionFlyingEvent.State.PRE && canSpeed(mc.thePlayer.onGround) && currentMode.getValue() == Mode.BOOST) {
                     event.setCancelled(true);
                     if (mc.thePlayer.isCollidedVertically) {
                         float yaw = mc.thePlayer.rotationYaw;
@@ -144,8 +153,6 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    shouldOffset = false;
-
                     double speed, slow;
                     double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
 
@@ -157,12 +164,12 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                             if (!mc.thePlayer.onGround)
                                 ticks = -5;
 
-                            if (canSpeed(mc.thePlayer.onGround) && !isAttacking) {
+                            if (canSpeed(mc.thePlayer.onGround)) {
                                 if (!mc.thePlayer.isCollidedVertically) {
                                     boostSpeed = 0.29316D;
                                     mc.getTimer().timerSpeed = 1.0F;
                                 } else {
-                                    switch(ticks) {
+                                    switch (ticks) {
                                         case 0:
                                             mc.getTimer().timerSpeed = 1.0F;
                                             break;
@@ -177,11 +184,8 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
 
                                             double difference = 0.656D * (lastDist - 0.299D);
                                             boostSpeed = lastDist - difference;
-                                            if (!boostCollided) {
-                                                event.setY(event.getY() + 0.017);
-                                                shouldOffset = true;
-                                            }
-
+                                            if (!boostCollided)
+                                                event.setY(event.getY() + 0.017D);
                                             mc.getTimer().timerSpeed = 1.175F;
                                         default:
                                             break;
@@ -190,16 +194,12 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                                     if (ticks >= 2)
                                         ticks = 0;
                                 }
-                            } else if(!isAttacking) {
+                            } else {
                                 boostSpeed = 0.29316D;
                                 mc.getTimer().timerSpeed = 1.0F;
-                                ticks = -1;
+                                ticks = -5;
                             }
                             ++ticks;
-
-                            if(isAttacking) {
-                                isAttacking = false;
-                            }
                             break;
                         case BUNNYHOP:
                             /* credits to DoubleParallax */
@@ -239,23 +239,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                                 speed -= 0.04F;
                                 slow -= 0.005D;
                             }
-                            if (mc.thePlayer.isPotionActive(Potion.SPEED)) {
-                                PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
-                                switch (effect.getAmplifier()) {
-                                    case 0:
-                                        speed -= 0.2975D;
-                                        break;
-                                    case 1:
-                                        speed -= 0.5575D;
-                                        break;
-                                    case 2:
-                                        speed -= 0.7858D;
-                                        break;
-                                    case 3:
-                                        speed -= 0.9075D;
-                                        break;
-                                }
-                            }
+                            speed = applySpeedModifier(speed);
 
                             if (canSpeed(groundCheck)) {
                                 if (nextTick = !nextTick) {
@@ -302,7 +286,7 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
                             } else {
                                 mc.thePlayer.motionX *= 0.98D;
                                 mc.thePlayer.motionZ *= 0.98D;
-                                ticks = 4;
+                                ticks = 3;
                             }
                             break;
                     }
@@ -311,20 +295,33 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
         };
     }
 
-    public boolean shouldOffset() {
-        return shouldOffset;
-    }
-
-    private boolean canSpeed() {
-        return canSpeed(true);
+    private double applySpeedModifier(double speed) {
+        if (mc.thePlayer.isPotionActive(Potion.SPEED)) {
+            PotionEffect effect = mc.thePlayer.getActivePotionEffect(Potion.SPEED);
+            switch (effect.getAmplifier()) {
+                case 0:
+                    speed -= 0.2975D;
+                    break;
+                case 1:
+                    speed -= 0.5575D;
+                    break;
+                case 2:
+                    speed -= 0.7858D;
+                    break;
+                case 3:
+                    speed -= 0.9075D;
+                    break;
+            }
+        }
+        return speed;
     }
 
     private boolean canSpeed(boolean groundCheck) {
         Step step = (Step) XIV.getInstance().getModManager().find("step");
         boolean editingPackets = step != null && step.isEnabled() && step.isEditingPackets();
 
-        List collidingBoundingBoxes = mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().expand(0.5D, 0.0D, 0.5D));
-        boolean blockCheck = step != null && (!step.isEnabled() || step.isEnabled() && collidingBoundingBoxes.isEmpty()) && !editingPackets;
+        List collidingBoundingBoxes = mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().expand(0.25D, 0.0D, 0.25D));
+        boolean blockCheck = !editingPackets && (step != null && (!step.isEnabled() || step.isEnabled() && collidingBoundingBoxes.isEmpty()));
 
         boolean moving = mc.thePlayer.movementInput.moveForward != 0;
         boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
@@ -422,31 +419,15 @@ public class Speed extends Mod implements CommandHandler, Listener<AttackEntityE
 
     @Override
     public void onEnabled() {
-        XIV.getInstance().getListenerManager().add(this, motionUpdateListener, motionListener, motionFlyingListener);
+        XIV.getInstance().getListenerManager().add(attackEntityListener, motionFlyingListener, motionListener, motionUpdateListener);
     }
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(this, motionUpdateListener, motionListener, motionFlyingListener);
+        XIV.getInstance().getListenerManager().remove(attackEntityListener, motionFlyingListener, motionListener, motionUpdateListener);
         Blocks.ice.slipperiness = 0.98F;
         Blocks.packed_ice.slipperiness = 0.98F;
-        shouldOffset = false;
-
         mc.getTimer().timerSpeed = 1.0F;
-    }
-
-    @Override
-    public void onEventCalled(AttackEntityEvent event) {
-        Criticals criticals = (Criticals) XIV.getInstance().getModManager().find("criticals");
-
-        if(criticals != null && criticals.isEnabled() && this.currentMode.getValue() == Mode.BOOST) {
-//            if(!criticals.isGay()) {
-                boostSpeed = 0.29316D;
-                mc.getTimer().timerSpeed = 1.0F;
-                ticks = -3;
-                isAttacking = true;
-//            }
-        }
     }
 
     private enum Mode {

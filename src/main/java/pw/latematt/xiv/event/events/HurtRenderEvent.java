@@ -1,6 +1,5 @@
 package pw.latematt.xiv.event.events;
 
-import net.minecraft.entity.item.EntityItem;
 import pw.latematt.xiv.event.Cancellable;
 import pw.latematt.xiv.event.Event;
 

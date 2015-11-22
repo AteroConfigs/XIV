@@ -45,7 +45,7 @@ public class TitanTheme extends ClickTheme {
         RenderUtils.drawGradientRect(panel.getX() + 2, panel.getY() + 2, panel.getX() + panel.getWidth() - 2, panel.getY() + panel.getOpenHeight() - 2, 0xFF525050, 0xFF4A4A4A);
         RenderUtils.drawGradientRect(panel.getX() + 2, panel.getY() + panel.getOpenHeight() - 2, panel.getX() + panel.getWidth() - 2, panel.getY() + panel.getOpenHeight(), 0x44000000, 0x11000000);
 
-        if(panel.isOpen()) {
+        if (panel.isOpen()) {
             RenderUtils.drawGradientRect(panel.getX() + 2, panel.getY() + panel.getOpenHeight() - 1, panel.getX() + panel.getWidth() - 2, panel.getY() + panel.getHeight() - 2, 0xFF3D3C3C, 0xFF414143);
 //            RenderUtils.drawGradientRect(panel.getX() + 2, panel.getY() + 2, panel.getX() + panel.getWidth() - 2, panel.getY() + panel.getOpenHeight() - 1, 0xFF525050, 0xFF4A4A4A);
 //            RenderUtils.drawGradientRect(panel.getX() + 2, panel.getY() + 2, panel.getX() + panel.getWidth() - 2, panel.getY() + panel.getHeight(), 0xFF525050, 0xFF4A4A4A);
@@ -67,7 +67,7 @@ public class TitanTheme extends ClickTheme {
         element.setWidth(this.getElementWidth() - 4);
         element.setHeight(this.getElementHeight());
 
-        if(enabled) {
+        if (enabled) {
             RenderUtils.drawGradientRect(x + 2, y, x + width - 2, y + height, 0xFF525050, 0xFF4A4A4A);
             RenderUtils.drawGradientRect(x + 3, y + height, x + width - 2, y + height + 1.5F, 0x55000000, 0x11000000);
         }

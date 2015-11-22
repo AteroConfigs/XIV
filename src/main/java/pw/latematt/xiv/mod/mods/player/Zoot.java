@@ -37,7 +37,7 @@ public class Zoot extends Mod implements Listener<MotionUpdateEvent>, CommandHan
         potionIncrementListener = new Listener<PotionIncrementEvent>() {
             @Override
             public void onEventCalled(PotionIncrementEvent event) {
-                if(isSpeedingPotions)
+                if (isSpeedingPotions)
                     event.setIncrement(2);
             }
         };
@@ -49,11 +49,11 @@ public class Zoot extends Mod implements Listener<MotionUpdateEvent>, CommandHan
             isSpeedingPotions = false;
 
             if (fire.getValue() && mc.thePlayer.isBurning() && !mc.thePlayer.isInsideOfMaterial(Material.fire) && !mc.thePlayer.isInsideOfMaterial(Material.lava)) {
-                if(currentMode.getValue() == Mode.OLD) {
+                if (currentMode.getValue() == Mode.OLD) {
                     for (int x = 0; x < 20; x++) {
                         mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
                     }
-                }else if(currentMode.getValue() == Mode.NEW) {
+                } else if (currentMode.getValue() == Mode.NEW) {
                     mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
                     isSpeedingPotions = true;
                 }
@@ -76,11 +76,11 @@ public class Zoot extends Mod implements Listener<MotionUpdateEvent>, CommandHan
                 final Potion potion = potionTypes[i];
                 if (Objects.nonNull(potion) && potion.isBadEffect() && mc.thePlayer.isPotionActive(potion)) {
                     final PotionEffect effect = mc.thePlayer.getActivePotionEffect(potion);
-                    if(currentMode.getValue() == Mode.OLD) {
+                    if (currentMode.getValue() == Mode.OLD) {
                         for (int x = 0; x < effect.getDuration() / 20; x++) {
                             mc.getNetHandler().addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
                         }
-                    }else if(currentMode.getValue() == Mode.NEW) {
+                    } else if (currentMode.getValue() == Mode.NEW) {
                         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer(mc.thePlayer.onGround));
                         isSpeedingPotions = true;
                     }

@@ -1,6 +1,5 @@
 package pw.latematt.xiv.mod.mods.movement;
 
-import net.minecraft.block.BlockLilyPad;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -41,7 +40,7 @@ public class Jesus extends Mod implements CommandHandler {
                 if (event.getBlock() instanceof BlockLiquid && event.getBlock() != null && mc.theWorld != null && mc.thePlayer != null) {
                     IBlockState state = mc.theWorld.getBlockState(event.getPos());
 
-                    switch(currentMode.getValue()) {
+                    switch (currentMode.getValue()) {
                         case NEW:
                             if (state != null) {
                                 float blockHeight = BlockLiquid.getLiquidHeightPercent(event.getBlock().getMetaFromState(state));
@@ -84,19 +83,19 @@ public class Jesus extends Mod implements CommandHandler {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (shouldJump && mc.thePlayer.isInsideOfMaterial(Material.air) && !mc.thePlayer.isSneaking()) {
-                    switch(currentMode.getValue()) {
+                    switch (currentMode.getValue()) {
                         case NEW:
-                            if(BlockUtils.getBlock(mc.thePlayer, 0.2) instanceof BlockLiquid) {
+                            if (BlockUtils.getBlock(mc.thePlayer, 0.2) instanceof BlockLiquid) {
                                 mc.thePlayer.motionY = 0.08;
                             }
                             break;
                         case OLD:
-                            if(BlockUtils.isInLiquid(mc.thePlayer)) {
+                            if (BlockUtils.isInLiquid(mc.thePlayer)) {
                                 mc.thePlayer.motionY = 0.08;
                             }
                             break;
                         case DOLPHIN:
-                            if(mc.thePlayer.isInWater()) {
+                            if (mc.thePlayer.isInWater()) {
                                 mc.thePlayer.motionY = 0.05;
                             }
                             break;
@@ -110,6 +109,8 @@ public class Jesus extends Mod implements CommandHandler {
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
+                    if (!player.isMoving())
+                        return;
                     if (BlockUtils.isOnLiquid(mc.thePlayer) && shouldJump && currentMode.getValue() != Mode.DOLPHIN) {
                         nextTick = !nextTick;
                         if (nextTick) {

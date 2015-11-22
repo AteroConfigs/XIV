@@ -15,6 +15,7 @@ import java.util.Objects;
  */
 public class Multi extends AuraMode {
     private final Timer timer = new Timer();
+
     public Multi(KillAura killAura) {
         super("Multi", killAura);
     }

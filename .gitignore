@@ -7,7 +7,6 @@ out
 
 # Maven directories
 target
-src/test
 logs
 
 # Minecraft Directory

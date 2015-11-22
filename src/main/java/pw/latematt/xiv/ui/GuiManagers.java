@@ -1,7 +1,6 @@
 package pw.latematt.xiv.ui;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import pw.latematt.xiv.ui.managers.alt.GuiAltManager;

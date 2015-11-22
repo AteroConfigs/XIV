@@ -1,7 +1,6 @@
 package pw.latematt.xiv.mod.mods.combat.aura.mode.modes;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
@@ -88,6 +87,8 @@ public class SemiMulti extends AuraMode {
 
     @Override
     public void onMotionPacket(C03PacketPlayer packet) {
+        if (!packet.isRotating())
+            return;
         if (entityToAttack != null && !killAura.isHealing()) {
             float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
             packet.setYaw(rotations[0]);

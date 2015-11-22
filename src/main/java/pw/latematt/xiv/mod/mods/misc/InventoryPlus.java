@@ -10,13 +10,11 @@ import net.minecraft.util.MathHelper;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.Listener;
-import pw.latematt.xiv.event.events.GuiScreenEvent;
 import pw.latematt.xiv.event.events.InventoryClosedEvent;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
 import pw.latematt.xiv.event.events.SendPacketEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.mod.mods.movement.Sprint;
 
 /**
  * @author Matthew

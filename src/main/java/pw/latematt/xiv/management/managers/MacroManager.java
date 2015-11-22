@@ -77,9 +77,9 @@ public class MacroManager extends ListManager<Macro> {
                                     } else {
                                         newBind = Keyboard.getKeyIndex(newBindName);
 
-                                        if(newBind == Keyboard.KEY_NONE) {
+                                        if (newBind == Keyboard.KEY_NONE) {
                                             ChatLogger.print("Invalid or unrecognized keybind.");
-                                        }else {
+                                        } else {
                                             Macro macro = new Macro(newBind, command);
                                             getContents().add(macro);
                                             XIV.getInstance().getFileManager().saveFile("macroconfig");

@@ -78,6 +78,8 @@ public class AutoHeal extends Mod implements CommandHandler {
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
+                    if (!player.isRotating())
+                        return;
                     if (healing) {
                         player.setYaw(-player.getYaw());
                         player.setPitch(85);

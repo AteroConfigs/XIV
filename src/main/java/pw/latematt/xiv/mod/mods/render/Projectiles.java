@@ -1,11 +1,9 @@
 package pw.latematt.xiv.mod.mods.render;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.*;
 import net.minecraft.util.AxisAlignedBB;
@@ -20,7 +18,6 @@ import pw.latematt.xiv.event.Listener;
 import pw.latematt.xiv.event.events.Render3DEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.utils.EntityUtils;
 import pw.latematt.xiv.utils.RenderUtils;
 
 import java.util.ArrayList;
@@ -164,7 +161,7 @@ public class Projectiles extends Mod implements Listener<Render3DEvent> {
             GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
             c.setDrawStyle(GLU.GLU_LINE);
 
-            if(landingOnEntity != null) {
+            if (landingOnEntity != null) {
                 GlStateManager.color(0.0F, 0.0F, 0.0F, 1.0F);
                 GL11.glLineWidth(RenderUtils.getLineWidth().getValue() + 2.5F);
                 c.draw(0.6F, 0.3F, 0.0F, 4, 1);

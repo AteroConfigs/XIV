@@ -8,7 +8,6 @@ import pw.latematt.xiv.event.events.AttackEntityEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 import pw.latematt.xiv.mod.mods.player.AutoHeal;
-import pw.latematt.xiv.utils.InventoryUtils;
 
 /**
  * @author Jack

@@ -1,7 +1,5 @@
 package pw.latematt.xiv.ui.clickgui.element;
 
-import pw.latematt.xiv.XIV;
-
 public abstract class Element {
 
     private float x, y, width, height;
