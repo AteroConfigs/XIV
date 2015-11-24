@@ -34,21 +34,16 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
             @Override
             public void onEventCalled(BlockAddBBEvent event) {
                 if (mode.getValue() == Mode.VANILLA_SKIP) {
-                    if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer)) {
+                    if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer))
                         event.setAxisAlignedBB(null);
-                    }
                 } else if (mode.getValue() == Mode.SKIP || mode.getValue() == Mode.VANILLA || mode.getValue() == Mode.NEW) {
-                    if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && BlockUtils.isInsideBlock(mc.thePlayer)) {
+                    if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && BlockUtils.isInsideBlock(mc.thePlayer))
                         event.setAxisAlignedBB(null);
-                    }
-
-                    if (mc.thePlayer.getEntityBoundingBox().maxY < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer)) {
+                    else if (mc.thePlayer.getEntityBoundingBox().maxY < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer))
                         event.setAxisAlignedBB(null);
-                    }
                 } else if (mode.getValue() == Mode.VANILLA_CONTROL) {
-                    if (BlockUtils.isInsideBlock(mc.thePlayer)) {
+                    if (BlockUtils.isInsideBlock(mc.thePlayer))
                         event.setAxisAlignedBB(null);
-                    }
                 }
             }
         };
@@ -77,20 +72,20 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                 float dir = mc.thePlayer.rotationYaw;
                 if (mc.thePlayer.moveForward < 0.0F)
                     dir += 180.0F;
-
                 if (mc.thePlayer.moveStrafing > 0.0F)
                     dir -= 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
-
                 if (mc.thePlayer.moveStrafing < 0.0F)
                     dir += 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
 
                 float xD = (float) Math.cos((dir + 90.0F) * Math.PI / 180.0D);
                 float zD = (float) Math.sin((dir + 90.0F) * Math.PI / 180.0D);
 
-                boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed();
+                boolean moving = mc.thePlayer.movementInput.moveForward != 0;
+                boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+
+                moving = moving || strafing;
                 if (mc.thePlayer.isCollidedHorizontally && !collided && mc.thePlayer.onGround && !BlockUtils.isInsideBlock(mc.thePlayer) && moving) {
                     mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
-
                     if (mode.getValue() == Mode.SKIP) {
                         float[] offset = new float[]{xD * 0.25F, 1.0F, zD * 0.25F};
 
@@ -139,7 +134,6 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                         if (motionY == 0 && mc.thePlayer.motionX == 0 && mc.thePlayer.motionZ == 0)
                             event.setCancelled(true);
                     }
-
                     mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
                 }
             }
