@@ -32,7 +32,7 @@ public class MineZ extends Mod {
                         needsToRespawn = false;
                     }
                 } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
-                    if (mc.thePlayer.experienceLevel < 20 && waterTimer.hasReached(500) && InventoryUtils.hotbarHasPotion(null, false)) {
+                    if (mc.thePlayer.experienceLevel < 10 && waterTimer.hasReached(500) && InventoryUtils.hotbarHasPotion(null, false)) {
                         if (mc.thePlayer.onGround || BlockUtils.isOnLadder(mc.thePlayer) || BlockUtils.isInLiquid(mc.thePlayer) || BlockUtils.isOnLiquid(mc.thePlayer)) {
                             final boolean wasSprinting = mc.thePlayer.isSprinting();
                             if (wasSprinting)
