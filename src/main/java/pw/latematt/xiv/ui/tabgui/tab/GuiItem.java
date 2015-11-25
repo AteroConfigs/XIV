@@ -4,15 +4,13 @@ import pw.latematt.xiv.mod.Mod;
 
 /**
  * @author Jack
+ * @editor Ddong because im the best
  */
-
 public class GuiItem {
     private final Mod mod;
-    private String name;
 
     public GuiItem(final Mod mod) {
         this.mod = mod;
-        this.name = mod.getName();
     }
 
     public Mod getMod() {
@@ -20,10 +18,6 @@ public class GuiItem {
     }
 
     public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        return mod.getName();
     }
 }
