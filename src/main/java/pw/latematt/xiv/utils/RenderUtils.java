@@ -359,9 +359,7 @@ public class RenderUtils {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(red, green, blue, alpha);
 
-        if (borderWidth == 1.0F) {
-            GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        }
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
 
         GL11.glLineWidth(borderWidth);
         Tessellator tessellator = Tessellator.getInstance();
@@ -378,15 +376,13 @@ public class RenderUtils {
         tessellator.draw();
         GL11.glLineWidth(2.0F);
 
-        if (borderWidth == 1.0F) {
-            GL11.glDisable(GL11.GL_LINE_SMOOTH);
-        }
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
 
         GlStateManager.func_179098_w();
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
     }
-    
+
     public static void drawBorderedRect(double left, double top, double right, double bottom, int borderColor, int color) {
         drawBorderedRect(left, top, right, bottom, 1.0F, borderColor, color);
     }

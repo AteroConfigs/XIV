@@ -10,7 +10,6 @@ import pw.latematt.xiv.utils.EntityUtils;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 /**
  * @author Matthew
