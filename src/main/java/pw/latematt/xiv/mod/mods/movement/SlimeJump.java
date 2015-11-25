@@ -25,13 +25,9 @@ public class SlimeJump extends Mod implements Listener<MotionUpdateEvent>, Comma
     }
 
     public void onEventCalled(MotionUpdateEvent event) {
-        if (BlockUtils.getBlock(mc.thePlayer, -0.5D) instanceof BlockSlime) {
-            if (mc.thePlayer.onGround) {
-                if (mc.thePlayer.motionY > 0) {
-                    mc.thePlayer.motionY += multiplier.getValue();
-                }
-            }
-        }
+        if (event.getCurrentState() == MotionUpdateEvent.State.PRE)
+            if (BlockUtils.getBlock(mc.thePlayer, -0.5D) instanceof BlockSlime && mc.thePlayer.onGround && mc.thePlayer.motionY > 0)
+                mc.thePlayer.motionY += multiplier.getValue();
     }
 
     @Override
@@ -42,14 +38,12 @@ public class SlimeJump extends Mod implements Listener<MotionUpdateEvent>, Comma
             switch (action.toLowerCase()) {
                 case "multiplier":
                 case "m":
-                case "h":
-                case "height":
                     if (arguments.length >= 3) {
                         String newMultiplierString = arguments[2];
                         try {
                             double newMultiplier = arguments[2].equalsIgnoreCase("-d") ? multiplier.getDefault() : Double.parseDouble(newMultiplierString);
                             multiplier.setValue(newMultiplier);
-                            ChatLogger.print(String.format("SlimeJump multiplier set to %s", multiplier.getValue()));
+                            ChatLogger.print(String.format("SlimeJump Multiplier set to %s", multiplier.getValue()));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newMultiplierString));
                         }

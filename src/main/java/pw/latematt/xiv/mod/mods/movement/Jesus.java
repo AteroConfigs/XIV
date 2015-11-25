@@ -32,6 +32,7 @@ public class Jesus extends Mod implements CommandHandler {
 
     public Jesus() {
         super("Jesus", ModType.MOVEMENT, Keyboard.KEY_J, 0xFF56BFE3);
+        setTag(currentMode.getValue().getName());
         Command.newCommand().cmd("jesus").description("Base command for the Jesus mod.").arguments("<action>").handler(this).build();
 
         blockAddBBListener = new Listener<BlockAddBBEvent>() {
@@ -85,19 +86,16 @@ public class Jesus extends Mod implements CommandHandler {
                 if (shouldJump && mc.thePlayer.isInsideOfMaterial(Material.air) && !mc.thePlayer.isSneaking()) {
                     switch (currentMode.getValue()) {
                         case NEW:
-                            if (BlockUtils.getBlock(mc.thePlayer, 0.2) instanceof BlockLiquid) {
+                            if (BlockUtils.getBlock(mc.thePlayer, 0.2) instanceof BlockLiquid)
                                 mc.thePlayer.motionY = 0.08;
-                            }
                             break;
                         case OLD:
-                            if (BlockUtils.isInLiquid(mc.thePlayer)) {
+                            if (BlockUtils.isInLiquid(mc.thePlayer))
                                 mc.thePlayer.motionY = 0.08;
-                            }
                             break;
                         case DOLPHIN:
-                            if (mc.thePlayer.isInWater()) {
+                            if (mc.thePlayer.isInWater())
                                 mc.thePlayer.motionY = 0.05;
-                            }
                             break;
                     }
                 }
@@ -112,10 +110,8 @@ public class Jesus extends Mod implements CommandHandler {
                     if (!player.isMoving())
                         return;
                     if (BlockUtils.isOnLiquid(mc.thePlayer) && shouldJump && currentMode.getValue() != Mode.DOLPHIN) {
-                        nextTick = !nextTick;
-                        if (nextTick) {
+                        if (nextTick = !nextTick)
                             player.setY(player.getY() - 0.01);
-                        }
                     }
                 }
             }
@@ -170,6 +166,9 @@ public class Jesus extends Mod implements CommandHandler {
                     } else {
                         ChatLogger.print("Invalid arguments, valid: jesus mode <mode>");
                     }
+                    break;
+                default:
+                    ChatLogger.print("Invalid action, valid: mode");
                     break;
             }
         } else {

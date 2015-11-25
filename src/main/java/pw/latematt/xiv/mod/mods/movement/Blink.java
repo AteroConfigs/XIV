@@ -33,36 +33,37 @@ public class Blink extends Mod {
         super("Blink", ModType.MOVEMENT, Keyboard.KEY_NONE, 11184895);
         setTag("" + packets.size());
 
-        this.packetListener = new Listener<SendPacketEvent>() {
+        packetListener = new Listener<SendPacketEvent>() {
             @Override
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    final boolean moving = mc.thePlayer.movementInput.moveForward != 0;
-                    final boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
-
                     double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
-                    boolean groundCheck = mc.thePlayer.onGround && yDifference == 0.0D;
+                    boolean groundCheck = yDifference == 0.0D;
 
-                    boolean movingCheck = moving || strafing || !groundCheck;
+                    boolean moving = mc.thePlayer.movementInput.moveForward != 0;
+                    boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+                    moving = moving || strafing;
 
+                    if (moving || !groundCheck)
+                        packets.add(player);
                     event.setCancelled(true);
-                    if (movingCheck) {
-                        packets.add(event.getPacket());
-                    }
                 }
 
-                if (event.getPacket() instanceof C07PacketPlayerDigging || event.getPacket() instanceof C08PacketPlayerBlockPlacement || event.getPacket() instanceof C0BPacketEntityAction || event.getPacket() instanceof C02PacketUseEntity || event.getPacket() instanceof C0APacketAnimation) {
-                    event.setCancelled(true);
-
+                if (event.getPacket() instanceof C07PacketPlayerDigging ||
+                        event.getPacket() instanceof C08PacketPlayerBlockPlacement ||
+                        event.getPacket() instanceof C0BPacketEntityAction ||
+                        event.getPacket() instanceof C02PacketUseEntity ||
+                        event.getPacket() instanceof C0APacketAnimation) {
                     packets.add(event.getPacket());
+                    event.setCancelled(true);
                 }
 
                 setTag("" + packets.size());
             }
         };
 
-        this.renderListener = new Listener<Render3DEvent>() {
+        renderListener = new Listener<Render3DEvent>() {
             @Override
             public void onEventCalled(Render3DEvent event) {
                 if (position == null) {
@@ -75,10 +76,10 @@ public class Blink extends Mod {
                 double[] start = new double[]{position.posX, position.posY, position.posZ};
 
                 RenderUtils.beginGl();
+                GlStateManager.color(0.3F, 0.7F, 1.0F, 1.0F);
                 Tessellator var2 = Tessellator.getInstance();
                 WorldRenderer var3 = var2.getWorldRenderer();
                 var3.startDrawing(2);
-                GlStateManager.color(0.3F, 0.7F, 1.0F, 1.0F);
                 var3.addVertex(start[0] - mc.getRenderManager().renderPosX, start[1] - mc.getRenderManager().renderPosY, start[2] - mc.getRenderManager().renderPosZ);
                 var3.addVertex(start[0] - mc.getRenderManager().renderPosX, start[1] + mc.thePlayer.height - mc.getRenderManager().renderPosY, start[2] - mc.getRenderManager().renderPosZ);
                 var2.draw();

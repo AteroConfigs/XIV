@@ -105,7 +105,7 @@ public class FastUse extends Mod implements Listener<MotionUpdateEvent>, Command
                 case "potions":
                     if (arguments.length >= 3) {
                         if (arguments[2].equalsIgnoreCase("-d")) {
-                            milk.setValue(milk.getDefault());
+                            potions.setValue(potions.getDefault());
                         } else {
                             potions.setValue(Boolean.parseBoolean(arguments[2]));
                         }

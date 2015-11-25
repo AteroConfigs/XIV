@@ -35,12 +35,10 @@ import pw.latematt.xiv.value.ClampedValue;
  */
 public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
     private final ClampedValue<Double> range = new ClampedValue<>("clickteleport_range", 35.0, 15.0, 120.0);
-
+    private Listener blockReachListener, renderListener, sendPacketListener;
     private BlockPos teleportPosition;
     private boolean canDraw;
-    private int delay = 0;
-
-    private Listener blockReachListener, renderListener, sendPacketListener;
+    private int delay;
 
     public ClickTeleport() {
         super("Click Teleport", ModType.MOVEMENT, Keyboard.KEY_NONE, 0xFFFF697C);
@@ -162,7 +160,7 @@ public class ClickTeleport extends Mod implements Listener<MotionUpdateEvent>, C
             offset -= 0.95F;
         } else if (block == Blocks.snow_layer) {
             offset -= 0.875F;
-            offset += 0.125F * (((Integer) state.getValue(BlockSnow.LAYERS_PROP)).intValue() - 1);
+            offset += 0.125F * ((Integer) state.getValue(BlockSnow.LAYERS_PROP) - 1);
         } else if (isValidBlock(block)) {
             offset -= 1.0F;
         }

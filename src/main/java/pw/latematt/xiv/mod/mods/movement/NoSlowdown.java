@@ -38,6 +38,7 @@ public class NoSlowdown extends Mod {
             }
         };
 
+        /* fix for blocking with a sword, TODO: remove it when updating to 1.9 (when it happens) */
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             public boolean blockingFix;
 
@@ -47,9 +48,8 @@ public class NoSlowdown extends Mod {
                     return;
 
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (mc.thePlayer.isBlocking()) {
+                    if (mc.thePlayer.isBlocking())
                         mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
-                    }
                 } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
                     KillAura aura = (KillAura) XIV.getInstance().getModManager().find("killaura");
                     if (aura.isAttacking()) {
@@ -78,8 +78,7 @@ public class NoSlowdown extends Mod {
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(itemSlowdownListener, motionUpdateListener, soulSandSlowdownListener);
-        if (mc.thePlayer != null) {
+        if (mc.thePlayer != null)
             mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
-        }
     }
 }
