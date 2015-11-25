@@ -47,7 +47,7 @@ public class Switch extends AuraMode {
 
                         return firstEntityDistance > secondEntityDistance ? 1 :
                                 secondEntityDistance > firstEntityDistance ? -1 : 0;
-                    }).collect(Collectors.toList()).get(0);
+                    }).findFirst().get();
             if (killAura.isValidEntity(firstInArray)) {
                 entityToAttack = firstInArray;
             } else {
@@ -94,11 +94,6 @@ public class Switch extends AuraMode {
                 packet.setPitch(rotations[1]);
             }
         }
-    }
-
-    @Override
-    public boolean isAttacking() {
-        return killAura.isValidEntity(entityToAttack);
     }
 
     @Override

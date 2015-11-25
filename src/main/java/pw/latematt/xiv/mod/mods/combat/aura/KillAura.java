@@ -5,10 +5,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.*;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
@@ -112,12 +109,15 @@ public class KillAura extends Mod implements CommandHandler {
     }
 
     public void attack(EntityLivingBase target) {
+        final ItemStack currentItem = mc.thePlayer.inventory.getCurrentItem();
         // stop sprinting
         // and stop sneaking
         // and stop blocking
         final boolean wasSprinting = mc.thePlayer.isSprinting();
         final boolean wasSneaking = mc.thePlayer.isSneaking();
-        final boolean wasBlocking = mc.thePlayer.isBlocking();
+        final boolean wasBlocking = currentItem != null &&
+                currentItem.getItem().getItemUseAction(currentItem) == EnumAction.BLOCK &&
+                mc.thePlayer.isBlocking();
         if (wasSprinting)
             mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
         if (wasSneaking)
@@ -126,14 +126,14 @@ public class KillAura extends Mod implements CommandHandler {
             mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
 
         int oldDamage = 0;
-        if (mc.thePlayer.getCurrentEquippedItem() != null)
-            oldDamage = mc.thePlayer.getCurrentEquippedItem().getItemDamage();
+        if (currentItem != null)
+            oldDamage = currentItem.getItemDamage();
 
         mc.thePlayer.swingItem();
         mc.playerController.attackEntity(mc.thePlayer, target);
 
-        if (mc.thePlayer.getCurrentEquippedItem() != null)
-            mc.thePlayer.getCurrentEquippedItem().setItemDamage(oldDamage);
+        if (currentItem != null)
+            currentItem.setItemDamage(oldDamage);
 
         // continue sprinting
         // and continue sneaking
@@ -143,11 +143,11 @@ public class KillAura extends Mod implements CommandHandler {
         if (wasSneaking)
             mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
         if (wasBlocking)
-            mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(mc.thePlayer.inventory.getCurrentItem()));
+            mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(currentItem));
         mc.thePlayer.setSprinting(wasSprinting);
         mc.thePlayer.setSneaking(wasSneaking);
         if (wasBlocking)
-            mc.thePlayer.setItemInUse(mc.thePlayer.getCurrentEquippedItem(), mc.thePlayer.getCurrentEquippedItem().getMaxItemUseDuration());
+            mc.thePlayer.setItemInUse(currentItem, currentItem.getMaxItemUseDuration());
     }
 
     public boolean isValidEntity(EntityLivingBase entity) {
@@ -204,10 +204,6 @@ public class KillAura extends Mod implements CommandHandler {
         }
 
         return false;
-    }
-
-    public boolean isAttacking() {
-        return currentMode.getValue().isAttacking();
     }
 
     public Long getDelay() {
@@ -515,7 +511,7 @@ public class KillAura extends Mod implements CommandHandler {
                                 ChatLogger.print("Invalid mode, valid: singular, switch, multi, semimulti");
                                 break;
                         }
-                        setTag(this.currentMode.getValue().getName());
+                        setTag(currentMode.getValue().getName());
                     } else {
                         ChatLogger.print("Invalid arguments, valid: killaura mode <mode>");
                     }

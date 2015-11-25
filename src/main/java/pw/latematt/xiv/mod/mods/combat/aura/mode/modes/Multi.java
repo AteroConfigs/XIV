@@ -24,7 +24,7 @@ public class Multi extends AuraMode {
 
     @Override
     public void onPostMotionUpdate(MotionUpdateEvent event) {
-        if (isAttacking() && !killAura.isHealing()) {
+        if (isEntityInRange() && !killAura.isHealing()) {
             if (timer.hasReached(killAura.getDelay())) {
                 mc.theWorld.loadedEntityList.stream()
                         .filter(entity -> entity instanceof EntityLivingBase)
@@ -37,19 +37,22 @@ public class Multi extends AuraMode {
 
     @Override
     public void onMotionPacket(C03PacketPlayer packet) {
-
-    }
-
-    @Override
-    public boolean isAttacking() {
-        return mc.theWorld.loadedEntityList.stream()
-                .filter(entity -> entity instanceof EntityLivingBase)
-                .filter(entity -> killAura.isValidEntity((EntityLivingBase) entity))
-                .findFirst().isPresent();
+        if (!packet.isRotating())
+            return;
+        if (isEntityInRange() && !killAura.isHealing()) {
+            packet.setPitch(95);
+        }
     }
 
     @Override
     public void onDisabled() {
 
+    }
+
+    private boolean isEntityInRange() {
+        return mc.theWorld.loadedEntityList.stream()
+                .filter(entity -> entity instanceof EntityLivingBase)
+                .filter(entity -> killAura.isValidEntity((EntityLivingBase) entity))
+                .findFirst().isPresent();
     }
 }

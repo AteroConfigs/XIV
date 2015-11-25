@@ -38,11 +38,11 @@ public class NoSlowdown extends Mod {
             }
         };
 
-        /* fix for blocking with a sword, TODO: remove it when updating to 1.9 (when it happens) */
+        /* fix for blocking with a sword, TODO: remove it when updating to 1.9 */
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                ItemStack currentItem = mc.thePlayer.getCurrentEquippedItem();
+                ItemStack currentItem = mc.thePlayer.inventory.getCurrentItem();
                 if (currentItem == null)
                     return;
                 if (currentItem.getItem().getItemUseAction(currentItem) != EnumAction.BLOCK)

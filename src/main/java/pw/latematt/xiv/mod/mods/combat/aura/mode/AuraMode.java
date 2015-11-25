@@ -28,7 +28,5 @@ public abstract class AuraMode {
 
     public abstract void onMotionPacket(C03PacketPlayer packet);
 
-    public abstract boolean isAttacking();
-
     public abstract void onDisabled();
 }

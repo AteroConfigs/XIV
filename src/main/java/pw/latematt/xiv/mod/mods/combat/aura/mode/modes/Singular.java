@@ -76,11 +76,6 @@ public class Singular extends AuraMode {
     }
 
     @Override
-    public boolean isAttacking() {
-        return killAura.isValidEntity(entityToAttack);
-    }
-
-    @Override
     public void onDisabled() {
         entityToAttack = null;
     }
