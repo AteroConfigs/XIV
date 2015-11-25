@@ -34,18 +34,11 @@ public class SemiMulti extends AuraMode {
                         double entity2Distance = mc.thePlayer.getDistanceToEntity(entity2);
                         return entity1Distance > entity2Distance ? 1 : entity2Distance > entity1Distance ? -1 : 0;
                     }).findFirst();
-            if (firstValidEntity.isPresent()) {
+            if (firstValidEntity.isPresent())
                 entityToAttack = (EntityLivingBase) firstValidEntity.get();
-            }
         }
 
         if (killAura.isValidEntity(entityToAttack)) {
-            if (killAura.autoBlock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
-                ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
-                sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
-                mc.playerController.updateController();
-            }
-
             if (!killAura.isHealing()) {
                 float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
                 if (killAura.silent.getValue()) {

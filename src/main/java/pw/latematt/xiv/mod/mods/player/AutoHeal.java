@@ -23,17 +23,15 @@ import pw.latematt.xiv.utils.ChatLogger;
 import pw.latematt.xiv.value.ClampedValue;
 import pw.latematt.xiv.value.Value;
 
-import java.util.Objects;
-
 import static pw.latematt.xiv.utils.InventoryUtils.*;
 
 /**
  * @author Matthew
  */
 public class AutoHeal extends Mod implements CommandHandler {
-    private final ClampedValue<Long> delay = new ClampedValue<>("autoheal_delay", 200L, 0L, 1000L);
+    private final ClampedValue<Long> delay = new ClampedValue<>("autoheal_delay", 250L, 0L, 1000L);
     private final ClampedValue<Float> health = new ClampedValue<>("autoheal_health", 12.0F, 1.0F, 20.0F);
-    private final Value<Mode> mode = new Value<>("autoheal_mode", Mode.POTION);
+    private final Value<Mode> currentMode = new Value<>("autoheal_mode", Mode.POTION);
     private final Listener sendPacketListener, readPacketListener, motionUpdateListener;
     private final Timer timer = new Timer();
     private boolean needsToHeal;
@@ -46,9 +44,9 @@ public class AutoHeal extends Mod implements CommandHandler {
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.PRE)) {
+                if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
                     updateCounter();
-                    if (needsToHeal && timer.hasReached(delay.getValue()) && mode.getValue() == Mode.POTION) {
+                    if (needsToHeal && timer.hasReached(delay.getValue()) && currentMode.getValue() == Mode.POTION) {
                         if (canSafelyThrowPot()) {
                             if (!hotbarHasPotion(Potion.INSTANT_HEALTH, true) && !hotbarIsFull())
                                 shiftClickPotion(Potion.INSTANT_HEALTH, true);
@@ -60,7 +58,7 @@ public class AutoHeal extends Mod implements CommandHandler {
                             }
                         }
                     }
-                } else if (Objects.equals(event.getCurrentState(), MotionUpdateEvent.State.POST)) {
+                } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
                     if (healing) {
                         if (needsToHeal) {
                             useFirstPotion(Potion.INSTANT_HEALTH, true);
@@ -94,10 +92,10 @@ public class AutoHeal extends Mod implements CommandHandler {
                 if (event.getPacket() instanceof S06PacketUpdateHealth) {
                     S06PacketUpdateHealth updateHealth = (S06PacketUpdateHealth) event.getPacket();
                     needsToHeal = updateHealth.getHealth() <= health.getValue();
-                    if (mode.getValue() == Mode.HEAD)
+                    if (currentMode.getValue() == Mode.HEAD)
                         needsToHeal = needsToHeal || teammateNeedsToHeal();
                     if (needsToHeal && timer.hasReached(delay.getValue())) {
-                        switch (mode.getValue()) {
+                        switch (currentMode.getValue()) {
                             case SOUP:
                                 dropFirst(Items.bowl);
                                 if (!hotbarHas(Items.mushroom_stew) && !hotbarIsFull())
@@ -131,7 +129,10 @@ public class AutoHeal extends Mod implements CommandHandler {
     }
 
     private boolean teammateNeedsToHeal() {
-        return mc.theWorld.playerEntities.stream().filter(player -> mc.thePlayer.isOnSameTeam(player) || XIV.getInstance().getFriendManager().isFriend(player.getName())).filter(player -> player.getHealth() <= health.getValue()).findAny().isPresent();
+        return mc.theWorld.playerEntities.stream()
+                .filter(player -> player.getHealth() <= health.getValue())
+                .filter(player -> mc.thePlayer.isOnSameTeam(player) || XIV.getInstance().getFriendManager().isFriend(player.getName()))
+                .findFirst().isPresent();
     }
 
     private boolean canSafelyThrowPot() {
@@ -151,7 +152,7 @@ public class AutoHeal extends Mod implements CommandHandler {
     private void updateCounter() {
         String displayName = getName();
 
-        switch (mode.getValue()) {
+        switch (currentMode.getValue()) {
             case SOUP:
                 int soups = countItem(Items.mushroom_stew);
                 if (soups > 0)
@@ -234,25 +235,25 @@ public class AutoHeal extends Mod implements CommandHandler {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
                             case "soup":
-                                this.mode.setValue(Mode.SOUP);
-                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(Mode.SOUP);
+                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "head":
-                                this.mode.setValue(Mode.HEAD);
-                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(Mode.HEAD);
+                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "cookie":
-                                this.mode.setValue(Mode.COOKIE);
-                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(Mode.COOKIE);
+                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "potion":
                             case "pot":
-                                this.mode.setValue(Mode.POTION);
-                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(Mode.POTION);
+                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "-d":
-                                this.mode.setValue(this.mode.getDefault());
-                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(currentMode.getDefault());
+                                ChatLogger.print(String.format("AutoHeal Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             default:
                                 ChatLogger.print("Invalid mode, valid: soup, head, cookie, potion");
@@ -263,7 +264,7 @@ public class AutoHeal extends Mod implements CommandHandler {
                     }
                     break;
                 case "heal":
-                    switch (mode.getValue()) {
+                    switch (currentMode.getValue()) {
                         case SOUP:
                             if (hotbarHas(Items.bowl))
                                 dropFirst(Items.bowl);

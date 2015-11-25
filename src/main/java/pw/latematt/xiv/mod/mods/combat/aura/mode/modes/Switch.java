@@ -58,12 +58,6 @@ public class Switch extends AuraMode {
         }
 
         if (killAura.isValidEntity(entityToAttack)) {
-            if (killAura.autoBlock.getValue() && Objects.nonNull(mc.thePlayer.getCurrentEquippedItem()) && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
-                ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
-                sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
-                mc.playerController.updateController();
-            }
-
             if (!killAura.isHealing()) {
                 float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
                 if (killAura.silent.getValue()) {

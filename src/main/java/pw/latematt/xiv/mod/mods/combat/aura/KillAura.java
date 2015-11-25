@@ -10,7 +10,11 @@ import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C07PacketPlayerDigging;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -67,7 +71,19 @@ public class KillAura extends Mod implements CommandHandler {
             public void onEventCalled(MotionUpdateEvent event) {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
                     mode.getValue().onPreMotionUpdate(event);
+                    if (autoBlock.getValue() && isAttacking()) {
+                        ItemStack currentItem = mc.thePlayer.getCurrentEquippedItem();
+                        if (currentItem.getItem() instanceof ItemSword) {
+                            currentItem.getItem().onItemRightClick(currentItem, mc.theWorld, mc.thePlayer);
+                            mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(BlockPos.ORIGIN, 255, mc.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
+                        }
+                    }
                 } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
+                    if (autoBlock.getValue() && isAttacking()) {
+                        ItemStack currentItem = mc.thePlayer.getCurrentEquippedItem();
+                        if (currentItem.getItem() instanceof ItemSword)
+                            mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+                    }
                     mode.getValue().onPostMotionUpdate(event);
                 }
             }
