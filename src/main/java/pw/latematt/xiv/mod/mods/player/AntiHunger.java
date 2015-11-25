@@ -20,7 +20,9 @@ public class AntiHunger extends Mod implements Listener<SendPacketEvent> {
     public void onEventCalled(SendPacketEvent event) {
         if (event.getPacket() instanceof C03PacketPlayer) {
             C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-            if (mc.thePlayer.posY == mc.thePlayer.lastTickPosY && !mc.playerController.isHittingBlock)
+            double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
+            boolean groundCheck = yDifference == 0.0D;
+            if (groundCheck && !mc.playerController.isHittingBlock)
                 player.setOnGround(false);
         }
     }

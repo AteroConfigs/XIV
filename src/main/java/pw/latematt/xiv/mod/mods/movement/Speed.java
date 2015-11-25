@@ -231,14 +231,10 @@ public class Speed extends Mod implements CommandHandler {
                         case CAPSAR:
                             speed = 2.433D;
                             slow = 1.5D;
-                            if (!mc.thePlayer.isSprinting()) {
+                            if (!mc.thePlayer.isSprinting())
                                 speed += 0.4D;
-                                slow -= 0.005D;
-                            }
-                            if (strafe) {
+                            if (strafe)
                                 speed -= 0.04F;
-                                slow -= 0.005D;
-                            }
                             speed = applySpeedModifier(speed);
 
                             if (canSpeed(groundCheck)) {
@@ -258,14 +254,6 @@ public class Speed extends Mod implements CommandHandler {
                         case OLD:
                             speed = 3.0D;
                             slow = 1.425D;
-                            if (!mc.thePlayer.isSprinting()) {
-                                speed += 0.4D;
-                                slow -= 0.005D;
-                            }
-                            if (strafe) {
-                                speed -= 0.04F;
-                                slow -= 0.005D;
-                            }
 
                             if (canSpeed(groundCheck)) {
                                 switch (++ticks) {
@@ -286,7 +274,7 @@ public class Speed extends Mod implements CommandHandler {
                             } else {
                                 mc.thePlayer.motionX *= 0.98D;
                                 mc.thePlayer.motionZ *= 0.98D;
-                                ticks = 3;
+                                ticks = 2;
                             }
                             break;
                     }
@@ -348,20 +336,17 @@ public class Speed extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
-                            case "lithe":
-                            case "faster":
                             case "boost":
+                            case "lithe":
                                 currentMode.setValue(Mode.BOOST);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;
-                            case "deluge":
-                            case "fast":
                             case "bunnyhop":
+                            case "deluge":
                                 currentMode.setValue(Mode.BUNNYHOP);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "capsar":
-                            case "capser":
                                 currentMode.setValue(Mode.CAPSAR);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;

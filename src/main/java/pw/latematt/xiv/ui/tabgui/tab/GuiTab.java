@@ -1,69 +1,105 @@
 package pw.latematt.xiv.ui.tabgui.tab;
 
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
-import pw.latematt.xiv.ui.tabgui.GuiTabHandler;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
+import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.utils.RenderUtils;
 
-import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
- * @author Jack
+ * @author Ddong
  */
-
 public class GuiTab {
-    private final GuiTabHandler gui;
-    private final ArrayList<GuiItem> mods = new ArrayList<>();
-    private int menuHeight = 0;
-    private int menuWidth = 0;
-    private String tabName;
+    public List<GuiItem> buttons;
+    private String label;
+    private int width;
+    private int selected;
 
-    public GuiTab(final GuiTabHandler gui, final String tabName) {
-        this.gui = gui;
-        this.tabName = tabName;
+    public GuiTab(String label) {
+        this.buttons = Lists.newArrayList();
+        this.selected = 0;
+        this.label = label;
     }
 
-    public void drawTabMenu(Minecraft mc, int x, int y) {
-        this.countMenuSize(mc);
-        int boxY = y;
+    public void drawTab(int x, int y, int widest, boolean selected, boolean hovered) {
+        FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+        String prefix = hovered ? "\247f" : "\2477";
+        Gui.drawRect(2, y - 2, widest + 6, y + 10, hovered ? 0x804DB3FF : 0x950C1A26);
+        font.drawStringWithShadow(prefix + this.label, x, y, 0xFFFFFF);
+    }
 
-        RenderUtils.drawBorderedRect(x, y, x + this.menuWidth, y + this.menuHeight, 0x80000000, this.gui.getColourBody());
-        for (int i = 0; i < this.mods.size(); i++) {
-            if (this.gui.getSelectedItem() == i) {
-                int transitionTop = this.gui.getTransition() + (this.gui.getSelectedItem() == 0 && this.gui.getTransition() < 0 ? -this.gui.getTransition() : 0);
-                int transitionBottom = this.gui.getTransition() + (this.gui.getSelectedItem() == this.mods.size() - 1 && this.gui.getTransition() > 0 ? -this.gui.getTransition() : 0);
+    public void drawButtons(int startY, int width, boolean selected, boolean hovered) {
+        if (!selected) {
+            return;
+        }
 
-                RenderUtils.drawBorderedRect(x, boxY + transitionTop, x + this.menuWidth, boxY + 12 + transitionBottom, 0x80000000, this.gui.getColourBox());
+        FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+        int y = startY;
+        for (GuiItem button : this.buttons) {
+            y += 12;
+            if (this.width == 2) {
+                this.width = font.getStringWidth(button.getName());
             }
 
-            mc.fontRendererObj.drawStringWithShadow((this.mods.get(i).getMod().isEnabled() ? this.gui.getColourHightlight() : this.gui.getColourNormal()) + this.mods.get(i).getName(), x + 2, y + this.gui.getTabHeight() * i + 2, 0xFFFFFFFF);
+            if (font.getStringWidth(button.getName()) < this.width) {
+                continue;
+            }
 
-            boxY += 12;
+            this.width = font.getStringWidth(button.getName());
+        }
+
+        RenderUtils.drawHollowRect(width + 8, startY, width + this.width + 12, y, 1.0f, 0x950C1A26);
+        int height = startY;
+        for (GuiItem button : this.buttons) {
+            Gui.drawRect(width + 8, height, width + this.width + 12, height + 12, (this.buttons.get(this.selected) == button) ? 0x804DB3FF : 0x950C1A26);
+            String prefix = button.getMod().isEnabled() ? "\247f" : "\2477";
+            font.drawStringWithShadow(prefix + button.getName(), width + 10, height + 2, button.getMod().isEnabled() ? -3495936 : -5723992);
+            height += 12;
         }
     }
 
-    private void countMenuSize(Minecraft mc) {
-        int maxWidth = 0;
-        for (GuiItem mod : this.mods) {
-            if (mc.fontRendererObj.getStringWidth(mod.getName()) > maxWidth) {
-                maxWidth = 2 + mc.fontRendererObj.getStringWidth(mod.getName()) + 2;
-            }
-//            System.out.println(mod.getName() + " ee " + (2 + mc.fontRendererObj.getStringWidth(mod.getName() + "r") + 2));
+    /**
+     * Handle each key event inside the tab.
+     *
+     * @param keyCode
+     */
+    public void keyboard(int keyCode) {
+        switch (keyCode) {
+            case Keyboard.KEY_DOWN:
+                ++this.selected;
+                if (this.selected > this.buttons.size() - 1) {
+                    this.selected = 0;
+                }
+
+                break;
+            case Keyboard.KEY_UP:
+                --this.selected;
+                if (this.selected < 0) {
+                    this.selected = this.buttons.size() - 1;
+                }
+                break;
+            case Keyboard.KEY_RIGHT:
+            case Keyboard.KEY_RETURN:
+                this.buttons.get(this.selected).getMod().toggle();
+                break;
         }
-
-        this.menuWidth = maxWidth;
-
-        this.menuHeight = this.mods.size() * this.gui.getTabHeight();
     }
 
     public String getTabName() {
-        return tabName;
+        return this.label;
     }
 
-    public void setTabName(String tabName) {
-        this.tabName = tabName;
-    }
-
-    public ArrayList<GuiItem> getMods() {
-        return mods;
+    public void addButton(GuiItem button) {
+        this.buttons.add(button);
+        this.buttons.sort(new Comparator<GuiItem>() {
+            @Override
+            public int compare(GuiItem o1, GuiItem o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
     }
 }

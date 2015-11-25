@@ -67,9 +67,8 @@ public class AutoBardKit extends Mod implements Listener<MotionUpdateEvent>, Com
                 }
 
                 if (selectedSlotId != -1) {
-                    if (selectedSlotId < 9) {
+                    if (selectedSlotId < 9)
                         selectedSlotId += 36;
-                    }
                     mc.playerController.windowClick(0, selectedSlotId, 0, 1, mc.thePlayer);
                     time.reset();
                 }

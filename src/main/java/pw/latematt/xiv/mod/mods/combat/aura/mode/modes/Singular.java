@@ -2,7 +2,6 @@ package pw.latematt.xiv.mod.mods.combat.aura.mode.modes;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import pw.latematt.timer.Timer;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
@@ -40,12 +39,6 @@ public class Singular extends AuraMode {
         }
 
         if (killAura.isValidEntity(entityToAttack)) {
-            if (killAura.autoBlock.getValue() && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
-                ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
-                sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
-                mc.playerController.updateController();
-            }
-
             if (!killAura.isHealing()) {
                 float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
                 if (killAura.silent.getValue()) {
@@ -80,11 +73,6 @@ public class Singular extends AuraMode {
             packet.setYaw(rotations[0]);
             packet.setPitch(rotations[1]);
         }
-    }
-
-    @Override
-    public boolean isAttacking() {
-        return killAura.isValidEntity(entityToAttack);
     }
 
     @Override

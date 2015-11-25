@@ -5,12 +5,13 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.*;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C07PacketPlayerDigging;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import org.lwjgl.input.Keyboard;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.command.Command;
@@ -52,12 +53,11 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> friends = new Value<>("killaura_friends", false);
     private final Value<Boolean> admins = new Value<>("killaura_admins", false);
     public final Value<Boolean> silent = new Value<>("killaura_silent", true);
-    public final Value<Boolean> autoSword = new Value<>("killaura_auto_sword", true);
     private final Value<Boolean> toggleDeath = new Value<>("killaura_toggle_death", false);
     public final Value<Boolean> autoBlock = new Value<>("killaura_auto_block", false);
     public final Value<Boolean> weaponOnly = new Value<>("killaura_weapon_only", false);
     private final Random random = new Random();
-    private final Value<AuraMode> mode = new Value<>("killaura_mode", new Singular(this));
+    private final Value<AuraMode> currentMode = new Value<>("killaura_mode", new Singular(this));
 
     public KillAura() {
         super("Kill Aura", ModType.COMBAT, Keyboard.KEY_R, 0xFFC6172B);
@@ -67,9 +67,22 @@ public class KillAura extends Mod implements CommandHandler {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
                 if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    mode.getValue().onPreMotionUpdate(event);
+                    if (autoBlock.getValue()) {
+                        boolean entitiesNearby = mc.theWorld.loadedEntityList.stream()
+                                .filter(entity -> entity instanceof EntityLivingBase)
+                                .filter(entity -> isValidEntity((EntityLivingBase) entity, 6))
+                                .findFirst().isPresent();
+                        if (entitiesNearby) {
+                            ItemStack currentItem = mc.thePlayer.getCurrentEquippedItem();
+                            if (currentItem != null && currentItem.getItem() instanceof ItemSword) {
+                                mc.thePlayer.setItemInUse(currentItem, currentItem.getMaxItemUseDuration());
+                            }
+                        }
+                    }
+
+                    currentMode.getValue().onPreMotionUpdate(event);
                 } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
-                    mode.getValue().onPostMotionUpdate(event);
+                    currentMode.getValue().onPostMotionUpdate(event);
                 }
             }
         };
@@ -79,7 +92,7 @@ public class KillAura extends Mod implements CommandHandler {
             public void onEventCalled(SendPacketEvent event) {
                 if (event.getPacket() instanceof C03PacketPlayer) {
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
-                    mode.getValue().onMotionPacket(player);
+                    currentMode.getValue().onMotionPacket(player);
                 }
             }
         };
@@ -92,36 +105,56 @@ public class KillAura extends Mod implements CommandHandler {
             }
         };
 
-        setTag(mode.getValue().getName());
+        setTag(currentMode.getValue().getName());
     }
 
     public void attack(EntityLivingBase target) {
-        final boolean wasSprinting = mc.thePlayer.isSprinting();
-        if (autoSword.getValue())
-            mc.thePlayer.inventory.currentItem = EntityUtils.getBestWeapon(target);
-        mc.playerController.updateController();
-
+        final ItemStack currentItem = mc.thePlayer.inventory.getCurrentItem();
         // stop sprinting
+        // and stop sneaking
+        // and stop blocking
+        final boolean wasSprinting = mc.thePlayer.isSprinting();
+        final boolean wasSneaking = mc.thePlayer.isSneaking();
+        final boolean wasBlocking = currentItem != null &&
+                currentItem.getItem().getItemUseAction(currentItem) == EnumAction.BLOCK &&
+                mc.thePlayer.isBlocking();
         if (wasSprinting)
             mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
+        if (wasSneaking)
+            mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
+        if (wasBlocking)
+            mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
 
         int oldDamage = 0;
-        if (mc.thePlayer.getCurrentEquippedItem() != null)
-            oldDamage = mc.thePlayer.getCurrentEquippedItem().getItemDamage();
+        if (currentItem != null)
+            oldDamage = currentItem.getItemDamage();
 
         mc.thePlayer.swingItem();
         mc.playerController.attackEntity(mc.thePlayer, target);
 
-        if (mc.thePlayer.getCurrentEquippedItem() != null)
-            mc.thePlayer.getCurrentEquippedItem().setItemDamage(oldDamage);
+        if (currentItem != null)
+            currentItem.setItemDamage(oldDamage);
 
         // continue sprinting
+        // and continue sneaking
+        // and continue blocking
         if (wasSprinting)
             mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SPRINTING));
+        if (wasSneaking)
+            mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
+        if (wasBlocking)
+            mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(currentItem));
         mc.thePlayer.setSprinting(wasSprinting);
+        mc.thePlayer.setSneaking(wasSneaking);
+        if (wasBlocking)
+            mc.thePlayer.setItemInUse(currentItem, currentItem.getMaxItemUseDuration());
     }
 
     public boolean isValidEntity(EntityLivingBase entity) {
+        return isValidEntity(entity, range.getValue());
+    }
+
+    public boolean isValidEntity(EntityLivingBase entity, double range) {
         if (!checkWeapon(mc.thePlayer.getHeldItem()))
             return false;
         if (entity == null)
@@ -136,7 +169,7 @@ public class KillAura extends Mod implements CommandHandler {
             return false;
         if (entity.ticksExisted < ticksToWait.getValue())
             return false;
-        if (EntityUtils.getReference().getDistanceToEntity(entity) > range.getValue())
+        if (EntityUtils.getReference().getDistanceToEntity(entity) > range)
             return false;
         if (!invisible.getValue() && entity.isInvisibleToPlayer(mc.thePlayer))
             return false;
@@ -167,17 +200,10 @@ public class KillAura extends Mod implements CommandHandler {
             return true;
         if (itemStack != null) {
             Item item = itemStack.getItem();
-
-            if (item instanceof ItemSword || item instanceof ItemAxe) {
-                return true;
-            }
+            return item instanceof ItemSword || item instanceof ItemAxe;
         }
 
         return false;
-    }
-
-    public boolean isAttacking() {
-        return mode.getValue().isAttacking();
     }
 
     public Long getDelay() {
@@ -431,19 +457,6 @@ public class KillAura extends Mod implements CommandHandler {
                     }
                     ChatLogger.print(String.format("Kill Aura will %s silently aim.", (silent.getValue() ? "now" : "no longer")));
                     break;
-                case "autosword":
-                case "as":
-                    if (arguments.length >= 3) {
-                        if (arguments[2].equalsIgnoreCase("-d")) {
-                            autoSword.setValue(autoSword.getDefault());
-                        } else {
-                            autoSword.setValue(Boolean.parseBoolean(arguments[2]));
-                        }
-                    } else {
-                        autoSword.setValue(!autoSword.getValue());
-                    }
-                    ChatLogger.print(String.format("Kill Aura will %s automatically switch to your sword.", (autoSword.getValue() ? "now" : "no longer")));
-                    break;
                 case "autoblock":
                 case "ab":
                     if (arguments.length >= 3) {
@@ -475,36 +488,36 @@ public class KillAura extends Mod implements CommandHandler {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
                             case "singular":
-                                this.mode.setValue(new Singular(this));
-                                ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
+                                currentMode.setValue(new Singular(this));
+                                ChatLogger.print(String.format("Kill Aura Mode set to %s", currentMode.getValue().getName()));
                                 break;
                             case "switch":
-                                this.mode.setValue(new Switch(this));
-                                ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
+                                currentMode.setValue(new Switch(this));
+                                ChatLogger.print(String.format("Kill Aura Mode set to %s", currentMode.getValue().getName()));
                                 break;
                             case "multi":
-                                this.mode.setValue(new Multi(this));
-                                ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
+                                currentMode.setValue(new Multi(this));
+                                ChatLogger.print(String.format("Kill Aura Mode set to %s", currentMode.getValue().getName()));
                                 break;
                             case "semimulti":
-                                this.mode.setValue(new SemiMulti(this));
-                                ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
+                                currentMode.setValue(new SemiMulti(this));
+                                ChatLogger.print(String.format("Kill Aura Mode set to %s", currentMode.getValue().getName()));
                                 break;
                             case "-d":
-                                this.mode.setValue(this.mode.getDefault());
-                                ChatLogger.print(String.format("Kill Aura Mode set to %s", this.mode.getValue().getName()));
+                                currentMode.setValue(currentMode.getDefault());
+                                ChatLogger.print(String.format("Kill Aura Mode set to %s", currentMode.getValue().getName()));
                                 break;
                             default:
                                 ChatLogger.print("Invalid mode, valid: singular, switch, multi, semimulti");
                                 break;
                         }
-                        setTag(this.mode.getValue().getName());
+                        setTag(currentMode.getValue().getName());
                     } else {
                         ChatLogger.print("Invalid arguments, valid: killaura mode <mode>");
                     }
                     break;
                 default:
-                    ChatLogger.print("Invalid action, valid: delay, randomdelay, attackspersecond, range, fov, tickstowait, players, mobs, animals, invisible, team, silent, autosword, autoblock, weapononly, mode");
+                    ChatLogger.print("Invalid action, valid: delay, randomdelay, attackspersecond, range, fov, tickstowait, players, mobs, animals, invisible, team, silent, autoblock, weapononly, mode");
                     break;
             }
         } else {
@@ -520,6 +533,6 @@ public class KillAura extends Mod implements CommandHandler {
     @Override
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(motionUpdateListener, sendPacketListener, playerDeathListener);
-        mode.getValue().onDisabled();
+        currentMode.getValue().onDisabled();
     }
 }

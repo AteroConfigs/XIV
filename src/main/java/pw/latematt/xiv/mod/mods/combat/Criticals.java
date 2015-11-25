@@ -1,6 +1,7 @@
 package pw.latematt.xiv.mod.mods.combat;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.potion.Potion;
 import org.lwjgl.input.Keyboard;
@@ -23,7 +24,6 @@ import pw.latematt.xiv.value.Value;
 public class Criticals extends Mod implements Listener<SendPacketEvent>, CommandHandler {
     private final Value<Mode> currentMode = new Value<>("criticals_mode", Mode.MINIJUMPS);
     private final Listener attackEntityListener;
-    private boolean nextAttack;
     private float fallDist;
 
     public Criticals() {
@@ -35,13 +35,16 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
             @Override
             public void onEventCalled(AttackEntityEvent event) {
                 if (currentMode.getValue() == Mode.MINIJUMPS) {
-                    if (!BlockUtils.isOnLiquid(mc.thePlayer) && mc.thePlayer.isCollidedVertically && !BlockUtils.isInLiquid(mc.thePlayer)) {
-                        if (nextAttack = !nextAttack) {
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.05, mc.thePlayer.posZ, false));
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.012511, mc.thePlayer.posZ, false));
-                            mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                        }
+                    if (BlockUtils.isOnLiquid(mc.thePlayer) || BlockUtils.isInLiquid(mc.thePlayer) || !mc.thePlayer.isCollidedVertically)
+                        return;
+                    if (!(event.getEntity() instanceof EntityLivingBase))
+                        return;
+                    EntityLivingBase living = (EntityLivingBase) event.getEntity();
+                    if (living.hurtTime < 5) {
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.05, mc.thePlayer.posZ, false));
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.012511, mc.thePlayer.posZ, false));
+                        mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
                     }
                 }
             }
@@ -103,7 +106,6 @@ public class Criticals extends Mod implements Listener<SendPacketEvent>, Command
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this, attackEntityListener);
         fallDist = 0.0F;
-        nextAttack = false;
     }
 
     @Override

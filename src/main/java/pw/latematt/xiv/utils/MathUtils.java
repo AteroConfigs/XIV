@@ -7,7 +7,6 @@ import org.lwjgl.input.Mouse;
  * @author TehNeon
  */
 public class MathUtils {
-
     // mouseX * scaledWidth / displayWidth
     public static int getMouseX() {
         return Mouse.getX() * RenderUtils.newScaledResolution().getScaledWidth() / Minecraft.getMinecraft().displayWidth;

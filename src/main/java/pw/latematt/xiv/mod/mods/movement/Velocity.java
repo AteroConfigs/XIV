@@ -19,7 +19,7 @@ import pw.latematt.xiv.value.Value;
  * @author TehNeon
  */
 public class Velocity extends Mod implements CommandHandler {
-    private final ClampedValue<Float> reduction = new ClampedValue<>("velocity_reduction", 0.0F, -150.0F, 150.0F);
+    private final ClampedValue<Float> reduction = new ClampedValue<>("velocity_reduction", 0.0F, -1.5F, 1.5F);
     private final Value<Boolean> liquid = new Value<>("velocity_water", true);
     private final Listener readPacketListener, liquidVelocityListener;
 
@@ -38,9 +38,9 @@ public class Velocity extends Mod implements CommandHandler {
 
                     if (mc.thePlayer.getEntityId() == packet.getEntityID()) {
                         event.setCancelled(true);
-                        double velX = packet.getVelocityX() * (reduction.getValue() / 100) / 8000;
-                        double velY = packet.getVelocityY() * (reduction.getValue() / 100) / 8000;
-                        double velZ = packet.getVelocityZ() * (reduction.getValue() / 100) / 8000;
+                        double velX = packet.getVelocityX() * reduction.getValue() / 8000;
+                        double velY = packet.getVelocityY() * reduction.getValue() / 8000;
+                        double velZ = packet.getVelocityZ() * reduction.getValue() / 8000;
 
                         mc.thePlayer.motionX += velX;
                         mc.thePlayer.motionY += velY;
@@ -91,15 +91,15 @@ public class Velocity extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String newVelocityString = arguments[2];
                         try {
-                            float newPercent = arguments[2].equalsIgnoreCase("-d") ? reduction.getDefault() : Float.parseFloat(newVelocityString);
-                            reduction.setValue((newPercent));
+                            float newPercent = arguments[2].equalsIgnoreCase("-d") ? reduction.getDefault() : Float.parseFloat(newVelocityString) / 100;
+                            reduction.setValue(newPercent);
                             if (reduction.getValue() > reduction.getMax())
                                 reduction.setValue(reduction.getMax());
                             else if (reduction.getValue() < reduction.getMin())
                                 reduction.setValue(reduction.getMin());
 
                             updateTag();
-                            ChatLogger.print(String.format("Velocity Percent set to %s", reduction.getValue() + "%"));
+                            ChatLogger.print(String.format("Velocity Percent set to %s", (reduction.getValue() * 100) + "%"));
                         } catch (NumberFormatException e) {
                             ChatLogger.print(String.format("\"%s\" is not a number.", newVelocityString));
                         }
@@ -122,7 +122,7 @@ public class Velocity extends Mod implements CommandHandler {
             setTag("");
         } else {
             setDisplayName(getName());
-            setTag((reduction.getValue()) + "%");
+            setTag((reduction.getValue() * 100) + "%");
         }
     }
 

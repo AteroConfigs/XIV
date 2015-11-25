@@ -128,10 +128,8 @@ public class RenderUtils {
                 color = new float[]{0.9F, 0.0F, 0.0F};
             }
         } else {
-            Entity entity = renderEntity;
-
-            final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
-            if (entity.isInvisibleToPlayer(mc.thePlayer)) {
+            final float distance = EntityUtils.getReference().getDistanceToEntity(renderEntity);
+            if (renderEntity.isInvisibleToPlayer(mc.thePlayer)) {
                 color = new float[]{1.0F, 0.9F, 0.0F};
             } else if (distance <= 3.9F) {
                 color = new float[]{0.9F, 0.0F, 0.0F};
@@ -344,6 +342,41 @@ public class RenderUtils {
         if (borderWidth == 1.0F) {
             GL11.glDisable(GL11.GL_LINE_SMOOTH);
         }
+
+        GlStateManager.func_179098_w();
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
+    }
+
+    public static void drawHollowRect(double left, double top, double right, double bottom, float borderWidth, int borderColor) {
+        float alpha = (borderColor >> 24 & 0xFF) / 255.0f;
+        float red = (borderColor >> 16 & 0xFF) / 255.0f;
+        float green = (borderColor >> 8 & 0xFF) / 255.0f;
+        float blue = (borderColor & 0xFF) / 255.0f;
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.func_179090_x();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.color(red, green, blue, alpha);
+
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+
+        GL11.glLineWidth(borderWidth);
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+        worldRenderer.startDrawing(1);
+        worldRenderer.addVertex(left, top, 0.0F);
+        worldRenderer.addVertex(left, bottom, 0.0F);
+        worldRenderer.addVertex(right, bottom, 0.0F);
+        worldRenderer.addVertex(right, top, 0.0F);
+        worldRenderer.addVertex(left, top, 0.0F);
+        worldRenderer.addVertex(right, top, 0.0F);
+        worldRenderer.addVertex(left, bottom, 0.0F);
+        worldRenderer.addVertex(right, bottom, 0.0F);
+        tessellator.draw();
+        GL11.glLineWidth(2.0F);
+
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
 
         GlStateManager.func_179098_w();
         GlStateManager.disableBlend();

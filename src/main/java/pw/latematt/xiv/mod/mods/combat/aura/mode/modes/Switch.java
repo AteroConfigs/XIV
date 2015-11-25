@@ -1,7 +1,6 @@
 package pw.latematt.xiv.mod.mods.combat.aura.mode.modes;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import pw.latematt.timer.Timer;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
@@ -10,9 +9,7 @@ import pw.latematt.xiv.mod.mods.combat.aura.mode.AuraMode;
 import pw.latematt.xiv.utils.EntityUtils;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 /**
  * @author Matthew
@@ -49,7 +46,7 @@ public class Switch extends AuraMode {
 
                         return firstEntityDistance > secondEntityDistance ? 1 :
                                 secondEntityDistance > firstEntityDistance ? -1 : 0;
-                    }).collect(Collectors.toList()).get(0);
+                    }).findFirst().get();
             if (killAura.isValidEntity(firstInArray)) {
                 entityToAttack = firstInArray;
             } else {
@@ -58,12 +55,6 @@ public class Switch extends AuraMode {
         }
 
         if (killAura.isValidEntity(entityToAttack)) {
-            if (killAura.autoBlock.getValue() && Objects.nonNull(mc.thePlayer.getCurrentEquippedItem()) && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword) {
-                ItemSword sword = (ItemSword) mc.thePlayer.getCurrentEquippedItem().getItem();
-                sword.onItemRightClick(mc.thePlayer.getCurrentEquippedItem(), mc.theWorld, mc.thePlayer);
-                mc.playerController.updateController();
-            }
-
             if (!killAura.isHealing()) {
                 float[] rotations = EntityUtils.getEntityRotations(entityToAttack);
                 if (killAura.silent.getValue()) {
@@ -102,11 +93,6 @@ public class Switch extends AuraMode {
                 packet.setPitch(rotations[1]);
             }
         }
-    }
-
-    @Override
-    public boolean isAttacking() {
-        return killAura.isValidEntity(entityToAttack);
     }
 
     @Override

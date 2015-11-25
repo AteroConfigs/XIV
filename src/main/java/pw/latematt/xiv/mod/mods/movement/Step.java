@@ -19,24 +19,23 @@ import pw.latematt.xiv.value.Value;
  * @author Matthew
  */
 public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandler {
-    private final Value<Mode> mode = new Value<>("step_mode", Mode.OLD);
+    private final Value<Mode> currentMode = new Value<>("step_mode", Mode.OLD);
     private final ClampedValue<Float> height = new ClampedValue<>("step_height", 1.0646F, 0.5F, 10.0F);
     private final Listener sendPacketListener, motionUpdateListener;
     private boolean editingPackets;
-
-    private int delay = 0;
+    private int delay;
 
     public Step() {
         super("Step", ModType.MOVEMENT);
         Command.newCommand().cmd("step").description("Base command for Step mod.").arguments("<action>").handler(this).build();
+        setTag(currentMode.getValue().getName());
 
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
+                if (event.getCurrentState() == MotionUpdateEvent.State.PRE)
                     if (delay > 0)
                         delay--;
-                }
             }
         };
 
@@ -47,17 +46,17 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                     C03PacketPlayer player = (C03PacketPlayer) event.getPacket();
                     if (!player.isMoving())
                         return;
-                    if (editingPackets && mode.getValue() == Mode.OLD) {
+                    if (editingPackets && currentMode.getValue() == Mode.OLD) {
                         if (mc.thePlayer.posY - mc.thePlayer.lastTickPosY >= 0.75D)
                             player.setY(player.getY() + 0.0646D);
                         editingPackets = false;
-                    } else if (mode.getValue() == Mode.JUMP) {
+                    } else if (currentMode.getValue() == Mode.JUMP) {
                         if (mc.thePlayer.isCollidedHorizontally && mc.thePlayer.onGround) {
                             mc.thePlayer.motionY = 0.37F;
                             mc.thePlayer.isAirBorne = true;
                         }
                         editingPackets = false;
-                    } else if (mode.getValue() == Mode.BLINK) {
+                    } else if (currentMode.getValue() == Mode.NEW) {
                         if (editingPackets)
                             event.setCancelled(true);
 
@@ -67,7 +66,6 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                 }
             }
         };
-        setTag(this.mode.getValue().getName());
     }
 
     @Override
@@ -78,14 +76,14 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
         if (event.getEntity() != mc.thePlayer)
             return;
 
-        switch (mode.getValue()) {
+        switch (currentMode.getValue()) {
             case OLD:
                 mc.thePlayer.stepHeight = height.getValue();
 
                 editingPackets = !BlockUtils.isInLiquid(mc.thePlayer);
                 event.setCancelled(!editingPackets);
                 break;
-            case BLINK:
+            case NEW:
                 mc.thePlayer.stepHeight = delay == 0 ? height.getValue() : 0.5F;
 
                 double yDifference = mc.thePlayer.posY - mc.thePlayer.lastTickPosY;
@@ -123,26 +121,26 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                             case "new":
                             case "blink":
                             case "offset":
-                                this.mode.setValue(Mode.BLINK);
-                                ChatLogger.print(String.format("Step Mode set to: %s", this.mode.getValue().getName()));
-                                break;
-                            case "jump":
-                                this.mode.setValue(Mode.JUMP);
-                                ChatLogger.print(String.format("Step Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(Mode.NEW);
+                                ChatLogger.print(String.format("Step Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "old":
-                                this.mode.setValue(Mode.OLD);
-                                ChatLogger.print(String.format("Step Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(Mode.OLD);
+                                ChatLogger.print(String.format("Step Mode set to: %s", currentMode.getValue().getName()));
+                                break;
+                            case "jump":
+                                currentMode.setValue(Mode.JUMP);
+                                ChatLogger.print(String.format("Step Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "-d":
-                                this.mode.setValue(this.mode.getDefault());
-                                ChatLogger.print(String.format("Step Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(currentMode.getDefault());
+                                ChatLogger.print(String.format("Step Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: blink, jump, old");
+                                ChatLogger.print("Invalid mode, valid: new, old, jump");
                                 break;
                         }
-                        setTag(this.mode.getValue().getName());
+                        setTag(currentMode.getValue().getName());
                     } else {
                         ChatLogger.print("Invalid arguments, valid: step mode <mode>");
                     }
@@ -177,13 +175,12 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
     }
 
     public boolean isEditingPackets() {
-        return isEnabled() && editingPackets;
+        return editingPackets;
     }
 
     @Override
     public void onEnabled() {
         XIV.getInstance().getListenerManager().add(this, sendPacketListener, motionUpdateListener);
-        editingPackets = false;
         if (mc.thePlayer != null)
             mc.thePlayer.stepHeight = height.getValue();
     }
@@ -197,7 +194,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
     }
 
     private enum Mode {
-        OLD, JUMP, BLINK;
+        NEW, OLD, JUMP;
 
         public String getName() {
             String prettyName = "";

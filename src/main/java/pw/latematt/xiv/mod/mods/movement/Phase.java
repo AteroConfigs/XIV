@@ -21,34 +21,29 @@ import pw.latematt.xiv.value.Value;
  * @author Rederpz
  */
 public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHandler {
-    private final Value<Mode> mode = new Value<>("phase_mode", Mode.SKIP);
+    private final Value<Mode> currentMode = new Value<>("phase_mode", Mode.SKIP);
     private final Listener blockAddBBListener, pushOutOfBlocksListener, cullingListener;
     private boolean collided = false;
 
     public Phase() {
         super("Phase", ModType.MOVEMENT, Keyboard.KEY_LBRACKET, 0xFF66FF99);
-        setTag(this.mode.getValue().getName());
+        setTag(currentMode.getValue().getName());
         Command.newCommand().cmd("phase").description("Base command for the Phase mod.").aliases("noclip", "ph", "noc").arguments("<action>").handler(this).build();
 
         blockAddBBListener = new Listener<BlockAddBBEvent>() {
             @Override
             public void onEventCalled(BlockAddBBEvent event) {
-                if (mode.getValue() == Mode.VANILLA_SKIP) {
-                    if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer)) {
+                if (currentMode.getValue() == Mode.VANILLA_SKIP) {
+                    if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer))
                         event.setAxisAlignedBB(null);
-                    }
-                } else if (mode.getValue() == Mode.SKIP || mode.getValue() == Mode.VANILLA || mode.getValue() == Mode.NEW) {
-                    if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && BlockUtils.isInsideBlock(mc.thePlayer)) {
+                } else if (currentMode.getValue() == Mode.SKIP || currentMode.getValue() == Mode.VANILLA || currentMode.getValue() == Mode.NEW) {
+                    if (mc.thePlayer.getEntityBoundingBox().minY - 0.5F < event.getPos().getY() && BlockUtils.isInsideBlock(mc.thePlayer))
                         event.setAxisAlignedBB(null);
-                    }
-
-                    if (mc.thePlayer.getEntityBoundingBox().maxY < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer)) {
+                    else if (mc.thePlayer.getEntityBoundingBox().maxY < event.getPos().getY() && !BlockUtils.isInsideBlock(mc.thePlayer))
                         event.setAxisAlignedBB(null);
-                    }
-                } else if (mode.getValue() == Mode.VANILLA_CONTROL) {
-                    if (BlockUtils.isInsideBlock(mc.thePlayer)) {
+                } else if (currentMode.getValue() == Mode.VANILLA_CONTROL) {
+                    if (BlockUtils.isInsideBlock(mc.thePlayer))
                         event.setAxisAlignedBB(null);
-                    }
                 }
             }
         };
@@ -70,28 +65,28 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
 
     public void onEventCalled(MotionUpdateEvent event) {
         if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-            if (mode.getValue() != Mode.VANILLA) {
+            if (currentMode.getValue() != Mode.VANILLA) {
                 if (!mc.thePlayer.isCollidedHorizontally && collided)
                     collided = false;
 
                 float dir = mc.thePlayer.rotationYaw;
                 if (mc.thePlayer.moveForward < 0.0F)
                     dir += 180.0F;
-
                 if (mc.thePlayer.moveStrafing > 0.0F)
                     dir -= 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
-
                 if (mc.thePlayer.moveStrafing < 0.0F)
                     dir += 90.0F * (mc.thePlayer.moveForward < 0.0F ? -0.5F : mc.thePlayer.moveForward > 0.0F ? 0.5F : 1.0F);
 
                 float xD = (float) Math.cos((dir + 90.0F) * Math.PI / 180.0D);
                 float zD = (float) Math.sin((dir + 90.0F) * Math.PI / 180.0D);
 
-                boolean moving = mc.gameSettings.keyBindForward.getIsKeyPressed() || mc.gameSettings.keyBindBack.getIsKeyPressed() || mc.gameSettings.keyBindLeft.getIsKeyPressed() || mc.gameSettings.keyBindRight.getIsKeyPressed();
+                boolean moving = mc.thePlayer.movementInput.moveForward != 0;
+                boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+
+                moving = moving || strafing;
                 if (mc.thePlayer.isCollidedHorizontally && !collided && mc.thePlayer.onGround && !BlockUtils.isInsideBlock(mc.thePlayer) && moving) {
                     mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
-
-                    if (mode.getValue() == Mode.SKIP) {
+                    if (currentMode.getValue() == Mode.SKIP) {
                         float[] offset = new float[]{xD * 0.25F, 1.0F, zD * 0.25F};
 
                         double[] movements = {
@@ -109,7 +104,7 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
 
                         if (mc.thePlayer.isCollidedHorizontally)
                             collided = true;
-                    } else if (mode.getValue() == Mode.NEW) {
+                    } else if (currentMode.getValue() == Mode.NEW) {
                         float[] offset = new float[]{xD * 0.75F, 1.0F, zD * 0.75F};
 
                         mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0] * 0.65F), mc.thePlayer.posY + 0.0001F, mc.thePlayer.posZ + (offset[2] * 0.65F), mc.thePlayer.onGround));
@@ -122,11 +117,11 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                             mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
                             mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
                         }
-                    } else if (mode.getValue() == Mode.VANILLA_SKIP) {
+                    } else if (currentMode.getValue() == Mode.VANILLA_SKIP) {
                         float[] offset = new float[]{xD * 1.9F, 1.0F, zD * 1.9F};
 
                         mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + (offset[0]), mc.thePlayer.posY, mc.thePlayer.posZ + (offset[2]), mc.thePlayer.onGround));
-                    } else if (mode.getValue() == Mode.VANILLA_CONTROL) {
+                    } else if (currentMode.getValue() == Mode.VANILLA_CONTROL) {
                         float motionY = 0;
 
                         if (mc.gameSettings.keyBindJump.getIsKeyPressed())
@@ -139,7 +134,6 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                         if (motionY == 0 && mc.thePlayer.motionX == 0 && mc.thePlayer.motionZ == 0)
                             event.setCancelled(true);
                     }
-
                     mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
                 }
             }
@@ -157,36 +151,36 @@ public class Phase extends Mod implements Listener<MotionUpdateEvent>, CommandHa
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
                             case "skip":
-                                this.mode.setValue(Mode.SKIP);
-                                ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(Mode.SKIP);
+                                ChatLogger.print(String.format("Phase Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "new":
-                                this.mode.setValue(Mode.NEW);
-                                ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(Mode.NEW);
+                                ChatLogger.print(String.format("Phase Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "vs":
                             case "vanillaskip":
-                                this.mode.setValue(Mode.VANILLA_SKIP);
-                                ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(Mode.VANILLA_SKIP);
+                                ChatLogger.print(String.format("Phase Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "vc":
                             case "vanillacontrol":
-                                this.mode.setValue(Mode.VANILLA_CONTROL);
-                                ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(Mode.VANILLA_CONTROL);
+                                ChatLogger.print(String.format("Phase Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "vanilla":
-                                this.mode.setValue(Mode.VANILLA);
-                                ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(Mode.VANILLA);
+                                ChatLogger.print(String.format("Phase Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "-d":
-                                this.mode.setValue(this.mode.getDefault());
-                                ChatLogger.print(String.format("Phase Mode set to: %s", this.mode.getValue().getName()));
+                                currentMode.setValue(currentMode.getDefault());
+                                ChatLogger.print(String.format("Phase Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             default:
                                 ChatLogger.print("Invalid mode, valid: new, skip, vanilla, vanillaskip, vanillacontrol");
                                 break;
                         }
-                        setTag(this.mode.getValue().getName());
+                        setTag(this.currentMode.getValue().getName());
                     } else {
                         ChatLogger.print("Invalid arguments, valid: phase mode <mode>");
                     }
