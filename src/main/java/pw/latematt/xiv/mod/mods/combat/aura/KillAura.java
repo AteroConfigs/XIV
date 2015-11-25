@@ -179,10 +179,7 @@ public class KillAura extends Mod implements CommandHandler {
             return true;
         if (itemStack != null) {
             Item item = itemStack.getItem();
-
-            if (item instanceof ItemSword || item instanceof ItemAxe) {
-                return true;
-            }
+            return item instanceof ItemSword || item instanceof ItemAxe;
         }
 
         return false;
