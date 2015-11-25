@@ -83,7 +83,6 @@ public class GuiClick extends GuiScreen {
         addPanel(new StorageESPPanel(x, y), x, y);
         addPanel(new WaypointsPanel(x, y), x, y);
         addPanel(new FastUsePanel(x, y), x, y);
-        addPanel(new NameProtectPanel(x, y), x, y);
         addPanel(new TriggerbotPanel(x, y), x, y);
 
         for (ModType type : ModType.values()) {
