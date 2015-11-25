@@ -109,6 +109,6 @@ public class AutoTool extends Mod implements CommandHandler {
 
     @Override
     public void onDisabled() {
-        XIV.getInstance().getListenerManager().remove(attackEntityListener, clickBlockListener);
+        XIV.getInstance().getListenerManager().remove(attackEntityListener, clickBlockListener, mouseClickListener);
     }
 }

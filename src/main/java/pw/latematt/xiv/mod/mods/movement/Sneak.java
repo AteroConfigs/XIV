@@ -24,12 +24,20 @@ public class Sneak extends Mod implements Listener<MotionUpdateEvent> {
         moving = moving || strafing;
         if (!moving || sneaking) {
             if (event.getCurrentState() == MotionUpdateEvent.State.PRE)
-                mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
+                sneak();
         } else {
-            mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
+            sneak();
             if (event.getCurrentState() == MotionUpdateEvent.State.PRE)
-                mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
+                unsneak();
         }
+    }
+
+    private void sneak() {
+        mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.START_SNEAKING));
+    }
+
+    private void unsneak() {
+        mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
     }
 
     @Override
@@ -41,6 +49,6 @@ public class Sneak extends Mod implements Listener<MotionUpdateEvent> {
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(this);
         if (mc.thePlayer != null && !mc.thePlayer.isSneaking())
-            mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(mc.thePlayer, C0BPacketEntityAction.Action.STOP_SNEAKING));
+            unsneak();
     }
 }

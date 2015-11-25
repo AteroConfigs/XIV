@@ -336,20 +336,17 @@ public class Speed extends Mod implements CommandHandler {
                     if (arguments.length >= 3) {
                         String mode = arguments[2];
                         switch (mode.toLowerCase()) {
-                            case "lithe":
-                            case "faster":
                             case "boost":
+                            case "lithe":
                                 currentMode.setValue(Mode.BOOST);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;
-                            case "deluge":
-                            case "fast":
                             case "bunnyhop":
+                            case "deluge":
                                 currentMode.setValue(Mode.BUNNYHOP);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             case "capsar":
-                            case "capser":
                                 currentMode.setValue(Mode.CAPSAR);
                                 ChatLogger.print(String.format("Speed Mode set to: %s", currentMode.getValue().getName()));
                                 break;

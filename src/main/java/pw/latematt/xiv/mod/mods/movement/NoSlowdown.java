@@ -1,6 +1,7 @@
 package pw.latematt.xiv.mod.mods.movement;
 
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.util.BlockPos;
@@ -13,7 +14,6 @@ import pw.latematt.xiv.event.events.SoulSandSlowdownEvent;
 import pw.latematt.xiv.event.events.UsingItemSlowdownEvent;
 import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
-import pw.latematt.xiv.mod.mods.combat.aura.KillAura;
 
 /**
  * @author Matthew
@@ -40,34 +40,35 @@ public class NoSlowdown extends Mod {
 
         /* fix for blocking with a sword, TODO: remove it when updating to 1.9 (when it happens) */
         motionUpdateListener = new Listener<MotionUpdateEvent>() {
-            public boolean blockingFix;
-
             @Override
             public void onEventCalled(MotionUpdateEvent event) {
-                if (mc.thePlayer.getCurrentEquippedItem() == null || !(mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword))
+                ItemStack currentItem = mc.thePlayer.getCurrentEquippedItem();
+                if (currentItem == null)
+                    return;
+                if (currentItem.getItem().getItemUseAction(currentItem) != EnumAction.BLOCK)
                     return;
 
-                if (event.getCurrentState() == MotionUpdateEvent.State.PRE) {
-                    if (mc.thePlayer.isBlocking())
-                        mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
-                } else if (event.getCurrentState() == MotionUpdateEvent.State.POST) {
-                    KillAura aura = (KillAura) XIV.getInstance().getModManager().find("killaura");
-                    if (aura.isAttacking()) {
-                        mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
-                    } else if (mc.thePlayer.isBlocking()) {
-                        if (!blockingFix)
-                            blockingFix = true;
-
-                        mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(BlockPos.ORIGIN, 255, mc.thePlayer.inventory.getCurrentItem(), 0.0F, 0.0F, 0.0F));
-                    } else if (blockingFix) {
-                        mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
-                        blockingFix = false;
-                    }
-                }
+                if (mc.thePlayer.isBlocking()) {
+                    boolean moving = mc.thePlayer.movementInput.moveForward != 0;
+                    boolean strafing = mc.thePlayer.movementInput.moveStrafe != 0;
+                    moving = moving || strafing;
+                    block();
+                    if (event.getCurrentState() == MotionUpdateEvent.State.PRE && moving)
+                        unblock();
+                } else
+                    unblock();
             }
         };
 
         setEnabled(true);
+    }
+
+    private void block() {
+        mc.getNetHandler().addToSendQueue(new C08PacketPlayerBlockPlacement(mc.thePlayer.inventory.getCurrentItem()));
+    }
+
+    private void unblock() {
+        mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
     }
 
     @Override
@@ -79,6 +80,6 @@ public class NoSlowdown extends Mod {
     public void onDisabled() {
         XIV.getInstance().getListenerManager().remove(itemSlowdownListener, motionUpdateListener, soulSandSlowdownListener);
         if (mc.thePlayer != null)
-            mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
+            unblock();
     }
 }

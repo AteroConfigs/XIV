@@ -1,7 +1,6 @@
 package pw.latematt.xiv.mod.mods.combat.aura.mode.modes;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import pw.latematt.timer.Timer;
 import pw.latematt.xiv.event.events.MotionUpdateEvent;
@@ -10,7 +9,6 @@ import pw.latematt.xiv.mod.mods.combat.aura.mode.AuraMode;
 import pw.latematt.xiv.utils.EntityUtils;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 

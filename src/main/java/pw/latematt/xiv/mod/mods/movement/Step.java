@@ -137,7 +137,7 @@ public class Step extends Mod implements Listener<EntityStepEvent>, CommandHandl
                                 ChatLogger.print(String.format("Step Mode set to: %s", currentMode.getValue().getName()));
                                 break;
                             default:
-                                ChatLogger.print("Invalid mode, valid: blink, jump, old");
+                                ChatLogger.print("Invalid mode, valid: new, old, jump");
                                 break;
                         }
                         setTag(currentMode.getValue().getName());

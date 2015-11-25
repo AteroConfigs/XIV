@@ -128,10 +128,8 @@ public class RenderUtils {
                 color = new float[]{0.9F, 0.0F, 0.0F};
             }
         } else {
-            Entity entity = renderEntity;
-
-            final float distance = EntityUtils.getReference().getDistanceToEntity(entity);
-            if (entity.isInvisibleToPlayer(mc.thePlayer)) {
+            final float distance = EntityUtils.getReference().getDistanceToEntity(renderEntity);
+            if (renderEntity.isInvisibleToPlayer(mc.thePlayer)) {
                 color = new float[]{1.0F, 0.9F, 0.0F};
             } else if (distance <= 3.9F) {
                 color = new float[]{0.9F, 0.0F, 0.0F};
