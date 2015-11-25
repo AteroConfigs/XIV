@@ -178,16 +178,18 @@ public class KillAura extends Mod implements CommandHandler {
 	if (!team.getValue() && entity.getTeam() != null && entity.getTeam().isSameTeam(mc.thePlayer.getTeam()))
 	    return false;
 	// 85.136.70.107
-	
+
 	if (entity instanceof EntityWither && this.witherFriend.getValue() && !this.team.getValue()) {
 	    EntityWither wither = (EntityWither) entity;
 	    String witherFormatCode = wither.getCustomNameTag().substring(0, 2);
 	    String playerFormatCode = this.mc.thePlayer.getDisplayName().getFormattedText().substring(0, 2);
-	    if (witherFormatCode.equalsIgnoreCase(playerFormatCode)) {
-		return false;
+	    if (witherFormatCode.contains("\247") && playerFormatCode.contains("\247")) {
+		if (witherFormatCode.equalsIgnoreCase(playerFormatCode)) {
+		    return false;
+		}
 	    }
 	}
-	
+
 	if (entity instanceof EntityPlayer) {
 	    if (!friends.getValue() && XIV.getInstance().getFriendManager().isFriend(entity.getName()))
 		return false;
@@ -204,7 +206,7 @@ public class KillAura extends Mod implements CommandHandler {
 	} else if (entity instanceof IMob) {
 	    return mobs.getValue();
 	}
-	
+
 	return false;
     }
 

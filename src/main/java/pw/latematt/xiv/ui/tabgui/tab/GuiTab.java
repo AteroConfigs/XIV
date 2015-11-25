@@ -29,7 +29,7 @@ public class GuiTab {
         FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
         String prefix = hovered ? "\247f" : "\247f";
         if (hovered) {
-            RenderUtils.drawBorderedRect(2, y - 2, widest + 6.5D, y + 10, 0xFF000000, 0x854DB3FF);
+            RenderUtils.drawBorderedRect(1.5D, y - 2, widest + 6.5D, y + 10, 0x95000000, 0x854DB3FF);
         } else {
             Gui.drawRect(2, y - 2, widest + 6, y + 10, 0x951C2A36);
         }
@@ -57,11 +57,11 @@ public class GuiTab {
             this.width = font.getStringWidth(button.getName());
         }
 
-        RenderUtils.drawHollowRect(width + 8, startY, width + this.width + 12, y, 1.0f, 0xFF000000);
+        RenderUtils.drawHollowRect(width + 8, startY, width + this.width + 12, y, 1.0f, 0xCC000000);
         int height = startY;
         for (GuiItem button : this.buttons) {
             if (this.buttons.get(this.selected) == button) {
-        	RenderUtils.drawBorderedRect(width + 8, height, width + this.width + 12.5D, height + 12, 0xFF000000, (this.buttons.get(this.selected) == button) ? 0x804DB3FF : 0x951C2A36);
+        	RenderUtils.drawBorderedRect(width + 7.5D, height, width + this.width + 12.5D, height + 12, 0xCC000000, (this.buttons.get(this.selected) == button) ? 0x804DB3FF : 0x951C2A36);
             } else {
         	Gui.drawRect(width + 8, height, width + this.width + 12, height + 12, (this.buttons.get(this.selected) == button) ? 0x804DB3FF : 0x951C2A36);
             }

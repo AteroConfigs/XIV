@@ -55,7 +55,7 @@ public class GuiTabHandler implements Listener<KeyPressEvent> {
             this.width = font.getStringWidth(tab.getTabName());
         }
 
-        RenderUtils.drawHollowRect(startX, startY, this.width + 6, y, 1.0f, 0xFF000000);
+        RenderUtils.drawHollowRect(startX, startY, this.width + 6, y, 1.0f, 0xCC000000);
         int height = startY;
         for (GuiTab tab : this.tabs) {
             tab.drawTab(startX + 2, height + 2, this.width, this.tabs.get(this.selected) == tab && this.opened, this.tabs.get(this.selected) == tab);
