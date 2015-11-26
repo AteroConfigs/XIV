@@ -2,27 +2,24 @@ package net.minecraft.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+
 import javax.crypto.Cipher;
 import javax.crypto.ShortBufferException;
 
-public class NettyEncryptionTranslator
-{
+public class NettyEncryptionTranslator {
     private final Cipher cipher;
     private byte[] field_150505_b = new byte[0];
     private byte[] field_150506_c = new byte[0];
 
 
-    protected NettyEncryptionTranslator(Cipher cipherIn)
-    {
+    protected NettyEncryptionTranslator(Cipher cipherIn) {
         this.cipher = cipherIn;
     }
 
-    private byte[] func_150502_a(ByteBuf p_150502_1_)
-    {
+    private byte[] func_150502_a(ByteBuf p_150502_1_) {
         int var2 = p_150502_1_.readableBytes();
 
-        if (this.field_150505_b.length < var2)
-        {
+        if (this.field_150505_b.length < var2) {
             this.field_150505_b = new byte[var2];
         }
 
@@ -30,8 +27,7 @@ public class NettyEncryptionTranslator
         return this.field_150505_b;
     }
 
-    protected ByteBuf decipher(ChannelHandlerContext ctx, ByteBuf buffer) throws ShortBufferException
-    {
+    protected ByteBuf decipher(ChannelHandlerContext ctx, ByteBuf buffer) throws ShortBufferException {
         int var3 = buffer.readableBytes();
         byte[] var4 = this.func_150502_a(buffer);
         ByteBuf var5 = ctx.alloc().heapBuffer(this.cipher.getOutputSize(var3));
@@ -39,14 +35,12 @@ public class NettyEncryptionTranslator
         return var5;
     }
 
-    protected void cipher(ByteBuf p_150504_1_, ByteBuf p_150504_2_) throws ShortBufferException
-    {
+    protected void cipher(ByteBuf p_150504_1_, ByteBuf p_150504_2_) throws ShortBufferException {
         int var3 = p_150504_1_.readableBytes();
         byte[] var4 = this.func_150502_a(p_150504_1_);
         int var5 = this.cipher.getOutputSize(var3);
 
-        if (this.field_150506_c.length < var5)
-        {
+        if (this.field_150506_c.length < var5) {
             this.field_150506_c = new byte[var5];
         }
 

@@ -1,19 +1,12 @@
 package net.minecraft.world.gen;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-import java.lang.reflect.Type;
+import com.google.gson.*;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.world.biome.BiomeGenBase;
 
-public class ChunkProviderSettings
-{
+import java.lang.reflect.Type;
+
+public class ChunkProviderSettings {
     public final float field_177811_a;
     public final float field_177809_b;
     public final float field_177810_c;
@@ -94,8 +87,7 @@ public class ChunkProviderSettings
     public final int field_177805_az;
 
 
-    private ChunkProviderSettings(ChunkProviderSettings.Factory p_i45639_1_)
-    {
+    private ChunkProviderSettings(ChunkProviderSettings.Factory p_i45639_1_) {
         this.field_177811_a = p_i45639_1_.field_177899_b;
         this.field_177809_b = p_i45639_1_.field_177900_c;
         this.field_177810_c = p_i45639_1_.field_177896_d;
@@ -176,13 +168,11 @@ public class ChunkProviderSettings
         this.field_177805_az = p_i45639_1_.field_177889_aA;
     }
 
-    ChunkProviderSettings(ChunkProviderSettings.Factory p_i45640_1_, Object p_i45640_2_)
-    {
+    ChunkProviderSettings(ChunkProviderSettings.Factory p_i45640_1_, Object p_i45640_2_) {
         this(p_i45640_1_);
     }
 
-    public static class Factory
-    {
+    public static class Factory {
         static final Gson field_177901_a = (new GsonBuilder()).registerTypeAdapter(ChunkProviderSettings.Factory.class, new ChunkProviderSettings.Serializer()).create();
         public float field_177899_b = 684.412F;
         public float field_177900_c = 684.412F;
@@ -264,37 +254,27 @@ public class ChunkProviderSettings
         public int field_177889_aA = 16;
 
 
-        public static ChunkProviderSettings.Factory func_177865_a(String p_177865_0_)
-        {
-            if (p_177865_0_.length() == 0)
-            {
+        public static ChunkProviderSettings.Factory func_177865_a(String p_177865_0_) {
+            if (p_177865_0_.length() == 0) {
                 return new ChunkProviderSettings.Factory();
-            }
-            else
-            {
-                try
-                {
-                    return (ChunkProviderSettings.Factory)field_177901_a.fromJson(p_177865_0_, ChunkProviderSettings.Factory.class);
-                }
-                catch (Exception var2)
-                {
+            } else {
+                try {
+                    return (ChunkProviderSettings.Factory) field_177901_a.fromJson(p_177865_0_, ChunkProviderSettings.Factory.class);
+                } catch (Exception var2) {
                     return new ChunkProviderSettings.Factory();
                 }
             }
         }
 
-        public String toString()
-        {
+        public String toString() {
             return field_177901_a.toJson(this);
         }
 
-        public Factory()
-        {
+        public Factory() {
             this.func_177863_a();
         }
 
-        public void func_177863_a()
-        {
+        public void func_177863_a() {
             this.field_177899_b = 684.412F;
             this.field_177900_c = 684.412F;
             this.field_177896_d = 512.0F;
@@ -375,25 +355,18 @@ public class ChunkProviderSettings
             this.field_177889_aA = 16;
         }
 
-        public boolean equals(Object p_equals_1_)
-        {
-            if (this == p_equals_1_)
-            {
+        public boolean equals(Object p_equals_1_) {
+            if (this == p_equals_1_) {
                 return true;
-            }
-            else if (p_equals_1_ != null && this.getClass() == p_equals_1_.getClass())
-            {
-                ChunkProviderSettings.Factory var2 = (ChunkProviderSettings.Factory)p_equals_1_;
+            } else if (p_equals_1_ != null && this.getClass() == p_equals_1_.getClass()) {
+                ChunkProviderSettings.Factory var2 = (ChunkProviderSettings.Factory) p_equals_1_;
                 return this.field_177936_aa != var2.field_177936_aa ? false : (this.field_177934_ac != var2.field_177934_ac ? false : (this.field_177937_ab != var2.field_177937_ab ? false : (this.field_177892_Z != var2.field_177892_Z ? false : (Float.compare(var2.field_177907_l, this.field_177907_l) != 0 ? false : (Float.compare(var2.field_177905_o, this.field_177905_o) != 0 ? false : (Float.compare(var2.field_177903_n, this.field_177903_n) != 0 ? false : (Float.compare(var2.field_177931_q, this.field_177931_q) != 0 ? false : (Float.compare(var2.field_177933_p, this.field_177933_p) != 0 ? false : (this.field_177877_H != var2.field_177877_H ? false : (this.field_177941_ae != var2.field_177941_ae ? false : (this.field_177938_ag != var2.field_177938_ag ? false : (this.field_177943_af != var2.field_177943_af ? false : (this.field_177935_ad != var2.field_177935_ad ? false : (Float.compare(var2.field_177899_b, this.field_177899_b) != 0 ? false : (Float.compare(var2.field_177915_h, this.field_177915_h) != 0 ? false : (Float.compare(var2.field_177893_f, this.field_177893_f) != 0 ? false : (Float.compare(var2.field_177894_g, this.field_177894_g) != 0 ? false : (this.field_177916_au != var2.field_177916_au ? false : (this.field_177912_aw != var2.field_177912_aw ? false : (this.field_177914_av != var2.field_177914_av ? false : (this.field_177902_at != var2.field_177902_at ? false : (this.field_177883_W != var2.field_177883_W ? false : (this.field_177890_Y != var2.field_177890_Y ? false : (this.field_177891_X != var2.field_177891_X ? false : (this.field_177884_V != var2.field_177884_V ? false : (this.field_177880_K != var2.field_177880_K ? false : (this.field_177874_M != var2.field_177874_M ? false : (this.field_177873_L != var2.field_177873_L ? false : (this.field_177879_J != var2.field_177879_J ? false : (this.field_177923_u != var2.field_177923_u ? false : (this.field_177869_G != var2.field_177869_G ? false : (this.field_177930_am != var2.field_177930_am ? false : (this.field_177926_ao != var2.field_177926_ao ? false : (this.field_177932_an != var2.field_177932_an ? false : (this.field_177920_al != var2.field_177920_al ? false : (this.field_177887_S != var2.field_177887_S ? false : (this.field_177881_U != var2.field_177881_U ? false : (this.field_177882_T != var2.field_177882_T ? false : (this.field_177888_R != var2.field_177888_R ? false : (this.field_177876_O != var2.field_177876_O ? false : (this.field_177885_Q != var2.field_177885_Q ? false : (this.field_177886_P != var2.field_177886_P ? false : (this.field_177875_N != var2.field_177875_N ? false : (Float.compare(var2.field_177900_c, this.field_177900_c) != 0 ? false : (this.field_177922_ai != var2.field_177922_ai ? false : (this.field_177918_ak != var2.field_177918_ak ? false : (this.field_177924_aj != var2.field_177924_aj ? false : (this.field_177939_ah != var2.field_177939_ah ? false : (this.field_177895_az != var2.field_177895_az ? false : (this.field_177897_ay != var2.field_177897_ay ? false : (this.field_177910_ax != var2.field_177910_ax ? false : (this.field_177889_aA != var2.field_177889_aA ? false : (this.field_177867_E != var2.field_177867_E ? false : (Float.compare(var2.field_177898_e, this.field_177898_e) != 0 ? false : (Float.compare(var2.field_177917_i, this.field_177917_i) != 0 ? false : (Float.compare(var2.field_177911_j, this.field_177911_j) != 0 ? false : (Float.compare(var2.field_177913_k, this.field_177913_k) != 0 ? false : (this.field_177908_aq != var2.field_177908_aq ? false : (this.field_177904_as != var2.field_177904_as ? false : (this.field_177906_ar != var2.field_177906_ar ? false : (this.field_177928_ap != var2.field_177928_ap ? false : (this.field_177878_I != var2.field_177878_I ? false : (this.field_177929_r != var2.field_177929_r ? false : (Float.compare(var2.field_177909_m, this.field_177909_m) != 0 ? false : (Float.compare(var2.field_177896_d, this.field_177896_d) != 0 ? false : (this.field_177927_s != var2.field_177927_s ? false : (this.field_177925_t != var2.field_177925_t ? false : (this.field_177866_D != var2.field_177866_D ? false : (this.field_177868_F != var2.field_177868_F ? false : (this.field_177944_x != var2.field_177944_x ? false : (this.field_177870_A != var2.field_177870_A ? false : (this.field_177921_v != var2.field_177921_v ? false : (this.field_177942_y != var2.field_177942_y ? false : (this.field_177940_z != var2.field_177940_z ? false : (this.field_177919_w != var2.field_177919_w ? false : (this.field_177871_B != var2.field_177871_B ? false : this.field_177872_C == var2.field_177872_C))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))));
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
 
-        public int hashCode()
-        {
+        public int hashCode() {
             int var1 = this.field_177899_b != 0.0F ? Float.floatToIntBits(this.field_177899_b) : 0;
             var1 = 31 * var1 + (this.field_177900_c != 0.0F ? Float.floatToIntBits(this.field_177900_c) : 0);
             var1 = 31 * var1 + (this.field_177896_d != 0.0F ? Float.floatToIntBits(this.field_177896_d) : 0);
@@ -475,23 +448,19 @@ public class ChunkProviderSettings
             return var1;
         }
 
-        public ChunkProviderSettings func_177864_b()
-        {
+        public ChunkProviderSettings func_177864_b() {
             return new ChunkProviderSettings(this, null);
         }
     }
 
-    public static class Serializer implements JsonDeserializer, JsonSerializer
-    {
+    public static class Serializer implements JsonDeserializer, JsonSerializer {
 
 
-        public ChunkProviderSettings.Factory func_177861_a(JsonElement p_177861_1_, Type p_177861_2_, JsonDeserializationContext p_177861_3_)
-        {
+        public ChunkProviderSettings.Factory func_177861_a(JsonElement p_177861_1_, Type p_177861_2_, JsonDeserializationContext p_177861_3_) {
             JsonObject var4 = p_177861_1_.getAsJsonObject();
             ChunkProviderSettings.Factory var5 = new ChunkProviderSettings.Factory();
 
-            try
-            {
+            try {
                 var5.field_177899_b = JsonUtils.getJsonObjectFloatFieldValueOrDefault(var4, "coordinateScale", var5.field_177899_b);
                 var5.field_177900_c = JsonUtils.getJsonObjectFloatFieldValueOrDefault(var4, "heightScale", var5.field_177900_c);
                 var5.field_177898_e = JsonUtils.getJsonObjectFloatFieldValueOrDefault(var4, "lowerLimitScale", var5.field_177898_e);
@@ -525,15 +494,11 @@ public class ChunkProviderSettings
                 var5.field_177868_F = JsonUtils.getJsonObjectBooleanFieldValueOrDefault(var4, "useLavaOceans", var5.field_177868_F);
                 var5.field_177869_G = JsonUtils.getJsonObjectIntegerFieldValueOrDefault(var4, "fixedBiome", var5.field_177869_G);
 
-                if (var5.field_177869_G < 38 && var5.field_177869_G >= -1)
-                {
-                    if (var5.field_177869_G >= BiomeGenBase.hell.biomeID)
-                    {
+                if (var5.field_177869_G < 38 && var5.field_177869_G >= -1) {
+                    if (var5.field_177869_G >= BiomeGenBase.hell.biomeID) {
                         var5.field_177869_G += 2;
                     }
-                }
-                else
-                {
+                } else {
                     var5.field_177869_G = -1;
                 }
 
@@ -583,17 +548,14 @@ public class ChunkProviderSettings
                 var5.field_177897_ay = JsonUtils.getJsonObjectIntegerFieldValueOrDefault(var4, "lapisCount", var5.field_177897_ay);
                 var5.field_177895_az = JsonUtils.getJsonObjectIntegerFieldValueOrDefault(var4, "lapisCenterHeight", var5.field_177895_az);
                 var5.field_177889_aA = JsonUtils.getJsonObjectIntegerFieldValueOrDefault(var4, "lapisSpread", var5.field_177889_aA);
-            }
-            catch (Exception var7)
-            {
+            } catch (Exception var7) {
                 ;
             }
 
             return var5;
         }
 
-        public JsonElement func_177862_a(ChunkProviderSettings.Factory p_177862_1_, Type p_177862_2_, JsonSerializationContext p_177862_3_)
-        {
+        public JsonElement func_177862_a(ChunkProviderSettings.Factory p_177862_1_, Type p_177862_2_, JsonSerializationContext p_177862_3_) {
             JsonObject var4 = new JsonObject();
             var4.addProperty("coordinateScale", Float.valueOf(p_177862_1_.field_177899_b));
             var4.addProperty("heightScale", Float.valueOf(p_177862_1_.field_177900_c));
@@ -676,14 +638,12 @@ public class ChunkProviderSettings
             return var4;
         }
 
-        public Object deserialize(JsonElement p_deserialize_1_, Type p_deserialize_2_, JsonDeserializationContext p_deserialize_3_)
-        {
+        public Object deserialize(JsonElement p_deserialize_1_, Type p_deserialize_2_, JsonDeserializationContext p_deserialize_3_) {
             return this.func_177861_a(p_deserialize_1_, p_deserialize_2_, p_deserialize_3_);
         }
 
-        public JsonElement serialize(Object p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_)
-        {
-            return this.func_177862_a((ChunkProviderSettings.Factory)p_serialize_1_, p_serialize_2_, p_serialize_3_);
+        public JsonElement serialize(Object p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_) {
+            return this.func_177862_a((ChunkProviderSettings.Factory) p_serialize_1_, p_serialize_2_, p_serialize_3_);
         }
     }
 }

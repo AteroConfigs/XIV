@@ -1,6 +1,7 @@
 package pw.latematt.xiv.mod.mods.combat.aura;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.IAnimals;
@@ -56,6 +57,7 @@ public class KillAura extends Mod implements CommandHandler {
     private final Value<Boolean> toggleDeath = new Value<>("killaura_toggle_death", false);
     public final Value<Boolean> autoBlock = new Value<>("killaura_auto_block", false);
     public final Value<Boolean> weaponOnly = new Value<>("killaura_weapon_only", false);
+    public final Value<Boolean> witherFriend = new Value<>("killaura_wither_friend", false);
     private final Random random = new Random();
     private final Value<AuraMode> currentMode = new Value<>("killaura_mode", new Singular(this));
 
@@ -176,6 +178,18 @@ public class KillAura extends Mod implements CommandHandler {
         if (!team.getValue() && entity.getTeam() != null && entity.getTeam().isSameTeam(mc.thePlayer.getTeam()))
             return false;
         // 85.136.70.107
+
+        if (entity instanceof EntityWither && this.witherFriend.getValue() && !this.team.getValue()) {
+            EntityWither wither = (EntityWither) entity;
+            String witherFormatCode = wither.getCustomNameTag().substring(0, 2);
+            String playerFormatCode = this.mc.thePlayer.getDisplayName().getFormattedText().substring(0, 2);
+            if (witherFormatCode.contains("\247") && playerFormatCode.contains("\247")) {
+                if (witherFormatCode.equalsIgnoreCase(playerFormatCode)) {
+                    return false;
+                }
+            }
+        }
+
         if (entity instanceof EntityPlayer) {
             if (!friends.getValue() && XIV.getInstance().getFriendManager().isFriend(entity.getName()))
                 return false;
@@ -192,6 +206,7 @@ public class KillAura extends Mod implements CommandHandler {
         } else if (entity instanceof IMob) {
             return mobs.getValue();
         }
+
         return false;
     }
 
@@ -481,7 +496,7 @@ public class KillAura extends Mod implements CommandHandler {
                     } else {
                         weaponOnly.setValue(!weaponOnly.getValue());
                     }
-                    ChatLogger.print(String.format("Kill Aura will %s function only while holding a sword.", (autoBlock.getValue() ? "now" : "no longer")));
+                    ChatLogger.print(String.format("Kill Aura will %s function only while holding a sword.", (weaponOnly.getValue() ? "now" : "no longer")));
                     break;
                 case "mode":
                     if (arguments.length >= 3) {
@@ -515,6 +530,22 @@ public class KillAura extends Mod implements CommandHandler {
                     } else {
                         ChatLogger.print("Invalid arguments, valid: killaura mode <mode>");
                     }
+                    break;
+                case "witherfriend":
+                case "wither":
+                case "wfriend":
+                case "wf":
+                    if (arguments.length >= 3) {
+                        if (arguments[2].equalsIgnoreCase("-d")) {
+                            this.witherFriend.setValue(this.witherFriend.getDefault());
+                        } else {
+                            this.witherFriend.setValue(Boolean.parseBoolean(arguments[2]));
+                        }
+                    } else {
+                        this.witherFriend.setValue(!this.witherFriend.getValue());
+                    }
+
+                    ChatLogger.print(String.format("Kill Aura will %s target friendly withers. [Hypixel]", (!this.witherFriend.getValue() ? "now" : "no longer")));
                     break;
                 default:
                     ChatLogger.print("Invalid action, valid: delay, randomdelay, attackspersecond, range, fov, tickstowait, players, mobs, animals, invisible, team, silent, autoblock, weapononly, mode");

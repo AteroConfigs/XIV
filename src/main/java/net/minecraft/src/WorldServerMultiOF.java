@@ -1,5 +1,4 @@
 package net.minecraft.src;
 
-public class WorldServerMultiOF
-{
+public class WorldServerMultiOF {
 }

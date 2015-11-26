@@ -80,6 +80,8 @@ public class ModManager extends ListManager<Mod> {
         contents.add(new Nametags());
         contents.add(new NoFall());
         contents.add(new NoItems());
+        contents.add(new NoLightning());
+        contents.add(new NoParticles());
         contents.add(new NoPotion());
         contents.add(new NoRotationSet());
         contents.add(new NoSlowdown());

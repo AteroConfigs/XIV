@@ -8,12 +8,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemShears extends Item
-{
+public class ItemShears extends Item {
 
 
-    public ItemShears()
-    {
+    public ItemShears() {
         this.setMaxStackSize(1);
         this.setMaxDamage(238);
         this.setCreativeTab(CreativeTabs.tabTools);
@@ -22,14 +20,10 @@ public class ItemShears extends Item
     /**
      * Called when a Block is destroyed using this Item. Return true to trigger the "Use Item" statistic.
      */
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn)
-    {
-        if (blockIn.getMaterial() != Material.leaves && blockIn != Blocks.web && blockIn != Blocks.tallgrass && blockIn != Blocks.vine && blockIn != Blocks.tripwire && blockIn != Blocks.wool)
-        {
+    public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn) {
+        if (blockIn.getMaterial() != Material.leaves && blockIn != Blocks.web && blockIn != Blocks.tallgrass && blockIn != Blocks.vine && blockIn != Blocks.tripwire && blockIn != Blocks.wool) {
             return super.onBlockDestroyed(stack, worldIn, blockIn, pos, playerIn);
-        }
-        else
-        {
+        } else {
             stack.damageItem(1, playerIn);
             return true;
         }
@@ -38,13 +32,11 @@ public class ItemShears extends Item
     /**
      * Check whether this Item can harvest the given Block
      */
-    public boolean canHarvestBlock(Block blockIn)
-    {
+    public boolean canHarvestBlock(Block blockIn) {
         return blockIn == Blocks.web || blockIn == Blocks.redstone_wire || blockIn == Blocks.tripwire;
     }
 
-    public float getStrVsBlock(ItemStack stack, Block p_150893_2_)
-    {
+    public float getStrVsBlock(ItemStack stack, Block p_150893_2_) {
         return p_150893_2_ != Blocks.web && p_150893_2_.getMaterial() != Material.leaves ? (p_150893_2_ == Blocks.wool ? 5.0F : super.getStrVsBlock(stack, p_150893_2_)) : 15.0F;
     }
 }

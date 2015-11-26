@@ -4,8 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 
-public interface IWorldAccess
-{
+public interface IWorldAccess {
     void markBlockForUpdate(BlockPos var1);
 
     void notifyLightSet(BlockPos var1);
@@ -26,7 +25,7 @@ public interface IWorldAccess
      */
     void playSoundToNearExcept(EntityPlayer var1, String var2, double var3, double var5, double var7, float var9, float var10);
 
-    void func_180442_a(int var1, boolean var2, double var3, double var5, double var7, double var9, double var11, double var13, int ... var15);
+    void func_180442_a(int var1, boolean var2, double var3, double var5, double var7, double var9, double var11, double var13, int... var15);
 
     /**
      * Called on all IWorldAccesses when an entity is created or loaded. On client worlds, starts downloading any

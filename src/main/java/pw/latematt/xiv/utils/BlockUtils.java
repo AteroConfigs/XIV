@@ -93,10 +93,8 @@ public class BlockUtils {
             return false;
         boolean onLadder = false;
         final int y = (int) entity.getEntityBoundingBox().offset(0.0D, 1.0D, 0.0D).minY;
-        for (int x = MathHelper.floor_double(entity.getEntityBoundingBox().minX);
-             x < MathHelper.floor_double(entity.getEntityBoundingBox().maxX) + 1; x++) {
-            for (int z = MathHelper.floor_double(entity.getEntityBoundingBox().minZ);
-                 z < MathHelper.floor_double(entity.getEntityBoundingBox().maxZ) + 1; z++) {
+        for (int x = MathHelper.floor_double(entity.getEntityBoundingBox().minX); x < MathHelper.floor_double(entity.getEntityBoundingBox().maxX) + 1; x++) {
+            for (int z = MathHelper.floor_double(entity.getEntityBoundingBox().minZ); z < MathHelper.floor_double(entity.getEntityBoundingBox().maxZ) + 1; z++) {
                 final Block block = MINECRAFT.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
                 if (Objects.nonNull(block) && !(block instanceof BlockAir)) {
                     if (!(block instanceof BlockLadder || block instanceof BlockVine))

@@ -2,21 +2,18 @@ package net.minecraft.src;
 
 import java.lang.reflect.Method;
 
-public class ReflectorMethod
-{
+public class ReflectorMethod {
     private ReflectorClass reflectorClass;
     private String targetMethodName;
     private Class[] targetMethodParameterTypes;
     private boolean checked;
     private Method targetMethod;
 
-    public ReflectorMethod(ReflectorClass reflectorClass, String targetMethodName)
-    {
-        this(reflectorClass, targetMethodName, (Class[])null);
+    public ReflectorMethod(ReflectorClass reflectorClass, String targetMethodName) {
+        this(reflectorClass, targetMethodName, (Class[]) null);
     }
 
-    public ReflectorMethod(ReflectorClass reflectorClass, String targetMethodName, Class[] targetMethodParameterTypes)
-    {
+    public ReflectorMethod(ReflectorClass reflectorClass, String targetMethodName, Class[] targetMethodParameterTypes) {
         this.reflectorClass = null;
         this.targetMethodName = null;
         this.targetMethodParameterTypes = null;
@@ -28,48 +25,36 @@ public class ReflectorMethod
         Method m = this.getTargetMethod();
     }
 
-    public Method getTargetMethod()
-    {
-        if (this.checked)
-        {
+    public Method getTargetMethod() {
+        if (this.checked) {
             return this.targetMethod;
-        }
-        else
-        {
+        } else {
             this.checked = true;
             Class cls = this.reflectorClass.getTargetClass();
 
-            if (cls == null)
-            {
+            if (cls == null) {
                 return null;
-            }
-            else
-            {
+            } else {
                 Method[] ms = cls.getDeclaredMethods();
                 int i = 0;
                 Method m;
 
-                while (true)
-                {
-                    if (i >= ms.length)
-                    {
+                while (true) {
+                    if (i >= ms.length) {
                         Config.log("(Reflector) Method not present: " + cls.getName() + "." + this.targetMethodName);
                         return null;
                     }
 
                     m = ms[i];
 
-                    if (m.getName().equals(this.targetMethodName))
-                    {
-                        if (this.targetMethodParameterTypes == null)
-                        {
+                    if (m.getName().equals(this.targetMethodName)) {
+                        if (this.targetMethodParameterTypes == null) {
                             break;
                         }
 
                         Class[] types = m.getParameterTypes();
 
-                        if (Reflector.matchesTypes(this.targetMethodParameterTypes, types))
-                        {
+                        if (Reflector.matchesTypes(this.targetMethodParameterTypes, types)) {
                             break;
                         }
                     }
@@ -79,8 +64,7 @@ public class ReflectorMethod
 
                 this.targetMethod = m;
 
-                if (!this.targetMethod.isAccessible())
-                {
+                if (!this.targetMethod.isAccessible()) {
                     this.targetMethod.setAccessible(true);
                 }
 
@@ -89,19 +73,16 @@ public class ReflectorMethod
         }
     }
 
-    public boolean exists()
-    {
+    public boolean exists() {
         return this.checked ? this.targetMethod != null : this.getTargetMethod() != null;
     }
 
-    public Class getReturnType()
-    {
+    public Class getReturnType() {
         Method tm = this.getTargetMethod();
         return tm == null ? null : tm.getReturnType();
     }
 
-    public void deactivate()
-    {
+    public void deactivate() {
         this.checked = true;
         this.targetMethod = null;
     }

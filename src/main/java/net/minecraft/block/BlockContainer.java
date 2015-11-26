@@ -6,12 +6,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public abstract class BlockContainer extends Block implements ITileEntityProvider
-{
+public abstract class BlockContainer extends Block implements ITileEntityProvider {
 
 
-    protected BlockContainer(Material materialIn)
-    {
+    protected BlockContainer(Material materialIn) {
         super(materialIn);
         this.isBlockContainer = true;
     }
@@ -19,13 +17,11 @@ public abstract class BlockContainer extends Block implements ITileEntityProvide
     /**
      * The type of render function that is called for this block
      */
-    public int getRenderType()
-    {
+    public int getRenderType() {
         return -1;
     }
 
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-    {
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
         worldIn.removeTileEntity(pos);
     }
@@ -33,8 +29,7 @@ public abstract class BlockContainer extends Block implements ITileEntityProvide
     /**
      * Called on both Client and Server when World#addBlockEvent is called
      */
-    public boolean onBlockEventReceived(World worldIn, BlockPos pos, IBlockState state, int eventID, int eventParam)
-    {
+    public boolean onBlockEventReceived(World worldIn, BlockPos pos, IBlockState state, int eventID, int eventParam) {
         super.onBlockEventReceived(worldIn, pos, state, eventID, eventParam);
         TileEntity var6 = worldIn.getTileEntity(pos);
         return var6 == null ? false : var6.receiveClientEvent(eventID, eventParam);

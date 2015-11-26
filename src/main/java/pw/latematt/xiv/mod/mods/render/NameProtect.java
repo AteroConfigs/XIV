@@ -75,18 +75,18 @@ public class NameProtect extends Mod implements Listener<RenderStringEvent>, Com
                 event.setString(XIV.getInstance().getFriendManager().replace(event.getString(), true));
                 break;
             case NAMETAG:
-                event.setString(protect(event.getString()));
+                event.setString(StringUtils.stripControlCodes(protect(event.getString())));
                 break;
             case TAB:
             case SCOREBOARD:
-                event.setString(String.format("\2473%s\247r", protect(event.getString())));
+                event.setString(protect(event.getString()));
                 break;
         }
     }
 
     public String protect(String string) {
         if (XIV.getInstance().getFriendManager().isFriend(string))
-            return XIV.getInstance().getFriendManager().getContents().get(StringUtils.stripControlCodes(string));
+            return String.format("\2473%s\247r", XIV.getInstance().getFriendManager().getContents().get(StringUtils.stripControlCodes(string)));
         return string;
     }
 

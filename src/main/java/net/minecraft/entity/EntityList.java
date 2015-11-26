@@ -2,72 +2,15 @@ package net.minecraft.entity;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import net.minecraft.entity.ai.EntityMinecartMobSpawner;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.entity.item.EntityEnderCrystal;
-import net.minecraft.entity.item.EntityEnderEye;
-import net.minecraft.entity.item.EntityEnderPearl;
-import net.minecraft.entity.item.EntityExpBottle;
-import net.minecraft.entity.item.EntityFallingBlock;
-import net.minecraft.entity.item.EntityFireworkRocket;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityMinecartChest;
-import net.minecraft.entity.item.EntityMinecartEmpty;
-import net.minecraft.entity.item.EntityMinecartFurnace;
-import net.minecraft.entity.item.EntityMinecartHopper;
-import net.minecraft.entity.item.EntityMinecartTNT;
-import net.minecraft.entity.item.EntityPainting;
-import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCaveSpider;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityEndermite;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityGiantZombie;
-import net.minecraft.entity.monster.EntityGuardian;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityMagmaCube;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.monster.EntitySnowman;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityWitch;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityBat;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntityMooshroom;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.item.*;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntityLargeFireball;
-import net.minecraft.entity.projectile.EntityPotion;
-import net.minecraft.entity.projectile.EntitySmallFireball;
-import net.minecraft.entity.projectile.EntitySnowball;
-import net.minecraft.entity.projectile.EntityWitherSkull;
+import net.minecraft.entity.projectile.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
@@ -75,50 +18,51 @@ import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class EntityList
-{
+import java.util.*;
+
+public class EntityList {
     private static final Logger logger = LogManager.getLogger();
 
-    /** Provides a mapping between entity classes and a string */
+    /**
+     * Provides a mapping between entity classes and a string
+     */
     private static final Map stringToClassMapping = Maps.newHashMap();
 
-    /** Provides a mapping between a string and an entity classes */
+    /**
+     * Provides a mapping between a string and an entity classes
+     */
     private static final Map classToStringMapping = Maps.newHashMap();
 
-    /** provides a mapping between an entityID and an Entity Class */
+    /**
+     * provides a mapping between an entityID and an Entity Class
+     */
     private static final Map idToClassMapping = Maps.newHashMap();
 
-    /** provides a mapping between an Entity Class and an entity ID */
+    /**
+     * provides a mapping between an Entity Class and an entity ID
+     */
     private static final Map classToIDMapping = Maps.newHashMap();
     private static final Map field_180126_g = Maps.newHashMap();
 
-    /** This is a HashMap of the Creative Entity Eggs/Spawners. */
+    /**
+     * This is a HashMap of the Creative Entity Eggs/Spawners.
+     */
     public static final Map entityEggs = Maps.newLinkedHashMap();
 
 
     /**
      * adds a mapping between Entity classes and both a string representation and an ID
      */
-    private static void addMapping(Class p_75618_0_, String p_75618_1_, int p_75618_2_)
-    {
-        if (stringToClassMapping.containsKey(p_75618_1_))
-        {
+    private static void addMapping(Class p_75618_0_, String p_75618_1_, int p_75618_2_) {
+        if (stringToClassMapping.containsKey(p_75618_1_)) {
             throw new IllegalArgumentException("ID is already registered: " + p_75618_1_);
-        }
-        else if (idToClassMapping.containsKey(Integer.valueOf(p_75618_2_)))
-        {
+        } else if (idToClassMapping.containsKey(Integer.valueOf(p_75618_2_))) {
             throw new IllegalArgumentException("ID is already registered: " + p_75618_2_);
-        }
-        else if (p_75618_2_ == 0)
-        {
+        } else if (p_75618_2_ == 0) {
             throw new IllegalArgumentException("Cannot register to reserved id: " + p_75618_2_);
-        }
-        else if (p_75618_0_ == null)
-        {
+        } else if (p_75618_0_ == null) {
             throw new IllegalArgumentException("Cannot register null clazz for id: " + p_75618_2_);
-        }
-        else
-        {
+        } else {
             stringToClassMapping.put(p_75618_1_, p_75618_0_);
             classToStringMapping.put(p_75618_0_, p_75618_1_);
             idToClassMapping.put(Integer.valueOf(p_75618_2_), p_75618_0_);
@@ -130,8 +74,7 @@ public class EntityList
     /**
      * Adds a entity mapping with egg info.
      */
-    private static void addMapping(Class p_75614_0_, String p_75614_1_, int p_75614_2_, int p_75614_3_, int p_75614_4_)
-    {
+    private static void addMapping(Class p_75614_0_, String p_75614_1_, int p_75614_2_, int p_75614_3_, int p_75614_4_) {
         addMapping(p_75614_0_, p_75614_1_, p_75614_2_);
         entityEggs.put(Integer.valueOf(p_75614_2_), new EntityList.EntityEggInfo(p_75614_2_, p_75614_3_, p_75614_4_));
     }
@@ -139,21 +82,16 @@ public class EntityList
     /**
      * Create a new instance of an entity in the world by using the entity name.
      */
-    public static Entity createEntityByName(String p_75620_0_, World worldIn)
-    {
+    public static Entity createEntityByName(String p_75620_0_, World worldIn) {
         Entity var2 = null;
 
-        try
-        {
-            Class var3 = (Class)stringToClassMapping.get(p_75620_0_);
+        try {
+            Class var3 = (Class) stringToClassMapping.get(p_75620_0_);
 
-            if (var3 != null)
-            {
-                var2 = (Entity)var3.getConstructor(new Class[] {World.class}).newInstance(new Object[] {worldIn});
+            if (var3 != null) {
+                var2 = (Entity) var3.getConstructor(new Class[]{World.class}).newInstance(new Object[]{worldIn});
             }
-        }
-        catch (Exception var4)
-        {
+        } catch (Exception var4) {
             var4.printStackTrace();
         }
 
@@ -163,36 +101,27 @@ public class EntityList
     /**
      * create a new instance of an entity from NBT store
      */
-    public static Entity createEntityFromNBT(NBTTagCompound p_75615_0_, World worldIn)
-    {
+    public static Entity createEntityFromNBT(NBTTagCompound p_75615_0_, World worldIn) {
         Entity var2 = null;
 
-        if ("Minecart".equals(p_75615_0_.getString("id")))
-        {
+        if ("Minecart".equals(p_75615_0_.getString("id"))) {
             p_75615_0_.setString("id", EntityMinecart.EnumMinecartType.func_180038_a(p_75615_0_.getInteger("Type")).func_180040_b());
             p_75615_0_.removeTag("Type");
         }
 
-        try
-        {
-            Class var3 = (Class)stringToClassMapping.get(p_75615_0_.getString("id"));
+        try {
+            Class var3 = (Class) stringToClassMapping.get(p_75615_0_.getString("id"));
 
-            if (var3 != null)
-            {
-                var2 = (Entity)var3.getConstructor(new Class[] {World.class}).newInstance(new Object[] {worldIn});
+            if (var3 != null) {
+                var2 = (Entity) var3.getConstructor(new Class[]{World.class}).newInstance(new Object[]{worldIn});
             }
-        }
-        catch (Exception var4)
-        {
+        } catch (Exception var4) {
             var4.printStackTrace();
         }
 
-        if (var2 != null)
-        {
+        if (var2 != null) {
             var2.readFromNBT(p_75615_0_);
-        }
-        else
-        {
+        } else {
             logger.warn("Skipping Entity with id " + p_75615_0_.getString("id"));
         }
 
@@ -202,26 +131,20 @@ public class EntityList
     /**
      * Create a new instance of an entity in the world by using an entity ID.
      */
-    public static Entity createEntityByID(int p_75616_0_, World worldIn)
-    {
+    public static Entity createEntityByID(int p_75616_0_, World worldIn) {
         Entity var2 = null;
 
-        try
-        {
+        try {
             Class var3 = getClassFromID(p_75616_0_);
 
-            if (var3 != null)
-            {
-                var2 = (Entity)var3.getConstructor(new Class[] {World.class}).newInstance(new Object[] {worldIn});
+            if (var3 != null) {
+                var2 = (Entity) var3.getConstructor(new Class[]{World.class}).newInstance(new Object[]{worldIn});
             }
-        }
-        catch (Exception var4)
-        {
+        } catch (Exception var4) {
             var4.printStackTrace();
         }
 
-        if (var2 == null)
-        {
+        if (var2 == null) {
             logger.warn("Skipping Entity with id " + p_75616_0_);
         }
 
@@ -231,57 +154,50 @@ public class EntityList
     /**
      * gets the entityID of a specific entity
      */
-    public static int getEntityID(Entity p_75619_0_)
-    {
-        Integer var1 = (Integer)classToIDMapping.get(p_75619_0_.getClass());
+    public static int getEntityID(Entity p_75619_0_) {
+        Integer var1 = (Integer) classToIDMapping.get(p_75619_0_.getClass());
         return var1 == null ? 0 : var1.intValue();
     }
 
     /**
      * Return the class assigned to this entity ID.
      */
-    public static Class getClassFromID(int p_90035_0_)
-    {
-        return (Class)idToClassMapping.get(Integer.valueOf(p_90035_0_));
+    public static Class getClassFromID(int p_90035_0_) {
+        return (Class) idToClassMapping.get(Integer.valueOf(p_90035_0_));
     }
 
     /**
      * Gets the string representation of a specific entity.
      */
-    public static String getEntityString(Entity p_75621_0_)
-    {
-        return (String)classToStringMapping.get(p_75621_0_.getClass());
+    public static String getEntityString(Entity p_75621_0_) {
+        return (String) classToStringMapping.get(p_75621_0_.getClass());
     }
 
-    public static int func_180122_a(String p_180122_0_)
-    {
-        Integer var1 = (Integer)field_180126_g.get(p_180122_0_);
+    public static int func_180122_a(String p_180122_0_) {
+        Integer var1 = (Integer) field_180126_g.get(p_180122_0_);
         return var1 == null ? 90 : var1.intValue();
     }
 
     /**
      * Finds the class using IDtoClassMapping and classToStringMapping
      */
-    public static String getStringFromID(int p_75617_0_)
-    {
-        return (String)classToStringMapping.get(getClassFromID(p_75617_0_));
+    public static String getStringFromID(int p_75617_0_) {
+        return (String) classToStringMapping.get(getClassFromID(p_75617_0_));
     }
 
-    public static void func_151514_a() {}
+    public static void func_151514_a() {
+    }
 
-    public static List func_180124_b()
-    {
+    public static List func_180124_b() {
         Set var0 = stringToClassMapping.keySet();
         ArrayList var1 = Lists.newArrayList();
         Iterator var2 = var0.iterator();
 
-        while (var2.hasNext())
-        {
-            String var3 = (String)var2.next();
-            Class var4 = (Class)stringToClassMapping.get(var3);
+        while (var2.hasNext()) {
+            String var3 = (String) var2.next();
+            Class var4 = (Class) stringToClassMapping.get(var3);
 
-            if ((var4.getModifiers() & 1024) != 1024)
-            {
+            if ((var4.getModifiers() & 1024) != 1024) {
                 var1.add(var3);
             }
         }
@@ -290,29 +206,23 @@ public class EntityList
         return var1;
     }
 
-    public static boolean func_180123_a(Entity p_180123_0_, String p_180123_1_)
-    {
+    public static boolean func_180123_a(Entity p_180123_0_, String p_180123_1_) {
         String var2 = getEntityString(p_180123_0_);
 
-        if (var2 == null && p_180123_0_ instanceof EntityPlayer)
-        {
+        if (var2 == null && p_180123_0_ instanceof EntityPlayer) {
             var2 = "Player";
-        }
-        else if (var2 == null && p_180123_0_ instanceof EntityLightningBolt)
-        {
+        } else if (var2 == null && p_180123_0_ instanceof EntityLightningBolt) {
             var2 = "LightningBolt";
         }
 
         return p_180123_1_.equals(var2);
     }
 
-    public static boolean func_180125_b(String p_180125_0_)
-    {
+    public static boolean func_180125_b(String p_180125_0_) {
         return "Player".equals(p_180125_0_) || func_180124_b().contains(p_180125_0_);
     }
 
-    static
-    {
+    static {
         addMapping(EntityItem.class, "Item", 1);
         addMapping(EntityXPOrb.class, "XPOrb", 2);
         addMapping(EntityLeashKnot.class, "LeashKnot", 8);
@@ -376,8 +286,7 @@ public class EntityList
         addMapping(EntityEnderCrystal.class, "EnderCrystal", 200);
     }
 
-    public static class EntityEggInfo
-    {
+    public static class EntityEggInfo {
         public final int spawnedID;
         public final int primaryColor;
         public final int secondaryColor;
@@ -385,8 +294,7 @@ public class EntityList
         public final StatBase field_151513_e;
 
 
-        public EntityEggInfo(int p_i1583_1_, int p_i1583_2_, int p_i1583_3_)
-        {
+        public EntityEggInfo(int p_i1583_1_, int p_i1583_2_, int p_i1583_3_) {
             this.spawnedID = p_i1583_1_;
             this.primaryColor = p_i1583_2_;
             this.secondaryColor = p_i1583_3_;

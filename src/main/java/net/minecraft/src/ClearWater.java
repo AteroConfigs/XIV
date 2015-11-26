@@ -11,16 +11,12 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.EmptyChunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
-public class ClearWater
-{
-    public static void updateWaterOpacity(GameSettings settings, World world)
-    {
-        if (settings != null)
-        {
+public class ClearWater {
+    public static void updateWaterOpacity(GameSettings settings, World world) {
+        if (settings != null) {
             byte cp = 3;
 
-            if (settings.ofClearWater)
-            {
+            if (settings.ofClearWater) {
                 cp = 1;
             }
 
@@ -28,34 +24,27 @@ public class ClearWater
             BlockUtils.setLightOpacity(Blocks.flowing_water, cp);
         }
 
-        if (world != null)
-        {
+        if (world != null) {
             IChunkProvider var25 = world.getChunkProvider();
 
-            if (var25 != null)
-            {
+            if (var25 != null) {
                 Entity rve = Config.getMinecraft().func_175606_aa();
 
-                if (rve != null)
-                {
-                    int cViewX = (int)rve.posX / 16;
-                    int cViewZ = (int)rve.posZ / 16;
+                if (rve != null) {
+                    int cViewX = (int) rve.posX / 16;
+                    int cViewZ = (int) rve.posZ / 16;
                     int cXMin = cViewX - 512;
                     int cXMax = cViewX + 512;
                     int cZMin = cViewZ - 512;
                     int cZMax = cViewZ + 512;
                     int countUpdated = 0;
 
-                    for (int threadName = cXMin; threadName < cXMax; ++threadName)
-                    {
-                        for (int cz = cZMin; cz < cZMax; ++cz)
-                        {
-                            if (var25.chunkExists(threadName, cz))
-                            {
+                    for (int threadName = cXMin; threadName < cXMax; ++threadName) {
+                        for (int cz = cZMin; cz < cZMax; ++cz) {
+                            if (var25.chunkExists(threadName, cz)) {
                                 Chunk c = var25.provideChunk(threadName, cz);
 
-                                if (c != null && !(c instanceof EmptyChunk))
-                                {
+                                if (c != null && !(c instanceof EmptyChunk)) {
                                     int x0 = threadName << 4;
                                     int z0 = cz << 4;
                                     int x1 = x0 + 16;
@@ -63,25 +52,20 @@ public class ClearWater
                                     BlockPosM posXZ = new BlockPosM(0, 0, 0);
                                     BlockPosM posXYZ = new BlockPosM(0, 0, 0);
 
-                                    for (int x = x0; x < x1; ++x)
-                                    {
+                                    for (int x = x0; x < x1; ++x) {
                                         int z = z0;
 
-                                        while (z < z1)
-                                        {
+                                        while (z < z1) {
                                             posXZ.setXyz(x, 0, z);
                                             BlockPos posH = world.func_175725_q(posXZ);
                                             int y = 0;
 
-                                            while (true)
-                                            {
-                                                if (y < posH.getY())
-                                                {
+                                            while (true) {
+                                                if (y < posH.getY()) {
                                                     posXYZ.setXyz(x, y, z);
                                                     IBlockState bs = world.getBlockState(posXYZ);
 
-                                                    if (bs.getBlock().getMaterial() != Material.water)
-                                                    {
+                                                    if (bs.getBlock().getMaterial() != Material.water) {
                                                         ++y;
                                                         continue;
                                                     }
@@ -100,12 +84,10 @@ public class ClearWater
                         }
                     }
 
-                    if (countUpdated > 0)
-                    {
+                    if (countUpdated > 0) {
                         String var26 = "server";
 
-                        if (Config.isMinecraftThread())
-                        {
+                        if (Config.isMinecraftThread()) {
                             var26 = "client";
                         }
 

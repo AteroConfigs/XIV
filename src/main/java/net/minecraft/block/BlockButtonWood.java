@@ -1,11 +1,9 @@
 package net.minecraft.block;
 
-public class BlockButtonWood extends BlockButton
-{
+public class BlockButtonWood extends BlockButton {
 
 
-    protected BlockButtonWood()
-    {
+    protected BlockButtonWood() {
         super(true);
     }
 }

@@ -146,7 +146,7 @@ public class EntityUtils {
     }
 
     public static void damagePlayer(int damage) {
-        /* capping it just in case anybody has an autism attack */
+    /* capping it just in case anybody has an autism attack */
         if (damage < 1)
             damage = 1;
         if (damage > MathHelper.floor_double(MINECRAFT.thePlayer.getMaxHealth()))

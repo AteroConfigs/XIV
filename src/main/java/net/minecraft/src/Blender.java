@@ -2,8 +2,7 @@ package net.minecraft.src;
 
 import net.minecraft.client.renderer.GlStateManager;
 
-public class Blender
-{
+public class Blender {
     public static final int BLEND_ALPHA = 0;
     public static final int BLEND_ADD = 1;
     public static final int BLEND_SUBSTRACT = 2;
@@ -14,60 +13,37 @@ public class Blender
     public static final int BLEND_REPLACE = 7;
     public static final int BLEND_DEFAULT = 1;
 
-    public static int parseBlend(String str)
-    {
-        if (str == null)
-        {
+    public static int parseBlend(String str) {
+        if (str == null) {
             return 1;
-        }
-        else
-        {
+        } else {
             str = str.toLowerCase().trim();
 
-            if (str.equals("alpha"))
-            {
+            if (str.equals("alpha")) {
                 return 0;
-            }
-            else if (str.equals("add"))
-            {
+            } else if (str.equals("add")) {
                 return 1;
-            }
-            else if (str.equals("subtract"))
-            {
+            } else if (str.equals("subtract")) {
                 return 2;
-            }
-            else if (str.equals("multiply"))
-            {
+            } else if (str.equals("multiply")) {
                 return 3;
-            }
-            else if (str.equals("dodge"))
-            {
+            } else if (str.equals("dodge")) {
                 return 4;
-            }
-            else if (str.equals("burn"))
-            {
+            } else if (str.equals("burn")) {
                 return 5;
-            }
-            else if (str.equals("screen"))
-            {
+            } else if (str.equals("screen")) {
                 return 6;
-            }
-            else if (str.equals("replace"))
-            {
+            } else if (str.equals("replace")) {
                 return 7;
-            }
-            else
-            {
+            } else {
                 Config.warn("Unknown blend: " + str);
                 return 1;
             }
         }
     }
 
-    public static void setupBlend(int blend, float brightness)
-    {
-        switch (blend)
-        {
+    public static void setupBlend(int blend, float brightness) {
+        switch (blend) {
             case 0:
                 GlStateManager.disableAlpha();
                 GlStateManager.enableBlend();
@@ -126,8 +102,7 @@ public class Blender
         GlStateManager.func_179098_w();
     }
 
-    public static void clearBlend(float rainBrightness)
-    {
+    public static void clearBlend(float rainBrightness) {
         GlStateManager.disableAlpha();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(770, 1);

@@ -6,8 +6,7 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public interface ICommandSender
-{
+public interface ICommandSender {
     /**
      * Gets the name of this command sender (usually username, but possibly "Rcon")
      */

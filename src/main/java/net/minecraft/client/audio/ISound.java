@@ -2,8 +2,7 @@ package net.minecraft.client.audio;
 
 import net.minecraft.util.ResourceLocation;
 
-public interface ISound
-{
+public interface ISound {
     ResourceLocation getSoundLocation();
 
     boolean canRepeat();
@@ -22,8 +21,7 @@ public interface ISound
 
     ISound.AttenuationType getAttenuationType();
 
-    public static enum AttenuationType
-    {
+    public static enum AttenuationType {
         NONE("NONE", 0, 0),
         LINEAR("LINEAR", 1, 2);
         private final int type;
@@ -31,13 +29,11 @@ public interface ISound
         private static final ISound.AttenuationType[] $VALUES = new ISound.AttenuationType[]{NONE, LINEAR};
 
 
-        private AttenuationType(String p_i45110_1_, int p_i45110_2_, int p_i45110_3_)
-        {
+        private AttenuationType(String p_i45110_1_, int p_i45110_2_, int p_i45110_3_) {
             this.type = p_i45110_3_;
         }
 
-        public int getTypeInt()
-        {
+        public int getTypeInt() {
             return this.type;
         }
     }

@@ -2,25 +2,21 @@ package net.minecraft.src;
 
 import java.util.ArrayList;
 
-public class CompactArrayList
-{
+public class CompactArrayList {
     private ArrayList list;
     private int initialCapacity;
     private float loadFactor;
     private int countValid;
 
-    public CompactArrayList()
-    {
+    public CompactArrayList() {
         this(10, 0.75F);
     }
 
-    public CompactArrayList(int initialCapacity)
-    {
+    public CompactArrayList(int initialCapacity) {
         this(initialCapacity, 0.75F);
     }
 
-    public CompactArrayList(int initialCapacity, float loadFactor)
-    {
+    public CompactArrayList(int initialCapacity, float loadFactor) {
         this.list = null;
         this.initialCapacity = 0;
         this.loadFactor = 1.0F;
@@ -30,39 +26,31 @@ public class CompactArrayList
         this.loadFactor = loadFactor;
     }
 
-    public void add(int index, Object element)
-    {
-        if (element != null)
-        {
+    public void add(int index, Object element) {
+        if (element != null) {
             ++this.countValid;
         }
 
         this.list.add(index, element);
     }
 
-    public boolean add(Object element)
-    {
-        if (element != null)
-        {
+    public boolean add(Object element) {
+        if (element != null) {
             ++this.countValid;
         }
 
         return this.list.add(element);
     }
 
-    public Object set(int index, Object element)
-    {
+    public Object set(int index, Object element) {
         Object oldElement = this.list.set(index, element);
 
-        if (element != oldElement)
-        {
-            if (oldElement == null)
-            {
+        if (element != oldElement) {
+            if (oldElement == null) {
                 ++this.countValid;
             }
 
-            if (element == null)
-            {
+            if (element == null) {
                 --this.countValid;
             }
         }
@@ -70,47 +58,36 @@ public class CompactArrayList
         return oldElement;
     }
 
-    public Object remove(int index)
-    {
+    public Object remove(int index) {
         Object oldElement = this.list.remove(index);
 
-        if (oldElement != null)
-        {
+        if (oldElement != null) {
             --this.countValid;
         }
 
         return oldElement;
     }
 
-    public void clear()
-    {
+    public void clear() {
         this.list.clear();
         this.countValid = 0;
     }
 
-    public void compact()
-    {
-        if (this.countValid <= 0 && this.list.size() <= 0)
-        {
+    public void compact() {
+        if (this.countValid <= 0 && this.list.size() <= 0) {
             this.clear();
-        }
-        else if (this.list.size() > this.initialCapacity)
-        {
-            float currentLoadFactor = (float)this.countValid * 1.0F / (float)this.list.size();
+        } else if (this.list.size() > this.initialCapacity) {
+            float currentLoadFactor = (float) this.countValid * 1.0F / (float) this.list.size();
 
-            if (currentLoadFactor <= this.loadFactor)
-            {
+            if (currentLoadFactor <= this.loadFactor) {
                 int dstIndex = 0;
                 int i;
 
-                for (i = 0; i < this.list.size(); ++i)
-                {
+                for (i = 0; i < this.list.size(); ++i) {
                     Object wr = this.list.get(i);
 
-                    if (wr != null)
-                    {
-                        if (i != dstIndex)
-                        {
+                    if (wr != null) {
+                        if (i != dstIndex) {
                             this.list.set(dstIndex, wr);
                         }
 
@@ -118,36 +95,30 @@ public class CompactArrayList
                     }
                 }
 
-                for (i = this.list.size() - 1; i >= dstIndex; --i)
-                {
+                for (i = this.list.size() - 1; i >= dstIndex; --i) {
                     this.list.remove(i);
                 }
             }
         }
     }
 
-    public boolean contains(Object elem)
-    {
+    public boolean contains(Object elem) {
         return this.list.contains(elem);
     }
 
-    public Object get(int index)
-    {
+    public Object get(int index) {
         return this.list.get(index);
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return this.list.isEmpty();
     }
 
-    public int size()
-    {
+    public int size() {
         return this.list.size();
     }
 
-    public int getCountValid()
-    {
+    public int getCountValid() {
         return this.countValid;
     }
 }

@@ -9,58 +9,45 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class ItemDoor extends Item
-{
+public class ItemDoor extends Item {
     private Block field_179236_a;
 
 
-    public ItemDoor(Block p_i45788_1_)
-    {
+    public ItemDoor(Block p_i45788_1_) {
         this.field_179236_a = p_i45788_1_;
         this.setCreativeTab(CreativeTabs.tabRedstone);
     }
 
     /**
      * Called when a Block is right-clicked with this Item
-     *  
-     * @param pos The block being right-clicked
+     *
+     * @param pos  The block being right-clicked
      * @param side The side being right-clicked
      */
-    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
-    {
-        if (side != EnumFacing.UP)
-        {
+    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (side != EnumFacing.UP) {
             return false;
-        }
-        else
-        {
+        } else {
             IBlockState var9 = worldIn.getBlockState(pos);
             Block var10 = var9.getBlock();
 
-            if (!var10.isReplaceable(worldIn, pos))
-            {
+            if (!var10.isReplaceable(worldIn, pos)) {
                 pos = pos.offset(side);
             }
 
-            if (!playerIn.func_175151_a(pos, side, stack))
-            {
+            if (!playerIn.func_175151_a(pos, side, stack)) {
                 return false;
-            }
-            else if (!this.field_179236_a.canPlaceBlockAt(worldIn, pos))
-            {
+            } else if (!this.field_179236_a.canPlaceBlockAt(worldIn, pos)) {
                 return false;
-            }
-            else
-            {
-                func_179235_a(worldIn, pos, EnumFacing.fromAngle((double)playerIn.rotationYaw), this.field_179236_a);
+            } else {
+                func_179235_a(worldIn, pos, EnumFacing.fromAngle((double) playerIn.rotationYaw), this.field_179236_a);
                 --stack.stackSize;
                 return true;
             }
         }
     }
 
-    public static void func_179235_a(World worldIn, BlockPos p_179235_1_, EnumFacing p_179235_2_, Block p_179235_3_)
-    {
+    public static void func_179235_a(World worldIn, BlockPos p_179235_1_, EnumFacing p_179235_2_, Block p_179235_3_) {
         BlockPos var4 = p_179235_1_.offset(p_179235_2_.rotateY());
         BlockPos var5 = p_179235_1_.offset(p_179235_2_.rotateYCCW());
         int var6 = (worldIn.getBlockState(var5).getBlock().isNormalCube() ? 1 : 0) + (worldIn.getBlockState(var5.offsetUp()).getBlock().isNormalCube() ? 1 : 0);
@@ -69,8 +56,7 @@ public class ItemDoor extends Item
         boolean var9 = worldIn.getBlockState(var4).getBlock() == p_179235_3_ || worldIn.getBlockState(var4.offsetUp()).getBlock() == p_179235_3_;
         boolean var10 = false;
 
-        if (var8 && !var9 || var7 > var6)
-        {
+        if (var8 && !var9 || var7 > var6) {
             var10 = true;
         }
 

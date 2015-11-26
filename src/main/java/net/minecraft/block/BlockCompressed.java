@@ -5,13 +5,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 
-public class BlockCompressed extends Block
-{
+public class BlockCompressed extends Block {
     private final MapColor mapColor;
 
 
-    public BlockCompressed(MapColor p_i45414_1_)
-    {
+    public BlockCompressed(MapColor p_i45414_1_) {
         super(Material.iron);
         this.mapColor = p_i45414_1_;
         this.setCreativeTab(CreativeTabs.tabBlock);
@@ -20,8 +18,7 @@ public class BlockCompressed extends Block
     /**
      * Get the MapColor for this Block and the given BlockState
      */
-    public MapColor getMapColor(IBlockState state)
-    {
+    public MapColor getMapColor(IBlockState state) {
         return this.mapColor;
     }
 }

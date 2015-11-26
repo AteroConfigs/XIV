@@ -5,34 +5,26 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class ItemNameTag extends Item
-{
+public class ItemNameTag extends Item {
 
 
-    public ItemNameTag()
-    {
+    public ItemNameTag() {
         this.setCreativeTab(CreativeTabs.tabTools);
     }
 
     /**
      * Returns true if the item can be used on the given entity, e.g. shears on sheep.
      */
-    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target)
-    {
-        if (!stack.hasDisplayName())
-        {
+    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target) {
+        if (!stack.hasDisplayName()) {
             return false;
-        }
-        else if (target instanceof EntityLiving)
-        {
-            EntityLiving var4 = (EntityLiving)target;
+        } else if (target instanceof EntityLiving) {
+            EntityLiving var4 = (EntityLiving) target;
             var4.setCustomNameTag(stack.getDisplayName());
             var4.enablePersistence();
             --stack.stackSize;
             return true;
-        }
-        else
-        {
+        } else {
             return super.itemInteractionForEntity(stack, playerIn, target);
         }
     }

@@ -2,41 +2,32 @@ package net.minecraft.world;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class LockCode
-{
+public class LockCode {
     public static final LockCode EMPTY_CODE = new LockCode("");
     private final String lock;
 
 
-    public LockCode(String p_i45903_1_)
-    {
+    public LockCode(String p_i45903_1_) {
         this.lock = p_i45903_1_;
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return this.lock == null || this.lock.isEmpty();
     }
 
-    public String getLock()
-    {
+    public String getLock() {
         return this.lock;
     }
 
-    public void toNBT(NBTTagCompound nbt)
-    {
+    public void toNBT(NBTTagCompound nbt) {
         nbt.setString("Lock", this.lock);
     }
 
-    public static LockCode fromNBT(NBTTagCompound nbt)
-    {
-        if (nbt.hasKey("Lock", 8))
-        {
+    public static LockCode fromNBT(NBTTagCompound nbt) {
+        if (nbt.hasKey("Lock", 8)) {
             String var1 = nbt.getString("Lock");
             return new LockCode(var1);
-        }
-        else
-        {
+        } else {
             return EMPTY_CODE;
         }
     }

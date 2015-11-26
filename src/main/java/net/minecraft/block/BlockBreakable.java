@@ -7,36 +7,29 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
-public class BlockBreakable extends Block
-{
+public class BlockBreakable extends Block {
     private boolean ignoreSimilarity;
 
 
-    protected BlockBreakable(Material p_i45712_1_, boolean p_i45712_2_)
-    {
+    protected BlockBreakable(Material p_i45712_1_, boolean p_i45712_2_) {
         super(p_i45712_1_);
         this.ignoreSimilarity = p_i45712_2_;
     }
 
-    public boolean isOpaqueCube()
-    {
+    public boolean isOpaqueCube() {
         return false;
     }
 
-    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
-    {
+    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
         IBlockState var4 = worldIn.getBlockState(pos);
         Block var5 = var4.getBlock();
 
-        if (this == Blocks.glass || this == Blocks.stained_glass)
-        {
-            if (worldIn.getBlockState(pos.offset(side.getOpposite())) != var4)
-            {
+        if (this == Blocks.glass || this == Blocks.stained_glass) {
+            if (worldIn.getBlockState(pos.offset(side.getOpposite())) != var4) {
                 return true;
             }
 
-            if (var5 == this)
-            {
+            if (var5 == this) {
                 return false;
             }
         }

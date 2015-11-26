@@ -1,22 +1,18 @@
 package net.minecraft.src;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Map.Entry;
+import com.google.gson.*;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.util.ResourceLocation;
 
-public class PlayerItemParser
-{
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
+
+public class PlayerItemParser {
     private static JsonParser jsonParser = new JsonParser();
     public static final String ITEM_TYPE = "type";
     public static final String ITEM_TEXTURE_SIZE = "textureSize";
@@ -41,37 +37,30 @@ public class PlayerItemParser
     public static final String ITEM_TYPE_MODEL = "PlayerItem";
     public static final String MODEL_TYPE_BOX = "ModelBox";
 
-    public static PlayerItemModel parseItemModel(JsonObject obj)
-    {
+    public static PlayerItemModel parseItemModel(JsonObject obj) {
         String type = Json.getString(obj, "type");
 
-        if (!Config.equals(type, "PlayerItem"))
-        {
+        if (!Config.equals(type, "PlayerItem")) {
             throw new JsonParseException("Unknown model type: " + type);
-        }
-        else
-        {
+        } else {
             int[] textureSize = Json.parseIntArray(obj.get("textureSize"), 2);
             checkNull(textureSize, "Missing texture size");
             Dimension textureDim = new Dimension(textureSize[0], textureSize[1]);
             boolean usePlayerTexture = Json.getBoolean(obj, "usePlayerTexture", false);
-            JsonArray models = (JsonArray)obj.get("models");
+            JsonArray models = (JsonArray) obj.get("models");
             checkNull(models, "Missing elements");
             HashMap mapModelJsons = new HashMap();
             ArrayList listModels = new ArrayList();
             new ArrayList();
 
-            for (int modelRenderers = 0; modelRenderers < models.size(); ++modelRenderers)
-            {
-                JsonObject elem = (JsonObject)models.get(modelRenderers);
+            for (int modelRenderers = 0; modelRenderers < models.size(); ++modelRenderers) {
+                JsonObject elem = (JsonObject) models.get(modelRenderers);
                 String baseId = Json.getString(elem, "baseId");
 
-                if (baseId != null)
-                {
-                    JsonObject id = (JsonObject)mapModelJsons.get(baseId);
+                if (baseId != null) {
+                    JsonObject id = (JsonObject) mapModelJsons.get(baseId);
 
-                    if (id == null)
-                    {
+                    if (id == null) {
                         Config.warn("BaseID not found: " + baseId);
                         continue;
                     }
@@ -79,120 +68,85 @@ public class PlayerItemParser
                     Set mr = id.entrySet();
                     Iterator iterator = mr.iterator();
 
-                    while (iterator.hasNext())
-                    {
-                        Entry entry = (Entry)iterator.next();
+                    while (iterator.hasNext()) {
+                        Entry entry = (Entry) iterator.next();
 
-                        if (!elem.has((String)entry.getKey()))
-                        {
-                            elem.add((String)entry.getKey(), (JsonElement)entry.getValue());
+                        if (!elem.has((String) entry.getKey())) {
+                            elem.add((String) entry.getKey(), (JsonElement) entry.getValue());
                         }
                     }
                 }
 
                 String var17 = Json.getString(elem, "id");
 
-                if (var17 != null)
-                {
-                    if (!mapModelJsons.containsKey(var17))
-                    {
+                if (var17 != null) {
+                    if (!mapModelJsons.containsKey(var17)) {
                         mapModelJsons.put(var17, elem);
-                    }
-                    else
-                    {
+                    } else {
                         Config.warn("Duplicate model ID: " + var17);
                     }
                 }
 
                 PlayerItemRenderer var18 = parseItemRenderer(elem, textureDim);
 
-                if (var18 != null)
-                {
+                if (var18 != null) {
                     listModels.add(var18);
                 }
             }
 
-            PlayerItemRenderer[] var16 = (PlayerItemRenderer[])((PlayerItemRenderer[])listModels.toArray(new PlayerItemRenderer[listModels.size()]));
+            PlayerItemRenderer[] var16 = (PlayerItemRenderer[]) ((PlayerItemRenderer[]) listModels.toArray(new PlayerItemRenderer[listModels.size()]));
             return new PlayerItemModel(textureDim, usePlayerTexture, var16);
         }
     }
 
-    private static void checkNull(Object obj, String msg)
-    {
-        if (obj == null)
-        {
+    private static void checkNull(Object obj, String msg) {
+        if (obj == null) {
             throw new JsonParseException(msg);
         }
     }
 
-    private static ResourceLocation makeResourceLocation(String texture)
-    {
+    private static ResourceLocation makeResourceLocation(String texture) {
         int pos = texture.indexOf(58);
 
-        if (pos < 0)
-        {
+        if (pos < 0) {
             return new ResourceLocation(texture);
-        }
-        else
-        {
+        } else {
             String domain = texture.substring(0, pos);
             String path = texture.substring(pos + 1);
             return new ResourceLocation(domain, path);
         }
     }
 
-    private static int parseAttachModel(String attachModelStr)
-    {
-        if (attachModelStr == null)
-        {
+    private static int parseAttachModel(String attachModelStr) {
+        if (attachModelStr == null) {
             return 0;
-        }
-        else if (attachModelStr.equals("body"))
-        {
+        } else if (attachModelStr.equals("body")) {
             return 0;
-        }
-        else if (attachModelStr.equals("head"))
-        {
+        } else if (attachModelStr.equals("head")) {
             return 1;
-        }
-        else if (attachModelStr.equals("leftArm"))
-        {
+        } else if (attachModelStr.equals("leftArm")) {
             return 2;
-        }
-        else if (attachModelStr.equals("rightArm"))
-        {
+        } else if (attachModelStr.equals("rightArm")) {
             return 3;
-        }
-        else if (attachModelStr.equals("leftLeg"))
-        {
+        } else if (attachModelStr.equals("leftLeg")) {
             return 4;
-        }
-        else if (attachModelStr.equals("rightLeg"))
-        {
+        } else if (attachModelStr.equals("rightLeg")) {
             return 5;
-        }
-        else if (attachModelStr.equals("cape"))
-        {
+        } else if (attachModelStr.equals("cape")) {
             return 6;
-        }
-        else
-        {
+        } else {
             Config.warn("Unknown attachModel: " + attachModelStr);
             return 0;
         }
     }
 
-    private static PlayerItemRenderer parseItemRenderer(JsonObject elem, Dimension textureDim)
-    {
+    private static PlayerItemRenderer parseItemRenderer(JsonObject elem, Dimension textureDim) {
         String type = Json.getString(elem, "type");
 
-        if (!Config.equals(type, "ModelBox"))
-        {
+        if (!Config.equals(type, "ModelBox")) {
             Config.warn("Unknown model type: " + type);
             return null;
-        }
-        else
-        {
+        } else {
             String attachToStr = Json.getString(elem, "attachTo");
             int attachTo = parseAttachModel(attachToStr);
             float scale = Json.getFloat(elem, "scale", 1.0F);
@@ -205,8 +159,7 @@ public class PlayerItemParser
         }
     }
 
-    private static ModelRenderer parseModelRenderer(JsonObject elem, ModelBase modelBase)
-    {
+    private static ModelRenderer parseModelRenderer(JsonObject elem, ModelBase modelBase) {
         ModelRenderer mr = new ModelRenderer(modelBase);
         String invertAxis = Json.getString(elem, "invertAxis", "").toLowerCase();
         boolean invertX = invertAxis.contains("x");
@@ -214,40 +167,33 @@ public class PlayerItemParser
         boolean invertZ = invertAxis.contains("z");
         float[] translate = Json.parseFloatArray(elem.get("translate"), 3, new float[3]);
 
-        if (invertX)
-        {
+        if (invertX) {
             translate[0] = -translate[0];
         }
 
-        if (invertY)
-        {
+        if (invertY) {
             translate[1] = -translate[1];
         }
 
-        if (invertZ)
-        {
+        if (invertZ) {
             translate[2] = -translate[2];
         }
 
         float[] rotateAngles = Json.parseFloatArray(elem.get("rotate"), 3, new float[3]);
 
-        for (int mirrorTexture = 0; mirrorTexture < rotateAngles.length; ++mirrorTexture)
-        {
-            rotateAngles[mirrorTexture] = rotateAngles[mirrorTexture] / 180.0F * (float)Math.PI;
+        for (int mirrorTexture = 0; mirrorTexture < rotateAngles.length; ++mirrorTexture) {
+            rotateAngles[mirrorTexture] = rotateAngles[mirrorTexture] / 180.0F * (float) Math.PI;
         }
 
-        if (invertX)
-        {
+        if (invertX) {
             rotateAngles[0] = -rotateAngles[0];
         }
 
-        if (invertY)
-        {
+        if (invertY) {
             rotateAngles[1] = -rotateAngles[1];
         }
 
-        if (invertZ)
-        {
+        if (invertZ) {
             rotateAngles[2] = -rotateAngles[2];
         }
 
@@ -259,116 +205,97 @@ public class PlayerItemParser
         boolean invertU = var19.contains("u");
         boolean invertV = var19.contains("v");
 
-        if (invertU)
-        {
+        if (invertU) {
             mr.mirror = true;
         }
 
-        if (invertV)
-        {
+        if (invertV) {
             mr.mirrorV = true;
         }
 
         JsonArray boxes = elem.getAsJsonArray("boxes");
         JsonObject submodel;
 
-        if (boxes != null)
-        {
-            for (int sprites = 0; sprites < boxes.size(); ++sprites)
-            {
+        if (boxes != null) {
+            for (int sprites = 0; sprites < boxes.size(); ++sprites) {
                 submodel = boxes.get(sprites).getAsJsonObject();
                 int[] submodels = Json.parseIntArray(submodel.get("textureOffset"), 2);
 
-                if (submodels == null)
-                {
+                if (submodels == null) {
                     throw new JsonParseException("Texture offset not specified");
                 }
 
                 float[] i = Json.parseFloatArray(submodel.get("coordinates"), 6);
 
-                if (i == null)
-                {
+                if (i == null) {
                     throw new JsonParseException("Coordinates not specified");
                 }
 
-                if (invertX)
-                {
+                if (invertX) {
                     i[0] = -i[0] - i[3];
                 }
 
-                if (invertY)
-                {
+                if (invertY) {
                     i[1] = -i[1] - i[4];
                 }
 
-                if (invertZ)
-                {
+                if (invertZ) {
                     i[2] = -i[2] - i[5];
                 }
 
                 float sm = Json.getFloat(submodel, "sizeAdd", 0.0F);
                 mr.setTextureOffset(submodels[0], submodels[1]);
-                mr.addBox(i[0], i[1], i[2], (int)i[3], (int)i[4], (int)i[5], sm);
+                mr.addBox(i[0], i[1], i[2], (int) i[3], (int) i[4], (int) i[5], sm);
             }
         }
 
         JsonArray var20 = elem.getAsJsonArray("sprites");
 
-        if (var20 != null)
-        {
-            for (int var21 = 0; var21 < var20.size(); ++var21)
-            {
+        if (var20 != null) {
+            for (int var21 = 0; var21 < var20.size(); ++var21) {
                 JsonObject var22 = var20.get(var21).getAsJsonObject();
                 int[] var25 = Json.parseIntArray(var22.get("textureOffset"), 2);
 
-                if (var25 == null)
-                {
+                if (var25 == null) {
                     throw new JsonParseException("Texture offset not specified");
                 }
 
                 float[] var27 = Json.parseFloatArray(var22.get("coordinates"), 6);
 
-                if (var27 == null)
-                {
+                if (var27 == null) {
                     throw new JsonParseException("Coordinates not specified");
                 }
 
-                if (invertX)
-                {
+                if (invertX) {
                     var27[0] = -var27[0] - var27[3];
                 }
 
-                if (invertY)
-                {
+                if (invertY) {
                     var27[1] = -var27[1] - var27[4];
                 }
 
-                if (invertZ)
-                {
+                if (invertZ) {
                     var27[2] = -var27[2] - var27[5];
                 }
 
                 float subMr = Json.getFloat(var22, "sizeAdd", 0.0F);
                 mr.setTextureOffset(var25[0], var25[1]);
-                mr.addSprite(var27[0], var27[1], var27[2], (int)var27[3], (int)var27[4], (int)var27[5], subMr);
+                mr.addSprite(var27[0], var27[1], var27[2], (int) var27[3], (int) var27[4], (int) var27[5], subMr);
             }
         }
 
-        submodel = (JsonObject)elem.get("submodel");
+        submodel = (JsonObject) elem.get("submodel");
 
-        if (submodel != null)
-        {
+        if (submodel != null) {
             ModelRenderer var23 = parseModelRenderer(submodel, modelBase);
             mr.addChild(var23);
         }
 
-        JsonArray var24 = (JsonArray)elem.get("submodels");
+        JsonArray var24 = (JsonArray) elem.get("submodels");
 
-        if (var24 != null)
-        {
-            for (int var26 = 0; var26 < var24.size(); ++var26)
-            {
-                JsonObject var28 = (JsonObject)var24.get(var26);
+        if (var24 != null) {
+            for (int var26 = 0; var26 < var24.size(); ++var26) {
+                JsonObject var28 = (JsonObject) var24.get(var26);
                 ModelRenderer var29 = parseModelRenderer(var28, modelBase);
                 mr.addChild(var29);
             }

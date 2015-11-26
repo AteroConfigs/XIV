@@ -1,13 +1,13 @@
 package net.minecraft.client.gui;
 
-import java.io.IOException;
 import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 
-public class GuiIngameMenu extends GuiScreen
-{
+import java.io.IOException;
+
+public class GuiIngameMenu extends GuiScreen {
     private int field_146445_a;
     private int field_146444_f;
 
@@ -15,17 +15,15 @@ public class GuiIngameMenu extends GuiScreen
     /**
      * Adds the buttons (and other controls) to the screen in question.
      */
-    public void initGui()
-    {
+    public void initGui() {
         this.field_146445_a = 0;
         this.buttonList.clear();
         byte var1 = -16;
         boolean var2 = true;
         this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 120 + var1, I18n.format("menu.returnToMenu", new Object[0])));
 
-        if (!this.mc.isIntegratedServerRunning())
-        {
-            ((GuiButton)this.buttonList.get(0)).displayString = I18n.format("menu.disconnect", new Object[0]);
+        if (!this.mc.isIntegratedServerRunning()) {
+            ((GuiButton) this.buttonList.get(0)).displayString = I18n.format("menu.disconnect", new Object[0]);
         }
 
         this.buttonList.add(new GuiButton(4, this.width / 2 - 100, this.height / 4 + 24 + var1, I18n.format("menu.returnToGame", new Object[0])));
@@ -37,10 +35,8 @@ public class GuiIngameMenu extends GuiScreen
         var3.enabled = this.mc.isSingleplayer() && !this.mc.getIntegratedServer().getPublic();
     }
 
-    protected void actionPerformed(GuiButton button) throws IOException
-    {
-        switch (button.id)
-        {
+    protected void actionPerformed(GuiButton button) throws IOException {
+        switch (button.id) {
             case 0:
                 this.mc.displayGuiScreen(new GuiOptions(this, this.mc.gameSettings));
                 break;
@@ -48,7 +44,7 @@ public class GuiIngameMenu extends GuiScreen
             case 1:
                 button.enabled = false;
                 this.mc.theWorld.sendQuittingDisconnectingPacket();
-                this.mc.loadWorld((WorldClient)null);
+                this.mc.loadWorld((WorldClient) null);
                 this.mc.displayGuiScreen(new GuiMainMenu());
 
             case 2:
@@ -57,7 +53,7 @@ public class GuiIngameMenu extends GuiScreen
                 break;
 
             case 4:
-                this.mc.displayGuiScreen((GuiScreen)null);
+                this.mc.displayGuiScreen((GuiScreen) null);
                 this.mc.setIngameFocus();
                 break;
 
@@ -77,8 +73,7 @@ public class GuiIngameMenu extends GuiScreen
     /**
      * Called from the main game loop to update the screen.
      */
-    public void updateScreen()
-    {
+    public void updateScreen() {
         super.updateScreen();
         ++this.field_146444_f;
     }
@@ -86,8 +81,7 @@ public class GuiIngameMenu extends GuiScreen
     /**
      * Draws the screen and all the components in it. Args : mouseX, mouseY, renderPartialTicks
      */
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    {
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         this.drawCenteredString(this.fontRendererObj, I18n.format("menu.game", new Object[0]), this.width / 2, 40, 16777215);
         super.drawScreen(mouseX, mouseY, partialTicks);

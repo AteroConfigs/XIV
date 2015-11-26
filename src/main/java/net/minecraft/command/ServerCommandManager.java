@@ -1,45 +1,18 @@
 package net.minecraft.command;
 
-import java.util.Iterator;
 import net.minecraft.command.common.CommandReplaceItem;
-import net.minecraft.command.server.CommandAchievement;
-import net.minecraft.command.server.CommandBanIp;
-import net.minecraft.command.server.CommandBanPlayer;
-import net.minecraft.command.server.CommandBlockLogic;
-import net.minecraft.command.server.CommandBroadcast;
-import net.minecraft.command.server.CommandDeOp;
-import net.minecraft.command.server.CommandEmote;
-import net.minecraft.command.server.CommandListBans;
-import net.minecraft.command.server.CommandListPlayers;
-import net.minecraft.command.server.CommandMessage;
-import net.minecraft.command.server.CommandMessageRaw;
-import net.minecraft.command.server.CommandOp;
-import net.minecraft.command.server.CommandPardonIp;
-import net.minecraft.command.server.CommandPardonPlayer;
-import net.minecraft.command.server.CommandPublishLocalServer;
-import net.minecraft.command.server.CommandSaveAll;
-import net.minecraft.command.server.CommandSaveOff;
-import net.minecraft.command.server.CommandSaveOn;
-import net.minecraft.command.server.CommandScoreboard;
-import net.minecraft.command.server.CommandSetBlock;
-import net.minecraft.command.server.CommandSetDefaultSpawnpoint;
-import net.minecraft.command.server.CommandStop;
-import net.minecraft.command.server.CommandSummon;
-import net.minecraft.command.server.CommandTeleport;
-import net.minecraft.command.server.CommandTestFor;
-import net.minecraft.command.server.CommandTestForBlock;
-import net.minecraft.command.server.CommandWhitelist;
+import net.minecraft.command.server.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 
-public class ServerCommandManager extends CommandHandler implements IAdminCommand
-{
+import java.util.Iterator;
+
+public class ServerCommandManager extends CommandHandler implements IAdminCommand {
 
 
-    public ServerCommandManager()
-    {
+    public ServerCommandManager() {
         this.registerCommand(new CommandTime());
         this.registerCommand(new CommandGameMode());
         this.registerCommand(new CommandDifficulty());
@@ -84,8 +57,7 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
         this.registerCommand(new CommandTitle());
         this.registerCommand(new CommandEntityData());
 
-        if (MinecraftServer.getServer().isDedicatedServer())
-        {
+        if (MinecraftServer.getServer().isDedicatedServer()) {
             this.registerCommand(new CommandOp());
             this.registerCommand(new CommandDeOp());
             this.registerCommand(new CommandStop());
@@ -101,58 +73,48 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
             this.registerCommand(new CommandListPlayers());
             this.registerCommand(new CommandWhitelist());
             this.registerCommand(new CommandSetPlayerTimeout());
-        }
-        else
-        {
+        } else {
             this.registerCommand(new CommandPublishLocalServer());
         }
 
         CommandBase.setAdminCommander(this);
     }
 
-    public void notifyOperators(ICommandSender sender, ICommand command, int p_152372_3_, String msgFormat, Object ... msgParams)
-    {
+    public void notifyOperators(ICommandSender sender, ICommand command, int p_152372_3_, String msgFormat, Object... msgParams) {
         boolean var6 = true;
         MinecraftServer var7 = MinecraftServer.getServer();
 
-        if (!sender.sendCommandFeedback())
-        {
+        if (!sender.sendCommandFeedback()) {
             var6 = false;
         }
 
-        ChatComponentTranslation var8 = new ChatComponentTranslation("chat.type.admin", new Object[] {sender.getName(), new ChatComponentTranslation(msgFormat, msgParams)});
+        ChatComponentTranslation var8 = new ChatComponentTranslation("chat.type.admin", new Object[]{sender.getName(), new ChatComponentTranslation(msgFormat, msgParams)});
         var8.getChatStyle().setColor(EnumChatFormatting.GRAY);
         var8.getChatStyle().setItalic(Boolean.valueOf(true));
 
-        if (var6)
-        {
+        if (var6) {
             Iterator var9 = var7.getConfigurationManager().playerEntityList.iterator();
 
-            while (var9.hasNext())
-            {
-                EntityPlayer var10 = (EntityPlayer)var9.next();
+            while (var9.hasNext()) {
+                EntityPlayer var10 = (EntityPlayer) var9.next();
 
-                if (var10 != sender && var7.getConfigurationManager().canSendCommands(var10.getGameProfile()) && command.canCommandSenderUseCommand(sender))
-                {
+                if (var10 != sender && var7.getConfigurationManager().canSendCommands(var10.getGameProfile()) && command.canCommandSenderUseCommand(sender)) {
                     var10.addChatMessage(var8);
                 }
             }
         }
 
-        if (sender != var7 && var7.worldServers[0].getGameRules().getGameRuleBooleanValue("logAdminCommands"))
-        {
+        if (sender != var7 && var7.worldServers[0].getGameRules().getGameRuleBooleanValue("logAdminCommands")) {
             var7.addChatMessage(var8);
         }
 
         boolean var11 = var7.worldServers[0].getGameRules().getGameRuleBooleanValue("sendCommandFeedback");
 
-        if (sender instanceof CommandBlockLogic)
-        {
-            var11 = ((CommandBlockLogic)sender).func_175571_m();
+        if (sender instanceof CommandBlockLogic) {
+            var11 = ((CommandBlockLogic) sender).func_175571_m();
         }
 
-        if ((p_152372_3_ & 1) != 1 && var11)
-        {
+        if ((p_152372_3_ & 1) != 1 && var11) {
             sender.addChatMessage(new ChatComponentTranslation(msgFormat, msgParams));
         }
     }
