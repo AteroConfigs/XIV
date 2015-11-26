@@ -2257,6 +2257,7 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
         if (p_72731_3_ == 0 && p_72731_2_.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
         {
             GlStateManager.enableBlend();
+            GL11.glEnable(GL11.GL_LINE_SMOOTH);
             GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
             GlStateManager.color(0.0F, 0.0F, 0.0F, 0.4F);
             GL11.glLineWidth(2.0F);
@@ -2272,11 +2273,12 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
                 double var8 = p_72731_1_.lastTickPosX + (p_72731_1_.posX - p_72731_1_.lastTickPosX) * (double)p_72731_4_;
                 double var10 = p_72731_1_.lastTickPosY + (p_72731_1_.posY - p_72731_1_.lastTickPosY) * (double)p_72731_4_;
                 double var12 = p_72731_1_.lastTickPosZ + (p_72731_1_.posZ - p_72731_1_.lastTickPosZ) * (double)p_72731_4_;
-                drawOutlinedBoundingBox(var7.getSelectedBoundingBox(this.theWorld, var6).expand(0.0020000000949949026D, 0.0020000000949949026D, 0.0020000000949949026D).offset(-var8, -var10, -var12), -1);
+                drawOutlinedBoundingBox(var7.getSelectedBoundingBox(this.theWorld, var6).expand(var5, var5, var5).offset(-var8, -var10, -var12), -1);
             }
 
             GlStateManager.depthMask(true);
             GlStateManager.func_179098_w();
+            GL11.glDisable(GL11.GL_LINE_SMOOTH);
             GlStateManager.disableBlend();
         }
     }
