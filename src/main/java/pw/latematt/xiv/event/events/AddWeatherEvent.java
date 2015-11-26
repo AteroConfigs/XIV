@@ -8,6 +8,7 @@ import pw.latematt.xiv.event.Event;
  */
 public class AddWeatherEvent extends Event {
     private final Entity entity;
+    private boolean cancel;
 
     public AddWeatherEvent(Entity entity) {
         this.entity = entity;
@@ -15,5 +16,13 @@ public class AddWeatherEvent extends Event {
 
     public Entity getEntity() {
         return entity;
+    }
+    
+    public void cancel() {
+	this.cancel = true;
+    }
+    
+    public boolean isCanceled() {
+	return cancel;
     }
 }

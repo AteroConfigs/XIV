@@ -1141,6 +1141,10 @@ public abstract class World implements IBlockAccess
     {
         AddWeatherEvent event = new AddWeatherEvent(p_72942_1_);
         XIV.getInstance().getListenerManager().call(event);
+        if (!event.isCanceled()) {  
+            return false;
+        }
+
         this.weatherEffects.add(event.getEntity());
         return true;
     }
