@@ -7,12 +7,10 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
-public class BlockCompressedPowered extends BlockCompressed
-{
+public class BlockCompressedPowered extends BlockCompressed {
 
 
-    public BlockCompressedPowered(MapColor p_i45416_1_)
-    {
+    public BlockCompressedPowered(MapColor p_i45416_1_) {
         super(p_i45416_1_);
         this.setCreativeTab(CreativeTabs.tabRedstone);
     }
@@ -20,13 +18,11 @@ public class BlockCompressedPowered extends BlockCompressed
     /**
      * Can this block provide power. Only wire currently seems to have this change based on its state.
      */
-    public boolean canProvidePower()
-    {
+    public boolean canProvidePower() {
         return true;
     }
 
-    public int isProvidingWeakPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side)
-    {
+    public int isProvidingWeakPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side) {
         return 15;
     }
 }

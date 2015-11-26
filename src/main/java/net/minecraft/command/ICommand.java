@@ -1,10 +1,10 @@
 package net.minecraft.command;
 
-import java.util.List;
 import net.minecraft.util.BlockPos;
 
-public interface ICommand extends Comparable
-{
+import java.util.List;
+
+public interface ICommand extends Comparable {
     String getCommandName();
 
     String getCommandUsage(ICommandSender var1);

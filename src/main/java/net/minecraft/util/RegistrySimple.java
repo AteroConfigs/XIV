@@ -1,45 +1,43 @@
 package net.minecraft.util;
 
 import com.google.common.collect.Maps;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class RegistrySimple implements IRegistry
-{
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+public class RegistrySimple implements IRegistry {
     private static final Logger logger = LogManager.getLogger();
 
-    /** Objects registered on this registry. */
+    /**
+     * Objects registered on this registry.
+     */
     protected final Map registryObjects = this.createUnderlyingMap();
 
 
     /**
      * Creates the Map we will use to map keys to their registered values.
      */
-    protected Map createUnderlyingMap()
-    {
+    protected Map createUnderlyingMap() {
         return Maps.newHashMap();
     }
 
-    public Object getObject(Object p_82594_1_)
-    {
+    public Object getObject(Object p_82594_1_) {
         return this.registryObjects.get(p_82594_1_);
     }
 
     /**
      * Register an object on this registry.
      */
-    public void putObject(Object p_82595_1_, Object p_82595_2_)
-    {
+    public void putObject(Object p_82595_1_, Object p_82595_2_) {
         Validate.notNull(p_82595_1_);
         Validate.notNull(p_82595_2_);
 
-        if (this.registryObjects.containsKey(p_82595_1_))
-        {
+        if (this.registryObjects.containsKey(p_82595_1_)) {
             logger.debug("Adding duplicate key \'" + p_82595_1_ + "\' to registry");
         }
 
@@ -49,21 +47,18 @@ public class RegistrySimple implements IRegistry
     /**
      * Gets all the keys recognized by this registry.
      */
-    public Set getKeys()
-    {
+    public Set getKeys() {
         return Collections.unmodifiableSet(this.registryObjects.keySet());
     }
 
     /**
      * Does this registry contain an entry for the given key?
      */
-    public boolean containsKey(Object p_148741_1_)
-    {
+    public boolean containsKey(Object p_148741_1_) {
         return this.registryObjects.containsKey(p_148741_1_);
     }
 
-    public Iterator iterator()
-    {
+    public Iterator iterator() {
         return this.registryObjects.values().iterator();
     }
 }

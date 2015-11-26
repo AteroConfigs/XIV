@@ -1,22 +1,17 @@
 package net.minecraft.src;
 
-public class RangeListInt
-{
+public class RangeListInt {
     private RangeInt[] ranges = new RangeInt[0];
 
-    public void addRange(RangeInt ri)
-    {
-        this.ranges = (RangeInt[])((RangeInt[])Config.addObjectToArray(this.ranges, ri));
+    public void addRange(RangeInt ri) {
+        this.ranges = (RangeInt[]) ((RangeInt[]) Config.addObjectToArray(this.ranges, ri));
     }
 
-    public boolean isInRange(int val)
-    {
-        for (int i = 0; i < this.ranges.length; ++i)
-        {
+    public boolean isInRange(int val) {
+        for (int i = 0; i < this.ranges.length; ++i) {
             RangeInt ri = this.ranges[i];
 
-            if (ri.isInRange(val))
-            {
+            if (ri.isInRange(val)) {
                 return true;
             }
         }
@@ -24,17 +19,14 @@ public class RangeListInt
         return false;
     }
 
-    public String toString()
-    {
+    public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("[");
 
-        for (int i = 0; i < this.ranges.length; ++i)
-        {
+        for (int i = 0; i < this.ranges.length; ++i) {
             RangeInt ri = this.ranges[i];
 
-            if (i > 0)
-            {
+            if (i > 0) {
                 sb.append(", ");
             }
 

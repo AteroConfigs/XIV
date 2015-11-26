@@ -17,12 +17,12 @@ public class AddWeatherEvent extends Event {
     public Entity getEntity() {
         return entity;
     }
-    
+
     public void cancel() {
-	this.cancel = true;
+        this.cancel = true;
     }
-    
+
     public boolean isCanceled() {
-	return cancel;
+        return cancel;
     }
 }

@@ -33,7 +33,7 @@ public class GuiTab {
         } else {
             Gui.drawRect(2, y - 2, widest + 6, y + 10, 0x951C2A36);
         }
-        
+
         font.drawStringWithShadow(prefix + this.label, x, y, 0xFFFFFF);
     }
 
@@ -61,9 +61,9 @@ public class GuiTab {
         int height = startY;
         for (GuiItem button : this.buttons) {
             if (this.buttons.get(this.selected) == button) {
-        	RenderUtils.drawBorderedRect(width + 7.5D, height, width + this.width + 12.5D, height + 12, 0xCC000000, (this.buttons.get(this.selected) == button) ? 0x804DB3FF : 0x951C2A36);
+                RenderUtils.drawBorderedRect(width + 7.5D, height, width + this.width + 12.5D, height + 12, 0xCC000000, (this.buttons.get(this.selected) == button) ? 0x804DB3FF : 0x951C2A36);
             } else {
-        	Gui.drawRect(width + 8, height, width + this.width + 12, height + 12, (this.buttons.get(this.selected) == button) ? 0x804DB3FF : 0x951C2A36);
+                Gui.drawRect(width + 8, height, width + this.width + 12, height + 12, (this.buttons.get(this.selected) == button) ? 0x804DB3FF : 0x951C2A36);
             }
             String prefix = button.getMod().isEnabled() ? "\247f" : "\2477";
             font.drawStringWithShadow(prefix + button.getName(), width + 10, height + 2, button.getMod().isEnabled() ? -3495936 : -5723992);

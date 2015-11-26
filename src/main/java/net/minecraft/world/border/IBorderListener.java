@@ -1,7 +1,6 @@
 package net.minecraft.world.border;
 
-public interface IBorderListener
-{
+public interface IBorderListener {
     void onSizeChanged(WorldBorder var1, double var2);
 
     void func_177692_a(WorldBorder var1, double var2, double var4, long var6);

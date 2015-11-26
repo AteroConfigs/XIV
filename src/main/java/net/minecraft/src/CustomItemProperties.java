@@ -1,5 +1,4 @@
 package net.minecraft.src;
 
-public class CustomItemProperties
-{
+public class CustomItemProperties {
 }

@@ -1,7 +1,5 @@
 package net.minecraft.client.gui;
 
-import java.io.IOException;
-import java.util.Iterator;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -9,8 +7,10 @@ import net.minecraft.util.EnumChatFormatting;
 import pw.latematt.xiv.XIV;
 import pw.latematt.xiv.event.events.PlayerDeathEvent;
 
-public class GuiGameOver extends GuiScreen implements GuiYesNoCallback
-{
+import java.io.IOException;
+import java.util.Iterator;
+
+public class GuiGameOver extends GuiScreen implements GuiYesNoCallback {
     private int field_146347_a;
     private boolean field_146346_f = false;
 
@@ -18,39 +18,30 @@ public class GuiGameOver extends GuiScreen implements GuiYesNoCallback
     /**
      * Adds the buttons (and other controls) to the screen in question.
      */
-    public void initGui()
-    {
+    public void initGui() {
         PlayerDeathEvent event = new PlayerDeathEvent();
         XIV.getInstance().getListenerManager().call(event);
         this.buttonList.clear();
 
-        if (this.mc.theWorld.getWorldInfo().isHardcoreModeEnabled())
-        {
-            if (this.mc.isIntegratedServerRunning())
-            {
+        if (this.mc.theWorld.getWorldInfo().isHardcoreModeEnabled()) {
+            if (this.mc.isIntegratedServerRunning()) {
                 this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 96, I18n.format("deathScreen.deleteWorld", new Object[0])));
-            }
-            else
-            {
+            } else {
                 this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 96, I18n.format("deathScreen.leaveServer", new Object[0])));
             }
-        }
-        else
-        {
+        } else {
             this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 72, I18n.format("deathScreen.respawn", new Object[0])));
             this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 96, I18n.format("deathScreen.titleScreen", new Object[0])));
 
-            if (this.mc.getSession() == null)
-            {
-                ((GuiButton)this.buttonList.get(1)).enabled = false;
+            if (this.mc.getSession() == null) {
+                ((GuiButton) this.buttonList.get(1)).enabled = false;
             }
         }
 
         GuiButton var2;
 
-        for (Iterator var1 = this.buttonList.iterator(); var1.hasNext(); var2.enabled = false)
-        {
-            var2 = (GuiButton)var1.next();
+        for (Iterator var1 = this.buttonList.iterator(); var1.hasNext(); var2.enabled = false) {
+            var2 = (GuiButton) var1.next();
         }
     }
 
@@ -58,15 +49,14 @@ public class GuiGameOver extends GuiScreen implements GuiYesNoCallback
      * Fired when a key is typed (except F11 who toggle full screen). This is the equivalent of
      * KeyListener.keyTyped(KeyEvent e). Args : character (character on the key), keyCode (lwjgl Keyboard key code)
      */
-    protected void keyTyped(char typedChar, int keyCode) throws IOException {}
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+    }
 
-    protected void actionPerformed(GuiButton button) throws IOException
-    {
-        switch (button.id)
-        {
+    protected void actionPerformed(GuiButton button) throws IOException {
+        switch (button.id) {
             case 0:
                 this.mc.thePlayer.respawnPlayer();
-                this.mc.displayGuiScreen((GuiScreen)null);
+                this.mc.displayGuiScreen((GuiScreen) null);
                 break;
 
             case 1:
@@ -76,26 +66,21 @@ public class GuiGameOver extends GuiScreen implements GuiYesNoCallback
         }
     }
 
-    public void confirmClicked(boolean result, int id)
-    {
-        if (result)
-        {
+    public void confirmClicked(boolean result, int id) {
+        if (result) {
             this.mc.theWorld.sendQuittingDisconnectingPacket();
-            this.mc.loadWorld((WorldClient)null);
+            this.mc.loadWorld((WorldClient) null);
             this.mc.displayGuiScreen(new GuiMainMenu());
-        }
-        else
-        {
+        } else {
             this.mc.thePlayer.respawnPlayer();
-            this.mc.displayGuiScreen((GuiScreen)null);
+            this.mc.displayGuiScreen((GuiScreen) null);
         }
     }
 
     /**
      * Draws the screen and all the components in it. Args : mouseX, mouseY, renderPartialTicks
      */
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    {
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawGradientRect(0, 0, this.width, this.height, 1615855616, -1602211792);
         GlStateManager.pushMatrix();
         GlStateManager.scale(2.0F, 2.0F, 2.0F);
@@ -104,8 +89,7 @@ public class GuiGameOver extends GuiScreen implements GuiYesNoCallback
         this.drawCenteredString(this.fontRendererObj, var5, this.width / 2 / 2, 30, 16777215);
         GlStateManager.popMatrix();
 
-        if (var4)
-        {
+        if (var4) {
             this.drawCenteredString(this.fontRendererObj, I18n.format("deathScreen.hardcoreInfo", new Object[0]), this.width / 2, 144, 16777215);
         }
 
@@ -116,25 +100,21 @@ public class GuiGameOver extends GuiScreen implements GuiYesNoCallback
     /**
      * Returns true if this GUI should pause the game when it is displayed in single-player
      */
-    public boolean doesGuiPauseGame()
-    {
+    public boolean doesGuiPauseGame() {
         return false;
     }
 
     /**
      * Called from the main game loop to update the screen.
      */
-    public void updateScreen()
-    {
+    public void updateScreen() {
         super.updateScreen();
         ++this.field_146347_a;
         GuiButton var2;
 
-        if (this.field_146347_a == 20)
-        {
-            for (Iterator var1 = this.buttonList.iterator(); var1.hasNext(); var2.enabled = true)
-            {
-                var2 = (GuiButton)var1.next();
+        if (this.field_146347_a == 20) {
+            for (Iterator var1 = this.buttonList.iterator(); var1.hasNext(); var2.enabled = true) {
+                var2 = (GuiButton) var1.next();
             }
         }
     }

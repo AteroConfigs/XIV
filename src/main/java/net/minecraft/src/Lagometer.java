@@ -10,8 +10,7 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.profiler.Profiler;
 import org.lwjgl.opengl.GL11;
 
-public class Lagometer
-{
+public class Lagometer {
     private static Minecraft mc;
     private static GameSettings gameSettings;
     private static Profiler profiler;
@@ -43,20 +42,17 @@ public class Lagometer
     private static long memDiff = 0L;
     private static int memMbSec = 0;
 
-    public static boolean updateMemoryAllocation()
-    {
+    public static boolean updateMemoryAllocation() {
         long timeNowMs = System.currentTimeMillis();
         long memNow = getMemoryUsed();
         boolean gc = false;
 
-        if (memNow < memLast)
-        {
-            double memDiffMb = (double)memDiff / 1000000.0D;
-            double timeDiffSec = (double)memTimeDiffMs / 1000.0D;
-            int mbSec = (int)(memDiffMb / timeDiffSec);
+        if (memNow < memLast) {
+            double memDiffMb = (double) memDiff / 1000000.0D;
+            double timeDiffSec = (double) memTimeDiffMs / 1000.0D;
+            int mbSec = (int) (memDiffMb / timeDiffSec);
 
-            if (mbSec > 0)
-            {
+            if (mbSec > 0) {
                 memMbSec = mbSec;
             }
 
@@ -65,9 +61,7 @@ public class Lagometer
             memTimeDiffMs = 0L;
             memDiff = 0L;
             gc = true;
-        }
-        else
-        {
+        } else {
             memTimeDiffMs = timeNowMs - memTimeStartMs;
             memDiff = memNow - memStart;
         }
@@ -77,32 +71,25 @@ public class Lagometer
         return gc;
     }
 
-    private static long getMemoryUsed()
-    {
+    private static long getMemoryUsed() {
         Runtime r = Runtime.getRuntime();
         return r.totalMemory() - r.freeMemory();
     }
 
-    public static void updateLagometer()
-    {
-        if (mc == null)
-        {
+    public static void updateLagometer() {
+        if (mc == null) {
             mc = Minecraft.getMinecraft();
             gameSettings = mc.gameSettings;
             profiler = mc.mcProfiler;
         }
 
-        if (gameSettings.showDebugInfo && gameSettings.ofLagometer)
-        {
+        if (gameSettings.showDebugInfo && gameSettings.ofLagometer) {
             active = true;
             long timeNowNano = System.nanoTime();
 
-            if (prevFrameTimeNano == -1L)
-            {
+            if (prevFrameTimeNano == -1L) {
                 prevFrameTimeNano = timeNowNano;
-            }
-            else
-            {
+            } else {
                 int frameIndex = numRecordedFrameTimes & timesFrame.length - 1;
                 ++numRecordedFrameTimes;
                 boolean gc = updateMemoryAllocation();
@@ -124,25 +111,21 @@ public class Lagometer
                 timerServer.reset();
                 prevFrameTimeNano = System.nanoTime();
             }
-        }
-        else
-        {
+        } else {
             active = false;
             prevFrameTimeNano = -1L;
         }
     }
 
-    public static void showLagometer(ScaledResolution scaledResolution)
-    {
-        if (gameSettings != null && gameSettings.ofLagometer)
-        {
+    public static void showLagometer(ScaledResolution scaledResolution) {
+        if (gameSettings != null && gameSettings.ofLagometer) {
             long timeRenderStartNano = System.nanoTime();
             GlStateManager.clear(256);
             GlStateManager.matrixMode(5889);
             GlStateManager.pushMatrix();
             GlStateManager.enableColorMaterial();
             GlStateManager.loadIdentity();
-            GlStateManager.ortho(0.0D, (double)mc.displayWidth, (double)mc.displayHeight, 0.0D, 1000.0D, 3000.0D);
+            GlStateManager.ortho(0.0D, (double) mc.displayWidth, (double) mc.displayHeight, 0.0D, 1000.0D, 3000.0D);
             GlStateManager.matrixMode(5888);
             GlStateManager.pushMatrix();
             GlStateManager.loadIdentity();
@@ -154,27 +137,23 @@ public class Lagometer
             tessellator.startDrawing(1);
             int memColR;
 
-            for (int lumMem = 0; lumMem < timesFrame.length; ++lumMem)
-            {
+            for (int lumMem = 0; lumMem < timesFrame.length; ++lumMem) {
                 memColR = (lumMem - numRecordedFrameTimes & timesFrame.length - 1) * 100 / timesFrame.length;
                 memColR += 155;
-                float memColG = (float)mc.displayHeight;
+                float memColG = (float) mc.displayHeight;
                 long memColB = 0L;
 
-                if (gcs[lumMem])
-                {
+                if (gcs[lumMem]) {
                     renderTime(lumMem, timesFrame[lumMem], memColR, memColR / 2, 0, memColG, tessellator);
-                }
-                else
-                {
+                } else {
                     renderTime(lumMem, timesFrame[lumMem], memColR, memColR, memColR, memColG, tessellator);
-                    memColG -= (float)renderTime(lumMem, timesServer[lumMem], memColR / 2, memColR / 2, memColR / 2, memColG, tessellator);
-                    memColG -= (float)renderTime(lumMem, timesTerrain[lumMem], 0, memColR, 0, memColG, tessellator);
-                    memColG -= (float)renderTime(lumMem, timesVisibility[lumMem], memColR, memColR, 0, memColG, tessellator);
-                    memColG -= (float)renderTime(lumMem, timesChunkUpdate[lumMem], memColR, 0, 0, memColG, tessellator);
-                    memColG -= (float)renderTime(lumMem, timesChunkUpload[lumMem], memColR, 0, memColR, memColG, tessellator);
-                    memColG -= (float)renderTime(lumMem, timesScheduledExecutables[lumMem], 0, 0, memColR, memColG, tessellator);
-                    float var10000 = memColG - (float)renderTime(lumMem, timesTick[lumMem], 0, memColR, memColR, memColG, tessellator);
+                    memColG -= (float) renderTime(lumMem, timesServer[lumMem], memColR / 2, memColR / 2, memColR / 2, memColG, tessellator);
+                    memColG -= (float) renderTime(lumMem, timesTerrain[lumMem], 0, memColR, 0, memColG, tessellator);
+                    memColG -= (float) renderTime(lumMem, timesVisibility[lumMem], memColR, memColR, 0, memColG, tessellator);
+                    memColG -= (float) renderTime(lumMem, timesChunkUpdate[lumMem], memColR, 0, 0, memColG, tessellator);
+                    memColG -= (float) renderTime(lumMem, timesChunkUpload[lumMem], memColR, 0, memColR, memColG, tessellator);
+                    memColG -= (float) renderTime(lumMem, timesScheduledExecutables[lumMem], 0, 0, memColR, memColG, tessellator);
+                    float var10000 = memColG - (float) renderTime(lumMem, timesTick[lumMem], 0, memColR, memColR, memColG, tessellator);
                 }
             }
 
@@ -184,11 +163,11 @@ public class Lagometer
             GlStateManager.matrixMode(5888);
             GlStateManager.popMatrix();
             GlStateManager.func_179098_w();
-            float var12 = 1.0F - (float)((double)(System.currentTimeMillis() - memTimeStartMs) / 1000.0D);
+            float var12 = 1.0F - (float) ((double) (System.currentTimeMillis() - memTimeStartMs) / 1000.0D);
             var12 = Config.limit(var12, 0.0F, 1.0F);
-            memColR = (int)(170.0F + var12 * 85.0F);
-            int var13 = (int)(100.0F + var12 * 55.0F);
-            int var14 = (int)(10.0F + var12 * 10.0F);
+            memColR = (int) (170.0F + var12 * 85.0F);
+            int var13 = (int) (100.0F + var12 * 55.0F);
+            int var14 = (int) (10.0F + var12 * 10.0F);
             int colMem = memColR << 16 | var13 << 8 | var14;
             int posX = 512 / scaledResolution.getScaleFactor() + 2;
             int posY = mc.displayHeight / scaledResolution.getScaleFactor() - 8;
@@ -199,58 +178,45 @@ public class Lagometer
         }
     }
 
-    private static long renderTime(int frameNum, long time, int r, int g, int b, float baseHeight, WorldRenderer tessellator)
-    {
+    private static long renderTime(int frameNum, long time, int r, int g, int b, float baseHeight, WorldRenderer tessellator) {
         long heightTime = time / 200000L;
 
-        if (heightTime < 3L)
-        {
+        if (heightTime < 3L) {
             return 0L;
-        }
-        else
-        {
+        } else {
             tessellator.func_178961_b(r, g, b, 255);
-            tessellator.addVertex((double)((float)frameNum + 0.5F), (double)(baseHeight - (float)heightTime + 0.5F), 0.0D);
-            tessellator.addVertex((double)((float)frameNum + 0.5F), (double)(baseHeight + 0.5F), 0.0D);
+            tessellator.addVertex((double) ((float) frameNum + 0.5F), (double) (baseHeight - (float) heightTime + 0.5F), 0.0D);
+            tessellator.addVertex((double) ((float) frameNum + 0.5F), (double) (baseHeight + 0.5F), 0.0D);
             return heightTime;
         }
     }
 
-    public static boolean isActive()
-    {
+    public static boolean isActive() {
         return active;
     }
 
-    public static class TimerNano
-    {
+    public static class TimerNano {
         public long timeStartNano = 0L;
         public long timeNano = 0L;
 
-        public void start()
-        {
-            if (Lagometer.active)
-            {
-                if (this.timeStartNano == 0L)
-                {
+        public void start() {
+            if (Lagometer.active) {
+                if (this.timeStartNano == 0L) {
                     this.timeStartNano = System.nanoTime();
                 }
             }
         }
 
-        public void end()
-        {
-            if (Lagometer.active)
-            {
-                if (this.timeStartNano != 0L)
-                {
+        public void end() {
+            if (Lagometer.active) {
+                if (this.timeStartNano != 0L) {
                     this.timeNano += System.nanoTime() - this.timeStartNano;
                     this.timeStartNano = 0L;
                 }
             }
         }
 
-        private void reset()
-        {
+        private void reset() {
             this.timeNano = 0L;
             this.timeStartNano = 0L;
         }

@@ -1,7 +1,6 @@
 package net.minecraft.util;
 
-public enum EnumWorldBlockLayer
-{
+public enum EnumWorldBlockLayer {
     SOLID("SOLID", 0, "Solid"),
     CUTOUT_MIPPED("CUTOUT_MIPPED", 1, "Mipped Cutout"),
     CUTOUT("CUTOUT", 2, "Cutout"),
@@ -11,13 +10,11 @@ public enum EnumWorldBlockLayer
     private static final EnumWorldBlockLayer[] $VALUES = new EnumWorldBlockLayer[]{SOLID, CUTOUT_MIPPED, CUTOUT, TRANSLUCENT};
 
 
-    private EnumWorldBlockLayer(String p_i45755_1_, int p_i45755_2_, String p_i45755_3_)
-    {
+    private EnumWorldBlockLayer(String p_i45755_1_, int p_i45755_2_, String p_i45755_3_) {
         this.field_180338_e = p_i45755_3_;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return this.field_180338_e;
     }
 }

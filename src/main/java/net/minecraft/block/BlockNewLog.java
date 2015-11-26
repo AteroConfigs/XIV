@@ -1,7 +1,6 @@
 package net.minecraft.block;
 
 import com.google.common.base.Predicate;
-import java.util.List;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
@@ -10,32 +9,29 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class BlockNewLog extends BlockLog
-{
-    public static final PropertyEnum field_176300_b = PropertyEnum.create("variant", BlockPlanks.EnumType.class, new Predicate()
-    {
+import java.util.List;
 
-        public boolean func_180194_a(BlockPlanks.EnumType p_180194_1_)
-        {
+public class BlockNewLog extends BlockLog {
+    public static final PropertyEnum field_176300_b = PropertyEnum.create("variant", BlockPlanks.EnumType.class, new Predicate() {
+
+        public boolean func_180194_a(BlockPlanks.EnumType p_180194_1_) {
             return p_180194_1_.func_176839_a() >= 4;
         }
-        public boolean apply(Object p_apply_1_)
-        {
-            return this.func_180194_a((BlockPlanks.EnumType)p_apply_1_);
+
+        public boolean apply(Object p_apply_1_) {
+            return this.func_180194_a((BlockPlanks.EnumType) p_apply_1_);
         }
     });
 
 
-    public BlockNewLog()
-    {
+    public BlockNewLog() {
         this.setDefaultState(this.blockState.getBaseState().withProperty(field_176300_b, BlockPlanks.EnumType.ACACIA).withProperty(AXIS_PROP, BlockLog.EnumAxis.Y));
     }
 
     /**
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List list)
-    {
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, List list) {
         list.add(new ItemStack(itemIn, 1, BlockPlanks.EnumType.ACACIA.func_176839_a() - 4));
         list.add(new ItemStack(itemIn, 1, BlockPlanks.EnumType.DARK_OAK.func_176839_a() - 4));
     }
@@ -43,12 +39,10 @@ public class BlockNewLog extends BlockLog
     /**
      * Convert the given metadata into a BlockState for this Block
      */
-    public IBlockState getStateFromMeta(int meta)
-    {
+    public IBlockState getStateFromMeta(int meta) {
         IBlockState var2 = this.getDefaultState().withProperty(field_176300_b, BlockPlanks.EnumType.func_176837_a((meta & 3) + 4));
 
-        switch (meta & 12)
-        {
+        switch (meta & 12) {
             case 0:
                 var2 = var2.withProperty(AXIS_PROP, BlockLog.EnumAxis.Y);
                 break;
@@ -71,13 +65,11 @@ public class BlockNewLog extends BlockLog
     /**
      * Convert the BlockState into the correct metadata value
      */
-    public int getMetaFromState(IBlockState state)
-    {
+    public int getMetaFromState(IBlockState state) {
         byte var2 = 0;
-        int var3 = var2 | ((BlockPlanks.EnumType)state.getValue(field_176300_b)).func_176839_a() - 4;
+        int var3 = var2 | ((BlockPlanks.EnumType) state.getValue(field_176300_b)).func_176839_a() - 4;
 
-        switch (BlockNewLog.SwitchEnumAxis.field_180191_a[((BlockLog.EnumAxis)state.getValue(AXIS_PROP)).ordinal()])
-        {
+        switch (BlockNewLog.SwitchEnumAxis.field_180191_a[((BlockLog.EnumAxis) state.getValue(AXIS_PROP)).ordinal()]) {
             case 1:
                 var3 |= 4;
                 break;
@@ -93,55 +85,41 @@ public class BlockNewLog extends BlockLog
         return var3;
     }
 
-    protected BlockState createBlockState()
-    {
-        return new BlockState(this, new IProperty[] {field_176300_b, AXIS_PROP});
+    protected BlockState createBlockState() {
+        return new BlockState(this, new IProperty[]{field_176300_b, AXIS_PROP});
     }
 
-    protected ItemStack createStackedBlock(IBlockState state)
-    {
-        return new ItemStack(Item.getItemFromBlock(this), 1, ((BlockPlanks.EnumType)state.getValue(field_176300_b)).func_176839_a() - 4);
+    protected ItemStack createStackedBlock(IBlockState state) {
+        return new ItemStack(Item.getItemFromBlock(this), 1, ((BlockPlanks.EnumType) state.getValue(field_176300_b)).func_176839_a() - 4);
     }
 
     /**
      * Get the damage value that this Block should drop
      */
-    public int damageDropped(IBlockState state)
-    {
-        return ((BlockPlanks.EnumType)state.getValue(field_176300_b)).func_176839_a() - 4;
+    public int damageDropped(IBlockState state) {
+        return ((BlockPlanks.EnumType) state.getValue(field_176300_b)).func_176839_a() - 4;
     }
 
-    static final class SwitchEnumAxis
-    {
+    static final class SwitchEnumAxis {
         static final int[] field_180191_a = new int[BlockLog.EnumAxis.values().length];
 
 
-        static
-        {
-            try
-            {
+        static {
+            try {
                 field_180191_a[BlockLog.EnumAxis.X.ordinal()] = 1;
-            }
-            catch (NoSuchFieldError var3)
-            {
+            } catch (NoSuchFieldError var3) {
                 ;
             }
 
-            try
-            {
+            try {
                 field_180191_a[BlockLog.EnumAxis.Z.ordinal()] = 2;
-            }
-            catch (NoSuchFieldError var2)
-            {
+            } catch (NoSuchFieldError var2) {
                 ;
             }
 
-            try
-            {
+            try {
                 field_180191_a[BlockLog.EnumAxis.NONE.ordinal()] = 3;
-            }
-            catch (NoSuchFieldError var1)
-            {
+            } catch (NoSuchFieldError var1) {
                 ;
             }
         }

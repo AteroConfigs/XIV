@@ -14,24 +14,24 @@ import pw.latematt.xiv.mod.ModType;
  */
 public class NoParticles extends Mod implements Listener<ReadPacketEvent> {
 
-	public NoParticles() {
-		super("NoParticles", ModType.RENDER);
-	}
+    public NoParticles() {
+        super("NoParticles", ModType.RENDER);
+    }
 
-	@Override
-	public void onEventCalled(ReadPacketEvent event) {
-		if (event.getPacket() instanceof S2APacketParticles || event.getPacket() instanceof S28PacketEffect) {
-			event.setCancelled(true);
-		}
-	}
+    @Override
+    public void onEventCalled(ReadPacketEvent event) {
+        if (event.getPacket() instanceof S2APacketParticles || event.getPacket() instanceof S28PacketEffect) {
+            event.setCancelled(true);
+        }
+    }
 
-	@Override
-	public void onEnabled() {
-		XIV.getInstance().getListenerManager().add(this);
-	}
+    @Override
+    public void onEnabled() {
+        XIV.getInstance().getListenerManager().add(this);
+    }
 
-	@Override
-	public void onDisabled() {
-		XIV.getInstance().getListenerManager().remove(this);
-	}
+    @Override
+    public void onDisabled() {
+        XIV.getInstance().getListenerManager().remove(this);
+    }
 }

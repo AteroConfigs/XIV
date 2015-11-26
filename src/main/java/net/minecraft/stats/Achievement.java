@@ -8,8 +8,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
 
-public class Achievement extends StatBase
-{
+public class Achievement extends StatBase {
     /**
      * Is the column (related to center of achievement gui, in 24 pixels unit) that the achievement will be displayed.
      */
@@ -48,49 +47,41 @@ public class Achievement extends StatBase
     private boolean isSpecial;
 
 
-    public Achievement(String p_i46327_1_, String p_i46327_2_, int p_i46327_3_, int p_i46327_4_, Item p_i46327_5_, Achievement p_i46327_6_)
-    {
+    public Achievement(String p_i46327_1_, String p_i46327_2_, int p_i46327_3_, int p_i46327_4_, Item p_i46327_5_, Achievement p_i46327_6_) {
         this(p_i46327_1_, p_i46327_2_, p_i46327_3_, p_i46327_4_, new ItemStack(p_i46327_5_), p_i46327_6_);
     }
 
-    public Achievement(String p_i45301_1_, String p_i45301_2_, int p_i45301_3_, int p_i45301_4_, Block p_i45301_5_, Achievement p_i45301_6_)
-    {
+    public Achievement(String p_i45301_1_, String p_i45301_2_, int p_i45301_3_, int p_i45301_4_, Block p_i45301_5_, Achievement p_i45301_6_) {
         this(p_i45301_1_, p_i45301_2_, p_i45301_3_, p_i45301_4_, new ItemStack(p_i45301_5_), p_i45301_6_);
     }
 
-    public Achievement(String p_i45302_1_, String p_i45302_2_, int p_i45302_3_, int p_i45302_4_, ItemStack p_i45302_5_, Achievement p_i45302_6_)
-    {
+    public Achievement(String p_i45302_1_, String p_i45302_2_, int p_i45302_3_, int p_i45302_4_, ItemStack p_i45302_5_, Achievement p_i45302_6_) {
         super(p_i45302_1_, new ChatComponentTranslation("achievement." + p_i45302_2_, new Object[0]));
         this.theItemStack = p_i45302_5_;
         this.achievementDescription = "achievement." + p_i45302_2_ + ".desc";
         this.displayColumn = p_i45302_3_;
         this.displayRow = p_i45302_4_;
 
-        if (p_i45302_3_ < AchievementList.minDisplayColumn)
-        {
+        if (p_i45302_3_ < AchievementList.minDisplayColumn) {
             AchievementList.minDisplayColumn = p_i45302_3_;
         }
 
-        if (p_i45302_4_ < AchievementList.minDisplayRow)
-        {
+        if (p_i45302_4_ < AchievementList.minDisplayRow) {
             AchievementList.minDisplayRow = p_i45302_4_;
         }
 
-        if (p_i45302_3_ > AchievementList.maxDisplayColumn)
-        {
+        if (p_i45302_3_ > AchievementList.maxDisplayColumn) {
             AchievementList.maxDisplayColumn = p_i45302_3_;
         }
 
-        if (p_i45302_4_ > AchievementList.maxDisplayRow)
-        {
+        if (p_i45302_4_ > AchievementList.maxDisplayRow) {
             AchievementList.maxDisplayRow = p_i45302_4_;
         }
 
         this.parentAchievement = p_i45302_6_;
     }
 
-    public Achievement func_180789_a()
-    {
+    public Achievement func_180789_a() {
         this.isIndependent = true;
         return this;
     }
@@ -99,14 +90,12 @@ public class Achievement extends StatBase
      * Special achievements have a 'spiked' (on normal texture pack) frame, special achievements are the hardest ones to
      * achieve.
      */
-    public Achievement setSpecial()
-    {
+    public Achievement setSpecial() {
         this.isSpecial = true;
         return this;
     }
 
-    public Achievement func_180788_c()
-    {
+    public Achievement func_180788_c() {
         super.registerStat();
         AchievementList.achievementList.add(this);
         return this;
@@ -115,36 +104,31 @@ public class Achievement extends StatBase
     /**
      * Returns whether or not the StatBase-derived class is a statistic (running counter) or an achievement (one-shot).
      */
-    public boolean isAchievement()
-    {
+    public boolean isAchievement() {
         return true;
     }
 
-    public IChatComponent getStatName()
-    {
+    public IChatComponent getStatName() {
         IChatComponent var1 = super.getStatName();
         var1.getChatStyle().setColor(this.getSpecial() ? EnumChatFormatting.DARK_PURPLE : EnumChatFormatting.GREEN);
         return var1;
     }
 
-    public Achievement func_180787_a(Class p_180787_1_)
-    {
-        return (Achievement)super.func_150953_b(p_180787_1_);
+    public Achievement func_180787_a(Class p_180787_1_) {
+        return (Achievement) super.func_150953_b(p_180787_1_);
     }
 
     /**
      * Returns the fully description of the achievement - ready to be displayed on screen.
      */
-    public String getDescription()
-    {
+    public String getDescription() {
         return this.statStringFormatter != null ? this.statStringFormatter.formatString(StatCollector.translateToLocal(this.achievementDescription)) : StatCollector.translateToLocal(this.achievementDescription);
     }
 
     /**
      * Defines a string formatter for the achievement.
      */
-    public Achievement setStatStringFormatter(IStatStringFormat p_75988_1_)
-    {
+    public Achievement setStatStringFormatter(IStatStringFormat p_75988_1_) {
         this.statStringFormatter = p_75988_1_;
         return this;
     }
@@ -153,21 +137,18 @@ public class Achievement extends StatBase
      * Special achievements have a 'spiked' (on normal texture pack) frame, special achievements are the hardest ones to
      * achieve.
      */
-    public boolean getSpecial()
-    {
+    public boolean getSpecial() {
         return this.isSpecial;
     }
 
-    public StatBase func_150953_b(Class p_150953_1_)
-    {
+    public StatBase func_150953_b(Class p_150953_1_) {
         return this.func_180787_a(p_150953_1_);
     }
 
     /**
      * Register the stat into StatList.
      */
-    public StatBase registerStat()
-    {
+    public StatBase registerStat() {
         return this.func_180788_c();
     }
 
@@ -175,8 +156,7 @@ public class Achievement extends StatBase
      * Initializes the current stat as independent (i.e., lacking prerequisites for being updated) and returns the
      * current instance.
      */
-    public StatBase initIndependentStat()
-    {
+    public StatBase initIndependentStat() {
         return this.func_180789_a();
     }
 }

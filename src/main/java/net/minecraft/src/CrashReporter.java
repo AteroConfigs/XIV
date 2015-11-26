@@ -1,50 +1,43 @@
 package net.minecraft.src;
 
-import java.util.HashMap;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.crash.CrashReport;
 
-public class CrashReporter
-{
-    public static void onCrashReport(CrashReport crashReport)
-    {
-        try
-        {
+import java.util.HashMap;
+
+public class CrashReporter {
+    public static void onCrashReport(CrashReport crashReport) {
+        try {
             GameSettings e = Config.getGameSettings();
 
-            if (e == null)
-            {
+            if (e == null) {
                 return;
             }
 
-            if (!e.snooperEnabled)
-            {
+            if (!e.snooperEnabled) {
                 return;
             }
 
             Throwable cause = crashReport.getCrashCause();
 
-            if (cause == null)
-            {
+            if (cause == null) {
                 return;
             }
 
-            if (cause.getClass() == Throwable.class)
-            {
+            if (cause.getClass() == Throwable.class) {
                 return;
             }
 
-            if (cause.getClass().getName().contains(".fml.client.SplashProgress"))
-            {
+            if (cause.getClass().getName().contains(".fml.client.SplashProgress")) {
                 return;
             }
 
             String url = "http://optifine.net/crashReport";
             String reportStr = makeReport(crashReport);
             byte[] content = reportStr.getBytes("ASCII");
-            IFileUploadListener listener = new IFileUploadListener()
-            {
-                public void fileUploadFinished(String url, byte[] content, Throwable exception) {}
+            IFileUploadListener listener = new IFileUploadListener() {
+                public void fileUploadFinished(String url, byte[] content, Throwable exception) {
+                }
             };
             HashMap headers = new HashMap();
             headers.put("OF-Version", Config.getVersion());
@@ -53,15 +46,12 @@ public class CrashReporter
             fut.setPriority(10);
             fut.start();
             Thread.sleep(1000L);
-        }
-        catch (Exception var9)
-        {
+        } catch (Exception var9) {
             Config.dbg(var9.getClass().getName() + ": " + var9.getMessage());
         }
     }
 
-    private static String makeReport(CrashReport crashReport)
-    {
+    private static String makeReport(CrashReport crashReport) {
         StringBuffer sb = new StringBuffer();
         sb.append("OptiFineVersion: " + Config.getVersion() + "\n");
         sb.append("Summary: " + makeSummary(crashReport) + "\n");
@@ -75,21 +65,16 @@ public class CrashReporter
         return sb.toString();
     }
 
-    private static String makeSummary(CrashReport crashReport)
-    {
+    private static String makeSummary(CrashReport crashReport) {
         Throwable t = crashReport.getCrashCause();
 
-        if (t == null)
-        {
+        if (t == null) {
             return "Unknown";
-        }
-        else
-        {
+        } else {
             StackTraceElement[] traces = t.getStackTrace();
             String firstTrace = "unknown";
 
-            if (traces.length > 0)
-            {
+            if (traces.length > 0) {
                 firstTrace = traces[0].toString().trim();
             }
 

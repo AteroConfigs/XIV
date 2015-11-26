@@ -1,12 +1,12 @@
 package net.minecraft.client.renderer.culling;
 
-import java.nio.FloatBuffer;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MathHelper;
 
-public class ClippingHelperImpl extends ClippingHelper
-{
+import java.nio.FloatBuffer;
+
+public class ClippingHelperImpl extends ClippingHelper {
     private static ClippingHelperImpl instance = new ClippingHelperImpl();
     private FloatBuffer projectionMatrixBuffer = GLAllocation.createDirectFloatBuffer(16);
     private FloatBuffer modelviewMatrixBuffer = GLAllocation.createDirectFloatBuffer(16);
@@ -16,14 +16,12 @@ public class ClippingHelperImpl extends ClippingHelper
     /**
      * Initialises the ClippingHelper object then returns an instance of it.
      */
-    public static ClippingHelper getInstance()
-    {
+    public static ClippingHelper getInstance() {
         instance.init();
         return instance;
     }
 
-    private void func_180547_a(float[] p_180547_1_)
-    {
+    private void func_180547_a(float[] p_180547_1_) {
         float var2 = MathHelper.sqrt_float(p_180547_1_[0] * p_180547_1_[0] + p_180547_1_[1] * p_180547_1_[1] + p_180547_1_[2] * p_180547_1_[2]);
         p_180547_1_[0] /= var2;
         p_180547_1_[1] /= var2;
@@ -31,8 +29,7 @@ public class ClippingHelperImpl extends ClippingHelper
         p_180547_1_[3] /= var2;
     }
 
-    public void init()
-    {
+    public void init() {
         this.projectionMatrixBuffer.clear();
         this.modelviewMatrixBuffer.clear();
         this.field_78564_h.clear();

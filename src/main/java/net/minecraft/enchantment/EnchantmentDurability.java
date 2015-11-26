@@ -1,16 +1,15 @@
 package net.minecraft.enchantment;
 
-import java.util.Random;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class EnchantmentDurability extends Enchantment
-{
+import java.util.Random;
+
+public class EnchantmentDurability extends Enchantment {
 
 
-    protected EnchantmentDurability(int p_i45773_1_, ResourceLocation p_i45773_2_, int p_i45773_3_)
-    {
+    protected EnchantmentDurability(int p_i45773_1_, ResourceLocation p_i45773_2_, int p_i45773_3_) {
         super(p_i45773_1_, p_i45773_2_, p_i45773_3_, EnumEnchantmentType.BREAKABLE);
         this.setName("durability");
     }
@@ -18,29 +17,25 @@ public class EnchantmentDurability extends Enchantment
     /**
      * Returns the minimal value of enchantability needed on the enchantment level passed.
      */
-    public int getMinEnchantability(int p_77321_1_)
-    {
+    public int getMinEnchantability(int p_77321_1_) {
         return 5 + (p_77321_1_ - 1) * 8;
     }
 
     /**
      * Returns the maximum value of enchantability nedded on the enchantment level passed.
      */
-    public int getMaxEnchantability(int p_77317_1_)
-    {
+    public int getMaxEnchantability(int p_77317_1_) {
         return super.getMinEnchantability(p_77317_1_) + 50;
     }
 
     /**
      * Returns the maximum level that the enchantment can have.
      */
-    public int getMaxLevel()
-    {
+    public int getMaxLevel() {
         return 3;
     }
 
-    public boolean canApply(ItemStack p_92089_1_)
-    {
+    public boolean canApply(ItemStack p_92089_1_) {
         return p_92089_1_.isItemStackDamageable() ? true : super.canApply(p_92089_1_);
     }
 
@@ -49,8 +44,7 @@ public class EnchantmentDurability extends Enchantment
      * enchantment level (par1). If the ItemStack is Armor then there is a flat 60% chance for damage to be negated no
      * matter the enchantment level, otherwise there is a 1-(par/1) chance for damage to be negated.
      */
-    public static boolean negateDamage(ItemStack p_92097_0_, int p_92097_1_, Random p_92097_2_)
-    {
+    public static boolean negateDamage(ItemStack p_92097_0_, int p_92097_1_, Random p_92097_2_) {
         return p_92097_0_.getItem() instanceof ItemArmor && p_92097_2_.nextFloat() < 0.6F ? false : p_92097_2_.nextInt(p_92097_1_ + 1) > 0;
     }
 }

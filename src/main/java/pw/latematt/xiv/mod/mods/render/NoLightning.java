@@ -9,30 +9,30 @@ import pw.latematt.xiv.mod.ModType;
 
 /**
  * A mod that removes all lightning strikes.
- * 
+ *
  * @author Tasmanian
  * @since Nov 25, 2015
  */
 public class NoLightning extends Mod implements Listener<AddWeatherEvent> {
 
     public NoLightning() {
-	super("NoLightning", ModType.RENDER);
+        super("NoLightning", ModType.RENDER);
     }
 
     @Override
     public void onEventCalled(AddWeatherEvent event) {
-	if (event.getEntity() instanceof EntityLightningBolt) {
-	    event.cancel();
-	}
+        if (event.getEntity() instanceof EntityLightningBolt) {
+            event.cancel();
+        }
     }
 
     @Override
-    public void onEnabled() { 
-	XIV.getInstance().getListenerManager().add(this);
+    public void onEnabled() {
+        XIV.getInstance().getListenerManager().add(this);
     }
 
     @Override
     public void onDisabled() {
-	XIV.getInstance().getListenerManager().remove(this);
+        XIV.getInstance().getListenerManager().remove(this);
     }
 }

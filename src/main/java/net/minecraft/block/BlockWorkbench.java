@@ -15,63 +15,50 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 
-public class BlockWorkbench extends Block
-{
+public class BlockWorkbench extends Block {
 
 
-    protected BlockWorkbench()
-    {
+    protected BlockWorkbench() {
         super(Material.wood);
         this.setCreativeTab(CreativeTabs.tabDecorations);
     }
 
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
-    {
-        if (worldIn.isRemote)
-        {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (worldIn.isRemote) {
             return true;
-        }
-        else
-        {
+        } else {
             playerIn.displayGui(new BlockWorkbench.InterfaceCraftingTable(worldIn, pos));
             return true;
         }
     }
 
-    public static class InterfaceCraftingTable implements IInteractionObject
-    {
+    public static class InterfaceCraftingTable implements IInteractionObject {
         private final World world;
         private final BlockPos position;
 
 
-        public InterfaceCraftingTable(World worldIn, BlockPos p_i45730_2_)
-        {
+        public InterfaceCraftingTable(World worldIn, BlockPos p_i45730_2_) {
             this.world = worldIn;
             this.position = p_i45730_2_;
         }
 
-        public String getName()
-        {
+        public String getName() {
             return null;
         }
 
-        public boolean hasCustomName()
-        {
+        public boolean hasCustomName() {
             return false;
         }
 
-        public IChatComponent getDisplayName()
-        {
+        public IChatComponent getDisplayName() {
             return new ChatComponentTranslation(Blocks.crafting_table.getUnlocalizedName() + ".name", new Object[0]);
         }
 
-        public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
-        {
+        public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
             return new ContainerWorkbench(playerInventory, this.world, this.position);
         }
 
-        public String getGuiID()
-        {
+        public String getGuiID() {
             return "minecraft:crafting_table";
         }
     }

@@ -1,32 +1,28 @@
 package net.minecraft.src;
 
-import java.util.HashMap;
-import java.util.Map;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.util.StringUtils;
 
-public class PlayerConfigurations
-{
+import java.util.HashMap;
+import java.util.Map;
+
+public class PlayerConfigurations {
     private static Map mapConfigurations = null;
 
-    public static void renderPlayerItems(ModelBiped modelBiped, AbstractClientPlayer player, float scale, float partialTicks)
-    {
+    public static void renderPlayerItems(ModelBiped modelBiped, AbstractClientPlayer player, float scale, float partialTicks) {
         PlayerConfiguration cfg = getPlayerConfiguration(player);
 
-        if (cfg != null)
-        {
+        if (cfg != null) {
             cfg.renderPlayerItems(modelBiped, player, scale, partialTicks);
         }
     }
 
-    public static synchronized PlayerConfiguration getPlayerConfiguration(AbstractClientPlayer player)
-    {
+    public static synchronized PlayerConfiguration getPlayerConfiguration(AbstractClientPlayer player) {
         String name = getPlayerName(player);
-        PlayerConfiguration pc = (PlayerConfiguration)getMapConfigurations().get(name);
+        PlayerConfiguration pc = (PlayerConfiguration) getMapConfigurations().get(name);
 
-        if (pc == null)
-        {
+        if (pc == null) {
             pc = new PlayerConfiguration();
             getMapConfigurations().put(name, pc);
             PlayerConfigurationReceiver pcl = new PlayerConfigurationReceiver(name);
@@ -38,27 +34,22 @@ public class PlayerConfigurations
         return pc;
     }
 
-    public static synchronized void setPlayerConfiguration(String player, PlayerConfiguration pc)
-    {
+    public static synchronized void setPlayerConfiguration(String player, PlayerConfiguration pc) {
         getMapConfigurations().put(player, pc);
     }
 
-    private static Map getMapConfigurations()
-    {
-        if (mapConfigurations == null)
-        {
+    private static Map getMapConfigurations() {
+        if (mapConfigurations == null) {
             mapConfigurations = new HashMap();
         }
 
         return mapConfigurations;
     }
 
-    public static String getPlayerName(AbstractClientPlayer player)
-    {
+    public static String getPlayerName(AbstractClientPlayer player) {
         String username = player.getName();
 
-        if (username != null && !username.isEmpty())
-        {
+        if (username != null && !username.isEmpty()) {
             username = StringUtils.stripControlCodes(username);
         }
 

@@ -4,8 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 
-public class ServerData
-{
+public class ServerData {
     public String serverName;
     public String serverIP;
 
@@ -21,11 +20,15 @@ public class ServerData
      */
     public String serverMOTD;
 
-    /** last server ping that showed up in the server browser */
+    /**
+     * last server ping that showed up in the server browser
+     */
     public long pingToServer;
     public int version = 47;
 
-    /** Game version for this server. */
+    /**
+     * Game version for this server.
+     */
     public String gameVersion = "1.8";
     public boolean field_78841_f;
     public String playerList;
@@ -33,8 +36,7 @@ public class ServerData
     private String serverIcon;
 
 
-    public ServerData(String p_i1193_1_, String p_i1193_2_)
-    {
+    public ServerData(String p_i1193_1_, String p_i1193_2_) {
         this.resourceMode = ServerData.ServerResourceMode.PROMPT;
         this.serverName = p_i1193_1_;
         this.serverIP = p_i1193_2_;
@@ -43,64 +45,49 @@ public class ServerData
     /**
      * Returns an NBTTagCompound with the server's name, IP and maybe acceptTextures.
      */
-    public NBTTagCompound getNBTCompound()
-    {
+    public NBTTagCompound getNBTCompound() {
         NBTTagCompound var1 = new NBTTagCompound();
         var1.setString("name", this.serverName);
         var1.setString("ip", this.serverIP);
 
-        if (this.serverIcon != null)
-        {
+        if (this.serverIcon != null) {
             var1.setString("icon", this.serverIcon);
         }
 
-        if (this.resourceMode == ServerData.ServerResourceMode.ENABLED)
-        {
+        if (this.resourceMode == ServerData.ServerResourceMode.ENABLED) {
             var1.setBoolean("acceptTextures", true);
-        }
-        else if (this.resourceMode == ServerData.ServerResourceMode.DISABLED)
-        {
+        } else if (this.resourceMode == ServerData.ServerResourceMode.DISABLED) {
             var1.setBoolean("acceptTextures", false);
         }
 
         return var1;
     }
 
-    public ServerData.ServerResourceMode getResourceMode()
-    {
+    public ServerData.ServerResourceMode getResourceMode() {
         return this.resourceMode;
     }
 
-    public void setResourceMode(ServerData.ServerResourceMode mode)
-    {
+    public void setResourceMode(ServerData.ServerResourceMode mode) {
         this.resourceMode = mode;
     }
 
     /**
      * Takes an NBTTagCompound with 'name' and 'ip' keys, returns a ServerData instance.
      */
-    public static ServerData getServerDataFromNBTCompound(NBTTagCompound nbtCompound)
-    {
+    public static ServerData getServerDataFromNBTCompound(NBTTagCompound nbtCompound) {
         ServerData var1 = new ServerData(nbtCompound.getString("name"), nbtCompound.getString("ip"));
 
-        if (nbtCompound.hasKey("icon", 8))
-        {
+        if (nbtCompound.hasKey("icon", 8)) {
             var1.setBase64EncodedIconData(nbtCompound.getString("icon"));
         }
 
-        if (nbtCompound.hasKey("acceptTextures", 1))
-        {
-            if (nbtCompound.getBoolean("acceptTextures"))
-            {
+        if (nbtCompound.hasKey("acceptTextures", 1)) {
+            if (nbtCompound.getBoolean("acceptTextures")) {
                 var1.setResourceMode(ServerData.ServerResourceMode.ENABLED);
-            }
-            else
-            {
+            } else {
                 var1.setResourceMode(ServerData.ServerResourceMode.DISABLED);
             }
-        }
-        else
-        {
+        } else {
             var1.setResourceMode(ServerData.ServerResourceMode.PROMPT);
         }
 
@@ -110,26 +97,22 @@ public class ServerData
     /**
      * Returns the base-64 encoded representation of the server's icon, or null if not available
      */
-    public String getBase64EncodedIconData()
-    {
+    public String getBase64EncodedIconData() {
         return this.serverIcon;
     }
 
-    public void setBase64EncodedIconData(String icon)
-    {
+    public void setBase64EncodedIconData(String icon) {
         this.serverIcon = icon;
     }
 
-    public void copyFrom(ServerData serverDataIn)
-    {
+    public void copyFrom(ServerData serverDataIn) {
         this.serverIP = serverDataIn.serverIP;
         this.serverName = serverDataIn.serverName;
         this.setResourceMode(serverDataIn.getResourceMode());
         this.serverIcon = serverDataIn.serverIcon;
     }
 
-    public static enum ServerResourceMode
-    {
+    public static enum ServerResourceMode {
         ENABLED("ENABLED", 0, "enabled"),
         DISABLED("DISABLED", 1, "disabled"),
         PROMPT("PROMPT", 2, "prompt");
@@ -138,13 +121,11 @@ public class ServerData
         private static final ServerData.ServerResourceMode[] $VALUES = new ServerData.ServerResourceMode[]{ENABLED, DISABLED, PROMPT};
 
 
-        private ServerResourceMode(String p_i1053_1_, int p_i1053_2_, String p_i1053_3_)
-        {
+        private ServerResourceMode(String p_i1053_1_, int p_i1053_2_, String p_i1053_3_) {
             this.motd = new ChatComponentTranslation("addServer.resourcePack." + p_i1053_3_, new Object[0]);
         }
 
-        public IChatComponent getMotd()
-        {
+        public IChatComponent getMotd() {
             return this.motd;
         }
     }

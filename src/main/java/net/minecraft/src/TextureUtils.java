@@ -1,25 +1,9 @@
 package net.minecraft.src;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.IntBuffer;
-import java.util.Iterator;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.ITextureObject;
-import net.minecraft.client.renderer.texture.ITickableTextureObject;
-import net.minecraft.client.renderer.texture.SimpleTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.*;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
@@ -28,8 +12,18 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
-public class TextureUtils
-{
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.IntBuffer;
+import java.util.Iterator;
+
+public class TextureUtils {
     public static final String texGrassTop = "grass_top";
     public static final String texStone = "stone";
     public static final String texDirt = "dirt";
@@ -112,12 +106,10 @@ public class TextureUtils
     public static final String SPRITE_LOCATION_PREFIX = "minecraft:blocks/";
     private static IntBuffer staticBuffer = GLAllocation.createDirectIntBuffer(256);
 
-    public static void update()
-    {
+    public static void update() {
         TextureMap mapBlocks = getTextureMapBlocks();
 
-        if (mapBlocks != null)
-        {
+        if (mapBlocks != null) {
             String prefix = "minecraft:blocks/";
             iconGrassTop = mapBlocks.getSpriteSafe(prefix + "grass_top");
             iconGrassSide = mapBlocks.getSpriteSafe(prefix + "grass_side");
@@ -138,19 +130,16 @@ public class TextureUtils
         }
     }
 
-    public static BufferedImage fixTextureDimensions(String name, BufferedImage bi)
-    {
-        if (name.startsWith("/mob/zombie") || name.startsWith("/mob/pigzombie"))
-        {
+    public static BufferedImage fixTextureDimensions(String name, BufferedImage bi) {
+        if (name.startsWith("/mob/zombie") || name.startsWith("/mob/pigzombie")) {
             int width = bi.getWidth();
             int height = bi.getHeight();
 
-            if (width == height * 2)
-            {
+            if (width == height * 2) {
                 BufferedImage scaledImage = new BufferedImage(width, height * 2, 2);
                 Graphics2D gr = scaledImage.createGraphics();
                 gr.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                gr.drawImage(bi, 0, 0, width, height, (ImageObserver)null);
+                gr.drawImage(bi, 0, 0, width, height, (ImageObserver) null);
                 return scaledImage;
             }
         }
@@ -158,74 +147,60 @@ public class TextureUtils
         return bi;
     }
 
-    public static int ceilPowerOfTwo(int val)
-    {
+    public static int ceilPowerOfTwo(int val) {
         int i;
 
-        for (i = 1; i < val; i *= 2)
-        {
+        for (i = 1; i < val; i *= 2) {
             ;
         }
 
         return i;
     }
 
-    public static int getPowerOfTwo(int val)
-    {
+    public static int getPowerOfTwo(int val) {
         int i = 1;
         int po2;
 
-        for (po2 = 0; i < val; ++po2)
-        {
+        for (po2 = 0; i < val; ++po2) {
             i *= 2;
         }
 
         return po2;
     }
 
-    public static int twoToPower(int power)
-    {
+    public static int twoToPower(int power) {
         int val = 1;
 
-        for (int i = 0; i < power; ++i)
-        {
+        for (int i = 0; i < power; ++i) {
             val *= 2;
         }
 
         return val;
     }
 
-    public static void refreshBlockTextures() {}
+    public static void refreshBlockTextures() {
+    }
 
-    public static ITextureObject getTexture(String path)
-    {
+    public static ITextureObject getTexture(String path) {
         return getTexture(new ResourceLocation(path));
     }
 
-    public static ITextureObject getTexture(ResourceLocation loc)
-    {
+    public static ITextureObject getTexture(ResourceLocation loc) {
         ITextureObject tex = Config.getTextureManager().getTexture(loc);
 
-        if (tex != null)
-        {
+        if (tex != null) {
             return tex;
-        }
-        else if (!Config.hasResource(loc))
-        {
+        } else if (!Config.hasResource(loc)) {
             return null;
-        }
-        else
-        {
+        } else {
             SimpleTexture tex1 = new SimpleTexture(loc);
             Config.getTextureManager().loadTexture(loc, tex1);
             return tex1;
         }
     }
 
-    public static void resourcesReloaded(IResourceManager rm)
-    {
-        if (getTextureMapBlocks() != null)
-        {
+    public static void resourcesReloaded(IResourceManager rm) {
+        if (getTextureMapBlocks() != null) {
             Config.dbg("*** Reloading custom textures ***");
             CustomSky.reset();
             TextureAnimations.reset();
@@ -242,178 +217,144 @@ public class TextureUtils
         }
     }
 
-    public static TextureMap getTextureMapBlocks()
-    {
+    public static TextureMap getTextureMapBlocks() {
         return Minecraft.getMinecraft().getTextureMapBlocks();
     }
 
-    public static void registerResourceListener()
-    {
+    public static void registerResourceListener() {
         IResourceManager rm = Config.getResourceManager();
 
-        if (rm instanceof IReloadableResourceManager)
-        {
-            IReloadableResourceManager tto = (IReloadableResourceManager)rm;
-            IResourceManagerReloadListener ttol = new IResourceManagerReloadListener()
-            {
-                public void onResourceManagerReload(IResourceManager var1)
-                {
+        if (rm instanceof IReloadableResourceManager) {
+            IReloadableResourceManager tto = (IReloadableResourceManager) rm;
+            IResourceManagerReloadListener ttol = new IResourceManagerReloadListener() {
+                public void onResourceManagerReload(IResourceManager var1) {
                     TextureUtils.resourcesReloaded(var1);
                 }
             };
             tto.registerReloadListener(ttol);
         }
 
-        ITickableTextureObject tto1 = new ITickableTextureObject()
-        {
-            public void tick()
-            {
+        ITickableTextureObject tto1 = new ITickableTextureObject() {
+            public void tick() {
                 TextureAnimations.updateCustomAnimations();
             }
-            public void loadTexture(IResourceManager var1) throws IOException {}
-            public int getGlTextureId()
-            {
+
+            public void loadTexture(IResourceManager var1) throws IOException {
+            }
+
+            public int getGlTextureId() {
                 return 0;
             }
-            public void func_174936_b(boolean p_174936_1, boolean p_174936_2) {}
-            public void func_174935_a() {}
+
+            public void func_174936_b(boolean p_174936_1, boolean p_174936_2) {
+            }
+
+            public void func_174935_a() {
+            }
         };
         ResourceLocation ttol1 = new ResourceLocation("optifine/TickableTextures");
         Config.getTextureManager().loadTickableTexture(ttol1, tto1);
     }
 
-    public static String fixResourcePath(String path, String basePath)
-    {
+    public static String fixResourcePath(String path, String basePath) {
         String strAssMc = "assets/minecraft/";
 
-        if (path.startsWith(strAssMc))
-        {
+        if (path.startsWith(strAssMc)) {
             path = path.substring(strAssMc.length());
             return path;
-        }
-        else if (path.startsWith("./"))
-        {
+        } else if (path.startsWith("./")) {
             path = path.substring(2);
 
-            if (!basePath.endsWith("/"))
-            {
+            if (!basePath.endsWith("/")) {
                 basePath = basePath + "/";
             }
 
             path = basePath + path;
             return path;
-        }
-        else
-        {
+        } else {
             String strMcpatcher = "mcpatcher/";
 
-            if (path.startsWith("~/"))
-            {
+            if (path.startsWith("~/")) {
                 path = path.substring(2);
                 path = strMcpatcher + path;
                 return path;
-            }
-            else if (path.startsWith("/"))
-            {
+            } else if (path.startsWith("/")) {
                 path = strMcpatcher + path.substring(1);
                 return path;
-            }
-            else
-            {
+            } else {
                 return path;
             }
         }
     }
 
-    public static String getBasePath(String path)
-    {
+    public static String getBasePath(String path) {
         int pos = path.lastIndexOf(47);
         return pos < 0 ? "" : path.substring(0, pos);
     }
 
-    public static void applyAnisotropicLevel()
-    {
-        if (GLContext.getCapabilities().GL_EXT_texture_filter_anisotropic)
-        {
+    public static void applyAnisotropicLevel() {
+        if (GLContext.getCapabilities().GL_EXT_texture_filter_anisotropic) {
             float maxLevel = GL11.glGetFloat(34047);
-            float level = (float)Config.getAnisotropicFilterLevel();
+            float level = (float) Config.getAnisotropicFilterLevel();
             level = Math.min(level, maxLevel);
             GL11.glTexParameterf(GL11.GL_TEXTURE_2D, 34046, level);
         }
     }
 
-    public static void bindTexture(int glTexId)
-    {
+    public static void bindTexture(int glTexId) {
         GlStateManager.func_179144_i(glTexId);
     }
 
-    public static boolean isPowerOfTwo(int x)
-    {
+    public static boolean isPowerOfTwo(int x) {
         int x2 = MathHelper.roundUpToPowerOfTwo(x);
         return x2 == x;
     }
 
-    public static BufferedImage scaleToPowerOfTwo(BufferedImage bi, int minSize)
-    {
-        if (bi == null)
-        {
+    public static BufferedImage scaleToPowerOfTwo(BufferedImage bi, int minSize) {
+        if (bi == null) {
             return bi;
-        }
-        else
-        {
+        } else {
             int w = bi.getWidth();
             int h = bi.getHeight();
             int w2 = Math.max(w, minSize);
             w2 = MathHelper.roundUpToPowerOfTwo(w2);
 
-            if (w2 == w)
-            {
+            if (w2 == w) {
                 return bi;
-            }
-            else
-            {
+            } else {
                 int h2 = h * w2 / w;
                 BufferedImage bi2 = new BufferedImage(w2, h2, 2);
                 Graphics2D g2 = bi2.createGraphics();
                 Object method = RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR;
 
-                if (w2 % w != 0)
-                {
+                if (w2 % w != 0) {
                     method = RenderingHints.VALUE_INTERPOLATION_BILINEAR;
                 }
 
                 g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, method);
-                g2.drawImage(bi, 0, 0, w2, h2, (ImageObserver)null);
+                g2.drawImage(bi, 0, 0, w2, h2, (ImageObserver) null);
                 return bi2;
             }
         }
     }
 
-    public static Dimension getImageSize(InputStream in, String suffix)
-    {
+    public static Dimension getImageSize(InputStream in, String suffix) {
         Iterator iter = ImageIO.getImageReadersBySuffix(suffix);
 
-        while (true)
-        {
-            if (iter.hasNext())
-            {
-                ImageReader reader = (ImageReader)iter.next();
+        while (true) {
+            if (iter.hasNext()) {
+                ImageReader reader = (ImageReader) iter.next();
                 Dimension var7;
 
-                try
-                {
+                try {
                     ImageInputStream e = ImageIO.createImageInputStream(in);
                     reader.setInput(e);
                     int width = reader.getWidth(reader.getMinIndex());
                     int height = reader.getHeight(reader.getMinIndex());
                     var7 = new Dimension(width, height);
-                }
-                catch (IOException var11)
-                {
+                } catch (IOException var11) {
                     continue;
-                }
-                finally
-                {
+                } finally {
                     reader.dispose();
                 }
 
