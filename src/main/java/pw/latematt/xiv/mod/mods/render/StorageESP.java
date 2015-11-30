@@ -41,7 +41,7 @@ public class StorageESP extends Mod implements Listener<Render3DEvent>, CommandH
     public final Value<Boolean> tracerLines = new Value<>("storage_esp_tracer_lines", false);
 
     public StorageESP() {
-        super("StorageESP", ModType.RENDER);
+        super("Storage ESP", ModType.RENDER);
         Command.newCommand().cmd("storageesp").description("Base command for Storage ESP mod.").arguments("<action>").aliases("storage", "sesp").handler(this).build();
     }
 
