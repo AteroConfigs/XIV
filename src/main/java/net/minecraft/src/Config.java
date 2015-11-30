@@ -90,6 +90,8 @@ public class Config {
     }
 
     public static void initDisplay() {
+
+
         checkInitialized();
         antialiasingLevel = gameSettings.ofAaLevel;
         checkDisplaySettings();
@@ -1053,7 +1055,7 @@ public class Config {
             try {
                 Display.destroy();
                 Display.setDisplayMode(displayMode);
-                Display.create((new PixelFormat()).withDepthBits(24).withSamples(samples));
+                Display.create((new PixelFormat()).withDepthBits(24).withSamples(samples).withStencilBits(8));
                 Display.setResizable(false);
                 Display.setResizable(true);
             } catch (LWJGLException var9) {
@@ -1062,7 +1064,7 @@ public class Config {
 
                 try {
                     Display.setDisplayMode(displayMode);
-                    Display.create((new PixelFormat()).withDepthBits(24));
+                    Display.create((new PixelFormat()).withDepthBits(24).withStencilBits(8));
                     Display.setResizable(false);
                     Display.setResizable(true);
                 } catch (LWJGLException var8) {
