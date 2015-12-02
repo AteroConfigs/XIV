@@ -4,7 +4,9 @@ A Minecraft client based around organization and user friendliness.
 To begin, you should probably [read the wiki](https://gitlab.com/latematt/XIV/wikis/home) ([start here!](https://gitlab.com/latematt/XIV/wikis/how-to-get-source))  
 This will help you get started with a workspace.  
 If you'd like to contribute, first ask Matthew to set your permissions to Developer on GitLab.  
-Then, open the project as a Maven project pointing to the pom.xml in the root directory. Most modern IDE's will support this.  
+Then, open the project as a Maven project pointing to the pom.xml in the root directory. Most modern IDE's will support this.
+
+
 Before you commit any changes at all please be sure you're:
 
 1. using tabs instead of 4 spaces
