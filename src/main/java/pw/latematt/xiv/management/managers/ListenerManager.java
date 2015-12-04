@@ -34,6 +34,9 @@ public class ListenerManager extends ListManager<Listener> implements Cancellabl
     }
 
     public void add(Listener... listeners) {
+        if (isCancelled())
+            return;
+
         for (Listener listener : listeners) {
             if (contents.contains(listener))
                 continue;
@@ -43,6 +46,9 @@ public class ListenerManager extends ListManager<Listener> implements Cancellabl
     }
 
     public void remove(Listener... listeners) {
+        if (isCancelled())
+            return;
+
         for (Listener listener : listeners) {
             if (!contents.contains(listener))
                 continue;
