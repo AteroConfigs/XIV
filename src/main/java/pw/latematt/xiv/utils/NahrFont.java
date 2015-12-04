@@ -126,11 +126,11 @@ public class NahrFont {
                 char character = text.charAt(i);
                 try {
                     drawChar(character, x, y);
-                    x += getStringWidth(Character.toString(character)) * 2.0F;
                 } catch (ArrayIndexOutOfBoundsException exception) {
-                    drawChar('?', x, y);
-                    x += getStringWidth(Character.toString('?')) * 2.0F;
+                    character = '?';
+                    drawChar(character, x, y);
                 }
+                x += getStringWidth(Character.toString(character)) * 2.0F;
             }
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
