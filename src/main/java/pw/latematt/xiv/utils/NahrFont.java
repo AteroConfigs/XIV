@@ -34,7 +34,6 @@ public class NahrFont {
     private Graphics2D theGraphics;
     private FontMetrics theMetrics;
     private final float[] xPos;
-
     private final float[] yPos;
 
     public NahrFont(Object font, float size) {
@@ -116,19 +115,21 @@ public class NahrFont {
                     x = startX;
                 }
                 final int colorCode = Minecraft.getMinecraft().fontRendererObj.func_175064_b(oneMore);
-                if (colorCode != 16777215) {
+                if (colorCode != 16777215)
                     GlStateManager.color((colorCode >> 16) / 255.0F, (colorCode >> 8 & 0xFF) / 255.0F, (colorCode & 0xFF) / 255.0F, alpha);
-                } else if (oneMore == 'r') {
+                else if (oneMore == 'r')
                     GlStateManager.color(red, green, blue, alpha);
-                } else if (oneMore == 'g') {
+                else if (oneMore == 'g')
                     GlStateManager.color(0.3F, 0.7F, 1.0F, alpha);
-                }
                 i++;
             } else {
-                final char c = text.charAt(i);
-                if (c - this.startChar <= xPos.length && c - this.startChar <= yPos.length) {
-                    drawChar(c, x, y);
-                    x += getStringWidth(Character.toString(c)) * 2.0F;
+                char character = text.charAt(i);
+                try {
+                    drawChar(character, x, y);
+                    x += getStringWidth(Character.toString(character)) * 2.0F;
+                } catch (ArrayIndexOutOfBoundsException exception) {
+                    drawChar('?', x, y);
+                    x += getStringWidth(Character.toString('?')) * 2.0F;
                 }
             }
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -142,31 +143,30 @@ public class NahrFont {
         this.drawString(text, x, y, fontType, color, (color & 16579836) >> 2 | color & -16777216);
     }
 
-    public void drawString(String text, float x, float y, FontType fontType,
-                           int color, int color2) {
+    public void drawString(String text, float x, float y, FontType fontType, int color, int color2) {
         text = stripUnsupported(text);
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.scale(0.5F, 0.5F, 0.5F);
-        final String text2 = stripControlCodes(text);
+        final String colorless = stripControlCodes(text);
         switch (fontType) {
             case SHADOW_THICK:
-                drawer(text2, x + 1.0F, y + 1.0F, color2);
+                drawer(colorless, x + 1.0F, y + 1.0F, color2);
                 break;
             case SHADOW_THIN:
-                drawer(text2, x + 0.5F, y + 0.5F, color2);
+                drawer(colorless, x + 0.5F, y + 0.5F, color2);
                 break;
             case OUTLINE_THIN:
-                drawer(text2, x + 0.5F, y, color2);
-                drawer(text2, x - 0.5F, y, color2);
-                drawer(text2, x, y + 0.5F, color2);
-                drawer(text2, x, y - 0.5F, color2);
+                drawer(colorless, x + 0.5F, y, color2);
+                drawer(colorless, x - 0.5F, y, color2);
+                drawer(colorless, x, y + 0.5F, color2);
+                drawer(colorless, x, y - 0.5F, color2);
                 break;
             case EMBOSS_BOTTOM:
-                drawer(text2, x, y + 0.5F, color2);
+                drawer(colorless, x, y + 0.5F, color2);
                 break;
             case EMBOSS_TOP:
-                drawer(text2, x, y - 0.5F, color2);
+                drawer(colorless, x, y - 0.5F, color2);
                 break;
             case NORMAL:
             default:
@@ -178,21 +178,15 @@ public class NahrFont {
         GlStateManager.popMatrix();
     }
 
-    private void drawTexturedModalRect(float x, float y, float u, float v,
-                                       float width, float height) {
+    private void drawTexturedModalRect(float x, float y, float u, float v, float width, float height) {
         final float scale = 0.0039063F;
-        final WorldRenderer worldRenderer = Tessellator.getInstance()
-                .getWorldRenderer();
+        final WorldRenderer worldRenderer = Tessellator.getInstance().getWorldRenderer();
         final Tessellator tessellator = Tessellator.getInstance();
         worldRenderer.startDrawingQuads();
-        worldRenderer.addVertexWithUV(x + 0.0F, y + height, 0.0D, (u + 0.0F)
-                * scale, (v + height) * scale);
-        worldRenderer.addVertexWithUV(x + width, y + height, 0.0D, (u + width)
-                * scale, (v + height) * scale);
-        worldRenderer.addVertexWithUV(x + width, y + 0.0F, 0.0D, (u + width)
-                * scale, (v + 0.0F) * scale);
-        worldRenderer.addVertexWithUV(x + 0.0F, y + 0.0F, 0.0D, (u + 0.0F)
-                * scale, (v + 0.0F) * scale);
+        worldRenderer.addVertexWithUV(x + 0.0F, y + height, 0.0D, (u + 0.0F) * scale, (v + height) * scale);
+        worldRenderer.addVertexWithUV(x + width, y + height, 0.0D, (u + width) * scale, (v + height) * scale);
+        worldRenderer.addVertexWithUV(x + width, y + 0.0F, 0.0D, (u + width) * scale, (v + 0.0F) * scale);
+        worldRenderer.addVertexWithUV(x + 0.0F, y + 0.0F, 0.0D, (u + 0.0F) * scale, (v + 0.0F) * scale);
         tessellator.draw();
     }
 
@@ -237,13 +231,11 @@ public class NahrFont {
     }
 
     private boolean isFormatColor(char par0) {
-        return par0 >= '0' && par0 <= '9' || par0 >= 'a' && par0 <= 'f'
-                || par0 >= 'A' && par0 <= 'F';
+        return par0 >= '0' && par0 <= '9' || par0 >= 'a' && par0 <= 'f' || par0 >= 'A' && par0 <= 'F';
     }
 
     private boolean isFormatSpecial(char par0) {
-        return par0 >= 'k' && par0 <= 'o' || par0 >= 'K' && par0 <= 'O'
-                || par0 == 'r' || par0 == 'R';
+        return par0 >= 'k' && par0 <= 'o' || par0 >= 'K' && par0 <= 'O' || par0 == 'r' || par0 == 'R';
     }
 
     public List listFormattedStringToWidth(String s, int width) {
@@ -323,10 +315,7 @@ public class NahrFont {
         if (s.length() <= wrapWidth)
             return s;
         final String split = s.substring(0, wrapWidth);
-        final String split2 = getFormatFromString(split)
-                + s.substring(wrapWidth
-                + (s.charAt(wrapWidth) == ' '
-                || s.charAt(wrapWidth) == '\n' ? 1 : 0));
+        final String split2 = getFormatFromString(split) + s.substring(wrapWidth + (s.charAt(wrapWidth) == ' ' || s.charAt(wrapWidth) == '\n' ? 1 : 0));
         try {
             return split + "\n" + wrapFormattedStringToWidth(split2, width);
         } catch (final Exception e) {

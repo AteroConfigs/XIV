@@ -28,16 +28,11 @@ public class ModButton extends Element {
             if (val.getName().toLowerCase().startsWith(getMod().getName().toLowerCase().replaceAll(" ", "") + "_")) {
                 if (!(val.getValue() instanceof Enum)) {
                     String actualName = val.getName().toLowerCase().replaceAll(mod.getName().toLowerCase(), mod.getName().toLowerCase().replaceAll(" ", ""));
-
-                    //System.out.println(val.getName() + " | " + actualName + " | " + mod.getName().replaceAll(" ", ""));
-
                     String prettyName = "";
                     String[] actualNameSplit = actualName.split("_");
                     if (actualNameSplit.length > 0) {
                         for (String arg : actualNameSplit) {
-                            System.out.println("T:" + arg + " | " + getMod().getName() + " | " + getMod().getName().replaceAll(" ", "") + "|" + arg.equalsIgnoreCase(getMod().getName().replaceAll(" ", "")) + "|" + arg.equalsIgnoreCase(getMod().getName()));
                             if (!arg.equalsIgnoreCase(getMod().getName().replaceAll(" ", ""))) {
-                                System.out.println("Y:" + arg + " | " + getMod().getName() + " | " + getMod().getName().replaceAll(" ", ""));
                                 arg = arg.substring(0, 1).toUpperCase() + arg.substring(1, arg.length());
                                 prettyName += arg + " ";
                             }
