@@ -1,7 +1,6 @@
 package pw.latematt.xiv.mod.mods.misc.tray;
 
 import pw.latematt.xiv.XIV;
-import pw.latematt.xiv.mod.Mod;
 import pw.latematt.xiv.mod.ModType;
 
 import javax.swing.*;
@@ -43,12 +42,14 @@ public class XIVTray {
         MenuItem hideClient = new MenuItem("Hide Client");
         hideClient.addActionListener(e -> {
             XIV.getInstance().getListenerManager().setCancelled(!XIV.getInstance().getListenerManager().isCancelled());
-            XIV.getInstance().getModManager().getContents().stream().filter(Mod::isEnabled).forEach(mod -> {
-                if (XIV.getInstance().getListenerManager().isCancelled())
-                    mod.onDisabled();
-                else
-                    mod.onEnabled();
-            });
+            XIV.getInstance().getModManager().getContents().stream()
+                    .filter(mod -> !mod.getName().equals("TrayIcon"))
+                    .forEach(mod -> {
+                        if (XIV.getInstance().getListenerManager().isCancelled())
+                            mod.onDisabled();
+                        else if (mod.isEnabled())
+                            mod.onEnabled();
+                    });
             icon.displayMessage("XIV", String.format("Client is now %s.", XIV.getInstance().getListenerManager().isCancelled() ? "hidden" : "shown"), TrayIcon.MessageType.INFO);
             hideClient.setLabel(String.format("%s Client", XIV.getInstance().getListenerManager().isCancelled() ? "Show" : "Hide"));
         });

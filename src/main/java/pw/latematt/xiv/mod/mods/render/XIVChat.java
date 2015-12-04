@@ -14,7 +14,6 @@ public class XIVChat extends Mod {
     public void onEnabled() {
         GuiNewChat chat = new GuiXIVChat(mc);
         chat = copyLines(mc.ingameGUI.getChatGUI(), chat);
-
         mc.ingameGUI.setChatGUI(chat);
     }
 
@@ -22,7 +21,6 @@ public class XIVChat extends Mod {
     public void onDisabled() {
         GuiNewChat chat = new GuiNewChat(mc);
         chat = copyLines(mc.ingameGUI.getChatGUI(), chat);
-
         mc.ingameGUI.setChatGUI(chat);
     }
 
