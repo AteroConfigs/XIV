@@ -1,3 +1,5 @@
+Originated from https://gitlab.com/Apteryx/XIV/ which originated from https://gitlab.com/latematt/XIV/ (private repo).
+
 # XIV
 A Minecraft client based around organization and user friendliness.  
 # Usage
