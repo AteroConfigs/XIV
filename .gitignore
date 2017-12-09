@@ -8,6 +8,7 @@ out
 # Maven directories
 target
 logs
+src/main/java/net/*
 src/test
 
 # Minecraft Directory
